@@ -1,0 +1,127 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["prismaSchemaFolder"]
+    output          = "../../generated/postgres"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// Enum for story status
+enum StoryStatus {
+    DRAFT
+    PUBLISHED
+    DELETED
+    PRIVATE
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String
+    username      String
+    email         String    @unique
+    bio           String?
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    stories       Story[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Story {
+    id          String      @id @default(cuid())
+    title       String
+    slug        String      @unique
+    summary     String
+    reads       Int         @default(0)
+    votes       Int         @default(0)
+    readingTime Int         @default(0)
+    thumbnail   String
+    tags        String[]
+    isMature    Boolean     @default(false)
+    storyStatus StoryStatus @default(DRAFT)
+    isCompleted Boolean     @default(false)
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+
+    genreSlug String
+    genre     Genres @relation("StoryGenres", fields: [genreSlug], references: [slug])
+
+    author   User   @relation(fields: [authorId], references: [id])
+    authorId String
+
+    chapterCount Int       @default(0)
+    chapters     Chapter[]
+
+    @@index([title, slug, tags], name: "story_index")
+}
+
+model Chapter {
+    id            String   @id @default(cuid())
+    chapterNumber Int
+    title         String
+    tags          String[]
+
+    /// Metrics data for the chapter including engagement and reading statistics
+    metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"viewsCount\": 0, \"sharesCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"ratingAvg\": 0}")
+
+    storyId String
+    story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+    mongoContentID String[] // multple mongo document if the chapter is split due to size
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([title, storyId], name: "chapter_index")
+}
+
+model Genres {
+    id           String   @id @default(cuid())
+    name         String   @unique
+    slug         String   @unique
+    stories      Story[]  @relation("StoryGenres")
+    createdAt    DateTime @default(now())
+    totalStories Int      @default(0)
+}
+
+// Necessary for Next auth
+model Account {
+    id                       String  @id @default(cuid())
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String?
+    access_token             String?
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String?
+    session_state            String?
+    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    refresh_token_expires_in Int?
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
