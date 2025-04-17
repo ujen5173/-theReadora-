@@ -4,6 +4,7 @@ import { HydrateClient } from "~/trpc/server";
 import { outfit } from "~/utils/font";
 import { LogOut, MoveRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import Link from "next/link";
 
 export default async function Home() {
   const session = await auth();
@@ -42,9 +43,11 @@ export default async function Home() {
                   </span>
                 </div>
               </div>
-              <Button iconPlacement="right" icon={LogOut}>
-                Sign Out
-              </Button>
+              <Link href="/api/auth/signout">
+                <Button iconPlacement="right" icon={LogOut}>
+                  Sign Out
+                </Button>
+              </Link>
             </div>
           ) : (
             <div className="flex flex-col items-center space-y-6">
@@ -58,9 +61,11 @@ export default async function Home() {
                   </p>
                 </div>
               </div>
-              <Button iconPlacement="right" icon={MoveRight}>
-                Sign In
-              </Button>
+              <Link href="/api/auth/signin">
+                <Button iconPlacement="right" icon={MoveRight}>
+                  Sign In
+                </Button>
+              </Link>
             </div>
           )}
         </div>
