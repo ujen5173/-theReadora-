@@ -1,4 +1,4 @@
-import { PrismaClient } from "generated/postgres";
+import { PrismaClient } from "@prisma/client";
 import { env } from "~/env";
 
 const createPostgresClient = () =>
