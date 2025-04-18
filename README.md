@@ -1,29 +1,61 @@
-# Create T3 App
+# 📖 Readora
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Readora is a storytelling platform where users can read, write, and share stories across various genres. It offers a clean writing experience for authors and an immersive reading interface for users.
 
-## What's next? How do I make an app with this?
+Build as a passion project.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+> **Warning**
+> This is a work-in-progress and not the finished product.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Google](https://t3.gg/discord) and ask for help.
+## 🧰 Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- **Next.js** – for building the web application
+- **NextAuth** – for user authentication
+- **Zustand** – for state management
+- **ShadCN** – for UI components
+- **Prisma** – for working with databases
+- **MongoDB** – for storing chapter content
+- **PostgreSQL** – for storing structured data like users, stories, and metadata
 
-## Learn More
+## ⚙️ Setup Instructions
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### 1. Clone the Repository
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+```bash
+git clone https://github.com/ujen5173/readora.git
+cd readora
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### 2. Install Dependencies
 
-## How do I deploy this?
+```bash
+pnpm install
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### 3. Create Environment Variables
+
+Run the following command to create a `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+Then, fill in the required environment variables in the `.env` file. You can find the necessary variables in the `.env.example` file.
+
+### 4. Set Up Database
+
+- **MongoDB**: Set up a MongoDB database and update the `MONGODB_URI` in your `.env` file.
+- **PostgreSQL**: Set up a PostgreSQL database and update the `DATABASE_URL` in your `.env` file.
+- **Prisma**: Run the following command to generate the Prisma client and migrate the database:
+
+```bash
+pnpm postinstall
+```
+
+### 4. Run the App Locally
+
+```bash
+pnpm dev
+```
+
+Feel free to open issues or contribute. Cheers 🍻

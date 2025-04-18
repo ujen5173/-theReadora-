@@ -80,7 +80,7 @@ const Button = React.forwardRef<
       effect,
       size,
       icon: Icon,
-      iconPlacement,
+      iconPlacement = "left",
       asChild = false,
       ...props
     },

@@ -1,16 +1,19 @@
 import { Button } from "~/components/ui/button";
 import { auth } from "~/server/auth";
-import { HydrateClient } from "~/trpc/server";
 import { outfit } from "~/utils/font";
 import { LogOut, MoveRight } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import Link from "next/link";
+import Image from "next/image";
+import Header from "./_components/layouts/header";
+import { Fragment } from "react";
 
 export default async function Home() {
   const session = await auth();
 
   return (
-    <HydrateClient>
+    <Fragment>
+      <Header />
+
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-center font-extrabold text-5xl tracking-tight sm:text-[5rem]">
@@ -24,15 +27,13 @@ export default async function Home() {
             <div className="flex flex-col items-center space-y-6">
               <div className="flex items-center gap-4 rounded-full min-w-80 bg-slate-700/50 p-4 backdrop-blur-sm">
                 {session.user.image && (
-                  <Avatar className="h-12 w-12 rounded-full">
-                    <AvatarImage
-                      src={session.user.image}
-                      alt={`@${session.user.name}`}
-                    />
-                    <AvatarFallback>
-                      {session.user.name ?? "Profile"}
-                    </AvatarFallback>
-                  </Avatar>
+                  <Image
+                    src={session.user.image}
+                    alt={`@${session.user.name}`}
+                    width={600}
+                    height={600}
+                    className="size-14 rounded-full object-cover"
+                  />
                 )}
                 <div className="flex flex-col">
                   <span className="text-xl font-medium text-rose-400">
@@ -70,6 +71,6 @@ export default async function Home() {
           )}
         </div>
       </main>
-    </HydrateClient>
+    </Fragment>
   );
 }
