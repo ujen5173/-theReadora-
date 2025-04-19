@@ -9,6 +9,10 @@
 
   --animate-shine: shine 3s ease-out infinite;
   --animate-gradient-flow: gradient-flow 10s ease infinite;
+  --animate-slide-up: slide-up 60s linear infinite;
+  --animate-slide-up-delay-1: slide-up 60s linear infinite -6.6s;
+  --animate-slide-up-delay-2: slide-up 60s linear infinite -12.5s;
+  --animate-slide-up-delay-3: slide-up 60s linear infinite -18.75s;
 
   @keyframes shine {
     0% {
@@ -31,6 +35,15 @@
     }
     100% {
       background-position: 0% 50%;
+    }
+  }
+
+  @keyframes slide-up {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
     }
   }
 }
@@ -71,6 +84,10 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --animate-slide: var(--animate-slide-up);
+  --animate-slide-1: var(--animate-slide-up-delay-1);
+  --animate-slide-2: var(--animate-slide-up-delay-2);
+  --animate-slide-3: var(--animate-slide-up-delay-3);
 }
 
 :root {

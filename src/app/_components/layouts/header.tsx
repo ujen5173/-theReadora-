@@ -1,6 +1,6 @@
 import { Input } from "~/components/ui/input";
 import Logo from "../shared/logo";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { Crown, Plus } from "lucide-react";
 import {
   NavigationMenu,
@@ -10,6 +10,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "~/components/ui/navigation-menu";
+import { cn } from "~/lib/utils";
 
 // Genre list for explore dropdown
 const GENRES = {
@@ -67,13 +68,19 @@ const Header = () => {
   return (
     <header className="w-full">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-6 px-4 py-4">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-10">
           <Logo />
-          <ul className="flex items-center">
+
+          <ul className="flex items-center gap-2">
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="transition duration-200 ease-in-out hover:text-primary">
+                  <NavigationMenuTrigger
+                    className={cn(
+                      buttonVariants({ variant: "link" }),
+                      "text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent"
+                    )}
+                  >
                     Explore
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="bg-white shadow-lg rounded-lg p-4 transition duration-150 ease-in-out">
@@ -93,7 +100,12 @@ const Header = () => {
             </NavigationMenu>
 
             <li>
-              <Button variant="ghost" icon={Crown} iconPlacement="left">
+              <Button
+                variant="link"
+                className="text-foreground"
+                icon={Crown}
+                iconPlacement="left"
+              >
                 Get Premium
               </Button>
             </li>

@@ -66,8 +66,9 @@ model Chapter {
     chapterNumber Int
     title         String
     tags          String[]
+    slug          String
 
-    /// Metrics data for the chapter including engagement and reading statistics
+    // Metrics data for the chapter including engagement and reading statistics
     metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"viewsCount\": 0, \"sharesCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"ratingAvg\": 0}")
 
     storyId String

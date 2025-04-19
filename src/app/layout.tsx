@@ -5,6 +5,9 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { RootContext } from "./_components/root";
+import NextTopLoader from "nextjs-toploader";
+import Footer from "./_components/shared/footer";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -26,7 +29,23 @@ export default function RootLayout({
     <html lang="en" className={`${geist.variable}`}>
       <body>
         <TRPCReactProvider>
-          <RootContext>{children}</RootContext>
+          <RootContext>
+            <NextTopLoader height={5} color="#e11d48" />
+            <Toaster />
+
+            <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
+            <div
+              className="fixed -z-10 h-screen w-full opacity-30"
+              style={{
+                backgroundImage: "url(/ooorganize.svg)",
+                backgroundBlendMode: "overlay",
+                backgroundAttachment: "fixed",
+                backgroundSize: "cover",
+              }}
+            ></div>
+            {children}
+            <Footer />
+          </RootContext>
         </TRPCReactProvider>
       </body>
     </html>

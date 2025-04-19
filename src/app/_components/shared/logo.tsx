@@ -5,7 +5,7 @@ const Logo = () => {
   return (
     <div>
       <span
-        className={cn("text-2xl font-black text-destructive", kanit.className)}
+        className={cn("text-2xl font-black text-primary/90", kanit.className)}
       >
         [theReadora]
       </span>

@@ -1,4 +1,4 @@
-import { Prompt, Outfit } from "next/font/google";
+import { Prompt, Outfit, Merriweather } from "next/font/google";
 
 export const outfit = Outfit({
   subsets: ["latin"],
@@ -12,4 +12,11 @@ export const kanit = Prompt({
   variable: "--font-kanit",
   display: "swap",
   weight: ["400", "500", "600", "700"],
+});
+
+export const merriweatherFont = Merriweather({
+  subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
+  variable: "--font-merriweather",
+  preload: true,
 });

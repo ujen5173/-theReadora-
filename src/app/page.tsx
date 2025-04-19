@@ -6,6 +6,9 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "./_components/layouts/header";
 import { Fragment } from "react";
+import HeroSection from "./_components/layouts/(/)/hero-section";
+import TrendingSection from "./_components/layouts/(/)/trending";
+import { Separator } from "~/components/ui/separator";
 
 export default async function Home() {
   const session = await auth();
@@ -13,11 +16,14 @@ export default async function Home() {
   return (
     <Fragment>
       <Header />
+      <HeroSection />
+      <Separator className="max-w-[1440px] mx-auto" />
+      <TrendingSection />
 
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-center font-extrabold text-5xl tracking-tight sm:text-[5rem]">
-            Hello world, <br /> Welcome to{" "}
+            Hello Readers, <br /> Welcome to{" "}
             <span className={`underline ${outfit.className} text-primary/90`}>
               [theReadora]
             </span>

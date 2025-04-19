@@ -1,4 +1,5 @@
 import slugify from "slugify";
+import numeral from "numeral";
 
 export const makeSlug = (str: string) =>
   slugify(str, {
@@ -7,5 +8,9 @@ export const makeSlug = (str: string) =>
     replacement: "-",
     trim: true,
     locale: "en",
-    remove: /[*+~.()'"!:@]/g, // remove special characters
+    remove: /[*+~.()'"!:@]/g, // removes special characters
   });
+
+export const formatNumber = (num: number) => {
+  return numeral(num).format("0.[0]a");
+};
