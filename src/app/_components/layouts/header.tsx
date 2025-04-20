@@ -64,9 +64,9 @@ const GenreColumn = ({
   </div>
 );
 
-const Header = () => {
+const Header = ({ background = false }: { background?: boolean }) => {
   return (
-    <header className="w-full">
+    <header className={cn("w-full", background && "bg-slate-50")}>
       <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-6 px-4 py-4">
         <div className="flex items-center gap-10">
           <Logo />

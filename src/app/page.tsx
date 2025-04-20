@@ -1,7 +1,7 @@
 import { Button } from "~/components/ui/button";
 import { auth } from "~/server/auth";
 import { outfit } from "~/utils/font";
-import { PenLine, Rocket, Coins, Users } from "lucide-react";
+import { PenLine, Coins, Users, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Header from "./_components/layouts/header";
 import { Fragment } from "react";
@@ -25,7 +25,7 @@ export default async function Home() {
         "Earn from day one through ads, subscriptions, chapter unlocks, and reader tips. Get paid for your work, no minimum follower requirements.",
     },
     {
-      icon: Rocket,
+      icon: Sparkles,
       title: "AI Writing Assistant",
       description:
         "Get smart suggestions for your plot, characters, and writing style. Let AI help you create better stories, faster.",
@@ -60,15 +60,17 @@ export default async function Home() {
       <PopularCompleted />
 
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-center font-extrabold text-5xl tracking-tight sm:text-[5rem]">
-            Hello Writers, <br /> Welcome to{" "}
-            <span className={`underline ${outfit.className} text-primary/90`}>
-              [theReadora]
-            </span>
-          </h1>
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-24">
+          <div className="mt-10">
+            <h1 className="text-center font-extrabold text-5xl tracking-tight sm:text-[5rem]">
+              Hello Writers, <br /> Welcome to{" "}
+              <span className={`underline ${outfit.className} text-primary/90`}>
+                [theReadora]
+              </span>
+            </h1>
+          </div>
 
-          <section className="py-16 px-4">
+          <section className="pt-4 px-4">
             <div className="max-w-[1440px] mx-auto">
               <div className="text-center mb-12">
                 <Badge variant="secondary" className="mb-4">
