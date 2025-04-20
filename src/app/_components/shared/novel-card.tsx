@@ -19,7 +19,7 @@ import {
 import { cardHeight, cardWidth } from "~/utils/constants";
 import { PlusIcon } from "lucide-react";
 
-type TCard = {
+export type TCard = {
   id: string;
   title: string;
   slug: string;

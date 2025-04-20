@@ -1,17 +1,48 @@
 import { Button } from "~/components/ui/button";
 import { auth } from "~/server/auth";
 import { outfit } from "~/utils/font";
-import { LogOut, MoveRight } from "lucide-react";
+import { PenLine, Rocket, Coins, Users } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import Header from "./_components/layouts/header";
 import { Fragment } from "react";
 import HeroSection from "./_components/layouts/(/)/hero-section";
 import TrendingSection from "./_components/layouts/(/)/trending";
 import { Separator } from "~/components/ui/separator";
+import PopularCompleted from "./_components/layouts/(/)/popular-completed";
+import LatestAndRising from "./_components/layouts/(/)/latest-rising";
+import TopTags from "./_components/layouts/(/)/top-tags";
+import { Badge } from "~/components/ui/badge";
+import Recommendations from "./_components/layouts/(/)/recommendations";
 
 export default async function Home() {
   const session = await auth();
+
+  const features = [
+    {
+      icon: Coins,
+      title: "70% Revenue Share",
+      description:
+        "Earn from day one through ads, subscriptions, chapter unlocks, and reader tips. Get paid for your work, no minimum follower requirements.",
+    },
+    {
+      icon: Rocket,
+      title: "AI Writing Assistant",
+      description:
+        "Get smart suggestions for your plot, characters, and writing style. Let AI help you create better stories, faster.",
+    },
+    {
+      icon: PenLine,
+      title: "Write Without Limits",
+      description:
+        "No content restrictions. Write any genre, theme, or format. Perfect for mature themes and cross-genre stories.",
+    },
+    {
+      icon: Users,
+      title: "Collaborative Writing Mode",
+      description:
+        "Co-author stories with friends or writers across the world in real-time.",
+    },
+  ];
 
   return (
     <Fragment>
@@ -19,17 +50,70 @@ export default async function Home() {
       <HeroSection />
       <Separator className="max-w-[1440px] mx-auto" />
       <TrendingSection />
+      <Separator className="max-w-[1440px] mx-auto" />
+      <Recommendations />
+      <Separator className="max-w-[1440px] mx-auto" />
+      <TopTags />
+      <Separator className="max-w-[1440px] mx-auto" />
+      <LatestAndRising />
+      <Separator className="max-w-[1440px] mx-auto" />
+      <PopularCompleted />
 
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-center font-extrabold text-5xl tracking-tight sm:text-[5rem]">
-            Hello Readers, <br /> Welcome to{" "}
+            Hello Writers, <br /> Welcome to{" "}
             <span className={`underline ${outfit.className} text-primary/90`}>
               [theReadora]
             </span>
           </h1>
 
-          {session?.user ? (
+          <section className="py-16 px-4">
+            <div className="max-w-[1440px] mx-auto">
+              <div className="text-center mb-12">
+                <Badge variant="secondary" className="mb-4">
+                  The Readora Difference
+                </Badge>
+                <h2 className="text-4xl font-bold mb-4">
+                  Built for Writers Like You
+                </h2>
+                <p className="text-slate-300 max-w-2xl mx-auto text-lg">
+                  A modern platform that gives you the tools to write, earn, and
+                  grow your audience.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                {features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="p-6 rounded-xl bg-slate-700/30 border border-slate-700/50 transition-all duration-300 ease-in-out hover:bg-slate-700/50"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <feature.icon className="size-6 text-primary" />
+                      <h3 className="text-xl font-semibold">{feature.title}</h3>
+                    </div>
+                    <p className="text-slate-300">{feature.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <Link href="/api/auth/signin">
+                  <Button
+                    size="lg"
+                    variant="default"
+                    effect={"shineHover"}
+                    className="font-semibold px-8"
+                  >
+                    Start Writing Today
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* {session?.user ? (
             <div className="flex flex-col items-center space-y-6">
               <div className="flex items-center gap-4 rounded-full min-w-80 bg-slate-700/50 p-4 backdrop-blur-sm">
                 {session.user.image && (
@@ -74,7 +158,7 @@ export default async function Home() {
                 </Button>
               </Link>
             </div>
-          )}
+          )} */}
         </div>
       </main>
     </Fragment>

@@ -39,6 +39,9 @@ const FeedbackDialog = ({ children }: { children: ReactNode }) => {
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
+  // TODO: add actual logic.
+  const [status, setStatus] = useState<"idle" | "pending">("idle");
+
   const [from, setFrom] = useState<
     "github" | "twitter" | "none" | "google" | "friends" | undefined
   >();

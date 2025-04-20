@@ -54,7 +54,7 @@ const GenreColumn = ({
         <li key={genre.name}>
           <NavigationMenuLink
             href={genre.href}
-            className="block py-2 hover:text-primary font-medium"
+            className="block py-2 hover:text-primary text-slate-700 font-medium"
           >
             {genre.name}
           </NavigationMenuLink>
@@ -72,7 +72,7 @@ const Header = () => {
           <Logo />
 
           <ul className="flex items-center gap-2">
-            <NavigationMenu>
+            <NavigationMenu delayDuration={0} className="relative">
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger
@@ -121,7 +121,7 @@ const Header = () => {
             size="lg"
             placeholder="Search..."
             icon={KbdIcon}
-            className="w-80"
+            className="bg-white w-80"
             iconPlacement="right"
           />
           <Button>Sign in</Button>

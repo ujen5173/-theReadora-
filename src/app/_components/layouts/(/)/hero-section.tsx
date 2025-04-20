@@ -248,7 +248,12 @@ const HeroSection = () => {
           </p>
 
           <div className="flex items-center gap-2 mt-10">
-            <Button variant={"default"} icon={BookMarked} iconPlacement="left">
+            <Button
+              variant={"default"}
+              icon={BookMarked}
+              iconStyle="rotate-12"
+              iconPlacement="left"
+            >
               Start Reading
             </Button>
             <Button variant={"secondary"} icon={SquarePen}>
@@ -256,6 +261,7 @@ const HeroSection = () => {
             </Button>
           </div>
         </div>
+
         <VerticalSlider />
       </div>
     </section>

@@ -1,5 +1,5 @@
-const DiscoverGenres = () => {
+const DiscoverTrendingGenres = () => {
   return <div></div>;
 };
 
-export default DiscoverGenres;
+export default DiscoverTrendingGenres;
