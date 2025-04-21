@@ -11,6 +11,7 @@ import {
   NavigationMenuTrigger,
 } from "~/components/ui/navigation-menu";
 import { cn } from "~/lib/utils";
+import Link from "next/link";
 
 // Genre list for explore dropdown
 const GENRES = {
@@ -124,7 +125,9 @@ const Header = ({ background = false }: { background?: boolean }) => {
             className="bg-white w-80"
             iconPlacement="right"
           />
-          <Button>Sign in</Button>
+          <Link href="/auth/signin">
+            <Button>Sign in</Button>
+          </Link>
         </div>
       </div>
     </header>

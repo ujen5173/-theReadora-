@@ -2,6 +2,7 @@
 import {
   BookOpen01Icon,
   BubbleChatIcon,
+  CopyrightIcon,
   EyeIcon,
   FavouriteIcon,
   Flag02Icon,
@@ -231,8 +232,14 @@ const StoryDetailsSection = () => {
           to pursue your own dreams as a solo artist, or is there even a chance
           to fall in love. And finding out that a certain someone from the past,
           blocked by your memory will be coming back into your life, how will
-          you handle a forgotten friendship. <br /> <br />@ All Rights Reserved
+          you handle a forgotten friendship. <br /> <br />
         </p>
+        <div className="flex items-center gap-1">
+          <CopyrightIcon className="inline size-3.5" />
+          <p className="text-sm font-medium text-slate-700">
+            All Rights Reserved
+          </p>
+        </div>
       </div>
 
       <div className="my-6">
@@ -269,7 +276,7 @@ const StoryDetailsSection = () => {
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <span className="font-medium text-slate-700">
-                    Chapter {chapter.id}
+                    Chapter {chapter.id}:
                   </span>
                   <span className="text-slate-800 font-semibold">
                     {chapter.title}

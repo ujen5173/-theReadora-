@@ -7,8 +7,9 @@ import Header from "./_components/layouts/header";
 const NotFoundPage = () => {
   return (
     <>
-      <Header background={true} />
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+      <Header background={false} />
+
+      <main className="flex min-h-screen flex-col items-center justify-center  text-slate-700">
         <div className="container flex flex-col items-center justify-center gap-8 px-4 py-16 text-center">
           <h1
             className={`font-extrabold text-9xl tracking-tight text-primary/90 ${merriweatherFont.className}`}
@@ -20,7 +21,7 @@ const NotFoundPage = () => {
             Plot Twist!
           </h2>
 
-          <p className="text-xl text-slate-300 max-w-md">
+          <p className="text-xl text-slate-500 max-w-md">
             This chapter seems to be missing from our library. Let's get you
             back to where the stories are.
           </p>

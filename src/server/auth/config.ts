@@ -24,6 +24,9 @@ declare module "next-auth" {
 }
 
 export const authConfig = {
+  pages: {
+    signIn: "/auth/signin",
+  },
   providers: [
     GoogleProvider({
       async profile(profile: GoogleProfile): Promise<User> {

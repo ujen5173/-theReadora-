@@ -3,20 +3,12 @@ import {
   BookOpen01Icon,
   Share01Icon,
 } from "hugeicons-react";
-import { StarIcon, CheckCircle2, Sparkles, Crown } from "lucide-react";
+import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
+import PremiumBanner from "../../shared/premium-banner";
 
 const ThumbnailSection = () => {
-  const premiumFeatures = [
-    "Ad-free reading experience",
-    "Downloadable Stories",
-    "Discounts on premium chapters",
-    "Get 7 montly coins",
-    "New Chapter Alerts",
-    "Support your favorite authors",
-  ];
-
   return (
     <section className="w-full space-y-6">
       <div className="w-full h-auto shadow-lg rounded-md">
@@ -60,34 +52,7 @@ const ThumbnailSection = () => {
         </Button>
       </div>
 
-      <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
-        <div className="absolute -right-8 -top-8 size-24 rounded-full bg-primary/10"></div>
-        <div className="p-5">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-full bg-primary/10">
-              <Sparkles className="size-5 text-primary" />
-            </div>
-            <h3 className="text-lg font-bold text-slate-800">
-              Upgrade to Premium
-            </h3>
-          </div>
-
-          <ul className="space-y-2 mb-4">
-            {premiumFeatures.map((feature, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <CheckCircle2 className="size-4 text-primary mt-0.5 flex-shrink-0" />
-                <span className="text-sm font-medium text-slate-700">
-                  {feature}
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <Button icon={Crown} className="w-full" variant="default">
-            Subscribe – $9.99/-
-          </Button>
-        </div>
-      </div>
+      <PremiumBanner />
     </section>
   );
 };
