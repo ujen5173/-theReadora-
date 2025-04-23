@@ -3,7 +3,6 @@ import {
   BookmarkCheck02Icon,
   BookOpen01Icon,
   Edit01Icon,
-  Share01Icon,
 } from "hugeicons-react";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
@@ -11,6 +10,8 @@ import { Button } from "~/components/ui/button";
 import PremiumBanner from "../../shared/premium-banner";
 import type { Story } from "@prisma/client";
 import { auth } from "~/server/auth";
+import ShareDialog from "../../shared/share-dialog";
+import { env } from "~/env";
 
 interface ThumbnailSectionProps {
   story: Story;
@@ -62,13 +63,6 @@ const ThumbnailSection = async ({ story }: ThumbnailSectionProps) => {
             >
               Edit Story
             </Button>
-            <Button
-              variant={"outline"}
-              icon={Share01Icon}
-              className="w-full bg-white"
-            >
-              Share
-            </Button>
           </>
         ) : (
           <>
@@ -79,15 +73,12 @@ const ThumbnailSection = async ({ story }: ThumbnailSectionProps) => {
             >
               Save to List
             </Button>
-            <Button
-              variant={"outline"}
-              icon={Share01Icon}
-              className="w-full bg-white"
-            >
-              Share
-            </Button>
           </>
         )}
+        <ShareDialog
+          title={story.title}
+          url={`${env.NEXT_PUBLIC_APP_URL}/story/${story.id}`}
+        />
       </div>
 
       <PremiumBanner />
