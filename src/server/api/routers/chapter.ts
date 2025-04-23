@@ -16,7 +16,6 @@ export const chapterRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      console.log({ input });
       if (!input.storyId) {
         throw new Error("Story ID is required");
       }
@@ -37,6 +36,7 @@ export const chapterRouter = createTRPCRouter({
           select: {
             chapterCount: true,
             slug: true,
+            readingTime: true,
           },
         });
 
@@ -88,6 +88,7 @@ export const chapterRouter = createTRPCRouter({
           where: { id: input.storyId },
           data: {
             chapterCount: story.chapterCount + 1,
+            readingTime: story.readingTime + input.readingTime,
           },
         });
 

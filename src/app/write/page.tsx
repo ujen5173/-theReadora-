@@ -37,7 +37,7 @@ const Write = () => {
     public_id: string;
   }>();
 
-  const { mutateAsync: createStory } = api.story.create.useMutation();
+  const { mutateAsync: createStory, status } = api.story.create.useMutation();
 
   const handleUpload = async (file: File) => {
     try {
@@ -165,7 +165,7 @@ const Write = () => {
           </div>
 
           {/* Book Metadata */}
-          <BookMetadata onSubmit={handleSubmit} />
+          <BookMetadata onSubmit={handleSubmit} status={status} />
         </div>
       </div>
     </>

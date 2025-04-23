@@ -9,8 +9,6 @@ import {
 } from "hugeicons-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 import {
   Tooltip,
   TooltipContent,
@@ -18,6 +16,18 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import type { Story } from "@prisma/client";
+import type { ChapterMetrics } from "~/server/api/routers/story";
+import { getReadingTimeText } from "~/utils/helpers";
+import { useUserStore } from "~/store/userStore";
+import TableOfContent from "./toc";
+
+type Chapter = {
+  id: string;
+  title: string;
+  createdAt: Date;
+  chapterNumber: number;
+  metrics: ChapterMetrics;
+};
 
 interface StoryDetailsSectionProps {
   story: Story & {
@@ -26,29 +36,15 @@ interface StoryDetailsSectionProps {
       name: string;
       username: string;
     };
-    chapters: {
-      id: string;
-      title: string;
-      createdAt: Date;
-      chapterNumber: number;
-      metrics: {
-        wordCount: number;
-        readingTime: number;
-        likesCount: number;
-        commentsCount: number;
-        viewsCount: number;
-        sharesCount: number;
-        ratingCount: number;
-        ratingValue: number;
-        ratingAvg: number;
-      };
-    }[];
+    chapters: Chapter[];
   };
 }
 
 const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
+  const user = useUserStore();
+
   return (
-    <main className="w-full py-2">
+    <main className="w-full py-2 relative">
       <div className="mb-6 flex items-start gap-8">
         <div className="flex-1">
           <h1 className="text-2xl leading-tight md:text-3xl lg:text-4xl xl:text-5xl font-black mb-4 text-slate-700">
@@ -67,15 +63,17 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
             {story.genreSlug}
           </Badge>
         </div>
-        <div className="py-4">
-          <Button
-            variant={"default"}
-            icon={PlusSignSquareIcon}
-            className="w-full"
-          >
-            Follow
-          </Button>
-        </div>
+        {user?.user?.id !== story.author.id && (
+          <div className="py-4">
+            <Button
+              variant={"default"}
+              icon={PlusSignSquareIcon}
+              className="w-full"
+            >
+              Follow
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="flex">
@@ -172,8 +170,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
                   </span>
                 </div>
                 <span className="font-bold line-clamp-1 text-base text-center text-slate-700">
-                  {Math.floor(story.readingTime / 60)}h {story.readingTime % 60}
-                  m
+                  {getReadingTimeText(story.readingTime)}
                 </span>
               </div>
             </TooltipTrigger>
@@ -183,8 +180,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
               tooltipArrowClassName="bg-slate-50 border-b border-r border-slate-300 fill-slate-50"
             >
               <p className="text-slate-700 font-black">
-                {Math.floor(story.readingTime / 60)}hour{" "}
-                {story.readingTime % 60}min
+                {getReadingTimeText(story.readingTime)}
               </p>
             </TooltipContent>
           </Tooltip>
@@ -192,7 +188,9 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
       </div>
 
       <div className="my-10 px-3 border-l-4 border-slate-300">
-        <p className="text-lg mb-4 text-slate-800">{story.synopsis}</p>
+        <p className="text-lg mb-4 text-slate-800 whitespace-pre-line">
+          {story.synopsis}
+        </p>
         <div className="flex items-center gap-1">
           <CopyrightIcon className="inline size-3.5" />
           <p className="text-base font-medium text-slate-700">
@@ -214,48 +212,11 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
         </div>
       </div>
 
-      <div className="mt-10 border-t border-slate-200 pt-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-4">
-          Table of Contents
-        </h2>
-        {story.chapters.length > 0 ? (
-          <div className="space-y-2">
-            {story.chapters.map((chapter, index) => (
-              <Link
-                key={chapter.id}
-                href={`/chapter/${chapter.id}`}
-                className="block bg-white border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors"
-              >
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-4">
-                    <span className="font-medium text-slate-700">
-                      Chapter {chapter.chapterNumber}:
-                    </span>
-                    <span className="text-slate-800 font-semibold">
-                      {chapter.title}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm text-slate-500">
-                      {new Date(chapter.createdAt).toLocaleDateString()}
-                    </span>
-                    <span className="text-sm text-slate-500">
-                      {chapter.metrics.wordCount} words
-                    </span>
-                    <ChevronRight className="size-5 text-slate-500" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="h-30 flex items-center justify-center">
-            <p className="text-slate-700 font-medium text-lg text-center">
-              Oops! Chapters are not written yet.
-            </p>
-          </div>
-        )}
-      </div>
+      <TableOfContent
+        storyId={story.id}
+        chapters={story.chapters}
+        isAuthor={user?.user?.id === story.author.id}
+      />
     </main>
   );
 };

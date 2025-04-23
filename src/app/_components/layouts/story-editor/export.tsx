@@ -9,7 +9,7 @@ const ExportChapter = () => {
         Export Story
       </h3>
       <p className="text-sm text-muted-foreground">
-        Export your story as a PDF or HTML file.
+        Export your story as a PDF or Docs file.
       </p>
       <div className="mt-4 space-y-2">
         <Button variant="outline" className="w-full">

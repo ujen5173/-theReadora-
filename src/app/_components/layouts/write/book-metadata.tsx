@@ -12,15 +12,17 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, Loader2, X } from "lucide-react";
 import { Label } from "~/components/ui/label";
 import { toast } from "sonner";
 import { GENRES, LANGUAGES } from "~/utils/constants";
 import type { BookMetadataType } from "~/app/write/page";
 
 const BookMetadata = ({
+  status,
   onSubmit,
 }: {
+  status: "idle" | "success" | "error" | "pending";
   onSubmit: (metadata: BookMetadataType) => void;
 }) => {
   const [metadata, setMetadata] = useState<BookMetadataType>({
@@ -263,10 +265,15 @@ const BookMetadata = ({
         <Button
           onClick={() => onSubmit(metadata)}
           icon={ArrowRight}
-          effect={"expandIcon"}
+          effect={status === "pending" ? undefined : "expandIcon"}
           iconPlacement="right"
+          disabled={status === "pending"}
         >
-          Continue to Story Editor
+          {status === "pending" ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            "Continue to Story Editor"
+          )}
         </Button>
       </div>
     </div>

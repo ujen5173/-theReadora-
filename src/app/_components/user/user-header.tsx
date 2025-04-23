@@ -69,10 +69,12 @@ export default function UserHeader() {
             </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer px-3 py-2">
-            <BookIcon className="w-4 h-4 text-slate-800" />
-            My Creations
-          </DropdownMenuItem>
+          <Link href="/creations">
+            <DropdownMenuItem className="cursor-pointer px-3 py-2">
+              <BookIcon className="w-4 h-4 text-slate-800" />
+              My Creations
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem className="cursor-pointer px-3 py-2">
             <CreditCard className="w-4 h-4 text-slate-800" />
             Billing

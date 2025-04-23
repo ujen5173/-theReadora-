@@ -30,9 +30,11 @@ const StoryEditor = () => {
     setWordCount,
     setIsAutoSaving,
     focusMode,
+    setHardSaved,
   } = useNewChapterStore();
 
   const handleEditorChange = (json: string, html: string) => {
+    setHardSaved(false);
     setContent(JSON.parse(json) as JSONContent);
     setHtmlContent(html);
 
@@ -56,7 +58,7 @@ const StoryEditor = () => {
             <Tabs defaultValue="write" className="h-full">
               <StoryEditorTabs />
 
-              <div className="editor-container bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700/50 shadow-sm transition-all">
+              <div className="editor-container h-full bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700/50 shadow-sm transition-all">
                 <TabsContent value="write" className="min-h-[70vh]">
                   <Editor
                     initialContent={content}

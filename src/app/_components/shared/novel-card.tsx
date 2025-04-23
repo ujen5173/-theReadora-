@@ -8,7 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
 import { merriweatherFont } from "~/utils/font";
-import { formatNumber, makeSlug } from "~/utils/helpers";
+import { formatNumber } from "~/utils/helpers";
 import {
   ArrowRight02Icon,
   FavouriteIcon,
@@ -28,22 +28,11 @@ export type TCard = BookMetadataType & {
   readingTime: number;
   thumbnail: string;
   isCompleted: boolean;
-  genre: string;
-
-  chapters: ChapterCard[];
+  genreSlug: string;
+  chapterCount: string;
   author: {
-    name: string | null;
-    username: string | null;
+    name: string;
   };
-};
-
-type ChapterCard = {
-  id: string;
-  title: string | null;
-  slug: string | null;
-  isPremium: boolean;
-  chapterNumber: number;
-  createdAt: Date;
 };
 
 const NovelCard: FC<{
@@ -64,7 +53,7 @@ const NovelCard: FC<{
           )}
 
           <Image
-            className="cover-card-img mb-2 aspect-[1/1.5] rounded-lg object-fill"
+            className="cover-card-img mb-2 w-full rounded-lg object-fill"
             src={details.thumbnail}
             alt={details.thumbnail}
             width={cardWidth}
@@ -84,15 +73,19 @@ const NovelCard: FC<{
       </Link>
 
       <div className="absolute inset-0 hidden flex-col sm:flex">
-        <div className="mb-2 flex flex-1 flex-col justify-between rounded-md border border-border/70 bg-white p-2 opacity-0 transition duration-300 hover:shadow-md group-hover:opacity-100">
+        <div className="mb-2 flex flex-1 flex-col justify-between rounded-lg border border-border/70 bg-white p-2 opacity-0 transition duration-300 hover:shadow-md group-hover:opacity-100">
           <div className="h-6">
-            {details.genre && (
-              <Link href={`/genre/${makeSlug(details.genre)}`} passHref>
+            {details.genreSlug && (
+              <Link href={`/genre/${details.genreSlug}`} passHref>
                 <Badge
-                  className="capitalize text-sm border border-border"
+                  className="capitalize text-xs border border-border"
                   variant="secondary"
+                  title={
+                    details.genreSlug.charAt(0).toUpperCase() +
+                    details.genreSlug.slice(1)
+                  }
                 >
-                  {details.genre}
+                  {details.genreSlug}
                 </Badge>
               </Link>
             )}
@@ -133,9 +126,7 @@ const NovelCard: FC<{
                   className="mt-1 stroke-2"
                 />
               </div>
-              <p className="text-sm font-semibold">
-                {(details?.chapters ?? []).length}
-              </p>
+              <p className="text-sm font-semibold">{details.chapterCount}</p>
             </div>
           </div>
           <div className="space-y-2">

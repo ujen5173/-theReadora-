@@ -2,7 +2,7 @@
 
 import { StoryStatus } from "@prisma/client";
 import { Loader2, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import readingTime from "reading-time";
 import { toast } from "sonner";
@@ -20,10 +20,11 @@ const chapterSchema = z.object({
 
 const StoryEditorFooter = () => {
   const router = useRouter();
+  const { story_id } = useParams();
 
   const [isSavingDraft, setIsSavingDraft] = useState(false);
 
-  const { storyId, title, wordCount, htmlContent } = useNewChapterStore();
+  const { title, wordCount, htmlContent, setHardSaved } = useNewChapterStore();
   const {
     mutateAsync: createChapter,
     status,
@@ -50,10 +51,10 @@ const StoryEditorFooter = () => {
       const res = await createChapter({
         title,
         wordCount,
-        readingTime: readingTime(htmlContent).minutes,
+        readingTime: readingTime(htmlContent).time,
         status: StoryStatus.PUBLISHED,
         content: htmlContent,
-        storyId,
+        storyId: story_id as string,
       });
 
       if (res.success) {
@@ -74,10 +75,11 @@ const StoryEditorFooter = () => {
         wordCount,
         status: StoryStatus.DRAFT,
         content: htmlContent,
-        readingTime: readingTime(htmlContent).minutes,
-        storyId,
+        readingTime: readingTime(htmlContent).time,
+        storyId: story_id as string,
       });
 
+      setHardSaved(true);
       toast.success("Draft saved successfully");
     } catch (error) {
       console.error(error);

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Story Editor",
+  title: "Story Editor | Readora",
   description: "Edit your story",
 };
 

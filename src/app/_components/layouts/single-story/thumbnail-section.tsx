@@ -1,6 +1,8 @@
 import {
+  Analytics01Icon,
   BookmarkCheck02Icon,
   BookOpen01Icon,
+  Edit01Icon,
   Share01Icon,
 } from "hugeicons-react";
 import { StarIcon } from "lucide-react";
@@ -8,12 +10,15 @@ import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import PremiumBanner from "../../shared/premium-banner";
 import type { Story } from "@prisma/client";
+import { auth } from "~/server/auth";
 
 interface ThumbnailSectionProps {
   story: Story;
 }
 
-const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
+const ThumbnailSection = async ({ story }: ThumbnailSectionProps) => {
+  const user = await auth();
+
   return (
     <section className="w-full space-y-6">
       <div className="w-full h-auto shadow-lg rounded-md">
@@ -41,20 +46,48 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
             <span className="ml-2">...</span>
           </div>
         </Button>
-        <Button
-          variant={"outline"}
-          icon={BookmarkCheck02Icon}
-          className="w-full bg-white"
-        >
-          Save to List
-        </Button>
-        <Button
-          variant={"outline"}
-          icon={Share01Icon}
-          className="w-full bg-white"
-        >
-          Share
-        </Button>
+        {user?.user.id === story.authorId ? (
+          <>
+            <Button
+              variant={"outline"}
+              icon={Analytics01Icon}
+              className="w-full bg-white"
+            >
+              View Analytics
+            </Button>
+            <Button
+              variant={"outline"}
+              icon={Edit01Icon}
+              className="w-full bg-white"
+            >
+              Edit Story
+            </Button>
+            <Button
+              variant={"outline"}
+              icon={Share01Icon}
+              className="w-full bg-white"
+            >
+              Share
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              variant={"outline"}
+              icon={BookmarkCheck02Icon}
+              className="w-full bg-white"
+            >
+              Save to List
+            </Button>
+            <Button
+              variant={"outline"}
+              icon={Share01Icon}
+              className="w-full bg-white"
+            >
+              Share
+            </Button>
+          </>
+        )}
       </div>
 
       <PremiumBanner />

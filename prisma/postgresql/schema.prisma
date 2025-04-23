@@ -53,7 +53,7 @@ model Story {
     synopsis       String
     reads          Int         @default(0)
     votes          Int         @default(0)
-    readingTime    Int         @default(0)
+    readingTime    Int
     thumbnail      String
     thumbnailId    String
     tags           String[]

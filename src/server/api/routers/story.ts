@@ -9,11 +9,48 @@ import {
 import { GENRES, LANGUAGES } from "~/utils/constants";
 import { makeSlug } from "~/utils/helpers";
 
+export type ChapterMetrics = {
+  wordCount: number;
+  readingTime: number;
+  likesCount: number;
+  commentsCount: number;
+  viewsCount: number;
+};
+
+const NCardEntity = {
+  id: true,
+  slug: true,
+  title: true,
+  votes: true,
+  reads: true,
+  readingTime: true,
+  thumbnail: true,
+  isCompleted: true,
+  genreSlug: true,
+  chapterCount: true,
+  author: {
+    select: {
+      name: true,
+    },
+  },
+};
+
 export const storyRouter = createTRPCRouter({
   test: publicProcedure.query(() => {
     return {
       status: "Success",
     };
+  }),
+
+  getNovels: protectedProcedure.query(async ({ ctx }) => {
+    const novels = await ctx.postgresDb.story.findMany({
+      where: {
+        authorId: ctx.session?.user.id,
+      },
+      select: NCardEntity,
+    });
+
+    return novels;
   }),
 
   latest: publicProcedure
@@ -50,30 +87,11 @@ export const storyRouter = createTRPCRouter({
           orderBy: {
             votes: "desc",
           },
-          include: {
-            author: {
-              select: {
-                name: true,
-                username: true,
-              },
-            },
-            chapters: {
-              select: {
-                id: true,
-                title: true,
-                slug: true,
-              },
-            },
-          },
+          select: NCardEntity,
           take: input.limit,
         });
 
-        return stories.map(({ genreSlug, ...rest }) => {
-          return {
-            ...rest,
-            genre: genreSlug,
-          };
-        });
+        return stories;
       } catch (err) {
         console.error("Error fetching stories:", err);
         throw new Error("Error fetching stories");
@@ -225,7 +243,13 @@ export const storyRouter = createTRPCRouter({
           throw new Error("Story not found");
         }
 
-        return story;
+        return {
+          ...story,
+          chapters: story.chapters.map((chapter) => ({
+            ...chapter,
+            metrics: JSON.parse(chapter.metrics as string),
+          })),
+        };
       } catch (err) {
         console.error("Error fetching story by ID or slug:", err);
         throw new Error("Error fetching story");
@@ -396,6 +420,7 @@ export const storyRouter = createTRPCRouter({
             thumbnailId: input.thumbnail.public_id,
             thumbnail: input.thumbnail.url,
             genreSlug: genre.toLowerCase(),
+            readingTime: 0,
             language: input.language as Language,
           },
         });

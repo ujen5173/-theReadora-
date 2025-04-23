@@ -6,13 +6,11 @@ const TrendingSection = async () => {
     limit: 10,
   });
 
-  console.log(stories);
-
   return (
     <BookSection
       title="Discover Trending Reads"
       scrollable={true}
-      novels={[...stories]}
+      novels={stories}
     />
   );
 };

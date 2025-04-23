@@ -99,7 +99,7 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
           {hasCompletion ? (
             <AICompletionCommands
               onDiscard={() => {
-                if (editor) editor.chain().unsetHighlight().focus().run();
+                // if (editor) editor.chain().unsetHighlight().focus().run();
                 onOpenChange(false);
               }}
               completion={completion}

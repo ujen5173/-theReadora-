@@ -26,7 +26,7 @@ const GenerativeMenuSwitch = ({
         placement: open ? "bottom-start" : "top",
         onHidden: () => {
           onOpenChange(false);
-          if (editor) editor.chain().unsetHighlight().run();
+          // if (editor) editor.chain().unsetHighlight().run();
         },
       }}
       className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border border-muted bg-background shadow-xl"

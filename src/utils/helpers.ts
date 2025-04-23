@@ -15,6 +15,13 @@ export const formatNumber = (num: number) => {
   return numeral(num).format("0.[0]a");
 };
 
+export const formatDate = (date: Date) => {
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  });
+};
+
 export function formatBytes(
   bytes: number,
   opts: {
@@ -45,4 +52,13 @@ export const mongoObjectId = () => {
       })
       .toLowerCase()
   );
+};
+
+export const getReadingTimeText = (readingTime: number) => {
+  const totalSeconds = Math.floor(readingTime / 1000);
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+  return `${hours ? `${hours}h` : ""} ${minutes ? `${minutes}m` : ""} read`;
 };

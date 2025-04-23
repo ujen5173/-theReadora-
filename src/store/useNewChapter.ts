@@ -17,6 +17,8 @@ type NewChapterStore = {
   setIsAutoSaving: (isAutoSaving: boolean) => void;
   setStoryId: (storyId: string | null) => void;
   setFocusMode: (focusMode: boolean) => void;
+  hardSaved: boolean;
+  setHardSaved: (hardSaved: boolean) => void;
 };
 
 export const useNewChapterStore = create<NewChapterStore>()(
@@ -29,6 +31,7 @@ export const useNewChapterStore = create<NewChapterStore>()(
       htmlContent: "",
       isAutoSaving: false,
       focusMode: false,
+      hardSaved: false,
       setTitle: (title) => set({ title }),
       setContent: (content) => set({ content }),
       setHtmlContent: (htmlContent) => set({ htmlContent }),
@@ -36,6 +39,7 @@ export const useNewChapterStore = create<NewChapterStore>()(
       setIsAutoSaving: (isAutoSaving) => set({ isAutoSaving }),
       setStoryId: (storyId) => set({ storyId }),
       setFocusMode: (focusMode) => set({ focusMode }),
+      setHardSaved: (hardSaved) => set({ hardSaved }),
     }),
     {
       name: "user-store",
@@ -46,6 +50,7 @@ export const useNewChapterStore = create<NewChapterStore>()(
         content: state.content,
         isAutoSaving: state.isAutoSaving,
         focusMode: state.focusMode,
+        hardSaved: state.hardSaved,
       }),
     }
   )

@@ -26,6 +26,7 @@ export const generateMetadata = async ({ params }: PageProps) => {
 
 const SingleStory = async ({ params }: PageProps) => {
   const slug = await params;
+
   const story = await api.story.byID_or_slug({
     query: slug.slug,
   });
