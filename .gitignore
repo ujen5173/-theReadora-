@@ -46,4 +46,4 @@ yarn-error.log*
 .idea
 
 # generated files
-/generated
+/generated/

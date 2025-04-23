@@ -1,4 +1,3 @@
-import { Input } from "~/components/ui/input";
 import Logo from "../shared/logo";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Crown, Plus } from "lucide-react";
@@ -12,6 +11,8 @@ import {
 } from "~/components/ui/navigation-menu";
 import { cn } from "~/lib/utils";
 import Link from "next/link";
+import UserHeader from "../user/user-header";
+import SearchBar from "./search-bar";
 
 // Genre list for explore dropdown
 const GENRES = {
@@ -36,13 +37,6 @@ const GENRES = {
     { name: "Horror", href: "/genre/horror" },
   ],
 };
-
-// for search input
-const KbdIcon = () => (
-  <kbd className="pointer-events-none hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-    <span className="text-xs mt-1">⌘</span>K
-  </kbd>
-);
 
 const GenreColumn = ({
   genres,
@@ -111,23 +105,17 @@ const Header = ({ background = false }: { background?: boolean }) => {
               </Button>
             </li>
             <li>
-              <Button variant="link" icon={Plus} iconPlacement="left">
-                Write something
-              </Button>
+              <Link href="/write">
+                <Button variant="link" icon={Plus} iconPlacement="left">
+                  Write something
+                </Button>
+              </Link>
             </li>
           </ul>
         </div>
         <div className="flex items-center gap-2">
-          <Input
-            size="lg"
-            placeholder="Search..."
-            icon={KbdIcon}
-            className="bg-white w-80"
-            iconPlacement="right"
-          />
-          <Link href="/auth/signin">
-            <Button>Sign in</Button>
-          </Link>
+          <SearchBar />
+          <UserHeader />
         </div>
       </div>
     </header>

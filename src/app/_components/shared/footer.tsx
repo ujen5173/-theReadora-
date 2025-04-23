@@ -1,5 +1,5 @@
 import {
-  Facebook01Icon,
+  DiscordIcon,
   Idea01Icon,
   InstagramIcon,
   PinterestIcon,
@@ -10,6 +10,12 @@ import { Button, buttonVariants } from "~/components/ui/button";
 import Logo from "./logo";
 import { navigationLinks, siteConfig } from "~/utils/site";
 import FeedbackDialog from "./feedback";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 
 const Footer = () => {
   return (
@@ -17,9 +23,9 @@ const Footer = () => {
       <div className="mx-auto max-w-[1440px]">
         <div className="grid grid-cols-1 gap-8 px-4 py-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="grid-cols-2">
-            <Link href="/" className="mb-4 mr-6 flex w-fit items-end gap-1">
+            <div className="mb-4 mr-6 flex w-fit items-end gap-1">
               <Logo />
-            </Link>
+            </div>
             <p className="text-text-light mb-2 text-sm">{siteConfig.title}</p>
             <p className="text-text-light mb-4 text-sm">
               {siteConfig.description}
@@ -58,48 +64,88 @@ const Footer = () => {
             </h1>
             <ul className="flex items-center gap-2">
               <li>
-                <Link
-                  href={siteConfig.links.discord}
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "icon",
-                  })}
-                >
-                  <PinterestIcon className="text-primary" />
-                </Link>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link
+                        href={siteConfig.links.pinterest}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "icon",
+                        })}
+                      >
+                        <PinterestIcon className="text-primary" />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Pinterest</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </li>
               <li>
-                <Link
-                  href={siteConfig.links.discord}
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "icon",
-                  })}
-                >
-                  <InstagramIcon className="text-primary" />
-                </Link>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link
+                        href={siteConfig.links.instagram}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "icon",
+                        })}
+                      >
+                        <InstagramIcon className="text-primary" />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Instagram</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </li>
               <li>
-                <Link
-                  href={siteConfig.links.discord}
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "icon",
-                  })}
-                >
-                  <Facebook01Icon className="text-primary" />
-                </Link>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link
+                        href={siteConfig.links.twitter}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "icon",
+                        })}
+                      >
+                        <TwitterIcon className="text-primary" />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Twitter</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </li>
               <li>
-                <Link
-                  href={siteConfig.links.discord}
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "icon",
-                  })}
-                >
-                  <TwitterIcon className="text-primary" />
-                </Link>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link
+                        href={siteConfig.links.discord}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "icon",
+                        })}
+                      >
+                        <DiscordIcon className="text-primary" />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Discord</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </li>
             </ul>
           </div>

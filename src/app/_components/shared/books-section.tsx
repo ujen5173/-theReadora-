@@ -21,30 +21,19 @@ const BookSection = ({
           <ArrowDown className="h-5 w-5 text-primary" />
         </div>
 
-        <div className="flex items-center gap-4">
-          <NovelCard
-            details={{
-              id: "b3c4d5e6-f789-4a1b-9c2d-3e4f5a6b7c8d",
-              title: "Quantum Singularity",
-              slug: "quantum-singularity",
-              summary:
-                "A physics experiment creates parallel reality fractures",
-              author: {
-                name: "Sarah Thompson",
-                username: "sarah_writes",
-              },
-              thumbnail: "/hero-stories/4.jpg",
-              tags: ["hard sci-fi", "quantum physics", "alternate realities"],
-              genreSlug: "Horror",
-              reads: 150000,
-              votes: 30000,
-              readingTime: 500000,
-              isMature: false,
-              isCompleted: false,
-              chapters: [],
-            }}
-          />
-        </div>
+        {novels.length === 0 ? (
+          <div className="flex items-center min-h-40 justify-center w-full h-full">
+            <p className="text-gray-600 text-lg font-semibold">
+              Not Enough Data to show
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {novels.map((novel) => (
+              <NovelCard key={novel.slug} details={novel} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

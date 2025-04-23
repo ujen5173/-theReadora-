@@ -1,3 +1,4 @@
+import type { Language } from "@prisma/client";
 import { z } from "zod";
 
 import {
@@ -5,6 +6,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { GENRES, LANGUAGES } from "~/utils/constants";
 import { makeSlug } from "~/utils/helpers";
 
 export const storyRouter = createTRPCRouter({
@@ -28,6 +30,7 @@ export const storyRouter = createTRPCRouter({
           },
           take: input.limit,
         });
+
         return stories;
       } catch (err) {
         console.error("Error fetching stories:", err);
@@ -47,10 +50,30 @@ export const storyRouter = createTRPCRouter({
           orderBy: {
             votes: "desc",
           },
+          include: {
+            author: {
+              select: {
+                name: true,
+                username: true,
+              },
+            },
+            chapters: {
+              select: {
+                id: true,
+                title: true,
+                slug: true,
+              },
+            },
+          },
           take: input.limit,
         });
 
-        return stories;
+        return stories.map(({ genreSlug, ...rest }) => {
+          return {
+            ...rest,
+            genre: genreSlug,
+          };
+        });
       } catch (err) {
         console.error("Error fetching stories:", err);
         throw new Error("Error fetching stories");
@@ -175,6 +198,26 @@ export const storyRouter = createTRPCRouter({
             id: uuidRegex.test(input.query) ? input.query : undefined,
             slug: !uuidRegex.test(input.query) ? input.query : undefined,
           },
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+              },
+            },
+            chapters: {
+              select: {
+                id: true,
+                title: true,
+                createdAt: true,
+                metrics: true,
+              },
+              orderBy: {
+                createdAt: "asc",
+              },
+            },
+          },
         });
 
         if (!story) {
@@ -215,7 +258,6 @@ export const storyRouter = createTRPCRouter({
             },
           },
           orderBy: {
-            createdAt: "desc",
             votes: "desc",
           },
           take: input.limit,
@@ -226,6 +268,37 @@ export const storyRouter = createTRPCRouter({
       } catch (err) {
         console.error("Error searching stories:", err);
         throw new Error("Error searching stories");
+      }
+    }),
+
+  getStoryInfo: publicProcedure
+    .input(z.object({ storyId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      try {
+        const story = await ctx.postgresDb.story.findUnique({
+          where: {
+            id: input.storyId,
+          },
+          select: {
+            title: true,
+            slug: true,
+            storyStatus: true,
+            thumbnail: true,
+            chapters: {
+              select: {
+                id: true,
+                title: true,
+                chapterNumber: true,
+                createdAt: true,
+              },
+            },
+          },
+        });
+
+        return story;
+      } catch (err) {
+        console.error("Error fetching story info:", err);
+        throw new Error("Error fetching story info");
       }
     }),
 
@@ -294,31 +367,41 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string(),
-        summary: z.string(),
-        genre: z.string(),
+        synopsis: z.string(),
+        genre: z.enum(GENRES),
         tags: z.array(z.string()),
-        thumbnail: z.string().url(),
+        thumbnail: z.object({
+          url: z.string(),
+          public_id: z.string(),
+        }),
         isMature: z.boolean().default(false),
+        hasAiContent: z.boolean().default(false),
+        language: z.enum(
+          LANGUAGES.map((lang) => lang.name) as [string, ...string[]]
+        ),
+        isLGBTQContent: z.boolean().default(false),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
         const slug = makeSlug(input.title);
+        const { genre, thumbnail, ...rest } = input;
 
         const story = await ctx.postgresDb.story.create({
           data: {
-            title: input.title,
-            summary: input.summary,
-            genreSlug: input.genre,
+            ...rest,
             authorId: ctx.session?.user.id,
-            tags: input.tags,
-            thumbnail: input.thumbnail,
-            isMature: input.isMature,
             slug,
+            thumbnailId: input.thumbnail.public_id,
+            thumbnail: input.thumbnail.url,
+            genreSlug: genre.toLowerCase(),
+            language: input.language as Language,
           },
         });
 
-        return !!story;
+        return {
+          id: story.id,
+        };
       } catch (err) {
         console.error("Error creating story:", err);
         throw new Error("Error creating story");

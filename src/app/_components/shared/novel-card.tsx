@@ -18,20 +18,17 @@ import {
 } from "hugeicons-react";
 import { cardHeight, cardWidth } from "~/utils/constants";
 import { PlusIcon } from "lucide-react";
+import type { BookMetadataType } from "~/app/write/page";
 
-export type TCard = {
+export type TCard = BookMetadataType & {
   id: string;
-  title: string;
   slug: string;
-  summary: string;
   votes: number;
   reads: number;
   readingTime: number;
   thumbnail: string;
-  tags: string[];
-  isMature: boolean;
   isCompleted: boolean;
-  genreSlug: string;
+  genre: string;
 
   chapters: ChapterCard[];
   author: {
@@ -53,7 +50,7 @@ const NovelCard: FC<{
   details: TCard;
 }> = ({ details }) => {
   return (
-    <div className="cover-card group relative">
+    <div title={details.title} className="cover-card group relative">
       <Link href="/story/[slug]" as={`/story/${details.slug}`} legacyBehavior>
         <a className="relative block">
           {details.isMature && (
@@ -67,14 +64,11 @@ const NovelCard: FC<{
           )}
 
           <Image
-            className="cover-card-img mb-2 rounded-lg object-fill"
+            className="cover-card-img mb-2 aspect-[1/1.5] rounded-lg object-fill"
             src={details.thumbnail}
             alt={details.thumbnail}
             width={cardWidth}
             height={cardHeight}
-            style={{
-              aspectRatio: "1/1.5",
-            }}
           />
 
           <div className="w-full">
@@ -92,10 +86,13 @@ const NovelCard: FC<{
       <div className="absolute inset-0 hidden flex-col sm:flex">
         <div className="mb-2 flex flex-1 flex-col justify-between rounded-md border border-border/70 bg-white p-2 opacity-0 transition duration-300 hover:shadow-md group-hover:opacity-100">
           <div className="h-6">
-            {details.genreSlug && (
-              <Link href={`/genre/${makeSlug(details.genreSlug)}`} passHref>
-                <Badge className="border border-border" variant="secondary">
-                  {details.genreSlug}
+            {details.genre && (
+              <Link href={`/genre/${makeSlug(details.genre)}`} passHref>
+                <Badge
+                  className="capitalize text-sm border border-border"
+                  variant="secondary"
+                >
+                  {details.genre}
                 </Badge>
               </Link>
             )}

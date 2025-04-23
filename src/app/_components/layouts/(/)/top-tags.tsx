@@ -35,7 +35,7 @@ const TopTags = () => {
         ) : (
           <div className="flex items-center min-h-40 justify-center w-full h-full">
             <p className="text-gray-600 text-lg font-semibold">
-              Not Enough Data to show 😥
+              Not Enough Data to show
             </p>
           </div>
         )}

@@ -1,7 +1,7 @@
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["prismaSchemaFolder"]
-    output          = "../../generated/postgres"
+    // output          = "../../generated/postgres"
 }
 
 datasource db {
@@ -33,21 +33,38 @@ model User {
     updatedAt DateTime @updatedAt
 }
 
+enum Language {
+    English
+    Spanish
+    French
+    German
+    Italian
+    Portuguese
+    Russian
+    Chinese
+    Japanese
+    Korean
+}
+
 model Story {
-    id          String      @id @default(cuid())
-    title       String
-    slug        String      @unique
-    summary     String
-    reads       Int         @default(0)
-    votes       Int         @default(0)
-    readingTime Int         @default(0)
-    thumbnail   String
-    tags        String[]
-    isMature    Boolean     @default(false)
-    storyStatus StoryStatus @default(DRAFT)
-    isCompleted Boolean     @default(false)
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
+    id             String      @id @default(cuid())
+    title          String
+    slug           String      @unique
+    synopsis       String
+    reads          Int         @default(0)
+    votes          Int         @default(0)
+    readingTime    Int         @default(0)
+    thumbnail      String
+    thumbnailId    String
+    tags           String[]
+    isMature       Boolean     @default(false)
+    storyStatus    StoryStatus @default(DRAFT)
+    isCompleted    Boolean     @default(false)
+    createdAt      DateTime    @default(now())
+    updatedAt      DateTime    @updatedAt
+    hasAiContent   Boolean     @default(false)
+    language       Language    @default(English)
+    isLGBTQContent Boolean     @default(false)
 
     genreSlug String
     genre     Genres @relation("StoryGenres", fields: [genreSlug], references: [slug])

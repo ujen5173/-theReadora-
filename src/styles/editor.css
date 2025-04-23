@@ -1,0 +1,203 @@
+.editor-container {
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap");
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  color: #334155;
+}
+.editor-container .editor-content, .editor-container .preview-content {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #334155;
+}
+.editor-container .editor-content h1, .editor-container .preview-content h1,
+.editor-container .editor-content h2,
+.editor-container .preview-content h2,
+.editor-container .editor-content h3,
+.editor-container .preview-content h3,
+.editor-container .editor-content h4,
+.editor-container .preview-content h4,
+.editor-container .editor-content h5,
+.editor-container .preview-content h5,
+.editor-container .editor-content h6,
+.editor-container .preview-content h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  color: #1e293b;
+}
+.editor-container .editor-content h1:first-child, .editor-container .preview-content h1:first-child,
+.editor-container .editor-content h2:first-child,
+.editor-container .preview-content h2:first-child,
+.editor-container .editor-content h3:first-child,
+.editor-container .preview-content h3:first-child,
+.editor-container .editor-content h4:first-child,
+.editor-container .preview-content h4:first-child,
+.editor-container .editor-content h5:first-child,
+.editor-container .preview-content h5:first-child,
+.editor-container .editor-content h6:first-child,
+.editor-container .preview-content h6:first-child {
+  margin-top: 0;
+}
+.editor-container .editor-content h1, .editor-container .preview-content h1 {
+  font-size: 2.25rem;
+  letter-spacing: -0.03em;
+  margin-top: 2em;
+}
+.editor-container .editor-content h2, .editor-container .preview-content h2 {
+  font-size: 1.875rem;
+  letter-spacing: -0.02em;
+  margin-top: 1.75em;
+}
+.editor-container .editor-content h3, .editor-container .preview-content h3 {
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  margin-top: 1.5em;
+}
+.editor-container .editor-content h4, .editor-container .preview-content h4 {
+  font-size: 1.25rem;
+  margin-top: 1.25em;
+}
+.editor-container .editor-content p, .editor-container .preview-content p {
+  margin-bottom: 1.5em;
+  color: #334155;
+}
+.editor-container .editor-content p:last-child, .editor-container .preview-content p:last-child {
+  margin-bottom: 0;
+}
+.editor-container .editor-content ul, .editor-container .preview-content ul,
+.editor-container .editor-content ol,
+.editor-container .preview-content ol {
+  margin: 1.5em 0;
+  padding-left: 1.5em;
+  color: #334155;
+}
+.editor-container .editor-content ul li, .editor-container .preview-content ul li,
+.editor-container .editor-content ol li,
+.editor-container .preview-content ol li {
+  margin-bottom: 0.5em;
+}
+.editor-container .editor-content ul li:last-child, .editor-container .preview-content ul li:last-child,
+.editor-container .editor-content ol li:last-child,
+.editor-container .preview-content ol li:last-child {
+  margin-bottom: 0;
+}
+.editor-container .editor-content ul, .editor-container .preview-content ul {
+  list-style-type: disc;
+}
+.editor-container .editor-content ol, .editor-container .preview-content ol {
+  list-style-type: decimal;
+}
+.editor-container .editor-content pre, .editor-container .preview-content pre {
+  font-family: "Fira Code", monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  background-color: var(--muted);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5em 0;
+  color: #1e293b;
+}
+.editor-container .editor-content code, .editor-container .preview-content code {
+  font-family: "Fira Code", monospace;
+  font-size: 0.9em;
+  background-color: var(--muted);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  color: #1e293b;
+}
+.editor-container .editor-content blockquote, .editor-container .preview-content blockquote {
+  border-left: 4px solid var(--primary);
+  margin: 1.5em 0;
+  padding-left: 1em;
+  font-style: italic;
+  color: #64748b;
+}
+.editor-container .editor-content a, .editor-container .preview-content a {
+  color: #2563eb;
+  font-weight: 400;
+  text-decoration: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.2em;
+  transition: color 0.2s ease;
+}
+.editor-container .editor-content a:hover, .editor-container .preview-content a:hover {
+  color: #1d4ed8;
+  text-decoration-thickness: 0.15em;
+}
+.editor-container .editor-content a:active, .editor-container .preview-content a:active {
+  color: #1e40af;
+}
+.editor-container .editor-content table, .editor-container .preview-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+}
+.editor-container .editor-content table th, .editor-container .preview-content table th,
+.editor-container .editor-content table td,
+.editor-container .preview-content table td {
+  padding: 0.75em;
+  border: 1px solid var(--border);
+  text-align: left;
+  color: #334155;
+}
+.editor-container .editor-content table th, .editor-container .preview-content table th {
+  background-color: var(--muted);
+  font-weight: 600;
+  color: #1e293b;
+}
+.editor-container .editor-content hr, .editor-container .preview-content hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2em 0;
+}
+.editor-container .preview-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+}
+.editor-container .preview-content ul[data-type=taskList] {
+  list-style: none;
+  padding-left: 0;
+}
+.editor-container .preview-content ul[data-type=taskList] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.editor-container .preview-content ul[data-type=taskList] li input[type=checkbox] {
+  margin-top: 0.375em;
+  width: 1em;
+  height: 1em;
+}
+.editor-container .prose-sm {
+  font-size: 0.875rem;
+}
+.editor-container .prose-lg {
+  font-size: 1.125rem;
+}
+@media (max-width: 768px) {
+  .editor-container {
+    padding: 0.75rem;
+  }
+  .editor-container .editor-content h1,
+  .editor-container .preview-content h1 {
+    font-size: 2rem;
+  }
+  .editor-container .editor-content h2,
+  .editor-container .preview-content h2 {
+    font-size: 1.75rem;
+  }
+  .editor-container .editor-content h3,
+  .editor-container .preview-content h3 {
+    font-size: 1.375rem;
+  }
+  .editor-container .editor-content h4,
+  .editor-container .preview-content h4 {
+    font-size: 1.125rem;
+  }
+}/*# sourceMappingURL=editor.css.map */

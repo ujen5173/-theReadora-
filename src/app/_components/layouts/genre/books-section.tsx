@@ -13,7 +13,7 @@ const GenreBooksSection = () => {
       id: "b3c4d5e6-f789-4a1b-9c2d-3e4f5a6b7c8d",
       title: "Quantum Singularity",
       slug: "quantum-singularity",
-      summary: "A physics experiment creates parallel reality fractures",
+      synopsis: "A physics experiment creates parallel reality fractures",
       author: {
         name: "Sarah Thompson",
         username: "sarah_writes",
@@ -32,7 +32,7 @@ const GenreBooksSection = () => {
       id: "b3c4d5e6-f789-4a1b-9c2d-3e4f5a6b7cdf",
       title: "Collab to Love",
       slug: "quantum-singularity",
-      summary: "A physics experiment creates parallel reality fractures",
+      synopsis: "A physics experiment creates parallel reality fractures",
       author: {
         name: "Keggster",
         username: "keggster",

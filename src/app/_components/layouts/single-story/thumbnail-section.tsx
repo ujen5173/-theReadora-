@@ -7,18 +7,23 @@ import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import PremiumBanner from "../../shared/premium-banner";
+import type { Story } from "@prisma/client";
 
-const ThumbnailSection = () => {
+interface ThumbnailSectionProps {
+  story: Story;
+}
+
+const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
   return (
     <section className="w-full space-y-6">
       <div className="w-full h-auto shadow-lg rounded-md">
         <Image
-          src={"/hero-stories/3.jpg"}
+          src={story.thumbnail as string}
           width={600}
           height={1440}
           draggable={false}
           className="rounded-md w-full select-none object-cover aspect-[1/1.5]"
-          alt={"Story thumbnail"}
+          alt={story.title}
         />
       </div>
 

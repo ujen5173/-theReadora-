@@ -12,6 +12,8 @@ export const siteConfig = {
     twitter: "https://twitter.com/readora",
     github: "https://github.com/readora",
     discord: "https://discord.gg/readora",
+    pinterest: "https://www.pinterest.com/readora",
+    instagram: "https://www.instagram.com/readora",
   },
   creator: {
     name: "Ujen Basi",

@@ -1,10 +1,12 @@
+"use client";
+
 import { Button } from "~/components/ui/button";
 import Header from "~/app/_components/layouts/header";
 import { Facebook01Icon, GoogleIcon, Mail01Icon } from "hugeicons-react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import Link from "next/link";
-
+import { signIn } from "next-auth/react";
 export default function SignInPage() {
   return (
     <>
@@ -27,6 +29,7 @@ export default function SignInPage() {
             <Button
               size="lg"
               variant="outline"
+              onClick={() => signIn("google")}
               className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-slate-200"
             >
               <GoogleIcon className="size-5" />

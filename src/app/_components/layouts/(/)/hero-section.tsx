@@ -2,6 +2,7 @@ import { BookMarked, SquarePen } from "lucide-react";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import { auth } from "~/server/auth";
 import { merriweatherFont } from "~/utils/font";
 
 const FEATURED_NOVELS = [
@@ -208,7 +209,11 @@ const VerticalSlider = () => (
   </div>
 );
 
-const HeroSection = () => {
+const HeroSection = async () => {
+  // Server-side auth for security
+  const session = await auth();
+  // We still use server auth for security, but we'll also sync with client store
+
   return (
     <section className="w-full">
       <div className="relative mx-auto px-4 pt-4 pb-6 min-h-[30rem] max-w-[1240px] flex gap-10">
