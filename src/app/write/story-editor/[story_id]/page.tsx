@@ -5,6 +5,9 @@
 //   - chapters can be ordered by the chapter number
 // - if chapter_id is provided, the user is EDITING an existing chapter
 
+// TODO:
+// - add search and find and replace feature.
+
 "use client";
 import { Tabs, TabsContent } from "~/components/ui/tabs";
 import { Editor } from "~/app/_components/layouts/editor";
@@ -26,6 +29,7 @@ const StoryEditor = () => {
     setHtmlContent,
     setWordCount,
     setIsAutoSaving,
+    focusMode,
   } = useNewChapterStore();
 
   const handleEditorChange = (json: string, html: string) => {
@@ -86,7 +90,7 @@ const StoryEditor = () => {
           </div>
 
           {/* Right Sidebar - Only visible in normal mode */}
-          <StoryEditorSidebar />
+          {!focusMode && <StoryEditorSidebar />}
         </div>
 
         {/* Footer Actions - Only in normal mode */}

@@ -212,6 +212,7 @@ export const storyRouter = createTRPCRouter({
                 title: true,
                 createdAt: true,
                 metrics: true,
+                chapterNumber: true,
               },
               orderBy: {
                 createdAt: "asc",

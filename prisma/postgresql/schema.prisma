@@ -79,10 +79,9 @@ model Story {
 }
 
 model Chapter {
-    id            String   @id @default(cuid())
+    id            String @id @default(cuid())
     chapterNumber Int
     title         String
-    tags          String[]
     slug          String
 
     // Metrics data for the chapter including engagement and reading statistics

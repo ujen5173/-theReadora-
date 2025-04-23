@@ -1,13 +1,91 @@
+"use client";
+
 import { StoryStatus } from "@prisma/client";
-import { Users } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import readingTime from "reading-time";
+import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { useNewChapterStore } from "~/store/useNewChapter";
 import { api } from "~/trpc/react";
 
+const chapterSchema = z.object({
+  title: z.string().min(5, "Title must be at least 5 characters long"),
+  htmlContent: z
+    .string()
+    .min(10, "Content must be at least 10 characters long"),
+});
+
 const StoryEditorFooter = () => {
-  const { storyId, title, wordCount, htmlContent, content } =
-    useNewChapterStore();
-  const { mutateAsync: createChapter } = api.chapter.create.useMutation();
+  const router = useRouter();
+
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
+
+  const { storyId, title, wordCount, htmlContent } = useNewChapterStore();
+  const {
+    mutateAsync: createChapter,
+    status,
+    error,
+  } = api.chapter.create.useMutation();
+
+  if (error) {
+    toast.error(error.message);
+  }
+
+  const handlePublish = async () => {
+    try {
+      const result = chapterSchema.safeParse({
+        title,
+        htmlContent,
+      });
+
+      if (!result.success) {
+        // Show the first validation error
+        toast.error(result?.error?.errors?.[0]?.message);
+        return;
+      }
+
+      const res = await createChapter({
+        title,
+        wordCount,
+        readingTime: readingTime(htmlContent).minutes,
+        status: StoryStatus.PUBLISHED,
+        content: htmlContent,
+        storyId,
+      });
+
+      if (res.success) {
+        toast.success(res.message);
+        router.push(`/story/${res.storySlug}/`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to publish chapter");
+    }
+  };
+
+  const handleSaveDraft = async () => {
+    try {
+      setIsSavingDraft(true);
+      await createChapter({
+        title,
+        wordCount,
+        status: StoryStatus.DRAFT,
+        content: htmlContent,
+        readingTime: readingTime(htmlContent).minutes,
+        storyId,
+      });
+
+      toast.success("Draft saved successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to save draft");
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
 
   return (
     <div className="flex justify-between items-center mt-6 pt-6 border-t">
@@ -17,48 +95,20 @@ const StoryEditorFooter = () => {
 
       <div className="flex gap-3">
         <Button
-          onClick={async () => {
-            try {
-              await createChapter({
-                title,
-                wordCount,
-                status: StoryStatus.DRAFT,
-                content: htmlContent,
-                storyId,
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          }}
+          onClick={handleSaveDraft}
           variant="outline"
+          disabled={status === "pending" || isSavingDraft}
         >
+          {isSavingDraft && <Loader2 className="size-4 animate-spin" />}
           Save Draft
         </Button>
         <Button
-          onClick={async () => {
-            try {
-              console.log({
-                title,
-                wordCount,
-                status: StoryStatus.PUBLISHED,
-                content: htmlContent,
-                storyId,
-              });
-              // await createChapter({
-              //   title,
-              //   wordCount,
-              //   chapterNumber,
-              //   status: StoryStatus.PUBLISHED,
-              //   content: htmlContent,
-              //   storyId,
-              // });
-            } catch (error) {
-              console.error(error);
-            }
-          }}
+          onClick={handlePublish}
+          disabled={status === "pending"}
           className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
           effect="shineHover"
         >
+          {status === "pending" && <Loader2 className="size-4 animate-spin" />}
           Publish Chapter
         </Button>
       </div>

@@ -5,14 +5,15 @@ import { api } from "~/trpc/server";
 import { generateSEOMetadata } from "~/utils/site";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export const generateMetadata = async ({ params }: PageProps) => {
+  const slug = await params;
   const story = await api.story.byID_or_slug({
-    query: params.slug,
+    query: slug.slug,
   });
 
   return generateSEOMetadata({
@@ -22,9 +23,11 @@ export const generateMetadata = async ({ params }: PageProps) => {
     pathname: `/story/${story.slug}`,
   });
 };
+
 const SingleStory = async ({ params }: PageProps) => {
+  const slug = await params;
   const story = await api.story.byID_or_slug({
-    query: params.slug,
+    query: slug.slug,
   });
 
   return (

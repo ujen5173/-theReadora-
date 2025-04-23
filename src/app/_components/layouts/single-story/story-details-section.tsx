@@ -30,6 +30,7 @@ interface StoryDetailsSectionProps {
       id: string;
       title: string;
       createdAt: Date;
+      chapterNumber: number;
       metrics: {
         wordCount: number;
         readingTime: number;
@@ -60,7 +61,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
             </span>
           </p>
           <Badge
-            className="capitalize text-base px-3 py-1"
+            className="capitalize text-sm px-3 py-1"
             variant={"destructive"}
           >
             {story.genreSlug}
@@ -219,7 +220,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
         </h2>
         {story.chapters.length > 0 ? (
           <div className="space-y-2">
-            {story.chapters.map((chapter) => (
+            {story.chapters.map((chapter, index) => (
               <Link
                 key={chapter.id}
                 href={`/chapter/${chapter.id}`}
@@ -228,7 +229,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-4">
                     <span className="font-medium text-slate-700">
-                      Chapter {chapter.id}:
+                      Chapter {chapter.chapterNumber}:
                     </span>
                     <span className="text-slate-800 font-semibold">
                       {chapter.title}

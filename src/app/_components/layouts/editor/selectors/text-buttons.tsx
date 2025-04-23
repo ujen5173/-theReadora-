@@ -12,7 +12,9 @@ import { Button } from "~/components/ui/button";
 
 export const TextButtons = () => {
   const { editor } = useEditor();
+
   if (!editor) return null;
+
   const items: SelectorItem[] = [
     {
       name: "bold",
@@ -45,6 +47,7 @@ export const TextButtons = () => {
       icon: CodeIcon,
     },
   ];
+
   return (
     <div className="flex">
       {items.map((item) => (

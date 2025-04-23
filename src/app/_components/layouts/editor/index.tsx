@@ -54,7 +54,7 @@ export function Editor({
         <EditorContent
           initialContent={initialContent}
           extensions={[...defaultExtensions, slashCommand]}
-          className={`prose prose-lg editor-content dark:prose-invert max-w-none focus:outline-none ${className}`}
+          className={`prose prose-lg editor-content max-w-none focus:outline-none ${className}`}
           editorProps={{
             attributes: {
               class: "outline-none min-h-[500px] px-4 py-4",

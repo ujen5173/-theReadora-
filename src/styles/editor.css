@@ -200,4 +200,12 @@
   .editor-container .preview-content h4 {
     font-size: 1.125rem;
   }
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
 }/*# sourceMappingURL=editor.css.map */

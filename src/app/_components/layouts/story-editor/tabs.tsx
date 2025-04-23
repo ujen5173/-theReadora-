@@ -1,8 +1,11 @@
 import { Focus, Sparkles } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { useNewChapterStore } from "~/store/useNewChapter";
 
 const StoryEditorTabs = () => {
+  const { focusMode, setFocusMode } = useNewChapterStore();
+
   return (
     <div className="flex items-center justify-between mb-6">
       <TabsList className="bg-slate-100/50 dark:bg-slate-800/50 p-1">
@@ -27,8 +30,14 @@ const StoryEditorTabs = () => {
       </TabsList>
 
       <div className="flex gap-2">
-        <Button variant="outline" effect={"shineHover"} icon={Focus} size="sm">
-          Focus Mode
+        <Button
+          variant="outline"
+          onClick={() => setFocusMode(!focusMode)}
+          effect={"shineHover"}
+          icon={Focus}
+          size="sm"
+        >
+          {focusMode ? "Comfort Mode" : "Focus Mode"}
         </Button>
         {/* <Button
           size="sm"

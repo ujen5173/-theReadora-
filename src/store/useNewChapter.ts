@@ -11,10 +11,12 @@ type NewChapterStore = {
   setTitle: (title: string) => void;
   setContent: (content: JSONContent) => void;
   htmlContent: string;
+  focusMode: boolean;
   setHtmlContent: (htmlContent: string) => void;
   setWordCount: (wordCount: number) => void;
   setIsAutoSaving: (isAutoSaving: boolean) => void;
   setStoryId: (storyId: string | null) => void;
+  setFocusMode: (focusMode: boolean) => void;
 };
 
 export const useNewChapterStore = create<NewChapterStore>()(
@@ -26,12 +28,14 @@ export const useNewChapterStore = create<NewChapterStore>()(
       content: {},
       htmlContent: "",
       isAutoSaving: false,
+      focusMode: false,
       setTitle: (title) => set({ title }),
       setContent: (content) => set({ content }),
       setHtmlContent: (htmlContent) => set({ htmlContent }),
       setWordCount: (wordCount) => set({ wordCount }),
       setIsAutoSaving: (isAutoSaving) => set({ isAutoSaving }),
       setStoryId: (storyId) => set({ storyId }),
+      setFocusMode: (focusMode) => set({ focusMode }),
     }),
     {
       name: "user-store",
@@ -41,6 +45,7 @@ export const useNewChapterStore = create<NewChapterStore>()(
         wordCount: state.wordCount,
         content: state.content,
         isAutoSaving: state.isAutoSaving,
+        focusMode: state.focusMode,
       }),
     }
   )
