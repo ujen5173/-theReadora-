@@ -22,8 +22,8 @@ const NotFoundPage = () => {
           </h2>
 
           <p className="text-xl text-slate-500 max-w-md">
-            This chapter seems to be missing from our library. Let's get you
-            back to where the stories are.
+            This chapter seems to be missing from our library. Let&apos;s get
+            you back to where the stories are.
           </p>
 
           <div className="flex gap-4 mt-4">

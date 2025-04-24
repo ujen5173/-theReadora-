@@ -1,5 +1,4 @@
 import { Button } from "~/components/ui/button";
-import { auth } from "~/server/auth";
 import { outfit } from "~/utils/font";
 import { PenLine, Coins, Users, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -15,8 +14,6 @@ import { Badge } from "~/components/ui/badge";
 import Recommendations from "./_components/layouts/(/)/recommendations";
 
 export default async function Home() {
-  const session = await auth();
-
   const features = [
     {
       icon: Coins,

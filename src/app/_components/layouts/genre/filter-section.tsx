@@ -218,8 +218,12 @@ const GenreFilterSection = () => {
                 className="w-full"
               />
               <div className="flex items-center justify-between text-xs text-slate-500">
-                <span>{(viewRange[0] / 1000).toFixed(1)}K</span>
-                <span>{(viewRange[1] / 1000).toFixed(1)}K+</span>
+                <span>
+                  {viewRange?.[0] ? (viewRange[0] / 1000).toFixed(1) : "0"}K
+                </span>
+                <span>
+                  {viewRange?.[1] ? (viewRange[1] / 1000).toFixed(1) : "0"}K+
+                </span>
               </div>
             </div>
           </div>

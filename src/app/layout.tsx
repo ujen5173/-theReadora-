@@ -12,6 +12,7 @@ import { generateSEOMetadata } from "~/utils/site";
 import TailwindIndicator from "./_components/shared/tailwind-size-indicator";
 import { SessionProvider } from "next-auth/react";
 import RootLayoutClient from "./_components/layouts/root-layout-client";
+import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
 
 export const metadata: Metadata = generateSEOMetadata({});
 
@@ -32,24 +33,26 @@ export default function RootLayout({
           <SessionProvider>
             <RootContext>
               <RootLayoutClient>
-                <TailwindIndicator />
-                <NextTopLoader height={5} color="#e11d48" />
-                <Toaster />
+                <CSPostHogProvider>
+                  <TailwindIndicator />
+                  <NextTopLoader height={5} color="#e11d48" />
+                  <Toaster />
 
-                <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
-                <div
-                  className="fixed -z-10 h-screen w-full opacity-30"
-                  style={{
-                    backgroundImage: "url(/ooorganize.svg)",
-                    backgroundBlendMode: "overlay",
-                    backgroundAttachment: "fixed",
-                    backgroundSize: "cover",
-                  }}
-                ></div>
+                  <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
+                  <div
+                    className="fixed -z-10 h-screen w-full opacity-30"
+                    style={{
+                      backgroundImage: "url(/ooorganize.svg)",
+                      backgroundBlendMode: "overlay",
+                      backgroundAttachment: "fixed",
+                      backgroundSize: "cover",
+                    }}
+                  ></div>
 
-                {children}
+                  {children}
 
-                <Footer />
+                  <Footer />
+                </CSPostHogProvider>
               </RootLayoutClient>
             </RootContext>
           </SessionProvider>
