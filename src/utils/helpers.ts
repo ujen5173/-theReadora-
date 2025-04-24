@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import numeral from "numeral";
+import { GENRES } from "./constants";
 
 export const makeSlug = (str: string) =>
   slugify(str, {
@@ -61,4 +62,8 @@ export const getReadingTimeText = (readingTime: number) => {
   const minutes = Math.floor((totalSeconds % 3600) / 60);
 
   return `${hours ? `${hours}h` : ""} ${minutes ? `${minutes}m` : ""} read`;
+};
+
+export const getValidGenre = (genre: string) => {
+  return GENRES.find((g) => g.toLowerCase() === genre.toLowerCase()) ?? "";
 };

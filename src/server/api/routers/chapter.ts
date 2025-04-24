@@ -1,6 +1,10 @@
 import { StoryStatus } from "@prisma/client";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { makeSlug, mongoObjectId } from "~/utils/helpers";
 
 export const chapterRouter = createTRPCRouter({
@@ -19,6 +23,7 @@ export const chapterRouter = createTRPCRouter({
       if (!input.storyId) {
         throw new Error("Story ID is required");
       }
+
       try {
         //? how we are going to handle the chapter creation?
         // we need to find a way to break down the content into chunks based on the word count
@@ -111,6 +116,48 @@ export const chapterRouter = createTRPCRouter({
         throw new Error("Failed to create chapter");
       }
     }),
+
+  updateChapterOrder: protectedProcedure
+    .input(
+      z.object({
+        storyId: z.string(),
+        chapterIdsAndOrders: z.array(
+          z.object({
+            chapterId: z.string(),
+            order: z.number(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { storyId, chapterIdsAndOrders } = input;
+      try {
+        const story = await ctx.postgresDb.story.findUnique({
+          where: { id: storyId },
+        });
+
+        if (!story) {
+          throw new Error("Story not found");
+        }
+
+        await Promise.all(
+          chapterIdsAndOrders.map(({ chapterId, order }) =>
+            ctx.postgresDb.chapter.update({
+              where: { id: chapterId },
+              data: { chapterNumber: order },
+            })
+          )
+        );
+
+        return {
+          success: true,
+          message: "Chapter order updated successfully",
+        };
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to update chapter order");
+      }
+    }),
 });
 
 const MAX_CHUNK_SIZE = 1500 as const;
@@ -131,7 +178,7 @@ function countWords(html: string): number {
 }
 
 function processChapterContent(content: string): ContentChunk[] {
-  // Split content into paragraphs (assuming paragraphs are separated by </p>)
+  // Split content into paragraphs
   const paragraphs = content
     .split("</p>")
     .map((p) => p.trim())
@@ -152,7 +199,6 @@ function processChapterContent(content: string): ContentChunk[] {
       currentWordCount + paragraphWordCount > MAX_CHUNK_SIZE &&
       currentChunk.length > 0
     ) {
-      // Store current chunk
       chunks.push({
         content: currentChunk.join("\n"),
         wordCount: currentWordCount,
@@ -164,12 +210,10 @@ function processChapterContent(content: string): ContentChunk[] {
       currentWordCount = 0;
     }
 
-    // Add paragraph to current chunk
     currentChunk.push(paragraph);
     currentWordCount += paragraphWordCount;
   }
 
-  // Don't forget to add the last chunk if there's anything left
   if (currentChunk.length > 0) {
     chunks.push({
       content: currentChunk.join("\n"),

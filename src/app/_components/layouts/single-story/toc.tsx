@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ChevronRight,
   GripVertical,
@@ -7,6 +9,7 @@ import {
   Plus,
   X,
   Save,
+  Loader2,
 } from "lucide-react";
 import { getReadingTimeText, formatDate } from "~/utils/helpers";
 import { LeftToRightListNumberIcon, RecordIcon } from "hugeicons-react";
@@ -37,6 +40,7 @@ import {
 import { Button } from "~/components/ui/button";
 import type { ChapterMetrics } from "~/server/api/routers/story";
 import { toast } from "sonner";
+import { api } from "~/trpc/react";
 
 interface Chapter {
   id: string;
@@ -133,7 +137,7 @@ const SortableChapter = ({
                   // Handle delete
                 }}
               >
-                <Trash2 className="size-4 mr-2" />
+                <Trash2 className="size-4 mr-2 text-red-600" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -151,6 +155,7 @@ const TableOfContent = ({
 }: TableOfContentProps) => {
   const [chapters, setChapters] = useState(initialChapters);
   const [hasOrderChanged, setHasOrderChanged] = useState(false);
+  const { mutateAsync, status } = api.chapter.updateChapterOrder.useMutation();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -174,9 +179,6 @@ const TableOfContent = ({
         );
 
         setHasOrderChanged(true);
-        // Just notify parent about changes, don't update immediately
-        updateChapterOrder(newChapters);
-
         return newChapters;
       });
     }
@@ -194,6 +196,21 @@ const TableOfContent = ({
 
   const updateChapterOrder = async (newChapters: Chapter[]) => {
     try {
+      const extractedChapterIdsAndOrders = newChapters.map((chapter) => ({
+        chapterId: chapter.id,
+        order: chapter.chapterNumber,
+      }));
+
+      const { success, message } = await mutateAsync({
+        storyId,
+        chapterIdsAndOrders: extractedChapterIdsAndOrders,
+      });
+
+      if (success) {
+        toast.success(message);
+      } else {
+        toast.error(message);
+      }
     } catch (error) {
       toast.error("Failed to update chapter order");
     }
@@ -212,7 +229,7 @@ const TableOfContent = ({
         )}
       </div>
 
-      {chapters.length > 0 ? (
+      {chapters.sort((a, b) => a.chapterNumber - b.chapterNumber).length > 0 ? (
         <>
           <DndContext
             sensors={sensors}
@@ -268,10 +285,14 @@ const TableOfContent = ({
                     updateChapterOrder(chapters);
                     setHasOrderChanged(false);
                   }}
+                  disabled={status === "pending"}
                   className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
-                  icon={Save}
+                  icon={status !== "pending" ? Save : undefined}
                 >
-                  Save Order
+                  {status === "pending" && (
+                    <Loader2 className="size-4 animate-spin" />
+                  )}
+                  {status === "pending" ? "Saving..." : "Save Order"}
                 </Button>
               </div>
             </div>

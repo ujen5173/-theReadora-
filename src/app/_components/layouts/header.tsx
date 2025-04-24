@@ -17,24 +17,24 @@ import SearchBar from "./search-bar";
 // Genre list for explore dropdown
 const GENRES = {
   column1: [
-    { name: "Romance", href: "/genre/romance" },
-    { name: "Fanfiction", href: "/genre/fanfiction" },
-    { name: "LGBTQ+", href: "/genre/lgbtq" },
-    { name: "Werewolf", href: "/genre/werewolf" },
-    { name: "Contemporary Lit", href: "/genre/contemporary" },
+    { name: "Romance", href: "/search?genre=romance" },
+    { name: "Fanfiction", href: "/search?genre=fanfiction" },
+    { name: "LGBTQ+", href: "/search?genre=lgbtq" },
+    { name: "Werewolf", href: "/search?genre=werewolf" },
+    { name: "Contemporary Lit", href: "/search?genre=contemporary" },
   ],
   column2: [
-    { name: "New Adult", href: "/genre/new-adult" },
-    { name: "Fantasy", href: "/genre/fantasy" },
-    { name: "Short Story", href: "/genre/short-story" },
-    { name: "Teen Fiction", href: "/genre/teen-fiction" },
-    { name: "Historical Fiction", href: "/genre/historical-fiction" },
+    { name: "New Adult", href: "/search?genre=new-adult" },
+    { name: "Fantasy", href: "/search?genre=fantasy" },
+    { name: "Short Story", href: "/search?genre=short-story" },
+    { name: "Teen Fiction", href: "/search?genre=teen-fiction" },
+    { name: "Historical Fiction", href: "/search?genre=historical-fiction" },
   ],
   column3: [
-    { name: "Paranormal", href: "/genre/paranormal" },
-    { name: "Editor's Picks", href: "/genre/editors-picks" },
-    { name: "Humor", href: "/genre/humor" },
-    { name: "Horror", href: "/genre/horror" },
+    { name: "Paranormal", href: "/search?genre=paranormal" },
+    { name: "Editor's Picks", href: "/search?genre=editors-picks" },
+    { name: "Humor", href: "/search?genre=humor" },
+    { name: "Horror", href: "/search?genre=horror" },
   ],
 };
 

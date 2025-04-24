@@ -1,4 +1,5 @@
 import type { Language } from "@prisma/client";
+import type { inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 
 import {
@@ -24,6 +25,7 @@ const NCardEntity = {
   votes: true,
   reads: true,
   readingTime: true,
+  isMature: true,
   thumbnail: true,
   isCompleted: true,
   genreSlug: true,
@@ -34,6 +36,20 @@ const NCardEntity = {
     },
   },
 };
+
+const filterSchema = z.object({
+  query: z.string().optional(),
+  genre: z.string().optional(),
+  sortBy: z.string().optional(),
+  status: z.array(z.enum(["COMPLETED", "MATURE"])).optional(),
+  contentType: z.array(z.enum(["AI_GENREATED", "ORIGINAL"])).optional(),
+  minChapterCount: z.number().optional(),
+  maxChapterCount: z.number().optional(),
+  minViewsCount: z.number().optional(),
+  maxViewsCount: z.number().optional(),
+  publishedAt: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+});
 
 export const storyRouter = createTRPCRouter({
   test: publicProcedure.query(() => {
@@ -208,13 +224,12 @@ export const storyRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        const uuidRegex =
-          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        const cuidRegex = /^c[a-z0-9]{24}$/;
 
         const story = await ctx.postgresDb.story.findUnique({
           where: {
-            id: uuidRegex.test(input.query) ? input.query : undefined,
-            slug: !uuidRegex.test(input.query) ? input.query : undefined,
+            id: cuidRegex.test(input.query) ? input.query : undefined,
+            slug: !cuidRegex.test(input.query) ? input.query : undefined,
           },
           include: {
             author: {
@@ -259,37 +274,152 @@ export const storyRouter = createTRPCRouter({
   search: publicProcedure
     .input(
       z.object({
-        query: z.string(),
+        ...filterSchema.shape,
         skip: z.number().optional(),
         limit: z.number().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       try {
-        /* TODO:
-          ? a very advance search by title, description, and tags, author, genre and other things.
-          ? user can search by small title and author name or genre
-          ? this search system will be very vast and can handle complex search
-        */
+        const {
+          query,
+          genre,
+          sortBy,
+          status,
+          contentType,
+          minChapterCount,
+          maxChapterCount,
+          minViewsCount,
+          maxViewsCount,
+          publishedAt,
+          tags,
+          skip = 0,
+          limit = 10,
+        } = input;
 
-        const stories = await ctx.postgresDb.story.findMany({
-          where: {
-            title: {
-              contains: input.query,
-              mode: "insensitive",
-            },
-            tags: {
-              hasSome: input.query.split(" "),
-            },
-          },
-          orderBy: {
-            votes: "desc",
-          },
-          take: input.limit,
-          skip: input.skip,
-        });
+        // Build where clause
+        const where: any = {};
 
-        return stories;
+        // Text search across multiple fields
+        if (query) {
+          where.OR = [
+            { title: { contains: query, mode: "insensitive" } },
+            { synopsis: { contains: query, mode: "insensitive" } },
+            { author: { name: { contains: query, mode: "insensitive" } } },
+            { tags: { hasSome: [query] } },
+          ];
+        }
+
+        // Genre filter
+        if (genre) {
+          where.genreSlug = {
+            equals: genre.toLowerCase(),
+            mode: "insensitive",
+          };
+        }
+
+        // Status filters
+        if (status) {
+          const statusFilters: any = {};
+          if (status.includes("COMPLETED")) {
+            statusFilters.isCompleted = true;
+          }
+          if (status.includes("MATURE")) {
+            statusFilters.isMature = true;
+          }
+          Object.assign(where, statusFilters);
+        }
+
+        // Content type filters
+        if (contentType) {
+          const contentFilters: any = {};
+          if (contentType.includes("AI_GENREATED")) {
+            contentFilters.hasAiContent = true;
+          }
+          if (contentType.includes("ORIGINAL")) {
+            contentFilters.hasAiContent = false;
+          }
+          Object.assign(where, contentFilters);
+        }
+
+        // Chapter count range
+        if (minChapterCount || maxChapterCount) {
+          where.chapterCount = {};
+          if (minChapterCount) where.chapterCount.gte = minChapterCount;
+          if (maxChapterCount) where.chapterCount.lte = maxChapterCount;
+        }
+
+        // Views count range
+        if (minViewsCount || maxViewsCount) {
+          where.reads = {};
+          if (minViewsCount) where.reads.gte = minViewsCount;
+          if (maxViewsCount) where.reads.lte = maxViewsCount;
+        }
+
+        // Publication date filter
+        if (publishedAt) {
+          const dateFilters: Record<string, Date> = {
+            LAST_WEEK: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+            LAST_MONTH: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+            LAST_YEAR: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
+          };
+
+          if (publishedAt in dateFilters) {
+            where.createdAt = {
+              gte: dateFilters[publishedAt],
+            };
+          }
+        }
+
+        // Tags filter
+        if (tags && tags.length > 0) {
+          where.tags = {
+            hasSome: tags,
+          };
+        }
+
+        // Determine sort order
+        const orderBy: any = {};
+        switch (sortBy?.toUpperCase()) {
+          case "HOT":
+            orderBy.votes = "desc";
+            break;
+          case "POPULAR":
+            orderBy.reads = "desc";
+            break;
+          case "LATEST":
+            orderBy.createdAt = "desc";
+            break;
+          case "TOP RATED":
+            orderBy.votes = "desc";
+            break;
+          default:
+            orderBy.createdAt = "desc";
+        }
+
+        console.log({ where });
+
+        // Execute query with pagination
+        const [stories, totalCount] = await Promise.all([
+          ctx.postgresDb.story.findMany({
+            where,
+            orderBy,
+            skip,
+            take: limit,
+            select: NCardEntity,
+          }),
+          ctx.postgresDb.story.count({ where }),
+        ]);
+
+        return {
+          stories,
+          metadata: {
+            total: totalCount,
+            page: Math.floor(skip / limit) + 1,
+            pageSize: limit,
+            pageCount: Math.ceil(totalCount / limit),
+          },
+        };
       } catch (err) {
         console.error("Error searching stories:", err);
         throw new Error("Error searching stories");
@@ -434,3 +564,5 @@ export const storyRouter = createTRPCRouter({
       }
     }),
 });
+
+export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;

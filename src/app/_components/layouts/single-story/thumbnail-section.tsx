@@ -77,7 +77,7 @@ const ThumbnailSection = async ({ story }: ThumbnailSectionProps) => {
         )}
         <ShareDialog
           title={story.title}
-          url={`${env.NEXT_PUBLIC_APP_URL}/story/${story.id}`}
+          url={`${env.NEXT_PUBLIC_APP_URL}/story/${story.slug}`}
         />
       </div>
 

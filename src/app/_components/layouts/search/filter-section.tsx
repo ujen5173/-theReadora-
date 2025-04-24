@@ -1,13 +1,4 @@
 "use client";
-
-// Filter Methods:
-// - completed or not
-// - mature or not, ai generated, grahics
-// - tags
-// - view range
-// - hot, popular, latest
-// - number of chapters
-
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Switch } from "~/components/ui/switch";
@@ -27,8 +18,9 @@ import {
   Star,
   Eye,
   Calendar,
-  Search,
   Plus,
+  ChevronsUpDown,
+  Check,
 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -39,13 +31,59 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import PremiumBanner from "../../shared/premium-banner";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "~/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
+import { GENRES } from "~/utils/constants";
+import { cn } from "~/lib/utils";
+import { useFilterStore } from "~/store/useFilter";
 
-const GenreFilterSection = () => {
+const FilterSection = ({
+  query,
+  genre,
+  handleRefetch,
+}: {
+  query: string;
+  genre: string;
+  handleRefetch: () => void;
+}) => {
+  const {
+    genre: genreStore,
+    sortBy,
+    status,
+    contentType,
+    minChapterCount,
+    maxChapterCount,
+    minViewsCount,
+    maxViewsCount,
+    publishedAt,
+    tags,
+    setQuery,
+    setGenre,
+    setSortBy,
+    setStatus,
+    setContentType,
+    setChapterCount,
+    setViewsCount,
+    setPublishedAt,
+    setTags,
+    resetAll,
+    applyFilters,
+  } = useFilterStore();
+
   const [chapterRange, setChapterRange] = useState([0, 100]);
   const [viewRange, setViewRange] = useState([0, 1000000]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [customTag, setCustomTag] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
 
   const popularTags = [
     "Fantasy",
@@ -68,11 +106,13 @@ const GenreFilterSection = () => {
   ];
 
   const handleAddCustomTag = () => {
-    if (customTag && !selectedTags.includes(customTag)) {
-      setSelectedTags((prev) => [...prev, customTag]);
+    if (customTag && !tags.includes(customTag)) {
+      setTags([...tags, customTag]);
       setCustomTag("");
     }
   };
+
+  const [open, setOpen] = useState(false);
 
   return (
     <section className="space-y-4">
@@ -86,7 +126,15 @@ const GenreFilterSection = () => {
               <Filter className="size-5 text-primary" />
               <h3 className="font-semibold text-slate-900">Story Filters</h3>
             </div>
-            <Button variant="ghost" size="sm" className="text-slate-500">
+            <Button
+              onClick={() => {
+                resetAll();
+                handleRefetch();
+              }}
+              variant="ghost"
+              size="sm"
+              className="text-slate-500"
+            >
               Reset All
             </Button>
           </div>
@@ -96,16 +144,56 @@ const GenreFilterSection = () => {
           {/* Search Input */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-slate-700">
-              Search Stories
+              By Genre
             </Label>
             <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-slate-500" />
-              <Input
-                placeholder="Search by title or author..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8"
-              />
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-full justify-between"
+                  >
+                    {genreStore
+                      ? GENRES.find(
+                          (g) => g.toLowerCase() === genreStore.toLowerCase()
+                        )
+                      : "Select genre"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Search genre..." />
+                    <CommandList>
+                      <CommandEmpty>No genre found.</CommandEmpty>
+                      <CommandGroup>
+                        {GENRES.map((g) => (
+                          <CommandItem
+                            key={g}
+                            value={g}
+                            onSelect={(currentValue) => {
+                              setGenre(currentValue);
+                              setOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                genreStore.toLowerCase() === g.toLowerCase()
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {g}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
 
@@ -120,9 +208,15 @@ const GenreFilterSection = () => {
                   key={option.label}
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  icon={option.icon}
+                  className={cn(
+                    "w-full justify-start",
+                    sortBy === option.label && "bg-primary text-white"
+                  )}
+                  onClick={() => {
+                    setSortBy(option.label);
+                  }}
                 >
-                  <option.icon className="size-4 mr-2" />
                   {option.label}
                 </Button>
               ))}
@@ -140,7 +234,17 @@ const GenreFilterSection = () => {
                     Completed Only
                   </Label>
                 </div>
-                <Switch id="completed" />
+                <Switch
+                  id="completed"
+                  checked={status.includes("COMPLETED")}
+                  onCheckedChange={(checked) => {
+                    setStatus(
+                      checked
+                        ? [...status, "COMPLETED"]
+                        : status.filter((s) => s !== "COMPLETED")
+                    );
+                  }}
+                />
               </div>
 
               <div className="flex items-center justify-between">
@@ -150,7 +254,17 @@ const GenreFilterSection = () => {
                     Mature Content
                   </Label>
                 </div>
-                <Switch id="mature" />
+                <Switch
+                  id="mature"
+                  checked={status.includes("MATURE")}
+                  onCheckedChange={(checked) => {
+                    setStatus(
+                      checked
+                        ? [...status, "MATURE"]
+                        : status.filter((s) => s !== "MATURE")
+                    );
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -166,7 +280,17 @@ const GenreFilterSection = () => {
                     AI Generated
                   </Label>
                 </div>
-                <Switch id="ai" />
+                <Switch
+                  id="ai"
+                  checked={contentType.includes("AI_GENREATED")}
+                  onCheckedChange={(checked) => {
+                    setContentType(
+                      checked
+                        ? [...contentType, "AI_GENREATED"]
+                        : contentType.filter((type) => type !== "AI_GENREATED")
+                    );
+                  }}
+                />
               </div>
 
               <div className="flex items-center justify-between">
@@ -176,7 +300,17 @@ const GenreFilterSection = () => {
                     With Graphics
                   </Label>
                 </div>
-                <Switch id="graphics" />
+                <Switch
+                  id="graphics"
+                  checked={contentType.includes("ORIGINAL")}
+                  onCheckedChange={(checked) => {
+                    setContentType(
+                      checked
+                        ? [...contentType, "ORIGINAL"]
+                        : contentType.filter((type) => type !== "ORIGINAL")
+                    );
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -195,6 +329,10 @@ const GenreFilterSection = () => {
                 min={0}
                 max={100}
                 step={1}
+                defaultValue={[minChapterCount, maxChapterCount]}
+                onValueCommit={() => {
+                  setChapterCount(chapterRange[0] ?? 0, chapterRange[1] ?? 0);
+                }}
                 className="w-full"
               />
               <div className="flex items-center justify-between text-xs text-slate-500">
@@ -214,7 +352,11 @@ const GenreFilterSection = () => {
                 onValueChange={setViewRange}
                 min={0}
                 max={1000000}
-                step={1000}
+                step={50000}
+                defaultValue={[minViewsCount, maxViewsCount]}
+                onValueCommit={() => {
+                  setViewsCount(viewRange[0] ?? 0, viewRange[1] ?? 0);
+                }}
                 className="w-full"
               />
               <div className="flex items-center justify-between text-xs text-slate-500">
@@ -234,7 +376,14 @@ const GenreFilterSection = () => {
               <Calendar className="size-4 text-slate-600" />
               <Label className="text-sm font-medium">Publication Date</Label>
             </div>
-            <Select>
+            <Select
+              value={publishedAt}
+              onValueChange={(value) => {
+                setPublishedAt(
+                  value as "LAST_WEEK" | "LAST_MONTH" | "LAST_YEAR" | "ALL_TIME"
+                );
+              }}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
@@ -274,26 +423,24 @@ const GenreFilterSection = () => {
 
             {/* Selected and Popular Tags */}
             <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 bg-slate-50 rounded-lg">
-              {selectedTags.map((tag) => (
+              {tags.map((tag) => (
                 <Badge
                   key={tag}
                   variant="default"
                   className="cursor-pointer"
-                  onClick={() =>
-                    setSelectedTags((prev) => prev.filter((t) => t !== tag))
-                  }
+                  onClick={() => setTags(tags.filter((t) => t !== tag))}
                 >
                   {tag} ×
                 </Badge>
               ))}
               {popularTags
-                .filter((tag) => !selectedTags.includes(tag))
+                .filter((tag) => !tags.includes(tag))
                 .map((tag) => (
                   <Badge
                     key={tag}
                     variant="outline"
                     className="cursor-pointer"
-                    onClick={() => setSelectedTags((prev) => [...prev, tag])}
+                    onClick={() => setTags([...tags, tag])}
                   >
                     {tag}
                   </Badge>
@@ -304,11 +451,18 @@ const GenreFilterSection = () => {
 
         {/* Apply Filters Button - Sticky */}
         <div className="sticky bottom-0 p-4 border-t rounded-b-lg border-slate-200 bg-white">
-          <Button className="w-full">Apply Filters</Button>
+          <Button
+            className="w-full"
+            onClick={() => {
+              handleRefetch();
+            }}
+          >
+            Apply Filters
+          </Button>
         </div>
       </div>
     </section>
   );
 };
 
-export default GenreFilterSection;
+export default FilterSection;

@@ -1,6 +1,6 @@
-import Header from "~/app/_components/layouts/header";
 import StoryDetailsSection from "~/app/_components/layouts/single-story/story-details-section";
 import ThumbnailSection from "~/app/_components/layouts/single-story/thumbnail-section";
+import StoryNotFound from "~/app/_components/shared/StoryNotFound";
 import { api } from "~/trpc/server";
 import { generateSEOMetadata } from "~/utils/site";
 
@@ -31,24 +31,24 @@ const SingleStory = async ({ params }: PageProps) => {
     query: slug.slug,
   });
 
+  if (!story) {
+    return <StoryNotFound />;
+  }
+
   return (
-    <>
-      <Header />
-
-      <section className="w-full">
-        <div className="flex border-b border-border max-w-[1240px] mx-auto px-4 py-10 gap-10">
-          {/* Thumbnail and actions */}
-          <div className="flex-1 min-w-72 max-w-96">
-            <ThumbnailSection story={story} />
-          </div>
-
-          {/* Story details */}
-          <div className="flex-[5]">
-            <StoryDetailsSection story={story} />
-          </div>
+    <section className="w-full">
+      <div className="flex border-b border-border max-w-[1240px] mx-auto px-4 py-10 gap-10">
+        {/* Thumbnail and actions */}
+        <div className="flex-1 min-w-72 max-w-96">
+          <ThumbnailSection story={story} />
         </div>
-      </section>
-    </>
+
+        {/* Story details */}
+        <div className="flex-[5]">
+          <StoryDetailsSection story={story} />
+        </div>
+      </div>
+    </section>
   );
 };
 

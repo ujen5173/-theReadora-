@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { type FC } from "react";
@@ -18,18 +17,19 @@ import {
 } from "hugeicons-react";
 import { cardHeight, cardWidth } from "~/utils/constants";
 import { PlusIcon } from "lucide-react";
-import type { BookMetadataType } from "~/app/write/page";
 
-export type TCard = BookMetadataType & {
+export type TCard = {
   id: string;
   slug: string;
+  title: string;
   votes: number;
   reads: number;
   readingTime: number;
   thumbnail: string;
+  isMature: boolean;
   isCompleted: boolean;
   genreSlug: string;
-  chapterCount: string;
+  chapterCount: number;
   author: {
     name: string;
   };
@@ -73,10 +73,10 @@ const NovelCard: FC<{
       </Link>
 
       <div className="absolute inset-0 hidden flex-col sm:flex">
-        <div className="mb-2 flex flex-1 flex-col justify-between rounded-lg border border-border/70 bg-white p-2 opacity-0 transition duration-300 hover:shadow-md group-hover:opacity-100">
+        <div className="mb-2 flex flex-1 flex-col justify-between rounded-md border border-border/70 bg-white p-2 opacity-0 transition duration-300 hover:shadow-md group-hover:opacity-100">
           <div className="h-6">
             {details.genreSlug && (
-              <Link href={`/genre/${details.genreSlug}`} passHref>
+              <Link href={`/search?genre=${details.genreSlug}`} passHref>
                 <Badge
                   className="capitalize text-xs border border-border"
                   variant="secondary"

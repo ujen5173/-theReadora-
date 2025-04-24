@@ -27,7 +27,7 @@ const SearchBar = () => {
   );
 
   const debouncedFunction = (e: string) => {
-    router.push(`/?query=${e}`);
+    router.push(`/search?query=${e}`);
 
     // Get the data from the server
     refetch();
