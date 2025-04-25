@@ -1,23 +1,34 @@
-import { PrismaClient } from "generated/mongodb";
+import { MongoClient } from "mongodb";
 import { env } from "~/env";
+const uri = env.MONGODB_URI;
+const options = {};
 
-const createMongoClient = () => {
-  const client = new PrismaClient({
-    datasourceUrl: env.MONGODB_URI, // MongoDB connection URL
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
+let client;
+let clientPromise: Promise<MongoClient>;
 
-  // Log when MongoDB is connected
-  console.log("\x1b[36m%s\x1b[0m", "🍃 MongoDB Connected Successfully");
+if (process.env.NODE_ENV === "development") {
+  const globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>;
+  };
 
-  return client;
-};
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri, options);
+    globalWithMongo._mongoClientPromise = client.connect();
+  }
+  clientPromise = globalWithMongo._mongoClientPromise;
+} else {
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
+}
 
-const globalForMongo = globalThis as unknown as {
-  mongoDb: ReturnType<typeof createMongoClient> | undefined;
-};
+export default clientPromise;
 
-export const mongoDb = globalForMongo.mongoDb ?? createMongoClient();
-
-if (env.NODE_ENV !== "production") globalForMongo.mongoDb = mongoDb;
+export async function getMongoDB() {
+  try {
+    const client = await clientPromise;
+    return client.db("readora");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    throw error;
+  }
+}

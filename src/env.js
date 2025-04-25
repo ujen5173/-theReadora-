@@ -16,6 +16,7 @@ export const env = createEnv({
       .default("development"),
     CLOUDINARY_API_SECRET: z.string(),
     OPENAI_API_KEY: z.string(),
+    NEXT_AUTH_URL: z.string().url(),
   },
 
   client: {
@@ -44,6 +45,7 @@ export const env = createEnv({
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    NEXT_AUTH_URL: process.env.NEXT_AUTH_URL,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

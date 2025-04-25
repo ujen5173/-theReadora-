@@ -13,6 +13,7 @@ import TailwindIndicator from "./_components/shared/tailwind-size-indicator";
 import { SessionProvider } from "next-auth/react";
 import RootLayoutClient from "./_components/layouts/root-layout-client";
 import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
+import { Suspense } from "react";
 
 export const metadata: Metadata = generateSEOMetadata({});
 
@@ -34,24 +35,26 @@ export default function RootLayout({
             <RootContext>
               <RootLayoutClient>
                 <CSPostHogProvider>
-                  <TailwindIndicator />
-                  <NextTopLoader height={5} color="#e11d48" />
-                  <Toaster />
+                  <Suspense>
+                    <TailwindIndicator />
+                    <NextTopLoader height={5} color="#e11d48" />
+                    <Toaster />
 
-                  <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
-                  <div
-                    className="fixed -z-10 h-screen w-full opacity-30"
-                    style={{
-                      backgroundImage: "url(/ooorganize.svg)",
-                      backgroundBlendMode: "overlay",
-                      backgroundAttachment: "fixed",
-                      backgroundSize: "cover",
-                    }}
-                  ></div>
+                    <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
+                    <div
+                      className="fixed -z-10 h-screen w-full opacity-30"
+                      style={{
+                        backgroundImage: "url(/ooorganize.svg)",
+                        backgroundBlendMode: "overlay",
+                        backgroundAttachment: "fixed",
+                        backgroundSize: "cover",
+                      }}
+                    ></div>
 
-                  {children}
+                    {children}
 
-                  <Footer />
+                    <Footer />
+                  </Suspense>
                 </CSPostHogProvider>
               </RootLayoutClient>
             </RootContext>

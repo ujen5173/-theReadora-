@@ -53,20 +53,22 @@ export const chapterRouter = createTRPCRouter({
 
         const objectId = mongoObjectId();
 
-        const mongoContentID = await ctx.mongoDb.chapter.create({
-          data: {
-            id: objectId,
-            storyId: input.storyId,
-            chapterNumber: story.chapterCount + 1,
-            version: 1,
-            chunks: {
-              create: chunks.map((chunk, index) => ({
-                content: chunk.content,
-                index: index,
-              })),
+        const mongoContentID = await ctx.mongoDb
+          .collection("Chapters")
+          .insertOne({
+            data: {
+              id: objectId,
+              storyId: input.storyId,
+              chapterNumber: story.chapterCount + 1,
+              version: 1,
+              chunks: {
+                create: chunks.map((chunk, index) => ({
+                  content: chunk.content,
+                  index: index,
+                })),
+              },
             },
-          },
-        });
+          });
 
         await ctx.postgresDb.chapter.create({
           data: {
@@ -85,7 +87,7 @@ export const chapterRouter = createTRPCRouter({
               ratingValue: 0,
               ratingAvg: 0,
             }),
-            mongoContentID: [mongoContentID.id],
+            mongoContentID: [mongoContentID.insertedId.toString()],
           },
         });
 

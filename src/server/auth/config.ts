@@ -27,6 +27,7 @@ export const authConfig = {
   pages: {
     signIn: "/auth/signin",
   },
+  trustHost: true,
   providers: [
     GoogleProvider({
       async profile(profile: GoogleProfile): Promise<User> {

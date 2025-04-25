@@ -91,6 +91,11 @@ export const suggestionItems = createSuggestionItems([
         /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
       );
 
+      if (!videoLink) {
+        alert("Please enter a Youtube Video Link");
+        return;
+      }
+
       if (ytregex.test(videoLink)) {
         editor
           .chain()

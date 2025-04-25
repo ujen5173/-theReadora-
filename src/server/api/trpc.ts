@@ -4,11 +4,11 @@ import { ZodError } from "zod";
 
 import { auth } from "~/server/auth";
 import { postgresDb } from "~/server/postgresql";
-import { mongoDb } from "~/server/mongodb";
+import { getMongoDB } from "~/server/mongodb";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await auth();
-
+  const mongoDb = await getMongoDB();
   return {
     postgresDb,
     mongoDb,
