@@ -15,11 +15,9 @@ import "~/styles/editor.css";
 import { api } from "~/trpc/react";
 
 const ChapterContent = () => {
-  const { chapter } = useChapterStore();
-
   return (
     <section className="w-full bg-slate-100">
-      <div className="max-w-4xl border-x border-slate-200 bg-white px-6 mx-auto">
+      <div className="max-w-4xl border-x border-b border-border bg-white px-6 mx-auto">
         <ChapterMetaData />
         <Content />
       </div>
@@ -148,7 +146,7 @@ const Content = () => {
   if (!initialChunk) return null;
 
   return (
-    <div className="editor-container px-[0!important] space-y-8 border-b border-slate-200">
+    <div className="editor-container px-[0!important] space-y-8">
       {/* Initial chunk */}
       <div
         className="preview-content text-slate-500"
@@ -173,31 +171,29 @@ const Content = () => {
 
       {/* Next Chapter or End of Story Message */}
       {!hasNextPage && data?.pages.length && data.pages.length > 0 && (
-        <div className="py-12 flex flex-col items-center">
+        <div className="py-12 m-0 flex flex-col items-center">
           {nextChapter ? (
-            <div className="flex flex-col items-center gap-4 bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="border border-slate-200 text-slate-500 text-sm font-medium px-4 py-1 bg-slate-100 rounded-full">
+            <div className="flex flex-col items-center border border-border gap-4 bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl shadow-sm">
+              <span className="border border-border text-slate-500 text-sm font-medium px-4 py-1 bg-slate-100 rounded-full">
                 Up Next
               </span>
               <h3 className="text-2xl font-bold text-slate-700 text-center">
                 Chapter {nextChapter.chapterNumber}: {nextChapter.title}
               </h3>
-              <Button
-                variant="dark"
-                icon={ArrowRightIcon}
-                iconPlacement="right"
-                className="w-full"
-              >
-                Continue Reading
-              </Button>
+              <Link href={`/chapter/${nextChapter.id}`}>
+                <Button
+                  variant="dark"
+                  icon={ArrowRightIcon}
+                  iconPlacement="right"
+                  className="w-full"
+                >
+                  Continue Reading
+                </Button>
+              </Link>
             </div>
           ) : (
-            <div className="text-center bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-8 max-w-lg w-full mx-auto">
+            <div className="text-center bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-border shadow-sm space-y-8 max-w-lg w-full mx-auto">
               <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 px-4 py-1 border border-amber-200 bg-amber-100 rounded-full text-amber-700 text-sm font-medium">
-                  <span>🎉</span>
-                  <span>You earned 50 coins!</span>
-                </div>
                 <h3 className="text-2xl font-bold text-slate-800">
                   You're All Caught Up!
                 </h3>

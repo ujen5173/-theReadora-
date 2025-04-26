@@ -13,6 +13,8 @@ const ChapterWrapper = ({
 }) => {
   const { setStory, setChapter, setInitialChunk } = useChapterStore();
 
+  // TODO: fix this production error
+  // Type '{ id: string; storyId: string; chapterNumber: number | null; version: number; createdAt: Date; }' is missing the following properties from type 'Chapter': title, slug, updatedAt, metrics, mongoContentID
   useLayoutEffect(() => {
     if (details) {
       setStory(details.story);

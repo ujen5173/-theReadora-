@@ -118,7 +118,7 @@ const FilterSection = ({
     <section className="space-y-4">
       <PremiumBanner />
 
-      <div className="w-full bg-white rounded-lg border border-slate-200">
+      <div className="w-full bg-white rounded-lg border border-border">
         {/* Header */}
         <div className="border-b border-slate-200 p-4">
           <div className="flex items-center justify-between">

@@ -1,7 +1,6 @@
 // TODO: Fix the search bar after the write page is done
 
 "use client";
-
 import { useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Input } from "~/components/ui/input";
@@ -11,12 +10,8 @@ const SearchBar = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
   const router = useRouter();
-  const {
-    data: stories,
-    refetch,
-    isRefetching,
-    error,
-  } = api.story.search.useQuery(
+
+  const { refetch } = api.story.search.useQuery(
     {
       query: query || "",
       limit: 5,
@@ -27,13 +22,15 @@ const SearchBar = () => {
   );
 
   const debouncedFunction = (e: string) => {
+    // startHolyLoader();
     router.push(`/search?query=${e}`);
+    // stopHolyLoader();
 
     // Get the data from the server
     refetch();
   };
 
-  const debounced = useDebouncedCallback(debouncedFunction, 800);
+  const debounced = useDebouncedCallback(debouncedFunction, 10);
 
   return (
     <div className="relative">

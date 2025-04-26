@@ -203,6 +203,7 @@ export const storyRouter = createTRPCRouter({
               not: input.storyId,
             },
           },
+          select: NCardEntity,
           orderBy: {
             votes: "desc",
           },

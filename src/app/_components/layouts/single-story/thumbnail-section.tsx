@@ -1,3 +1,4 @@
+"use client";
 import {
   Analytics01Icon,
   BookmarkCheck02Icon,
@@ -9,16 +10,20 @@ import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import PremiumBanner from "../../shared/premium-banner";
 import type { Story } from "@prisma/client";
-import { auth } from "~/server/auth";
 import ShareDialog from "../../shared/share-dialog";
 import { env } from "~/env";
+import { useChapterStore } from "~/store/useChapter";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "~/store/userStore";
 
 interface ThumbnailSectionProps {
   story: Story;
 }
 
-const ThumbnailSection = async ({ story }: ThumbnailSectionProps) => {
-  const user = await auth();
+const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
+  const user = useUserStore();
+  const { chapter } = useChapterStore();
+  const router = useRouter();
 
   return (
     <section className="w-full space-y-6">
@@ -34,7 +39,14 @@ const ThumbnailSection = async ({ story }: ThumbnailSectionProps) => {
       </div>
 
       <div className="space-y-2">
-        <Button variant={"default"} icon={BookOpen01Icon} className="w-full">
+        <Button
+          onClick={() => {
+            router.push(`/chapter/${chapter?.slug}`);
+          }}
+          variant={"default"}
+          icon={BookOpen01Icon}
+          className="w-full"
+        >
           Start Reading
         </Button>
         <Button variant={"outline"} className="w-full bg-white">
@@ -47,7 +59,7 @@ const ThumbnailSection = async ({ story }: ThumbnailSectionProps) => {
             <span className="ml-2">...</span>
           </div>
         </Button>
-        {user?.user.id === story.authorId ? (
+        {user?.user?.id === story.authorId ? (
           <>
             <Button
               variant={"outline"}

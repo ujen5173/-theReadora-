@@ -55,7 +55,7 @@ const StoryEditorSidebar = () => {
       <NewChapterDialog open={open} onOpenChange={setOpen} />
 
       <div className="w-72 hidden lg:block space-y-4">
-        <div className="bg-white rounded-xl border border-slate-200 dark:border-slate-700/50 p-4 shadow-sm">
+        <div className="bg-white rounded-xl border border-border dark:border-slate-700/50 p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-slate-700 flex items-center gap-2">
               Story Info
@@ -96,7 +96,7 @@ const StoryEditorSidebar = () => {
             )}
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 dark:border-slate-700/50 p-4 shadow-sm">
+        <div className="bg-white rounded-xl border border-border dark:border-slate-700/50 p-4 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-slate-700 flex items-center gap-2">
               <PenLine className="h-4 w-4 text-primary" />
@@ -108,7 +108,7 @@ const StoryEditorSidebar = () => {
               <div className="space-y-2 pr-4 w-[16.8rem]">
                 {story?.chapters.map((chapter) => (
                   <div key={chapter.id} className="flex min-w-0">
-                    <p className="w-full text-sm font-semibold text-slate-600 hover:bg-slate-100 p-2 rounded-md border border-slate-200 cursor-pointer transition-colors truncate">
+                    <p className="w-full text-sm font-semibold text-slate-600 hover:bg-slate-100 p-2 rounded-md border border-border cursor-pointer transition-colors truncate">
                       Chapter {chapter.chapterNumber}: {chapter.title}
                     </p>
                   </div>
@@ -136,7 +136,7 @@ const StoryEditorSidebar = () => {
         <Collapsible
           open={isStatsOpen}
           onOpenChange={setIsStatsOpen}
-          className="bg-white rounded-xl border border-slate-200 dark:border-slate-700/50 p-4 shadow-sm"
+          className="bg-white rounded-xl border border-border dark:border-slate-700/50 p-4 shadow-sm"
         >
           <div className="flex items-center justify-between">
             <h3 className="font-semibold flex items-center text-slate-700 gap-2">

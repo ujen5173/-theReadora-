@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 
 const ExportChapter = () => {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700/50 p-4 shadow-sm">
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-border dark:border-slate-700/50 p-4 shadow-sm">
       <h3 className="font-semibold text-slate-700 flex items-center gap-2">
         <FolderExportIcon className="h-4 w-4 text-primary" />
         Export Story

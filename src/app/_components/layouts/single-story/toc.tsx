@@ -75,7 +75,7 @@ const SortableChapter = ({
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-white border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors"
+      className="bg-white border border-border rounded-lg p-4 hover:bg-slate-50 transition-colors"
     >
       <div className="flex justify-between items-center gap-2">
         {isAuthor && (

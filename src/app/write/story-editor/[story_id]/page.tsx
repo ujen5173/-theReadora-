@@ -58,7 +58,7 @@ const StoryEditor = () => {
             <Tabs defaultValue="write" className="h-full">
               <StoryEditorTabs />
 
-              <div className="editor-container h-full bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700/50 shadow-sm transition-all">
+              <div className="editor-container h-full bg-white dark:bg-slate-800 rounded-xl border border-border dark:border-slate-700/50 shadow-sm transition-all">
                 <TabsContent
                   value="write"
                   className="min-h-[600px] max-h-[800px] h-[80vh]"

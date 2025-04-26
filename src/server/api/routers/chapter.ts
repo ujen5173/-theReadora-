@@ -175,6 +175,7 @@ export const chapterRouter = createTRPCRouter({
     .input(z.object({ slugOrId: z.string() }))
     .query(async ({ ctx, input }) => {
       const { slugOrId } = input;
+
       try {
         const chapter = await ctx.postgresDb.chapter.findFirst({
           where: {
