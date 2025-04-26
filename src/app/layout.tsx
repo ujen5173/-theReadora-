@@ -5,7 +5,6 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { RootContext } from "./_components/root";
-import NextTopLoader from "nextjs-toploader";
 import Footer from "./_components/shared/footer";
 import { Toaster } from "sonner";
 import { generateSEOMetadata } from "~/utils/site";
@@ -14,6 +13,7 @@ import { SessionProvider } from "next-auth/react";
 import RootLayoutClient from "./_components/layouts/root-layout-client";
 import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
 import { Suspense } from "react";
+import HolyLoader from "holy-loader";
 
 export const metadata: Metadata = generateSEOMetadata({});
 
@@ -37,19 +37,9 @@ export default function RootLayout({
                 <CSPostHogProvider>
                   <Suspense>
                     <TailwindIndicator />
-                    <NextTopLoader height={5} color="#e11d48" />
+                    {/* <NextTopLoader height={5} color="#e11d48" /> */}
+                    <HolyLoader height={5} color="#e11d48" />
                     <Toaster />
-
-                    <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
-                    <div
-                      className="fixed -z-10 h-screen w-full opacity-30"
-                      style={{
-                        backgroundImage: "url(/ooorganize.svg)",
-                        backgroundBlendMode: "overlay",
-                        backgroundAttachment: "fixed",
-                        backgroundSize: "cover",
-                      }}
-                    ></div>
 
                     {children}
 

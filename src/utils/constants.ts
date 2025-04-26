@@ -30,3 +30,8 @@ export const GENRES = [
   "Humor",
   "Horror",
 ] as const;
+
+export const cuidRegex = /^c[a-z0-9]{24}$/;
+
+export const chapterCollectionName = "Chapters";
+export const chunkCollectionName = "Chunks";

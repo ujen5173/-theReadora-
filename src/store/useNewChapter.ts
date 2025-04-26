@@ -19,6 +19,7 @@ type NewChapterStore = {
   setFocusMode: (focusMode: boolean) => void;
   hardSaved: boolean;
   setHardSaved: (hardSaved: boolean) => void;
+  setResetForm: () => void;
 };
 
 export const useNewChapterStore = create<NewChapterStore>()(
@@ -40,6 +41,13 @@ export const useNewChapterStore = create<NewChapterStore>()(
       setStoryId: (storyId) => set({ storyId }),
       setFocusMode: (focusMode) => set({ focusMode }),
       setHardSaved: (hardSaved) => set({ hardSaved }),
+      setResetForm: () =>
+        set({
+          title: "Untitled Chapter",
+          wordCount: 0,
+          content: {},
+          htmlContent: "",
+        }),
     }),
     {
       name: "user-store",

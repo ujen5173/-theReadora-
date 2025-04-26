@@ -77,15 +77,17 @@ const SortableChapter = ({
       style={style}
       className="bg-white border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors"
     >
-      <div className="flex justify-between items-center gap-4">
+      <div className="flex justify-between items-center gap-2">
         {isAuthor && (
-          <button
-            className="touch-none flex items-center justify-center p-1 hover:bg-slate-100 rounded"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="border border-transparent transition hover:border-slate-300 h-8 w-8"
             {...attributes}
             {...listeners}
           >
             <GripVertical className="size-5 text-slate-400" />
-          </button>
+          </Button>
         )}
 
         <div className="flex-1">
@@ -117,7 +119,11 @@ const SortableChapter = ({
         {isAuthor && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="border border-transparent transition hover:border-slate-300 h-8 w-8"
+              >
                 <MoreVertical className="size-4" />
               </Button>
             </DropdownMenuTrigger>

@@ -107,6 +107,9 @@ importers:
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
+      holy-loader:
+        specifier: ^2.3.13
+        version: 2.3.13(react@19.1.0)
       hugeicons-react:
         specifier: ^0.3.0
         version: 0.3.0(react@19.1.0)
@@ -2600,6 +2603,11 @@ packages:
   highlight.js@11.11.1:
     resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
     engines: {node: '>=12.0.0'}
+
+  holy-loader@2.3.13:
+    resolution: {integrity: sha512-SnQ06sfMgbhiRGkHZ0RFMbexSpZN3i6tgItt3q8GWNba3mOdsq1RNJXkoqsWkqPIAmyroj2/xIOHu1hCFnjkBQ==}
+    peerDependencies:
+      react: '>= 16.0.0'
 
   html-url-attributes@3.0.1:
     resolution: {integrity: sha512-ol6UPyBWqsrO6EJySPz2O7ZSr856WDrEzM5zMqp+FJJLGMW35cLYmmZnl0vztAZxRUoNZJFTCohfjuIJ8I4QBQ==}
@@ -6373,6 +6381,10 @@ snapshots:
       '@types/hast': 3.0.4
 
   highlight.js@11.11.1: {}
+
+  holy-loader@2.3.13(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   html-url-attributes@3.0.1: {}
 

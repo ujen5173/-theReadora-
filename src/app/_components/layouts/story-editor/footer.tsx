@@ -24,7 +24,14 @@ const StoryEditorFooter = () => {
 
   const [isSavingDraft, setIsSavingDraft] = useState(false);
 
-  const { title, wordCount, htmlContent, setHardSaved } = useNewChapterStore();
+  const {
+    title,
+    wordCount,
+    htmlContent,
+    setHardSaved,
+    setResetForm,
+    setWordCount,
+  } = useNewChapterStore();
   const {
     mutateAsync: createChapter,
     status,
@@ -64,6 +71,9 @@ const StoryEditorFooter = () => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to publish chapter");
+    } finally {
+      setResetForm();
+      setWordCount(0);
     }
   };
 

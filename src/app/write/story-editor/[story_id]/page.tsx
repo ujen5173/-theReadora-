@@ -59,13 +59,16 @@ const StoryEditor = () => {
               <StoryEditorTabs />
 
               <div className="editor-container h-full bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700/50 shadow-sm transition-all">
-                <TabsContent value="write" className="min-h-[70vh]">
+                <TabsContent
+                  value="write"
+                  className="min-h-[600px] max-h-[800px] h-[80vh]"
+                >
                   <Editor
                     initialContent={content}
                     onChange={handleEditorChange}
                     placeholder="Start writing your story..."
                     autoFocus
-                    className="max-h-[80vh] overflow-y-auto"
+                    className="min-h-[600px] max-h-[800px] h-[80vh] overflow-y-auto"
                   />
                 </TabsContent>
 

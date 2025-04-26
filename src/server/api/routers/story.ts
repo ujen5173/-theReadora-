@@ -7,7 +7,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { GENRES, LANGUAGES } from "~/utils/constants";
+import { GENRES, LANGUAGES, cuidRegex } from "~/utils/constants";
 import { makeSlug } from "~/utils/helpers";
 
 export type ChapterMetrics = {
@@ -224,8 +224,6 @@ export const storyRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        const cuidRegex = /^c[a-z0-9]{24}$/;
-
         const story = await ctx.postgresDb.story.findUnique({
           where: {
             id: cuidRegex.test(input.query) ? input.query : undefined,

@@ -30,6 +30,7 @@ const StoryEditorHeader = () => {
             onChange={(e) => setTitle(e.target.value)}
             className="w-[300px] font-semibold"
             autoFocus
+            onFocus={(e) => e.target.select()}
           />
         </div>
 

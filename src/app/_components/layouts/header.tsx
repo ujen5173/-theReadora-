@@ -59,66 +59,95 @@ const GenreColumn = ({
   </div>
 );
 
-const Header = ({ background = false }: { background?: boolean }) => {
+const Header = ({
+  full = false,
+  background = false,
+  removeBackground = false,
+}: {
+  full?: boolean;
+  background?: boolean;
+  removeBackground?: boolean;
+}) => {
   return (
-    <header className={cn("w-full", background && "bg-slate-50")}>
-      <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-6 px-4 py-4">
-        <div className="flex items-center gap-10">
-          <Logo />
+    <>
+      {!removeBackground && (
+        <>
+          <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
+          <div
+            className="fixed -z-10 h-screen w-full opacity-30"
+            style={{
+              backgroundImage: "url(/ooorganize.svg)",
+              backgroundBlendMode: "overlay",
+              backgroundAttachment: "fixed",
+              backgroundSize: "cover",
+            }}
+          ></div>
+        </>
+      )}
+      <header className={cn("w-full", background && "bg-slate-50")}>
+        <div
+          className={cn(
+            "mx-auto flex items-center justify-between gap-6 px-4 py-4",
+            !full && "max-w-[1440px]"
+          )}
+        >
+          <div className="flex items-center gap-10">
+            <Logo />
 
-          <ul className="flex items-center gap-2">
-            <NavigationMenu delayDuration={0} className="relative">
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger
-                    className={cn(
-                      buttonVariants({ variant: "link" }),
-                      "text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent"
-                    )}
-                  >
-                    Explore
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-white shadow-lg rounded-lg p-4 transition duration-150 ease-in-out">
-                    <div className="flex mb-2 items-center px-2 justify-between">
-                      <h3 className="text-lg font-bold text-slate-700">
-                        Genres
-                      </h3>
-                    </div>
-                    <div className="flex space-x-6">
-                      <GenreColumn genres={GENRES.column1} />
-                      <GenreColumn genres={GENRES.column2} />
-                      <GenreColumn genres={GENRES.column3} />
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            <ul className="flex items-center gap-2">
+              <NavigationMenu delayDuration={0} className="relative">
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent"
+                      )}
+                    >
+                      Explore
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent className="bg-white shadow-lg rounded-lg p-4 transition duration-150 ease-in-out">
+                      <div className="flex mb-2 items-center px-2 justify-between">
+                        <h3 className="text-lg font-bold text-slate-700">
+                          Genres
+                        </h3>
+                      </div>
+                      <div className="flex space-x-6">
+                        <GenreColumn genres={GENRES.column1} />
+                        <GenreColumn genres={GENRES.column2} />
+                        <GenreColumn genres={GENRES.column3} />
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
 
-            <li>
-              <Button
-                variant="link"
-                className="text-foreground"
-                icon={Crown}
-                iconPlacement="left"
-              >
-                Get Premium
-              </Button>
-            </li>
-            <li>
-              <Link href="/write">
-                <Button variant="link" icon={Plus} iconPlacement="left">
-                  Write something
+              <li>
+                <Button
+                  variant="link"
+                  className="text-foreground"
+                  icon={Crown}
+                  iconPlacement="left"
+                >
+                  Get Premium
                 </Button>
-              </Link>
-            </li>
-          </ul>
+              </li>
+              <li>
+                <Link href="/write">
+                  <Button variant="link" icon={Plus} iconPlacement="left">
+                    Write something
+                  </Button>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="flex items-center gap-2">
+            <SearchBar />
+            <UserHeader />
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <SearchBar />
-          <UserHeader />
-        </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 

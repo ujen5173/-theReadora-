@@ -1,4 +1,5 @@
 "use client";
+
 import {
   BookOpen01Icon,
   CopyrightIcon,
@@ -20,6 +21,8 @@ import type { ChapterMetrics } from "~/server/api/routers/story";
 import { getReadingTimeText } from "~/utils/helpers";
 import { useUserStore } from "~/store/userStore";
 import TableOfContent from "./toc";
+import { cn } from "~/lib/utils";
+import { useState } from "react";
 
 type Chapter = {
   id: string;
@@ -42,6 +45,11 @@ interface StoryDetailsSectionProps {
 
 const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
   const user = useUserStore();
+  const [toggleReadMore, setToggleReadMore] = useState(false);
+
+  const handleReadMore = () => {
+    setToggleReadMore(!toggleReadMore);
+  };
 
   return (
     <main className="w-full py-2 relative">
@@ -188,9 +196,22 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
       </div>
 
       <div className="my-10 px-3 border-l-4 border-slate-300">
-        <p className="text-lg mb-4 text-slate-800 whitespace-pre-line">
+        <p
+          className={cn(
+            !toggleReadMore ? "line-clamp-10" : "",
+            "text-lg mb-4 text-slate-800 whitespace-pre-line"
+          )}
+        >
           {story.synopsis}
         </p>
+        {story.synopsis.length > 250 && (
+          <span
+            className="underline text-primary/70 underline-offset-2 cursor-pointer my-4 inline-block font-semibold "
+            onClick={handleReadMore}
+          >
+            {toggleReadMore ? "Read Less" : "Read More"}
+          </span>
+        )}
         <div className="flex items-center gap-1">
           <CopyrightIcon className="inline size-3.5" />
           <p className="text-base font-medium text-slate-700">

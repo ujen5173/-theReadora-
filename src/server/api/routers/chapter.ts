@@ -1,10 +1,16 @@
 import { StoryStatus } from "@prisma/client";
+import type { inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import {
+  chapterCollectionName,
+  chunkCollectionName,
+  cuidRegex,
+} from "~/utils/constants";
 import { makeSlug, mongoObjectId } from "~/utils/helpers";
 
 export const chapterRouter = createTRPCRouter({
@@ -54,21 +60,25 @@ export const chapterRouter = createTRPCRouter({
         const objectId = mongoObjectId();
 
         const mongoContentID = await ctx.mongoDb
-          .collection("Chapters")
+          .collection(chapterCollectionName)
           .insertOne({
-            data: {
-              id: objectId,
-              storyId: input.storyId,
-              chapterNumber: story.chapterCount + 1,
-              version: 1,
-              chunks: {
-                create: chunks.map((chunk, index) => ({
-                  content: chunk.content,
-                  index: index,
-                })),
-              },
-            },
+            id: objectId,
+            storyId: input.storyId,
+            chapterNumber: story.chapterCount + 1,
+            version: 1,
+            createdAt: new Date(),
           });
+
+        // Insert chunks separately
+        await Promise.all(
+          chunks.map((chunk, index) =>
+            ctx.mongoDb.collection(chunkCollectionName).insertOne({
+              chapterId: mongoContentID.insertedId.toString(),
+              content: chunk.content,
+              index: index,
+            })
+          )
+        );
 
         await ctx.postgresDb.chapter.create({
           data: {
@@ -160,7 +170,127 @@ export const chapterRouter = createTRPCRouter({
         throw new Error("Failed to update chapter order");
       }
     }),
+
+  getChapterDetailsBySlugOrId: publicProcedure
+    .input(z.object({ slugOrId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { slugOrId } = input;
+      try {
+        const chapter = await ctx.postgresDb.chapter.findFirst({
+          where: {
+            slug: cuidRegex.test(slugOrId) ? undefined : slugOrId,
+            id: cuidRegex.test(slugOrId) ? slugOrId : undefined,
+          },
+          include: {
+            story: {
+              select: {
+                id: true,
+                title: true,
+                slug: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    image: true,
+                  },
+                },
+                chapters: {
+                  select: {
+                    id: true,
+                    title: true,
+                    slug: true,
+                    chapterNumber: true,
+                  },
+                },
+                chapterCount: true,
+                thumbnail: true,
+              },
+            },
+          },
+        });
+
+        if (!chapter) {
+          throw new Error("Chapter not found");
+        }
+
+        const { story, ...rest } = chapter;
+
+        // Get the initial chunk with proper typing
+        const initialChunk = await ctx.mongoDb
+          .collection(chunkCollectionName)
+          .findOne(
+            { chapterId: chapter.mongoContentID[0], index: 0 },
+            { projection: { _id: 1, content: 1, index: 1 } }
+          );
+
+        if (!initialChunk) {
+          throw new Error("Chapter content not found");
+        }
+
+        return {
+          chapter: rest,
+          story,
+          initialChunk: {
+            id: initialChunk._id.toString(),
+            content: initialChunk.content,
+            index: initialChunk.index,
+          },
+        };
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to get chapter details");
+      }
+    }),
+
+  getChapterChunks: publicProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+        limit: z.number().min(1).max(2).default(2),
+        cursor: z.number().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { chapterId, limit, cursor } = input;
+      try {
+        const query = {
+          chapterId,
+          index: { $gt: cursor ?? 0, $ne: 0 },
+        };
+
+        const chunks = await ctx.mongoDb
+          .collection(chunkCollectionName)
+          .find(query)
+          .sort({ index: 1 })
+          .limit(limit + 1)
+          .toArray();
+
+        let nextCursor: number | undefined = undefined;
+        if (chunks.length > limit) {
+          const lastChunk = chunks[limit - 1];
+          nextCursor = lastChunk?.index ?? undefined;
+          chunks.pop();
+        }
+
+        return {
+          chunks: chunks.map((chunk) => ({
+            id: chunk._id.toString(),
+            content: chunk.content,
+            index: chunk.index,
+          })),
+          nextCursor,
+        };
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to get chapter chunks");
+      }
+    }),
 });
+
+export type getChapterDetailsBySlugOrIdResponse = inferProcedureOutput<
+  typeof chapterRouter.getChapterDetailsBySlugOrId
+>;
 
 const MAX_CHUNK_SIZE = 1500 as const;
 

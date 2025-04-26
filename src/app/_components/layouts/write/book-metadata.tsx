@@ -270,7 +270,10 @@ const BookMetadata = ({
           disabled={status === "pending"}
         >
           {status === "pending" ? (
-            <Loader2 className="size-4 animate-spin" />
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              <span>Processing...</span>
+            </>
           ) : (
             "Continue to Story Editor"
           )}

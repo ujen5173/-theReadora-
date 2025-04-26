@@ -21,6 +21,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "sonner";
 import NewChapterDialog from "./new-chapter-dialog";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { getReadingTimeText } from "~/utils/helpers";
 
 const StoryEditorSidebar = () => {
   const { story_id } = useParams();
@@ -159,7 +160,7 @@ const StoryEditorSidebar = () => {
               <div className="text-base font-semibold">
                 {readingTimeCalc(htmlContent).text === "0 min read"
                   ? "N/A"
-                  : readingTimeCalc(htmlContent).text}
+                  : getReadingTimeText(readingTimeCalc(htmlContent).time)}
               </div>
             </div>
             <div className="space-y-1">
