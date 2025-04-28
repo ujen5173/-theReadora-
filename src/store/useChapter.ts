@@ -3,15 +3,15 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type Chapter = {
+  id: string;
+  chapterNumber: number;
   title: string;
   slug: string;
+  metrics: JsonValue;
   storyId: string;
-  id: string;
+  mongoContentID: string[];
   createdAt: Date;
   updatedAt: Date;
-  chapterNumber: number;
-  metrics: JsonValue;
-  mongoContentID: string[];
 };
 
 type User = {
