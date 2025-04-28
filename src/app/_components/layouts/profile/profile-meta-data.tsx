@@ -1,17 +1,6 @@
 "use client";
-
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
-import {
-  BellIcon,
-  CalendarDays,
-  Edit2,
-  MapPin,
-  Users,
-  BookOpen,
-  Heart,
-  Twitter,
-  Github,
-} from "lucide-react";
+import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -19,13 +8,6 @@ import { useUserProfileStore } from "~/store/userProfileStore";
 import UserCreations from "./user-creations";
 import UserReadingList from "./user-reading-list";
 import { formatDate } from "~/utils/helpers";
-import { Badge } from "~/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
 import ShareDialog from "../../shared/share-dialog";
 import { useEffect, useState } from "react";
 
@@ -37,16 +19,17 @@ const ProfileMetaData = () => {
     if (author) {
       setUser({
         ...author,
-        isPremium: true,
-        verified: true,
       });
     }
   }, [author]);
 
-  const socialLinks = [
-    { name: "Twitter", url: user?.twitter, icon: Twitter },
-    { name: "GitHub", url: user?.github, icon: Github },
-    // Add more social links as needed
+  const socialLinks: {
+    name: string;
+    url: string | null;
+    icon: React.ElementType;
+  }[] = [
+    // { name: "Twitter", url: user?.twitter, icon: <Users className="size-4" /> },
+    // { name: "GitHub", url: user?.github, icon: <Users className="size-4" /> },
   ];
 
   return (
@@ -69,11 +52,11 @@ const ProfileMetaData = () => {
                     draggable={false}
                   />
                 </div>
-                {user?.isPremium && (
+                {/* {user?.isPremium && (
                   <Badge className="absolute -right-2 bottom-4 py-1 px-3 font-semibold bg-gradient-to-r from-amber-400 to-amber-600 text-white border-2 border-white shadow-md">
                     PRO
                   </Badge>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -85,7 +68,7 @@ const ProfileMetaData = () => {
                   <h1 className="text-4xl font-bold text-slate-800 tracking-tight">
                     {user?.name}
                   </h1>
-                  {user?.verified && (
+                  {/* {user?.verified && (
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -114,7 +97,7 @@ const ProfileMetaData = () => {
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                  )}
+                  )} */}
                 </div>
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-slate-600">
                   <span className="font-medium text-slate-700">
@@ -123,7 +106,8 @@ const ProfileMetaData = () => {
                   <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />
                   <span className="flex items-center gap-1.5">
                     <MapPin className="size-4" />
-                    {user?.location || "Nepal"}
+                    Earth
+                    {/* {user?.location || "Nepal"} */}
                   </span>
                   <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />
                   <span className="flex items-center gap-1.5">
@@ -138,7 +122,7 @@ const ProfileMetaData = () => {
                 <div className="flex items-center gap-1">
                   <Book01Icon className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
-                    {user?.story?.length || 0}
+                    {/* {user?.story?.length || 0} */}0
                   </span>
                   <span className="text-sm text-slate-600">works</span>
                 </div>
@@ -146,7 +130,7 @@ const ProfileMetaData = () => {
                 <div className="flex items-center gap-1">
                   <Users className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
-                    {user?.followersCount || 0}
+                    {/* {user?.followersCount || 0} */}0
                   </span>
                   <span className="text-sm text-slate-600">followers</span>
                 </div>
@@ -154,12 +138,12 @@ const ProfileMetaData = () => {
                 <div className="flex items-center gap-1">
                   <Users className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
-                    {user?.followingCount || 0}
+                    {/* {user?.followingCount || 0} */}0
                   </span>
                   <span className="text-sm text-slate-600">following</span>
                 </div>
 
-                {user?.readCount && (
+                {/* {user?.readCount && (
                   <div className="flex items-center gap-1">
                     <BookOpen className="size-5 text-primary" />
                     <span className="text-base font-semibold text-slate-700">
@@ -167,9 +151,9 @@ const ProfileMetaData = () => {
                     </span>
                     <span className="text-sm text-slate-600">reads</span>
                   </div>
-                )}
+                )} */}
 
-                {user?.likesCount && (
+                {/* {user?.likesCount && (
                   <div className="flex items-center gap-1">
                     <Heart className="size-5 text-primary" />
                     <span className="text-base font-semibold text-slate-700">
@@ -177,7 +161,7 @@ const ProfileMetaData = () => {
                     </span>
                     <span className="text-sm text-slate-600">likes</span>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -239,9 +223,13 @@ const ProfileMetaData = () => {
                 )
             )}
             <div className="">
-              <ShareDialog title="" />
+              <ShareDialog
+                title={user?.name ?? ""}
+                description="Share this profile"
+                url={`https://readora.com/${user?.username ?? ""}`}
+              />
             </div>
-            {user?.isCurrentUser && (
+            {/* {user?.isCurrentUser && (
               <Button
                 variant="outline"
                 size="sm"
@@ -250,7 +238,7 @@ const ProfileMetaData = () => {
               >
                 Edit Profile
               </Button>
-            )}
+            )} */}
           </div>
         </div>
 
