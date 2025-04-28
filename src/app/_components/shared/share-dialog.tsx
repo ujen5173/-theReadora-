@@ -159,8 +159,8 @@ const ShareDialog = ({
                     platform.hoverColor
                   )}
                   onClick={() => handleShare(platform)}
+                  icon={platform.icon}
                 >
-                  <platform.icon className="size-4 mr-2" />
                   {platform.name}
                 </Button>
               ))}

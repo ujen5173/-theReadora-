@@ -18,7 +18,7 @@ export type ChapterMetrics = {
   viewsCount: number;
 };
 
-const NCardEntity = {
+export const NCardEntity = {
   id: true,
   slug: true,
   title: true,
@@ -487,6 +487,28 @@ export const storyRouter = createTRPCRouter({
       }
     }),
 
+  increaseReadCount: publicProcedure
+    .input(z.object({ storyId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // TODO: complete this procedure
+        const story = await ctx.postgresDb.story.update({
+          where: {
+            id: input.storyId,
+          },
+          data: {
+            reads: {
+              increment: 1,
+            },
+          },
+        });
+        return story;
+      } catch (err) {
+        console.error("Error increasing read count:", err);
+        throw new Error("Error increasing read count");
+      }
+    }),
+
   getByAuthor: publicProcedure
     .input(
       z.object({
@@ -506,6 +528,7 @@ export const storyRouter = createTRPCRouter({
           orderBy: {
             createdAt: "desc",
           },
+          select: NCardEntity,
           take: input.limit,
         });
 
@@ -562,6 +585,9 @@ export const storyRouter = createTRPCRouter({
         throw new Error("Error creating story");
       }
     }),
+  getAuthorReadingList: publicProcedure.query(() => {
+    return [];
+  }),
 });
 
 export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;

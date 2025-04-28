@@ -27,7 +27,6 @@ export const navigationLinks = {
     company: [
       { name: "About", href: "/about" },
       { name: "Careers", href: "/careers" },
-      { name: "Press", href: "/press" },
     ],
     support: [
       { name: "Help Center", href: "/help" },

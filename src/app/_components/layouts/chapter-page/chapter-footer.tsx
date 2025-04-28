@@ -51,7 +51,7 @@ const ChapterFooter = () => {
           </div>
 
           {/* Comment Input */}
-          <div className="flex items-start gap-3 pb-8 border-b border-slate-200">
+          <div className="flex items-start gap-3 pb-8 border-b border-border">
             <div className="shrink-0">
               <Image
                 src={user?.image || ""}
@@ -64,7 +64,7 @@ const ChapterFooter = () => {
             <div className="flex-1">
               <Textarea
                 placeholder="Share your thoughts..."
-                className="min-h-20 w-full px-4 py-3 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
+                className="min-h-20 w-full px-4 py-3 text-sm text-slate-700 bg-slate-50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
               />
               <div className="mt-2 flex justify-end">
                 <Button variant="default" size="sm">
@@ -156,7 +156,7 @@ const ChapterFooter = () => {
                       <div className="flex-1">
                         <textarea
                           placeholder="Write a reply..."
-                          className="w-full px-3 py-2 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
+                          className="w-full px-3 py-2 text-sm text-slate-700 bg-slate-50 border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
                           rows={2}
                         />
                         <div className="mt-2 flex justify-end gap-2">

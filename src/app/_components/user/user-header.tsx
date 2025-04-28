@@ -15,11 +15,15 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Bookmark01Icon, Bookshelf01Icon, UserIcon } from "hugeicons-react";
 import { BookIcon, CreditCard, LogOut } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function UserHeader() {
   useAuthSync();
 
   const { user, isLoading } = useUserStore();
+
+  const router = useRouter();
 
   // For hydration shit
   const [mounted, setMounted] = useState(false);
@@ -88,7 +92,13 @@ export default function UserHeader() {
             Favorites
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer px-3 py-2 text-red-500 hover:bg-destructive/10 hover:text-red-600">
+          <DropdownMenuItem
+            onClick={async () => {
+              await signOut();
+              router.push("/");
+            }}
+            className="cursor-pointer px-3 py-2 text-red-500 hover:bg-destructive/10 hover:text-red-600"
+          >
             <LogOut className="w-4 h-4 text-red-500" />
             Sign Out
           </DropdownMenuItem>

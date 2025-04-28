@@ -49,7 +49,7 @@ const ChapterTOC = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-80 p-0 mx-4">
               {/* Header */}
-              <div className="p-3 border-b border-slate-200">
+              <div className="p-3 border-b border-border">
                 <Link
                   href={`/story/${story?.slug}`}
                   className="flex flex-col items-center gap-0.5"

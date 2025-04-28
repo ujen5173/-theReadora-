@@ -30,7 +30,7 @@ export default function SignInPage() {
               size="lg"
               variant="outline"
               onClick={() => signIn("google")}
-              className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-slate-200"
+              className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-border"
             >
               <GoogleIcon className="size-5" />
               Continue with Google
@@ -39,7 +39,7 @@ export default function SignInPage() {
             <Button
               size="lg"
               variant="outline"
-              className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-slate-200"
+              className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-border"
             >
               <Facebook01Icon className="size-5" />
               Continue with Facebook

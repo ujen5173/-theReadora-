@@ -23,6 +23,7 @@ import { useUserStore } from "~/store/userStore";
 import TableOfContent from "./toc";
 import { cn } from "~/lib/utils";
 import { useState } from "react";
+import Link from "next/link";
 
 type Chapter = {
   id: string;
@@ -60,9 +61,11 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
           </h1>
           <p className="mb-4 text-slate-700">
             By{" "}
-            <span className="font-semibold text-primary underline underline-offset-2">
-              {story.author.name}
-            </span>
+            <Link href={`/profile?user_id=${story.author.username}`}>
+              <span className="font-semibold text-primary hover:underline underline-offset-2">
+                {story.author.name}
+              </span>
+            </Link>
           </p>
           <Badge
             className="capitalize text-sm px-3 py-1"

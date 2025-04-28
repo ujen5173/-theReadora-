@@ -120,7 +120,7 @@ const FilterSection = ({
 
       <div className="w-full bg-white rounded-lg border border-border">
         {/* Header */}
-        <div className="border-b border-slate-200 p-4">
+        <div className="border-b border-border p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Filter className="size-5 text-primary" />
@@ -450,7 +450,7 @@ const FilterSection = ({
         </div>
 
         {/* Apply Filters Button - Sticky */}
-        <div className="sticky bottom-0 p-4 border-t rounded-b-lg border-slate-200 bg-white">
+        <div className="sticky bottom-0 p-4 border-t rounded-b-lg border-border bg-white">
           <Button
             className="w-full"
             onClick={() => {

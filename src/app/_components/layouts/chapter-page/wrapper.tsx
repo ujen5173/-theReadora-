@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import type { getChapterDetailsBySlugOrIdResponse } from "~/server/api/routers/chapter";
 import { useChapterStore } from "~/store/useChapter";
 
@@ -15,13 +15,13 @@ const ChapterWrapper = ({
 
   // TODO: fix this production error
   // Type '{ id: string; storyId: string; chapterNumber: number | null; version: number; createdAt: Date; }' is missing the following properties from type 'Chapter': title, slug, updatedAt, metrics, mongoContentID
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (details) {
       setStory(details.story);
       setChapter(details.chapter);
       setInitialChunk(details.initialChunk);
     }
-  }, [details, setStory, setChapter, setInitialChunk]);
+  }, []);
 
   return <>{children}</>;
 };

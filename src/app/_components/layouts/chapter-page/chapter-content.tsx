@@ -15,9 +15,11 @@ import "~/styles/editor.css";
 import { api } from "~/trpc/react";
 
 const ChapterContent = () => {
+  const { chapter } = useChapterStore();
+
   return (
     <section className="w-full bg-slate-100">
-      <div className="max-w-4xl border-x border-b border-border bg-white px-6 mx-auto">
+      <div className="max-w-4xl border-x border-slate-200 bg-white px-6 mx-auto">
         <ChapterMetaData />
         <Content />
       </div>
@@ -84,8 +86,9 @@ const ChapterMetaData = () => {
 
 const Content = () => {
   const { initialChunk, chapter, story } = useChapterStore();
+  const [queryEnabled, setQueryEnabled] = useState(false);
   const [shouldFetchMore, setShouldFetchMore] = useState(false);
-  const hasInitialFetch = useRef(false);
+  const hasEnabledQuery = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Find next chapter
@@ -93,32 +96,36 @@ const Content = () => {
     (ch) => ch.chapterNumber === (chapter?.chapterNumber ?? 0) + 1
   );
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetching } =
     api.chapter.getChapterChunks.useInfiniteQuery(
       {
         chapterId: chapter?.mongoContentID[0] ?? "",
         limit: 1,
       },
       {
-        enabled: !!chapter?.mongoContentID[0] && hasInitialFetch.current,
+        enabled: !!chapter?.mongoContentID[0] && queryEnabled,
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         refetchOnWindowFocus: false,
         staleTime: Infinity,
       }
     );
 
-  // Setup intersection observer
+  // Setup intersection observer to load more content on scrolled
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          hasInitialFetch.current = true;
-          setShouldFetchMore(true);
+          if (!hasEnabledQuery.current) {
+            setQueryEnabled(true);
+            hasEnabledQuery.current = true;
+          } else {
+            setShouldFetchMore(true);
+          }
         }
       },
       {
         root: null,
-        rootMargin: "100px",
+        rootMargin: "250px",
         threshold: 0.1,
       }
     );
@@ -132,21 +139,19 @@ const Content = () => {
     };
   }, []);
 
-  // Handle fetching next page
   useEffect(() => {
-    if (shouldFetchMore && hasNextPage && !isFetchingNextPage) {
+    if (shouldFetchMore && hasNextPage && !isFetching) {
       void fetchNextPage();
       setShouldFetchMore(false);
     }
-  }, [shouldFetchMore, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [shouldFetchMore, hasNextPage, isFetching, fetchNextPage]);
 
-  // Get all chunks except the initial one
   const additionalChunks = data?.pages.flatMap((page) => page.chunks) ?? [];
 
   if (!initialChunk) return null;
 
   return (
-    <div className="editor-container px-[0!important] space-y-8">
+    <div className="editor-container px-[0!important] space-y-8 border-b border-slate-200">
       {/* Initial chunk */}
       <div
         className="preview-content text-slate-500"
@@ -162,8 +167,7 @@ const Content = () => {
         />
       ))}
 
-      {/* Loading indicator */}
-      {isFetchingNextPage && (
+      {isFetching && (
         <div className="py-4 text-center text-slate-500">
           Loading more content...
         </div>
@@ -171,28 +175,26 @@ const Content = () => {
 
       {/* Next Chapter or End of Story Message */}
       {!hasNextPage && data?.pages.length && data.pages.length > 0 && (
-        <div className="py-12 m-0 flex flex-col items-center">
+        <div className="py-12 flex flex-col items-center">
           {nextChapter ? (
-            <div className="flex flex-col items-center border border-border gap-4 bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl shadow-sm">
-              <span className="border border-border text-slate-500 text-sm font-medium px-4 py-1 bg-slate-100 rounded-full">
+            <div className="flex flex-col items-center gap-4 bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+              <span className="border border-slate-200 text-slate-500 text-sm font-medium px-4 py-1 bg-slate-100 rounded-full">
                 Up Next
               </span>
               <h3 className="text-2xl font-bold text-slate-700 text-center">
                 Chapter {nextChapter.chapterNumber}: {nextChapter.title}
               </h3>
-              <Link href={`/chapter/${nextChapter.id}`}>
-                <Button
-                  variant="dark"
-                  icon={ArrowRightIcon}
-                  iconPlacement="right"
-                  className="w-full"
-                >
-                  Continue Reading
-                </Button>
-              </Link>
+              <Button
+                variant="dark"
+                icon={ArrowRightIcon}
+                iconPlacement="right"
+                className="w-full"
+              >
+                Continue Reading
+              </Button>
             </div>
           ) : (
-            <div className="text-center bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-border shadow-sm space-y-8 max-w-lg w-full mx-auto">
+            <div className="text-center bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-8 max-w-lg w-full mx-auto">
               <div className="space-y-3">
                 <h3 className="text-2xl font-bold text-slate-800">
                   You're All Caught Up!

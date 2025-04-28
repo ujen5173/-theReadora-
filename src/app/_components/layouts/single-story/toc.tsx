@@ -223,7 +223,7 @@ const TableOfContent = ({
   };
 
   return (
-    <div className="mt-10 border-t border-slate-200 pt-6">
+    <div className="mt-10 border-t border-border pt-6">
       <div className="flex items-center mb-4 justify-between">
         <h2 className="text-xl font-bold text-slate-800">Table of Contents</h2>
         {isAuthor && (
@@ -260,7 +260,7 @@ const TableOfContent = ({
 
           {/* Order Update Section */}
           {hasOrderChanged && (
-            <div className="mt-6 border-t border-slate-200 pt-6 flex items-center justify-between">
+            <div className="mt-6 border-t border-border pt-6 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="size-10 rounded-full border border-amber-200 bg-amber-100 flex items-center justify-center">
                   <LeftToRightListNumberIcon className="size-5 text-amber-600" />

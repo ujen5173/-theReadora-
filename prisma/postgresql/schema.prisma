@@ -45,12 +45,23 @@ enum Language {
     Korean
 }
 
+model StoryRead {
+    id        String   @id @default(uuid())
+    story     Story    @relation(fields: [storyId], references: [id])
+    storyId   String
+    readerKey String // e.g. userId for logged-in and for anonymous
+    createdAt DateTime @default(now())
+
+    @@unique([storyId, readerKey])
+    @@map("story_reads")
+}
+
 model Story {
     id             String      @id @default(cuid())
     title          String
     slug           String      @unique
     synopsis       String
-    reads          Int         @default(0)
+    readCount      Int         @default(0)
     votes          Int         @default(0)
     readingTime    Int
     thumbnail      String
@@ -73,6 +84,8 @@ model Story {
 
     chapterCount Int       @default(0)
     chapters     Chapter[]
+
+    reads StoryRead[]
 
     @@index([title, slug, tags], name: "story_index")
 }

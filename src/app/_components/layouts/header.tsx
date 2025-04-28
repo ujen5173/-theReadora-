@@ -63,10 +63,12 @@ const Header = ({
   full = false,
   background = false,
   removeBackground = false,
+  headerExtraStyle,
 }: {
   full?: boolean;
   background?: boolean;
   removeBackground?: boolean;
+  headerExtraStyle?: string;
 }) => {
   return (
     <>
@@ -84,7 +86,9 @@ const Header = ({
           ></div>
         </>
       )}
-      <header className={cn("w-full", background && "bg-slate-50")}>
+      <header
+        className={cn("w-full", headerExtraStyle, background && "bg-slate-50")}
+      >
         <div
           className={cn(
             "mx-auto flex items-center justify-between gap-6 px-4 py-4",
@@ -123,14 +127,16 @@ const Header = ({
               </NavigationMenu>
 
               <li>
-                <Button
-                  variant="link"
-                  className="text-foreground"
-                  icon={Crown}
-                  iconPlacement="left"
-                >
-                  Get Premium
-                </Button>
+                <Link href="/premium">
+                  <Button
+                    variant="link"
+                    className="text-foreground"
+                    icon={Crown}
+                    iconPlacement="left"
+                  >
+                    Get Premium
+                  </Button>
+                </Link>
               </li>
               <li>
                 <Link href="/write">
