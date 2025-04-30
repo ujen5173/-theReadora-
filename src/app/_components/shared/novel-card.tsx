@@ -131,7 +131,7 @@ const NovelCard: FC<{
           </div>
           <div className="space-y-2">
             <Button asChild className="w-full gap-2">
-              <Link target="_blank" href={`/story/${details.slug}`}>
+              <Link href={`/story/${details.slug}`}>
                 <LinkSquare02Icon size={16} className="stroke-2" />
                 <span>View Details</span>
               </Link>

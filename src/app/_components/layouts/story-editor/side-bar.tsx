@@ -174,7 +174,7 @@ const StoryEditorSidebar = () => {
           </CollapsibleContent>
         </Collapsible>
 
-        <PremiumBanner type="writer" />
+        <PremiumBanner />
 
         <ExportChapter />
       </div>

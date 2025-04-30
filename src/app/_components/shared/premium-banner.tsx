@@ -2,23 +2,14 @@ import { CheckCircle2, Crown } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Sparkles } from "lucide-react";
 
-const PremiumBanner = ({ type = "reader" }: { type?: "writer" | "reader" }) => {
+const PremiumBanner = () => {
   const premiumFeatures = [
     "Ad-free reading experience",
-    "Downloadable Stories",
     "Discounts on premium chapters",
-    "Get 7 montly coins",
-    "New Chapter Alerts",
-    "Support your favorite authors",
-  ];
-
-  const premiumFeaturesForWriting = [
-    "Ad-free reading experience",
-    "Downloadable Stories",
+    "Get 100 monthly coins",
     "Unlimited Chapters",
     "Unlimited AI Credits",
     "Advanced Writing Tools",
-    "Priority Support",
   ];
 
   return (
@@ -35,10 +26,7 @@ const PremiumBanner = ({ type = "reader" }: { type?: "writer" | "reader" }) => {
         </div>
 
         <ul className="space-y-2 mb-4">
-          {(type === "reader"
-            ? premiumFeatures
-            : premiumFeaturesForWriting
-          ).map((feature, index) => (
+          {premiumFeatures.map((feature, index) => (
             <li key={index} className="flex items-start gap-2">
               <CheckCircle2 className="size-4 text-primary mt-0.5 flex-shrink-0" />
               <span className="text-sm font-medium text-slate-700">

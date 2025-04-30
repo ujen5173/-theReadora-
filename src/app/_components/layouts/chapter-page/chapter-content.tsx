@@ -15,11 +15,9 @@ import "~/styles/editor.css";
 import { api } from "~/trpc/react";
 
 const ChapterContent = () => {
-  const { chapter } = useChapterStore();
-
   return (
-    <section className="w-full bg-slate-100">
-      <div className="max-w-4xl border-x border-slate-200 bg-white px-6 mx-auto">
+    <section className="w-full bg-slate-100 border-b border-border">
+      <div className="max-w-4xl border-x border-border bg-white px-6 mx-auto">
         <ChapterMetaData />
         <Content />
       </div>
@@ -35,7 +33,6 @@ const ChapterMetaData = () => {
 
   return (
     <div className="py-20 space-y-8 border-b border-slate-200">
-      {/* Title */}
       <h1 className="text-4xl text-center font-black text-slate-700">
         {chapter?.title}
       </h1>
@@ -151,7 +148,7 @@ const Content = () => {
   if (!initialChunk) return null;
 
   return (
-    <div className="editor-container px-[0!important] space-y-8 border-b border-slate-200">
+    <div className="editor-container px-[0!important] space-y-8">
       {/* Initial chunk */}
       <div
         className="preview-content text-slate-500"
@@ -185,8 +182,8 @@ const Content = () => {
                 Chapter {nextChapter.chapterNumber}: {nextChapter.title}
               </h3>
               <Button
-                variant="dark"
                 icon={ArrowRightIcon}
+                effect={"expandIcon"}
                 iconPlacement="right"
                 className="w-full"
               >
@@ -237,14 +234,7 @@ const Content = () => {
                 </div>
 
                 <div className="space-x-2 flex items-center justify-center">
-                  <Link
-                    href={`/author/${story?.author.username}`}
-                    className="block w-full"
-                  >
-                    <Button variant="dark" icon={PlusIcon}>
-                      Follow Author for Updates
-                    </Button>
-                  </Link>
+                  <Button icon={PlusIcon}>Follow Author for Updates</Button>
 
                   <Link href={`/story/${story?.slug}`} className="block w-full">
                     <Button

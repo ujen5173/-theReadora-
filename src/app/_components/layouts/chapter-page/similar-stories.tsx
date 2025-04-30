@@ -1,4 +1,5 @@
 "use client";
+
 import { useChapterStore } from "~/store/useChapter";
 import { api } from "~/trpc/react";
 import NovelCard from "../../shared/novel-card";
@@ -52,7 +53,7 @@ const RecommendedStories = () => {
 
                   <Link href="/featured">
                     <Button variant={"secondary"} size="sm">
-                      Browse Featured Stories →
+                      Browse Featured Stories
                     </Button>
                   </Link>
                 </div>
