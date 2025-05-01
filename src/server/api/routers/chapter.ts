@@ -245,8 +245,10 @@ export const chapterRouter = createTRPCRouter({
         return {
           chapter: {
             ...restChapter,
-            metrics: metrics as ChapterMetrics,
-            readershipAnalytics: readershipAnalytics as {
+            metrics: JSON.parse(JSON.stringify(metrics)) as ChapterMetrics,
+            readershipAnalytics: JSON.parse(
+              JSON.stringify(readershipAnalytics)
+            ) as {
               total: number;
               unique: number;
               average: number;
