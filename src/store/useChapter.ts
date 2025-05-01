@@ -4,14 +4,15 @@ import { persist } from "zustand/middleware";
 
 type Chapter = {
   id: string;
-  chapterNumber: number;
-  title: string;
-  slug: string;
-  metrics: JsonValue;
-  storyId: string;
-  mongoContentID: string[];
   createdAt: Date;
   updatedAt: Date;
+  title: string;
+  slug: string;
+  storyId: string;
+  chapterNumber: number;
+  metrics: JsonValue;
+  readershipAnalytics: JsonValue;
+  mongoContentID: string[];
 };
 
 type User = {
@@ -47,8 +48,8 @@ type ChapterStore = {
   chapter: Chapter | null;
   isLoading: boolean;
   initialChunk: Chunk | null;
-  setChapter: (chapter: Chapter | null) => void;
-  setStory: (story: Story | null) => void;
+  setChapter: (chapter: Chapter) => void;
+  setStory: (story: Story) => void;
   setInitialChunk: (initialChunk: Chunk) => void;
 };
 
