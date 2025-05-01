@@ -183,17 +183,7 @@ export const chapterRouter = createTRPCRouter({
             slug: cuidRegex.test(slugOrId) ? undefined : slugOrId,
             id: cuidRegex.test(slugOrId) ? slugOrId : undefined,
           },
-          select: {
-            id: true,
-            createdAt: true,
-            updatedAt: true,
-            title: true,
-            slug: true,
-            storyId: true,
-            chapterNumber: true,
-            metrics: true,
-            readershipAnalytics: true,
-            mongoContentID: true,
+          include: {
             story: {
               select: {
                 id: true,
@@ -253,6 +243,14 @@ export const chapterRouter = createTRPCRouter({
               unique: number;
               average: number;
             },
+            id: restChapter.id,
+            createdAt: restChapter.createdAt,
+            updatedAt: restChapter.updatedAt,
+            title: restChapter.title,
+            slug: restChapter.slug,
+            storyId: restChapter.storyId,
+            chapterNumber: restChapter.chapterNumber,
+            mongoContentID: restChapter.mongoContentID,
           },
           story,
           initialChunk: {
