@@ -23,7 +23,7 @@ export const NCardEntity = {
   slug: true,
   title: true,
   votes: true,
-  reads: true,
+  readCount: true,
   readingTime: true,
   isMature: true,
   thumbnail: true,
@@ -261,7 +261,7 @@ export const storyRouter = createTRPCRouter({
           ...story,
           chapters: story.chapters.map((chapter) => ({
             ...chapter,
-            metrics: JSON.parse(chapter.metrics as string),
+            metrics: chapter.metrics,
           })),
         };
       } catch (err) {
@@ -487,27 +487,27 @@ export const storyRouter = createTRPCRouter({
       }
     }),
 
-  increaseReadCount: publicProcedure
-    .input(z.object({ storyId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      try {
-        // TODO: complete this procedure
-        const story = await ctx.postgresDb.story.update({
-          where: {
-            id: input.storyId,
-          },
-          data: {
-            reads: {
-              increment: 1,
-            },
-          },
-        });
-        return story;
-      } catch (err) {
-        console.error("Error increasing read count:", err);
-        throw new Error("Error increasing read count");
-      }
-    }),
+  // increaseReadCount: publicProcedure
+  //   .input(z.object({ storyId: z.string() }))
+  //   .mutation(async ({ ctx, input }) => {
+  //     try {
+  //       // TODO: complete this procedure
+  //       const story = await ctx.postgresDb.story.update({
+  //         where: {
+  //           id: input.storyId,
+  //         },
+  //         data: {
+  //           reads: {
+  //             increment: 1,
+  //           },
+  //         },
+  //       });
+  //       return story;
+  //     } catch (err) {
+  //       console.error("Error increasing read count:", err);
+  //       throw new Error("Error increasing read count");
+  //     }
+  //   }),
 
   getByAuthor: publicProcedure
     .input(

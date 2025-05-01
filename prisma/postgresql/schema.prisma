@@ -45,15 +45,19 @@ enum Language {
     Korean
 }
 
-model StoryRead {
+model ChapterRead {
     id        String   @id @default(uuid())
-    story     Story    @relation(fields: [storyId], references: [id])
-    storyId   String
+    chapter   Chapter  @relation(fields: [chapterId], references: [id])
+    chapterId String
     readerKey String // e.g. userId for logged-in and for anonymous
+    frequency Int      @default(1) // how many times the chapter is read
+    lastRead  DateTime @default(now()) // last read time
+    readTime  Int      @default(0) // time spent reading in seconds
     createdAt DateTime @default(now())
+    // userSessionId String? // for anonymous users, we can use a session ID to track reads
 
-    @@unique([storyId, readerKey])
-    @@map("story_reads")
+    @@unique([chapterId, readerKey])
+    @@map("chapter_reads")
 }
 
 model Story {
@@ -61,6 +65,7 @@ model Story {
     title          String
     slug           String      @unique
     synopsis       String
+    // readCount will be incremented by using cronjob. this will be calcaulated after every 24 hours
     readCount      Int         @default(0)
     votes          Int         @default(0)
     readingTime    Int
@@ -85,8 +90,6 @@ model Story {
     chapterCount Int       @default(0)
     chapters     Chapter[]
 
-    reads StoryRead[]
-
     @@index([title, slug, tags], name: "story_index")
 }
 
@@ -97,12 +100,16 @@ model Chapter {
     slug          String
 
     // Metrics data for the chapter including engagement and reading statistics
-    metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"viewsCount\": 0, \"sharesCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"ratingAvg\": 0}")
+    metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"sharesCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"ratingAvg\": 0}")
+
+    readershipAnalytics Json @default("{\"total\": 0, \"unique\": 0, \"average\": 0}")
 
     storyId String
     story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
 
     mongoContentID String[] // multple mongo document if the chapter is split due to size
+
+    reader ChapterRead[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

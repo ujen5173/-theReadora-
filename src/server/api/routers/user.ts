@@ -12,21 +12,22 @@ export const userRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const usreIdOrUsername = input.usernameOrId ?? ctx.session?.user.id;
+      const userIdOrUsername = input.usernameOrId ?? ctx.session?.user.id;
 
-      if (!usreIdOrUsername) {
+      if (!userIdOrUsername) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Username or ID is required",
         });
       }
+
       try {
         const user = await ctx.postgresDb.user.findFirst({
           where: {
-            username: cuidRegex.test(usreIdOrUsername)
+            username: cuidRegex.test(userIdOrUsername)
               ? undefined
-              : usreIdOrUsername,
-            id: cuidRegex.test(usreIdOrUsername) ? usreIdOrUsername : undefined,
+              : userIdOrUsername,
+            id: cuidRegex.test(userIdOrUsername) ? userIdOrUsername : undefined,
           },
 
           include: {
@@ -42,7 +43,7 @@ export const userRouter = createTRPCRouter({
 
         return user;
       } catch (error) {
-        console.error(error);
+        console.log(error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch user details",

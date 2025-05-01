@@ -1,6 +1,7 @@
 import { CheckCircle2, Crown } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Sparkles } from "lucide-react";
+import Link from "next/link";
 
 const PremiumBanner = () => {
   const premiumFeatures = [
@@ -36,9 +37,11 @@ const PremiumBanner = () => {
           ))}
         </ul>
 
-        <Button icon={Crown} className="w-full" variant="default">
-          Subscribe – $9.99/-
-        </Button>
+        <Link href="/premium" className="w-full">
+          <Button icon={Crown} className="w-full" variant="default">
+            Subscribe – $9.99/-
+          </Button>
+        </Link>
       </div>
     </div>
   );

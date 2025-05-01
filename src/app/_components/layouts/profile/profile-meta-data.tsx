@@ -1,7 +1,6 @@
 "use client";
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
 import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
-import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useUserProfileStore } from "~/store/userProfileStore";
@@ -10,6 +9,7 @@ import UserReadingList from "./user-reading-list";
 import { formatDate } from "~/utils/helpers";
 import ShareDialog from "../../shared/share-dialog";
 import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 const ProfileMetaData = () => {
   const { user: author } = useUserProfileStore();
@@ -43,14 +43,17 @@ const ProfileMetaData = () => {
             <div className="flex justify-center sm:justify-start">
               <div className="relative">
                 <div className="rounded-full p-1 bg-gradient-to-r from-primary to-primary/80">
-                  <Image
-                    src={user?.image ?? ""}
-                    alt={user?.name ?? ""}
-                    width={160}
-                    height={160}
-                    className="rounded-full border-4 border-white shadow-lg"
-                    draggable={false}
-                  />
+                  <Avatar className="size-36">
+                    <AvatarImage
+                      src={user?.image ?? ""}
+                      alt={user?.name ?? ""}
+                      width={160}
+                      height={160}
+                      className="size-36 rounded-full border-3 border-white shadow-lg"
+                      draggable={false}
+                    />
+                    <AvatarFallback>{user?.name}</AvatarFallback>
+                  </Avatar>
                 </div>
                 {/* {user?.isPremium && (
                   <Badge className="absolute -right-2 bottom-4 py-1 px-3 font-semibold bg-gradient-to-r from-amber-400 to-amber-600 text-white border-2 border-white shadow-md">

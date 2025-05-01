@@ -287,6 +287,161 @@ export const chapterRouter = createTRPCRouter({
         throw new Error("Failed to get chapter chunks");
       }
     }),
+
+  getChunkLength: publicProcedure
+    .input(
+      z.object({
+        chapter_id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { chapter_id } = input;
+
+      try {
+        const chunk = await ctx.mongoDb.collection(chunkCollectionName).findOne(
+          {
+            chapterId: chapter_id,
+          },
+          {
+            sort: { index: 1 },
+          }
+        );
+
+        return {
+          chunk,
+        };
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to get chunk length");
+      }
+    }),
+
+  increaseReadCount: publicProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+        anonymous: z.string().cuid2().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user.id ?? (input.anonymous as string); // Use anonymous ID if user is not logged in
+      const chapterId = input.chapterId;
+      try {
+        const [chapter, hasViewed] = await Promise.all([
+          ctx.postgresDb.chapter.findUnique({
+            where: {
+              id: chapterId,
+            },
+          }),
+          ctx.postgresDb.chapterRead.findFirst({
+            where: {
+              readerKey: userId,
+              chapterId,
+            },
+          }),
+        ]);
+
+        if (!chapter) {
+          throw new Error("Chapter not found");
+        }
+
+        // Check if 24 hours have passed since last read
+        const now = new Date();
+        const lastRead = hasViewed?.lastRead;
+        const hoursSinceLastRead = lastRead
+          ? (now.getTime() - lastRead.getTime()) / (1000 * 60 * 60)
+          : 24;
+
+        if (hoursSinceLastRead < 24) {
+          return {
+            success: true,
+            message:
+              "Read count not increased - 24 hour cooldown period not elapsed",
+          };
+        }
+
+        // Safely parse metrics and readershipAnalytics
+        let metrics;
+        let readershipAnalytics;
+        try {
+          metrics =
+            typeof chapter.metrics === "string"
+              ? JSON.parse(chapter.metrics)
+              : chapter.metrics;
+
+          readershipAnalytics =
+            typeof chapter.readershipAnalytics === "string"
+              ? JSON.parse(chapter.readershipAnalytics)
+              : chapter.readershipAnalytics;
+        } catch (e) {
+          // If parsing fails, use default values
+          metrics = {
+            wordCount: 0,
+            readingTime: 0,
+            likesCount: 0,
+            commentsCount: 0,
+            sharesCount: 0,
+            ratingCount: 0,
+            ratingValue: 0,
+            ratingAvg: 0,
+          };
+          readershipAnalytics = {
+            total: 0,
+            unique: 0,
+            average: 0,
+          };
+        }
+
+        // Update metrics and analytics
+        metrics.viewsCount = (metrics.viewsCount || 0) + 1;
+        readershipAnalytics.total = (readershipAnalytics.total || 0) + 1;
+        if (!hasViewed) {
+          readershipAnalytics.unique = (readershipAnalytics.unique || 0) + 1;
+        }
+        readershipAnalytics.average =
+          readershipAnalytics.total / readershipAnalytics.unique;
+
+        await Promise.all([
+          ctx.postgresDb.chapter.update({
+            where: {
+              id: chapterId,
+            },
+            data: {
+              metrics: metrics,
+              readershipAnalytics: readershipAnalytics,
+            },
+          }),
+          ctx.postgresDb.chapterRead.upsert({
+            where: {
+              chapterId_readerKey: {
+                chapterId,
+                readerKey: userId,
+              },
+            },
+            create: {
+              chapterId,
+              readerKey: userId,
+              lastRead: new Date(),
+              frequency: 1,
+            },
+            update: {
+              lastRead: new Date(),
+              frequency: {
+                increment: 1,
+              },
+            },
+          }),
+        ]);
+
+        return {
+          success: true,
+          message: "Read count increased successfully",
+        };
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to increase read count");
+      }
+    }),
 });
 
 export type getChapterDetailsBySlugOrIdResponse = inferProcedureOutput<

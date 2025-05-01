@@ -7,11 +7,11 @@ import type { Metadata } from "next";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ username: string }>;
+  searchParams: Promise<{ user_id: string }>;
 }): Promise<Metadata> {
-  const { username } = await searchParams;
+  const { user_id } = await searchParams;
   const user = await api.user.getUserDetails({
-    usernameOrId: username,
+    usernameOrId: user_id,
   });
 
   return {
@@ -26,6 +26,7 @@ const UserProfile = async ({
   searchParams: Promise<{ user_id: string }>;
 }) => {
   const { user_id } = await searchParams;
+  console.log({ user_id });
 
   const userDetails = await api.user.getUserDetails({
     usernameOrId: user_id,

@@ -1,14 +1,15 @@
 "use client";
+
 import {
   BookOpen01Icon,
-  RecordIcon,
-  FavouriteIcon,
   BubbleChatIcon,
+  FavouriteIcon,
+  RecordIcon,
 } from "hugeicons-react";
 import { ArrowLeftIcon, ArrowRightIcon, EyeIcon, PlusIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { useChapterStore } from "~/store/useChapter";
 import "~/styles/editor.css";
@@ -29,7 +30,18 @@ export default ChapterContent;
 
 const ChapterMetaData = () => {
   const { chapter } = useChapterStore();
-  const metrics = chapter?.metrics ? JSON.parse(String(chapter.metrics)) : null;
+  const metrics =
+    (chapter?.metrics as {
+      commentsCount: number;
+      likesCount: number;
+      ratingAvg: number;
+      ratingCount: number;
+      ratingValue: number;
+      readingTime: number;
+      sharesCount: number;
+      viewsCount: number;
+      wordCount: number;
+    }) ?? null;
 
   return (
     <div className="py-20 space-y-8 border-b border-slate-200">
@@ -88,9 +100,13 @@ const Content = () => {
   const hasEnabledQuery = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Find next chapter
-  const nextChapter = story?.chapters.find(
-    (ch) => ch.chapterNumber === (chapter?.chapterNumber ?? 0) + 1
+  // Memoize nextChapter to prevent unnecessary recalculations
+  const nextChapter = useMemo(
+    () =>
+      story?.chapters.find(
+        (ch) => ch.chapterNumber === (chapter?.chapterNumber ?? 0) + 1
+      ),
+    [story?.chapters, chapter?.chapterNumber]
   );
 
   const { data, fetchNextPage, hasNextPage, isFetching } =
@@ -107,15 +123,16 @@ const Content = () => {
       }
     );
 
-  // Setup intersection observer to load more content on scrolled
+  // Improve intersection observer cleanup
   useEffect(() => {
+    const currentRef = bottomRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
           if (!hasEnabledQuery.current) {
             setQueryEnabled(true);
             hasEnabledQuery.current = true;
-          } else {
+          } else if (!isFetching) {
             setShouldFetchMore(true);
           }
         }
@@ -127,14 +144,17 @@ const Content = () => {
       }
     );
 
-    if (bottomRef.current) {
-      observer.observe(bottomRef.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
       observer.disconnect();
     };
-  }, []);
+  }, [isFetching]);
 
   useEffect(() => {
     if (shouldFetchMore && hasNextPage && !isFetching) {
@@ -181,14 +201,16 @@ const Content = () => {
               <h3 className="text-2xl font-bold text-slate-700 text-center">
                 Chapter {nextChapter.chapterNumber}: {nextChapter.title}
               </h3>
-              <Button
-                icon={ArrowRightIcon}
-                effect={"expandIcon"}
-                iconPlacement="right"
-                className="w-full"
-              >
-                Continue Reading
-              </Button>
+              <Link href={`/chapter/${nextChapter.slug}`} className="block">
+                <Button
+                  icon={ArrowRightIcon}
+                  effect={"expandIcon"}
+                  iconPlacement="right"
+                  className="w-full"
+                >
+                  Continue Reading
+                </Button>
+              </Link>
             </div>
           ) : (
             <div className="text-center bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-8 max-w-lg w-full mx-auto">

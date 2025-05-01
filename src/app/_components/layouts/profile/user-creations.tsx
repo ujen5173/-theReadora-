@@ -9,6 +9,7 @@ import NovelCard from "../../shared/novel-card";
 
 const UserCreations = () => {
   const { user } = useUserProfileStore();
+
   const { data, isLoading } = api.story.getByAuthor.useQuery(
     {
       author: user?.id as string,

@@ -2,18 +2,18 @@
 import {
   BookOpenIcon,
   DotIcon,
-  StarIcon,
   Flag,
   MessageSquareIcon,
+  StarIcon,
   ThumbsDown,
   ThumbsUp,
 } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import ShareDialog from "../../shared/share-dialog";
-import { useChapterStore } from "~/store/useChapter";
 import Image from "next/image";
-import { useUserStore } from "~/store/userStore";
+import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
+import { useChapterStore } from "~/store/useChapter";
+import { useUserStore } from "~/store/userStore";
+import ShareDialog from "../../shared/share-dialog";
 
 const ChapterFooter = () => {
   const { user } = useUserStore();
