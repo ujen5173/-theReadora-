@@ -1,16 +1,14 @@
 "use client";
 
 import { BookOpenText, Loader2, PenLineIcon, Plus } from "lucide-react";
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { api } from "~/trpc/react";
 import Header from "../_components/layouts/header";
 import NovelCard from "../_components/shared/novel-card";
-import { Button } from "~/components/ui/button";
-import Link from "next/link";
-import { api } from "~/trpc/react";
 
 const MyCreations = () => {
   const { data: novels, isLoading } = api.story.getNovels.useQuery();
-
-  console.log({ novels });
 
   return (
     <>

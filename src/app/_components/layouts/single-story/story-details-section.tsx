@@ -1,5 +1,6 @@
 "use client";
-
+import type { Story } from "@prisma/client";
+import type { JsonValue } from "@prisma/client/runtime/library";
 import {
   BookOpen01Icon,
   CopyrightIcon,
@@ -8,6 +9,8 @@ import {
   LeftToRightListNumberIcon,
   PlusSignSquareIcon,
 } from "hugeicons-react";
+import Link from "next/link";
+import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -16,21 +19,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import type { Story } from "@prisma/client";
-import type { ChapterMetrics } from "~/server/api/routers/story";
-import { getReadingTimeText } from "~/utils/helpers";
-import { useUserStore } from "~/store/userStore";
-import TableOfContent from "./toc";
 import { cn } from "~/lib/utils";
-import { useState } from "react";
-import Link from "next/link";
+import { useUserStore } from "~/store/userStore";
+import { getReadingTimeText } from "~/utils/helpers";
+import TableOfContent from "./toc";
 
 type Chapter = {
   id: string;
   title: string;
   createdAt: Date;
   chapterNumber: number;
-  metrics: ChapterMetrics;
+  metrics: JsonValue;
 };
 
 interface StoryDetailsSectionProps {

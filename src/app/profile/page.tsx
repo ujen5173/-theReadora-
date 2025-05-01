@@ -1,8 +1,8 @@
-import { api } from "~/trpc/server";
-import ProfileWrapper from "../_components/layouts/profile/wrapper";
-import ProfileMetaData from "../_components/layouts/profile/profile-meta-data";
-import Header from "../_components/layouts/header";
 import type { Metadata } from "next";
+import { api } from "~/trpc/server";
+import Header from "../_components/layouts/header";
+import ProfileMetaData from "../_components/layouts/profile/profile-meta-data";
+import ProfileWrapper from "../_components/layouts/profile/wrapper";
 
 export async function generateMetadata({
   searchParams,
@@ -26,7 +26,6 @@ const UserProfile = async ({
   searchParams: Promise<{ user_id: string }>;
 }) => {
   const { user_id } = await searchParams;
-  console.log({ user_id });
 
   const userDetails = await api.user.getUserDetails({
     usernameOrId: user_id,

@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 import { cuidRegex } from "~/utils/constants";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { NCardEntity } from "./story";
 
 export const userRouter = createTRPCRouter({
@@ -43,7 +43,6 @@ export const userRouter = createTRPCRouter({
 
         return user;
       } catch (error) {
-        console.log(error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch user details",

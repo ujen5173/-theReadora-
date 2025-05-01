@@ -7,7 +7,7 @@ type Story = {
   slug: string;
   title: string;
   votes: number;
-  reads: number;
+  readCount: number;
   readingTime: number;
   isMature: boolean;
   thumbnail: string;

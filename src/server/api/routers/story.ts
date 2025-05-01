@@ -11,11 +11,15 @@ import { GENRES, LANGUAGES, cuidRegex } from "~/utils/constants";
 import { makeSlug } from "~/utils/helpers";
 
 export type ChapterMetrics = {
-  wordCount: number;
-  readingTime: number;
-  likesCount: number;
   commentsCount: number;
+  likesCount: number;
+  ratingAvg: number;
+  ratingCount: number;
+  ratingValue: number;
+  readingTime: number;
+  sharesCount: number;
   viewsCount: number;
+  wordCount: number;
 };
 
 export const NCardEntity = {
@@ -257,13 +261,7 @@ export const storyRouter = createTRPCRouter({
           throw new Error("Story not found");
         }
 
-        return {
-          ...story,
-          chapters: story.chapters.map((chapter) => ({
-            ...chapter,
-            metrics: chapter.metrics,
-          })),
-        };
+        return story;
       } catch (err) {
         console.error("Error fetching story by ID or slug:", err);
         throw new Error("Error fetching story");
@@ -395,8 +393,6 @@ export const storyRouter = createTRPCRouter({
           default:
             orderBy.createdAt = "desc";
         }
-
-        console.log({ where });
 
         // Execute query with pagination
         const [stories, totalCount] = await Promise.all([

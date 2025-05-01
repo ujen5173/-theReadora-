@@ -1,22 +1,7 @@
 "use client";
-
 import {
-  ChevronRight,
-  GripVertical,
-  MoreVertical,
-  Pencil,
-  Trash2,
-  Plus,
-  X,
-  Save,
-  Loader2,
-} from "lucide-react";
-import { getReadingTimeText, formatDate } from "~/utils/helpers";
-import { LeftToRightListNumberIcon, RecordIcon } from "hugeicons-react";
-import Link from "next/link";
-import {
-  DndContext,
   closestCenter,
+  DndContext,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -30,24 +15,39 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState, useEffect } from "react";
+import type { JsonValue } from "@prisma/client/runtime/library";
+import { LeftToRightListNumberIcon, RecordIcon } from "hugeicons-react";
+import {
+  ChevronRight,
+  GripVertical,
+  Loader2,
+  MoreVertical,
+  Pencil,
+  Plus,
+  Save,
+  Trash2,
+  X,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Button } from "~/components/ui/button";
 import type { ChapterMetrics } from "~/server/api/routers/story";
-import { toast } from "sonner";
 import { api } from "~/trpc/react";
+import { formatDate, getReadingTimeText } from "~/utils/helpers";
 
 interface Chapter {
   id: string;
   title: string;
   createdAt: Date;
   chapterNumber: number;
-  metrics: ChapterMetrics;
+  metrics: JsonValue;
 }
 
 interface TableOfContentProps {
@@ -65,6 +65,12 @@ const SortableChapter = ({
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: chapter.id });
+
+  const metrics = chapter.metrics
+    ? (JSON.parse(
+        JSON.stringify(chapter.metrics as string) as string
+      ) as ChapterMetrics)
+    : null;
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -109,7 +115,7 @@ const SortableChapter = ({
               </span>
               <RecordIcon className="size-1 text-slate-500 fill-slate-500" />
               <span className="text-sm text-slate-500 font-semibold">
-                {getReadingTimeText(chapter.metrics.readingTime)}
+                {getReadingTimeText(metrics?.readingTime ?? 0)}
               </span>
               <ChevronRight className="size-5 text-slate-500" />
             </div>

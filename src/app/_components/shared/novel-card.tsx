@@ -1,13 +1,5 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-import { type FC } from "react";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Separator } from "~/components/ui/separator";
-import { cn } from "~/lib/utils";
-import { merriweatherFont } from "~/utils/font";
-import { formatNumber } from "~/utils/helpers";
+
 import {
   ArrowRight02Icon,
   FavouriteIcon,
@@ -15,15 +7,24 @@ import {
   LinkSquare02Icon,
   ViewIcon,
 } from "hugeicons-react";
-import { cardHeight, cardWidth } from "~/utils/constants";
 import { PlusIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { type FC } from "react";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Separator } from "~/components/ui/separator";
+import { cn } from "~/lib/utils";
+import { cardHeight, cardWidth } from "~/utils/constants";
+import { merriweatherFont } from "~/utils/font";
+import { formatNumber } from "~/utils/helpers";
 
 export type TCard = {
   id: string;
   slug: string;
   title: string;
   votes: number;
-  reads: number;
+  readCount: number;
   readingTime: number;
   thumbnail: string;
   isMature: boolean;
@@ -106,7 +107,7 @@ const NovelCard: FC<{
                 <ViewIcon size={16} className="mt-1 stroke-2" />
               </div>
               <p className="text-sm font-semibold">
-                {formatNumber(details.reads)}
+                {formatNumber(details.readCount)}
               </p>
             </div>
             <Separator orientation="vertical" className="h-8" />
