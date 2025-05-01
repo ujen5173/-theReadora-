@@ -1,6 +1,6 @@
-import type { JsonValue } from "@prisma/client/runtime/library";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { ChapterMetrics } from "~/server/api/routers/story";
 
 type Chapter = {
   id: string;
@@ -10,8 +10,8 @@ type Chapter = {
   slug: string;
   storyId: string;
   chapterNumber: number;
-  metrics: JsonValue;
-  readershipAnalytics: JsonValue;
+  metrics: ChapterMetrics;
+  readershipAnalytics: { total: number; unique: number; average: number };
   mongoContentID: string[];
 };
 

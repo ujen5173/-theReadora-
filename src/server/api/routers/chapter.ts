@@ -12,6 +12,7 @@ import {
   cuidRegex,
 } from "~/utils/constants";
 import { makeSlug, mongoObjectId } from "~/utils/helpers";
+import type { ChapterMetrics } from "./story";
 
 export const chapterRouter = createTRPCRouter({
   create: publicProcedure
@@ -239,8 +240,18 @@ export const chapterRouter = createTRPCRouter({
           throw new Error("Chapter content not found");
         }
 
+        const { metrics, readershipAnalytics, ...restChapter } = rest;
+
         return {
-          chapter: rest,
+          chapter: {
+            ...restChapter,
+            metrics: metrics as ChapterMetrics,
+            readershipAnalytics: readershipAnalytics as {
+              total: number;
+              unique: number;
+              average: number;
+            },
+          },
           story,
           initialChunk: {
             id: initialChunk._id.toString(),

@@ -1,4 +1,4 @@
-- Readora Project Workflow
+- [theReadora] Project Workflow
 
 ===============================================================================
 1. BACKLOG (TO DO)
@@ -33,12 +33,17 @@
 ========================================================================================================
 2. BUG REPORT QUEUE
 ========================================================================================================
-#   | Description                                           | Priority | Date Identified |  Date Resolved  |
-----|-------------------------------------------------------|----------|-----------------|-----------------|
-1   | Got error while parsing the chapter metrics.          | High     |    4/30/2025    |    5/1/2025     |
-      got [Object Object] without parsing the json file     |          |                 |                 |
-2   | Errors while getting chapterChunk and chapterLength ig| Medium   |    4/30/2025    |    5/1/2025     |
-3   |                                                       |          |                 |                 |
+#   | Description                                           | Priority | Date Identified |  Date Resolved  | Status 
+----|-------------------------------------------------------|----------|-----------------|-----------------|--------
+1   | Got error while parsing the chapter metrics.          | High     |    4/30/2025    |    5/1/2025     |   ✅   
+      got [Object Object] without parsing the json file                                                              
+2   | Errors while getting chapterChunk and chapterLength ig| Medium   |    4/30/2025    |    5/1/2025     |   ✅ 
+3   | /_components/layouts/chapter-page/wrapper.tsx:19:18   | High     |    5/1/2025     |    _/1/2025     |        
+      Type error: Argument of type '{ id: string; storyId: 
+      string; chapterNumber: number | null; version: number
+      createdAt: Date; }' is not assignable to parameter of
+      type 'Chapter'.                                      
+    |                                                       |          |                 |                 |        
 
  
 ========================================================================================================
