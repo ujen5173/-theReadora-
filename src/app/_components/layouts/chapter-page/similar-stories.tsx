@@ -1,11 +1,11 @@
 "use client";
 
-import { useChapterStore } from "~/store/useChapter";
-import { api } from "~/trpc/react";
-import NovelCard from "../../shared/novel-card";
 import { ArrowDownIcon, BookOpenIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import { useChapterStore } from "~/store/useChapter";
+import { api } from "~/trpc/react";
+import NovelCard, { type TCard } from "../../shared/novel-card";
 
 const RecommendedStories = () => {
   const { chapter } = useChapterStore();
@@ -32,7 +32,7 @@ const RecommendedStories = () => {
               <Loader2 className="size-6 text-primary animate-spin" />
             </div>
           ) : stories?.length && stories?.length > 0 ? (
-            stories?.map((story) => (
+            stories?.map((story: TCard) => (
               <div key={story.id}>
                 <NovelCard details={story} />
               </div>
