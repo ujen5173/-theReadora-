@@ -1,10 +1,14 @@
 "use client";
+
+import { ArrowLeft, BookOpen } from "lucide-react";
+import type Error from "next/error";
+import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { merriweatherFont, outfit } from "~/utils/font";
-import { BookOpen, ArrowLeft } from "lucide-react";
-import Link from "next/link";
 
-const StoryNotFound = () => {
+const StoryNotFound = ({ error }: { error: Error }) => {
+  console.log({ error });
+
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center text-slate-700">
       <div className="container flex flex-col items-center justify-center gap-8 px-4 py-16 text-center">

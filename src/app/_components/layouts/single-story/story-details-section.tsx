@@ -7,12 +7,10 @@ import {
   EyeIcon,
   FavouriteIcon,
   LeftToRightListNumberIcon,
-  PlusSignSquareIcon,
 } from "hugeicons-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +20,7 @@ import {
 import { cn } from "~/lib/utils";
 import { useUserStore } from "~/store/userStore";
 import { getReadingTimeText } from "~/utils/helpers";
+import FollowButton from "../../shared/follow-button";
 import TableOfContent from "./toc";
 
 type Chapter = {
@@ -30,6 +29,7 @@ type Chapter = {
   createdAt: Date;
   chapterNumber: number;
   metrics: JsonValue;
+  readershipAnalytics: JsonValue;
 };
 
 interface StoryDetailsSectionProps {
@@ -49,6 +49,19 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
 
   const handleReadMore = () => {
     setToggleReadMore(!toggleReadMore);
+  };
+
+  const calculateReads = () => {
+    return story.chapters.reduce((acc, chapter) => {
+      const metrics = (
+        chapter.readershipAnalytics as {
+          total: number;
+          unique: number;
+          average: number;
+        }
+      ).total;
+      return acc + metrics;
+    }, 0);
   };
 
   return (
@@ -73,15 +86,15 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
             {story.genreSlug}
           </Badge>
         </div>
+
         {user?.user?.id !== story.author.id && (
           <div className="py-4">
-            <Button
-              variant={"default"}
-              icon={PlusSignSquareIcon}
-              className="w-full"
-            >
-              Follow
-            </Button>
+            <FollowButton
+              followingTo={{
+                id: story.author.id,
+                name: story.author.name,
+              }}
+            />
           </div>
         )}
       </div>
@@ -98,7 +111,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
                   </span>
                 </div>
                 <span className="font-bold text-base text-center text-slate-700">
-                  {story.readCount.toLocaleString()}
+                  {calculateReads()}
                 </span>
               </div>
             </TooltipTrigger>
@@ -108,7 +121,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
               tooltipArrowClassName="bg-slate-50 border-b border-r border-slate-300 fill-slate-50"
             >
               <p className="text-slate-700 font-black">
-                {story.readCount.toLocaleString()} Reads
+                {calculateReads()} Reads
               </p>
             </TooltipContent>
           </Tooltip>

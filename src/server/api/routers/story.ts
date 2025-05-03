@@ -27,7 +27,6 @@ export const NCardEntity = {
   slug: true,
   title: true,
   votes: true,
-  readCount: true,
   readingTime: true,
   isMature: true,
   thumbnail: true,
@@ -246,6 +245,7 @@ export const storyRouter = createTRPCRouter({
               select: {
                 id: true,
                 title: true,
+                readershipAnalytics: true,
                 createdAt: true,
                 metrics: true,
                 chapterNumber: true,
@@ -558,6 +558,7 @@ export const storyRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const slug = makeSlug(input.title);
+
         const { genre, thumbnail, ...rest } = input;
 
         const story = await ctx.postgresDb.story.create({

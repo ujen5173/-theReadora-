@@ -92,7 +92,6 @@ export const chapterRouter = createTRPCRouter({
               readingTime: input.readingTime,
               likesCount: 0,
               commentsCount: 0,
-              viewsCount: 0,
               sharesCount: 0,
               ratingCount: 0,
               ratingValue: 0,
@@ -346,7 +345,10 @@ export const chapterRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id ?? (input.anonymous as string); // Use anonymous ID if user is not logged in
+      console.log({ userId });
+
       const chapterId = input.chapterId;
+
       try {
         const [chapter, hasViewed] = await Promise.all([
           ctx.postgresDb.chapter.findUnique({
@@ -373,6 +375,8 @@ export const chapterRouter = createTRPCRouter({
           ? (now.getTime() - lastRead.getTime()) / (1000 * 60 * 60)
           : 24;
 
+        console.log({ lastRead, hoursSinceLastRead });
+
         if (hoursSinceLastRead < 24) {
           return {
             success: true,
@@ -384,6 +388,7 @@ export const chapterRouter = createTRPCRouter({
         // Safely parse metrics and readershipAnalytics
         let metrics;
         let readershipAnalytics;
+
         try {
           metrics =
             typeof chapter.metrics === "string"

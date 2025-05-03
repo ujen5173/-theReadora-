@@ -1,5 +1,6 @@
 "use client";
 
+import { createId } from "@paralleldrive/cuid2";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useChapterStore } from "~/store/useChapter";
@@ -32,11 +33,12 @@ const IncreaseReadCount = () => {
       if (!user) {
         let cuid = localStorage.getItem("cuid");
         if (!cuid) {
-          cuid = crypto.randomUUID();
+          cuid = createId();
           localStorage.setItem("cuid", cuid);
         }
         await mutateAsync({
           chapterId: chapter.id,
+          anonymous: cuid,
         });
       } else {
         await mutateAsync({
@@ -76,8 +78,8 @@ const IncreaseReadCount = () => {
   );
 
   useEffect(() => {
-    // Start with a 60-second timer for careful readers
-    timerRef.current = window.setTimeout(() => void fireReadCount(), 60_000);
+    // Start with a 30-second timer for careful readers
+    timerRef.current = window.setTimeout(() => void fireReadCount(), 30_000);
     window.addEventListener("scroll", attemptFire);
 
     return () => {

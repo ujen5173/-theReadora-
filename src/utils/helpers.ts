@@ -1,5 +1,5 @@
-import slugify from "slugify";
 import numeral from "numeral";
+import slugify from "slugify";
 import { GENRES } from "./constants";
 
 export const makeSlug = (str: string) =>
@@ -19,7 +19,7 @@ export const formatNumber = (num: number) => {
 export const formatDate = (date: Date) => {
   return date.toLocaleDateString("en-US", {
     month: "long",
-    day: "numeric",
+    day: "2-digit",
   });
 };
 

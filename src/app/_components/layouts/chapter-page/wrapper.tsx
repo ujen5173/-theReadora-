@@ -13,6 +13,8 @@ const ChapterWrapper = ({
 }) => {
   const { setStory, setChapter, setInitialChunk } = useChapterStore();
 
+  console.log({ details });
+
   useEffect(() => {
     if (details) {
       setStory(details.story);

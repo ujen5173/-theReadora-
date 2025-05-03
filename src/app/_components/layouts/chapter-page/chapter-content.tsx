@@ -43,6 +43,8 @@ const ChapterMetaData = () => {
       wordCount: number;
     }) ?? null;
 
+  console.log({ metrics, chapter });
+
   return (
     <div className="py-20 space-y-8 border-b border-slate-200">
       <h1 className="text-4xl text-center font-black text-slate-700">

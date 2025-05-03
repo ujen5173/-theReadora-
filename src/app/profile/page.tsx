@@ -16,7 +16,7 @@ export async function generateMetadata({
 
   return {
     title: `${user.name} (@${user.username}) | Readora`,
-    description: user.bio || `Check out ${user.name}'s profile on Readora`,
+    description: `Check out ${user.name}'s profile on Readora`,
   };
 }
 

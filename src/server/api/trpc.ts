@@ -3,8 +3,8 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { auth } from "~/server/auth";
-import { postgresDb } from "~/server/postgresql";
 import { getMongoDB } from "~/server/mongodb";
+import { postgresDb } from "~/server/postgresql";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await auth();

@@ -28,8 +28,27 @@ model User {
     sessions      Session[]
     stories       Story[]
 
+    followingCount Int @default(0)
+    followersCount Int @default(0)
+
+    followers follow[] @relation("Follower")
+    following follow[] @relation("Following")
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model follow {
+    id          String @id @default(cuid())
+    follower    User   @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+    followerId  String
+    following   User   @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+    followingId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([followerId, followingId])
 }
 
 enum Language {
@@ -65,8 +84,6 @@ model Story {
     title          String
     slug           String      @unique
     synopsis       String
-    // readCount will be incremented by using cronjob. this will be calcaulated after every 24 hours
-    readCount      Int         @default(0)
     votes          Int         @default(0)
     readingTime    Int
     thumbnail      String

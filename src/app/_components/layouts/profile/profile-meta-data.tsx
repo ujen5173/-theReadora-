@@ -1,15 +1,16 @@
 "use client";
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
 import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useUserProfileStore } from "~/store/userProfileStore";
+import { formatDate } from "~/utils/helpers";
+import FollowButton from "../../shared/follow-button";
+import ShareDialog from "../../shared/share-dialog";
 import UserCreations from "./user-creations";
 import UserReadingList from "./user-reading-list";
-import { formatDate } from "~/utils/helpers";
-import ShareDialog from "../../shared/share-dialog";
-import { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 const ProfileMetaData = () => {
   const { user: author } = useUserProfileStore();
@@ -125,7 +126,7 @@ const ProfileMetaData = () => {
                 <div className="flex items-center gap-1">
                   <Book01Icon className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
-                    {/* {user?.story?.length || 0} */}0
+                    {user?.stories?.length || 0}
                   </span>
                   <span className="text-sm text-slate-600">works</span>
                 </div>
@@ -133,7 +134,7 @@ const ProfileMetaData = () => {
                 <div className="flex items-center gap-1">
                   <Users className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
-                    {/* {user?.followersCount || 0} */}0
+                    {user?.followersCount || 0}
                   </span>
                   <span className="text-sm text-slate-600">followers</span>
                 </div>
@@ -141,43 +142,21 @@ const ProfileMetaData = () => {
                 <div className="flex items-center gap-1">
                   <Users className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
-                    {/* {user?.followingCount || 0} */}0
+                    {user?.followingCount || 0}
                   </span>
                   <span className="text-sm text-slate-600">following</span>
                 </div>
-
-                {/* {user?.readCount && (
-                  <div className="flex items-center gap-1">
-                    <BookOpen className="size-5 text-primary" />
-                    <span className="text-base font-semibold text-slate-700">
-                      {user?.readCount}
-                    </span>
-                    <span className="text-sm text-slate-600">reads</span>
-                  </div>
-                )} */}
-
-                {/* {user?.likesCount && (
-                  <div className="flex items-center gap-1">
-                    <Heart className="size-5 text-primary" />
-                    <span className="text-base font-semibold text-slate-700">
-                      {user?.likesCount}
-                    </span>
-                    <span className="text-sm text-slate-600">likes</span>
-                  </div>
-                )} */}
               </div>
             </div>
 
             {/* Action Buttons - Desktop */}
             <div className="hidden md:flex md:flex-col md:gap-3">
-              <Button
-                variant="default"
-                size="sm"
-                icon={Users}
-                className="shadow-md hover:shadow-lg transition-shadow"
-              >
-                Follow
-              </Button>
+              <FollowButton
+                followingTo={{
+                  id: author?.id,
+                  name: author?.name,
+                }}
+              />
               <Button
                 icon={BellIcon}
                 variant="outline"

@@ -1,4 +1,3 @@
-import type { User } from "@prisma/client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -7,7 +6,6 @@ type Story = {
   slug: string;
   title: string;
   votes: number;
-  readCount: number;
   readingTime: number;
   isMature: boolean;
   thumbnail: string;
@@ -19,7 +17,14 @@ type Story = {
   };
 };
 
-export type ExtendedUser = User & {
+export type ExtendedUser = {
+  id: string;
+  name: string;
+  username: string;
+  image: string | null;
+  createdAt: Date;
+  followingCount: number;
+  followersCount: number;
   stories: Story[];
 };
 
@@ -39,12 +44,7 @@ export const useUserProfileStore = create<UserStore>()(
     {
       name: "user-store",
       partialize: (state) => ({
-        user: state.user
-          ? {
-              name: state.user.name,
-              image: state.user.image,
-            }
-          : null,
+        user: state.user,
       }),
     }
   )

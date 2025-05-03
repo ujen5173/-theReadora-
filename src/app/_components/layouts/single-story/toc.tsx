@@ -1,4 +1,5 @@
 "use client";
+
 import {
   closestCenter,
   DndContext,
@@ -66,11 +67,7 @@ const SortableChapter = ({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: chapter.id });
 
-  const metrics = chapter.metrics
-    ? (JSON.parse(
-        JSON.stringify(chapter.metrics as string) as string
-      ) as ChapterMetrics)
-    : null;
+  const metrics = chapter.metrics as ChapterMetrics;
 
   const style = {
     transform: CSS.Transform.toString(transform),
