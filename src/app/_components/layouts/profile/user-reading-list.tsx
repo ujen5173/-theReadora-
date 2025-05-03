@@ -1,12 +1,19 @@
 "use client";
 
 import { Book01Icon } from "hugeicons-react";
+import NovelCard from "~/app/_components/shared/novel-card";
 import { useUserProfileStore } from "~/store/userProfileStore";
 import { api } from "~/trpc/react";
 
 const UserReadingList = () => {
   const { user } = useUserProfileStore();
-  const { data, isLoading } = api.story.getAuthorReadingList.useQuery();
+  const { data, isLoading } = api.story.getAuthorReadingList.useQuery(
+    undefined,
+    {
+      enabled: !!user?.id,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   return (
     <section className="w-full space-y-6">
@@ -37,9 +44,9 @@ const UserReadingList = () => {
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {/* {data?.map((story) => (
-            <NovelCard key={story.id} details={story} />
-          ))} */}
+          {data?.map((story) => (
+            <NovelCard key={story} details={story} />
+          ))}
         </div>
       )}
     </section>

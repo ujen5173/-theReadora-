@@ -1,5 +1,5 @@
 import type { Language } from "@prisma/client";
-import type { inferProcedureOutput } from "@trpc/server";
+import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 
 import {
@@ -33,6 +33,7 @@ export const NCardEntity = {
   isCompleted: true,
   genreSlug: true,
   chapterCount: true,
+  readCount: true,
   author: {
     select: {
       name: true,
@@ -70,6 +71,21 @@ export const storyRouter = createTRPCRouter({
     });
 
     return novels;
+  }),
+
+  getFavorites: protectedProcedure.query(async ({ ctx }) => {
+    const favorites = await ctx.postgresDb.story.findMany({
+      where: {
+        favorites: {
+          some: {
+            userId: ctx.session?.user.id,
+          },
+        },
+      },
+      select: NCardEntity,
+    });
+
+    return favorites;
   }),
 
   latest: publicProcedure
@@ -265,6 +281,52 @@ export const storyRouter = createTRPCRouter({
       } catch (err) {
         console.error("Error fetching story by ID or slug:", err);
         throw new Error("Error fetching story");
+      }
+    }),
+
+  simpleSearch: publicProcedure
+    .input(
+      z.object({
+        query: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { query } = input;
+      try {
+        const stories = await ctx.postgresDb.story.findMany({
+          where: {
+            OR: [
+              { title: { contains: query, mode: "insensitive" } },
+              { synopsis: { contains: query, mode: "insensitive" } },
+              { author: { name: { contains: query, mode: "insensitive" } } },
+              { tags: { hasSome: [query] } },
+            ],
+          },
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            thumbnail: true,
+            author: {
+              select: {
+                name: true,
+                username: true,
+              },
+            },
+          },
+        });
+
+        return stories;
+      } catch (err) {
+        console.log({ err });
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+        });
       }
     }),
 

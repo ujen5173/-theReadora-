@@ -17,22 +17,25 @@ enum StoryStatus {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String     @id @default(cuid())
     name          String
     username      String
-    email         String    @unique
+    email         String     @unique
     bio           String?
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
     stories       Story[]
+    favorites     Favorite[]
 
     followingCount Int @default(0)
     followersCount Int @default(0)
 
     followers follow[] @relation("Follower")
     following follow[] @relation("Following")
+
+    readinglist Readinglist[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -86,6 +89,7 @@ model Story {
     synopsis       String
     votes          Int         @default(0)
     readingTime    Int
+    readCount      Int         @default(0)
     thumbnail      String
     thumbnailId    String
     tags           String[]
@@ -104,8 +108,11 @@ model Story {
     author   User   @relation(fields: [authorId], references: [id])
     authorId String
 
-    chapterCount Int       @default(0)
+    chapterCount Int        @default(0)
     chapters     Chapter[]
+    favorites    Favorite[]
+
+    readinglists ReadinglistStory[]
 
     @@index([title, slug, tags], name: "story_index")
 }
@@ -177,4 +184,41 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Favorite {
+    id        String   @id @default(cuid())
+    story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+    storyId   String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    createdAt DateTime @default(now())
+
+    @@unique([storyId, userId])
+    @@map("favorites")
+}
+
+model Readinglist {
+    id          String   @id @default(cuid())
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String
+    createdAt   DateTime @default(now())
+    title       String
+    description String?
+
+    isPrivate Boolean @default(false)
+
+    stories ReadinglistStory[]
+
+    @@map("readinglist")
+}
+
+model ReadinglistStory {
+    id            String      @id @default(cuid())
+    readinglist   Readinglist @relation(fields: [readinglistId], references: [id], onDelete: Cascade)
+    readinglistId String
+    story         Story       @relation(fields: [storyId], references: [id], onDelete: Cascade)
+    storyId       String
+
+    @@unique([readinglistId, storyId])
 }

@@ -1,22 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { useUserStore } from "~/store/userStore";
-import { useAuthSync } from "~/hooks/useAuthSync";
-import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-} from "~/components/ui/dropdown-menu";
 import { Bookmark01Icon, Bookshelf01Icon, UserIcon } from "hugeicons-react";
 import { BookIcon, CreditCard, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { useAuthSync } from "~/hooks/useAuthSync";
+import { useUserStore } from "~/store/userStore";
 
 export default function UserHeader() {
   useAuthSync();
@@ -85,14 +85,18 @@ export default function UserHeader() {
               Billing
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem className="cursor-pointer px-3 py-2">
-            <Bookshelf01Icon className="w-4 h-4 text-slate-800" />
-            Reading List
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer px-3 py-2">
-            <Bookmark01Icon className="w-4 h-4 text-slate-800" />
-            Favorites
-          </DropdownMenuItem>
+          <Link href="/reading-list">
+            <DropdownMenuItem className="cursor-pointer px-3 py-2">
+              <Bookshelf01Icon className="w-4 h-4 text-slate-800" />
+              Reading List
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/favourites">
+            <DropdownMenuItem className="cursor-pointer px-3 py-2">
+              <Bookmark01Icon className="w-4 h-4 text-slate-800" />
+              Favorites
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={async () => {

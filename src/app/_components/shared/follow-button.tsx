@@ -29,10 +29,8 @@ const FollowButton = ({
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
-    if (isUserFollowing) {
-      setIsFollowing(isUserFollowing);
-    }
-  }, [isUserFollowing]);
+    setIsFollowing(!!isUserFollowing);
+  }, [isUserFollowing, followingTo?.id]);
 
   useEffect(() => {
     if (error) {
@@ -48,7 +46,7 @@ const FollowButton = ({
           : `Unfollowed ${followingTo?.name}`
       );
     }
-  }, [status, error]);
+  }, [status, error, followingTo?.id]);
 
   const handleFollow = async () => {
     if (!followingTo?.id) {

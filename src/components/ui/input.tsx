@@ -16,6 +16,7 @@ type InputSize = "sm" | "md" | "lg";
 
 type InputProps = {
   size?: InputSize;
+  iconStyle?: string;
   icon?: React.ElementType;
   iconPlacement?: "left" | "right";
   type?: string;
@@ -31,6 +32,7 @@ const sizeClasses = {
 function Input({
   className,
   type,
+  iconStyle = "",
   icon: Icon,
   iconPlacement,
   size = "md", // Default size
@@ -40,7 +42,7 @@ function Input({
     <div className="relative w-full flex items-center">
       {Icon && iconPlacement === "left" && (
         <div className="absolute left-3 top-1/2 -translate-y-1/2">
-          <Icon />
+          <Icon className={iconStyle} />
         </div>
       )}
       <input
@@ -59,7 +61,7 @@ function Input({
       />
       {Icon && iconPlacement === "right" && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
-          <Icon />
+          <Icon className={iconStyle} />
         </div>
       )}
     </div>
