@@ -1,20 +1,16 @@
 "use client";
-import {
-  Analytics01Icon,
-  BookmarkCheck02Icon,
-  BookOpen01Icon,
-  Edit01Icon,
-} from "hugeicons-react";
+import type { Story } from "@prisma/client";
+import { Analytics01Icon, BookOpen01Icon, Edit01Icon } from "hugeicons-react";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
-import PremiumBanner from "../../shared/premium-banner";
-import type { Story } from "@prisma/client";
-import ShareDialog from "../../shared/share-dialog";
 import { env } from "~/env";
 import { useChapterStore } from "~/store/useChapter";
-import { useRouter } from "next/navigation";
 import { useUserStore } from "~/store/userStore";
+import AddToList from "../../shared/add-to-list";
+import PremiumBanner from "../../shared/premium-banner";
+import ShareDialog from "../../shared/share-dialog";
 
 interface ThumbnailSectionProps {
   story: Story;
@@ -77,15 +73,7 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
             </Button>
           </>
         ) : (
-          <>
-            <Button
-              variant={"outline"}
-              icon={BookmarkCheck02Icon}
-              className="w-full bg-white"
-            >
-              Save to List
-            </Button>
-          </>
+          <AddToList storyId={story.id} />
         )}
         <ShareDialog
           title={story.title}

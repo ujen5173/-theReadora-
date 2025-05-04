@@ -203,6 +203,94 @@ export const readinglistRouter = createTRPCRouter({
         });
       }
     }),
+
+  getList: protectedProcedure.query(async ({ ctx, input }) => {
+    const lists = await ctx.postgresDb.readinglist.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+
+    return lists;
+  }),
+
+  // @params:
+  // @id - story id
+  // @listIds - multiple reading list ids
+  addToList: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+        listIds: z.array(z.string().cuid()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // Get the story ID and reading list IDs
+        const storyId = input.id;
+        const readingListIds = input.listIds;
+
+        // For each reading list, try to add the story
+        await Promise.all(
+          readingListIds.map(async (listId) => {
+            // Check if user has permission to modify this list
+            const readingList = await ctx.postgresDb.readinglist.findUnique({
+              where: { id: listId },
+              select: { userId: true },
+            });
+
+            if (!readingList) {
+              return { listId, success: false, reason: "NOT_FOUND" };
+            }
+
+            if (readingList.userId !== ctx.session.user.id) {
+              return { listId, success: false, reason: "FORBIDDEN" };
+            }
+
+            // Check if story already exists in this list
+            const existingEntry =
+              await ctx.postgresDb.readinglistStory.findUnique({
+                where: {
+                  readinglistId_storyId: {
+                    readinglistId: listId,
+                    storyId: storyId,
+                  },
+                },
+              });
+
+            if (existingEntry) {
+              return { listId, success: true, reason: "ALREADY_EXISTS" };
+            }
+
+            // Add story to reading list
+            await ctx.postgresDb.readinglistStory.create({
+              data: {
+                readinglist: { connect: { id: listId } },
+                story: { connect: { id: storyId } },
+              },
+            });
+
+            return { listId, success: true };
+          })
+        );
+
+        return true;
+      } catch (err) {
+        console.log({ err });
+        if (err instanceof TRPCError) {
+          throw err;
+        } else {
+          throw new TRPCError({
+            message: "Something went wrong!!!",
+            code: "INTERNAL_SERVER_ERROR",
+          });
+        }
+      }
+    }),
 });
 
 export type TgetUserReadingList = inferProcedureOutput<

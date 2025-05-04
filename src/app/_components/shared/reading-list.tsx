@@ -2,7 +2,7 @@
 import { PlusSignIcon, Search01Icon } from "hugeicons-react";
 import { Edit3Icon, Loader2, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -32,7 +32,13 @@ type Story = {
   };
 };
 
-const ReadingListDialog = ({ onSuccess }: { onSuccess?: () => void }) => {
+const ReadingListDialog = ({
+  onSuccess,
+  children,
+}: {
+  onSuccess?: () => void;
+  children?: React.ReactNode;
+}) => {
   const { open, setOpen, edit, edited, setEdited } = useReadinglistStore();
 
   const [data, setData] = useState({
@@ -162,16 +168,20 @@ const ReadingListDialog = ({ onSuccess }: { onSuccess?: () => void }) => {
       }}
     >
       <DialogTrigger asChild>
-        <Button
-          onClick={() => {
-            setOpen(true);
-            setEdited(null); // Reset on new creation
-          }}
-          icon={PlusSignIcon}
-          className="mt-4"
-        >
-          Create Reading List
-        </Button>
+        {children ? (
+          children
+        ) : (
+          <Button
+            onClick={() => {
+              setOpen(true);
+              setEdited(null); // Reset on new creation
+            }}
+            icon={PlusSignIcon}
+            className="mt-4"
+          >
+            Create Reading List
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
