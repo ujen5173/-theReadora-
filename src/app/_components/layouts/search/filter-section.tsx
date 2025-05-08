@@ -1,36 +1,26 @@
 "use client";
-import { useState } from "react";
-import { Button } from "~/components/ui/button";
-import { Switch } from "~/components/ui/switch";
-import { Label } from "~/components/ui/label";
-import { Slider } from "~/components/ui/slider";
-import { Input } from "~/components/ui/input";
+
 import {
-  BookOpen,
-  Flame,
-  Clock,
-  TrendingUp,
-  Tags,
-  Filter,
-  Sparkles,
-  Image,
   AlertCircle,
-  Star,
-  Eye,
+  BookOpen,
   Calendar,
-  Plus,
-  ChevronsUpDown,
   Check,
+  ChevronsUpDown,
+  Clock,
+  Eye,
+  Filter,
+  Flame,
+  Image,
+  Plus,
+  Sparkles,
+  Star,
+  Tags,
+  TrendingUp,
 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import PremiumBanner from "../../shared/premium-banner";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -39,14 +29,27 @@ import {
   CommandItem,
   CommandList,
 } from "~/components/ui/command";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { GENRES } from "~/utils/constants";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { Slider } from "~/components/ui/slider";
+import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
 import { useFilterStore } from "~/store/useFilter";
+import { GENRES } from "~/utils/genre";
+import { getValidGenre } from "~/utils/helpers";
+import PremiumBanner from "../../shared/premium-banner";
 
 const FilterSection = ({
   query,
@@ -58,7 +61,6 @@ const FilterSection = ({
   handleRefetch: () => void;
 }) => {
   const {
-    genre: genreStore,
     sortBy,
     status,
     contentType,
@@ -68,8 +70,6 @@ const FilterSection = ({
     maxViewsCount,
     publishedAt,
     tags,
-    setQuery,
-    setGenre,
     setSortBy,
     setStatus,
     setContentType,
@@ -78,7 +78,6 @@ const FilterSection = ({
     setPublishedAt,
     setTags,
     resetAll,
-    applyFilters,
   } = useFilterStore();
 
   const [chapterRange, setChapterRange] = useState([0, 100]);
@@ -113,6 +112,17 @@ const FilterSection = ({
   };
 
   const [open, setOpen] = useState(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Local state for pending genre
+  const [pendingGenre, setPendingGenre] = useState(genre);
+
+  // Keep local state in sync with URL/store when they change
+  useEffect(() => {
+    setPendingGenre(genre);
+  }, [genre]);
 
   return (
     <section className="space-y-4">
@@ -155,10 +165,8 @@ const FilterSection = ({
                     aria-expanded={open}
                     className="w-full justify-between"
                   >
-                    {genreStore
-                      ? GENRES.find(
-                          (g) => g.toLowerCase() === genreStore.toLowerCase()
-                        )
+                    {pendingGenre
+                      ? getValidGenre(pendingGenre)
                       : "Select genre"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -171,22 +179,22 @@ const FilterSection = ({
                       <CommandGroup>
                         {GENRES.map((g) => (
                           <CommandItem
-                            key={g}
-                            value={g}
-                            onSelect={(currentValue) => {
-                              setGenre(currentValue);
+                            key={g.slug}
+                            value={g.name}
+                            onSelect={() => {
+                              setPendingGenre(g.slug);
                               setOpen(false);
                             }}
                           >
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                genreStore.toLowerCase() === g.toLowerCase()
+                                pendingGenre === g.slug
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
                             />
-                            {g}
+                            {g.name}
                           </CommandItem>
                         ))}
                       </CommandGroup>
@@ -454,6 +462,12 @@ const FilterSection = ({
           <Button
             className="w-full"
             onClick={() => {
+              // Update the URL with the pending genre
+              const params = new URLSearchParams(searchParams.toString());
+              if (pendingGenre) params.set("genre", pendingGenre);
+              else params.delete("genre");
+              if (query) params.set("query", query);
+              router.push(`/search?${params.toString()}`);
               handleRefetch();
             }}
           >

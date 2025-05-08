@@ -7,7 +7,8 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { GENRES, LANGUAGES, cuidRegex } from "~/utils/constants";
+import { LANGUAGES, cuidRegex } from "~/utils/constants";
+import { GENRES } from "~/utils/genre";
 import { makeSlug } from "~/utils/helpers";
 
 export type ChapterMetrics = {
@@ -302,6 +303,7 @@ export const storyRouter = createTRPCRouter({
               { tags: { hasSome: [query] } },
             ],
           },
+          take: 5,
           select: {
             id: true,
             title: true,
@@ -410,9 +412,9 @@ export const storyRouter = createTRPCRouter({
 
         // Views count range
         if (minViewsCount || maxViewsCount) {
-          where.reads = {};
-          if (minViewsCount) where.reads.gte = minViewsCount;
-          if (maxViewsCount) where.reads.lte = maxViewsCount;
+          where.readCount = {};
+          if (minViewsCount) where.readCount.gte = minViewsCount;
+          if (maxViewsCount) where.readCount.lte = maxViewsCount;
         }
 
         // Publication date filter
@@ -444,7 +446,7 @@ export const storyRouter = createTRPCRouter({
             orderBy.votes = "desc";
             break;
           case "POPULAR":
-            orderBy.reads = "desc";
+            orderBy.readCount = "desc";
             break;
           case "LATEST":
             orderBy.createdAt = "desc";
@@ -603,7 +605,7 @@ export const storyRouter = createTRPCRouter({
       z.object({
         title: z.string(),
         synopsis: z.string(),
-        genre: z.enum(GENRES),
+        genre: z.enum(GENRES.map((e) => e.name) as [string, ...string[]]),
         tags: z.array(z.string()),
         thumbnail: z.object({
           url: z.string(),

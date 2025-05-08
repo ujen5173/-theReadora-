@@ -22,6 +22,7 @@ export type ExtendedUser = {
   name: string;
   username: string;
   image: string | null;
+  bio: string | null;
   createdAt: Date;
   followingCount: number;
   followersCount: number;

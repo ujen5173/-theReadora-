@@ -1,17 +1,17 @@
-import { Button } from "~/components/ui/button";
-import { outfit } from "~/utils/font";
-import { PenLine, Coins, Users, Sparkles } from "lucide-react";
+import { Coins, PenLine, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
-import Header from "./_components/layouts/header";
 import { Fragment } from "react";
-import HeroSection from "./_components/layouts/(/)/hero-section";
-import TrendingSection from "./_components/layouts/(/)/trending";
-import { Separator } from "~/components/ui/separator";
-import PopularCompleted from "./_components/layouts/(/)/popular-completed";
-import LatestAndRising from "./_components/layouts/(/)/latest-rising";
-import TopTags from "./_components/layouts/(/)/top-tags";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Separator } from "~/components/ui/separator";
+import { outfit } from "~/utils/font";
+import HeroSection from "./_components/layouts/(/)/hero-section";
+import LatestAndRising from "./_components/layouts/(/)/latest-rising";
+import PopularCompleted from "./_components/layouts/(/)/popular-completed";
 import Recommendations from "./_components/layouts/(/)/recommendations";
+import TopTags from "./_components/layouts/(/)/top-tags";
+import TrendingSection from "./_components/layouts/(/)/trending";
+import Header from "./_components/layouts/header";
 
 export default async function Home() {
   const features = [
@@ -98,7 +98,7 @@ export default async function Home() {
               </div>
 
               <div className="text-center">
-                <Link href="/api/auth/signin">
+                <Link href="/auth/signin">
                   <Button
                     size="lg"
                     variant="default"

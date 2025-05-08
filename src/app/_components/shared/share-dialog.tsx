@@ -1,8 +1,16 @@
 "use client";
 
+import {
+  Facebook01Icon,
+  RedditIcon,
+  Share01Icon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "hugeicons-react";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,16 +18,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
-import {
-  Facebook01Icon,
-  Share01Icon,
-  TwitterIcon,
-  WhatsappIcon,
-  RedditIcon,
-} from "hugeicons-react";
 import { Input } from "~/components/ui/input";
+import { cn } from "~/lib/utils";
 
 interface ShareDialogProps {
   title: string;
@@ -105,13 +105,15 @@ const ShareDialog = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">Share this novel</DialogTitle>
+          <DialogTitle className="text-xl text-slate-800 font-bold">
+            Share to the world 🌍
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           {/* Title and Description */}
           <div>
-            <h3 className="font-semibold text-slate-900 mb-1">{title}</h3>
+            <h3 className="font-semibold text-slate-800 mb-1">{title}</h3>
             {description && (
               <p className="text-sm text-slate-600 line-clamp-2">
                 {description}

@@ -51,19 +51,6 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
     setToggleReadMore(!toggleReadMore);
   };
 
-  const calculateReads = () => {
-    return story.chapters.reduce((acc, chapter) => {
-      const metrics = (
-        chapter.readershipAnalytics as {
-          total: number;
-          unique: number;
-          average: number;
-        }
-      ).total;
-      return acc + metrics;
-    }, 0);
-  };
-
   return (
     <main className="w-full py-2 relative">
       <div className="mb-6 flex items-start gap-8">
@@ -111,7 +98,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
                   </span>
                 </div>
                 <span className="font-bold text-base text-center text-slate-700">
-                  {calculateReads()}
+                  {story.readCount}
                 </span>
               </div>
             </TooltipTrigger>
@@ -121,7 +108,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
               tooltipArrowClassName="bg-slate-50 border-b border-r border-slate-300 fill-slate-50"
             >
               <p className="text-slate-700 font-black">
-                {calculateReads()} Reads
+                {story.readCount} Reads
               </p>
             </TooltipContent>
           </Tooltip>

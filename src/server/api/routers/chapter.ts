@@ -355,6 +355,9 @@ export const chapterRouter = createTRPCRouter({
             where: {
               id: chapterId,
             },
+            include: {
+              story: true,
+            },
           }),
           ctx.postgresDb.chapterRead.findFirst({
             where: {
@@ -421,12 +424,17 @@ export const chapterRouter = createTRPCRouter({
         // Update metrics and analytics
         metrics.viewsCount = (metrics.viewsCount || 0) + 1;
         readershipAnalytics.total = (readershipAnalytics.total || 0) + 1;
-        if (!hasViewed) {
+
+        // Whether this is a new unique reader for this chapter
+        const isNewUniqueRead = !hasViewed;
+
+        if (isNewUniqueRead) {
           readershipAnalytics.unique = (readershipAnalytics.unique || 0) + 1;
         }
         readershipAnalytics.average =
           readershipAnalytics.total / readershipAnalytics.unique;
 
+        // Update chapter and read record
         await Promise.all([
           ctx.postgresDb.chapter.update({
             where: {
@@ -458,6 +466,20 @@ export const chapterRouter = createTRPCRouter({
             },
           }),
         ]);
+
+        // If this is a new unique read, also update the story's readCount
+        if (isNewUniqueRead) {
+          await ctx.postgresDb.story.update({
+            where: {
+              id: chapter.storyId,
+            },
+            data: {
+              readCount: {
+                increment: 1,
+              },
+            },
+          });
+        }
 
         return {
           success: true,

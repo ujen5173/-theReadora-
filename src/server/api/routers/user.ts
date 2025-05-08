@@ -1,4 +1,4 @@
-import { TRPCError } from "@trpc/server";
+import { type inferProcedureOutput, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { cuidRegex } from "~/utils/constants";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
@@ -33,6 +33,7 @@ export const userRouter = createTRPCRouter({
             name: true,
             username: true,
             image: true,
+            bio: true,
             createdAt: true,
             followersCount: true,
             followingCount: true,
@@ -51,6 +52,7 @@ export const userRouter = createTRPCRouter({
           name: user.name,
           username: user.username,
           image: user.image,
+          bio: user.bio,
           createdAt: user.createdAt,
           followersCount: user.followersCount,
           followingCount: user.followingCount,
@@ -190,4 +192,80 @@ export const userRouter = createTRPCRouter({
         });
       }
     }),
+
+  getProfile: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.postgresDb.user.findFirst({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
+        createdAt: true,
+        updatedAt: true,
+        bio: true,
+        email: true,
+        emailVerified: true,
+      },
+    });
+
+    if (!user) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "User not found",
+      });
+    }
+
+    return user;
+  }),
+
+  checkUsername: protectedProcedure
+    .input(z.object({ username: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { username } = input;
+
+      const existingUser = await ctx.postgresDb.user.findFirst({
+        where: {
+          username,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      console.log({ existingUser });
+
+      return !!existingUser;
+    }),
+
+  updateUser: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+        username: z.string().optional(),
+        bio: z.string().optional(),
+        image: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { name, username, bio, image } = input;
+
+      const updatedUser = await ctx.postgresDb.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          name,
+          username,
+          bio,
+          image,
+        },
+      });
+
+      return updatedUser;
+    }),
 });
+
+export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;

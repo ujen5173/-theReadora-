@@ -1,7 +1,7 @@
+import { ArrowLeft, BookOpen } from "lucide-react";
+import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { merriweatherFont, outfit } from "~/utils/font";
-import { BookOpen, ArrowLeft } from "lucide-react";
-import Link from "next/link";
 
 const StoryNotFound = () => {
   return (

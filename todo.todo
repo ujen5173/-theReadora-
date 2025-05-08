@@ -3,19 +3,18 @@
 ===============================================================================
 1. BACKLOG (TO DO)
 ===============================================================================
-#     Category           | Task                                            | Priority | Notes                                   | Difficulty     | Status
+#   | Category           | Task                                            | Priority | Notes                                   | Difficulty     | Status
 ----|--------------------|-------------------------------------------------|----------|-----------------------------------------|----------------|-------------
 2   | Core Logic         | Read count logic                                | High     | Increment on scroll/chapter end         | High           |   ✅
 3   | Social/Follow      | Implement follow/unfollow users                 | Medium   | Update feed based on follows            | Low            |   ✅
-5   | Reading Lists      | CRUD for reading lists                          | Medium   |                                         | Low            |
-7   | Engagement         | Votes (up/down)                                 | Medium   | One vote per user/story                 | Low            |   
-8   | Search             | Top 5 suggestions in search bar                 | Medium   | Autocomplete + recent/frequent          | Low            |
-14  | Engagement         | Favorites/bookmarking                           | Medium   | Save for later                          | Low            |
+5   | Reading Lists      | CRUD for reading lists                          | Medium   |                                         | Low            |   ✅
+23  | Core Logic         | Story Read count logic                          | High     | Read count in story                     | Medium         |   ✅
+-------------------------|-------------------------------------------------|----------|-----------------------------------------|----------------|-------------
+7   | Engagement         | Rating                                          | Medium   | One rating per user/story               | Low            |   
+13  | Settings           | Profile settings page                           | Low      | Avatar, bio, preferences                | Low            |
 16  | Notifications      | Email (digests, alerts)                         | Medium   |                                         | Low            |
 22  | Content Access     | Locked chapters (premium gating)                | Medium   | Unlock via subscription                 | Low            |
-13  | Settings           | Profile settings page                           | Low      | Avatar, bio, preferences                | Low            |
-15  | Navigation         | Footer pages (About, Help, GDPR)                | Low      | Site map links                          | Low            |
-23  | Core Logic         | Read count logic                                | High     | Read count in story                     | Medium         |
+23  | Core Logic         | Schedule chapter publish                        | Medium   |                                         | Medium         |
 4   | Monetization       | Premium subscription flow                       | High     | Stripe, esewa and khalti integration    | Medium         |
 6   | Engagement         | Comments on stories                             | Medium   |                                         | Medium         |
 9   | Content Mgmt       | Edit stories and chapters                       | Medium   | Revision history                        | Medium         |
@@ -33,17 +32,17 @@
 ========================================================================================================
 2. BUG REPORT QUEUE
 ========================================================================================================
-#   | Description                                           | Priority | Date Identified |  Date Resolved  | Status |  Where? 
-----|-------------------------------------------------------|----------|-----------------|-----------------|--------|--------
-1   | Got error while parsing the chapter metrics.          | High     |    4/30/2025    |    5/1/2025     |   OK   |   Dev  |
-      got [Object Object] without parsing the json file                                                             | 
-2   | Errors while getting chapterChunk and chapterLength ig| Medium   |    4/30/2025    |    5/1/2025     |   OK   |   Dev  |
-3   | /_components/layouts/chapter-page/wrapper.tsx:19:18   | High     |    5/1/2025     |    _/1/2025     |        |  Prod. |
+#   | Description                                                       | Priority | Date Identified |  Date Resolved  | Status |  Where? 
+----|-------------------------------------------------------------------|----------|-----------------|-----------------|--------|--------
+1   | Got error while parsing the chapter metrics.                      | High     |    4/30/2025    |    5/1/2025     |   OK   |   Dev  |
+      got [Object Object] without parsing the json file                                                                         | 
+2   | Errors while getting chapterChunk and chapterLength ig            | Medium   |    4/30/2025    |    5/1/2025     |   OK   |   Dev  |
+3   | /_components/layouts/chapter-page/wrapper.tsx:19:18               | High     |    5/1/2025     |    _/1/2025     |        |  Prod. |
       Type error: Argument of type '{ id: string; storyId: 
       string; chapterNumber: number | null; version: number
       createdAt: Date; }' is not assignable to parameter of
       type 'Chapter'.                                      
-    |                                                       |          |                 |                 |        
+4   | Search system have conflict with params and filter system         | High     |    5/4/2025     |                 |        | Both   |
 
 
 

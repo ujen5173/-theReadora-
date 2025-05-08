@@ -17,23 +17,6 @@ export const LANGUAGES = [
   { code: "ko", name: "Korean" },
 ] as const;
 
-export const GENRES = [
-  "Romance",
-  "Fanfiction",
-  "LGBTQ+",
-  "Werewolf",
-  "Contemporary Lit",
-  "New Adult",
-  "Fantasy",
-  "Short Story",
-  "Teen Fiction",
-  "Historical Fiction",
-  "Paranormal",
-  "Editor's Picks",
-  "Humor",
-  "Horror",
-] as const;
-
 export const cuidRegex = /^c[a-z0-9]{24}$/;
 
 export const chapterCollectionName = "Chapters";

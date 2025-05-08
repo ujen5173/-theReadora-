@@ -1,47 +1,39 @@
-// TODO: Fix the search bar after the write page is done
-
 "use client";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
+
+import { useRouter } from "next/navigation";
+import { useRef } from "react";
+import useKeyPress from "~/app/hooks/use-key-press";
 import { Input } from "~/components/ui/input";
-import { api } from "~/trpc/react";
 
 const SearchBar = () => {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query");
   const router = useRouter();
+  const ref = useRef<HTMLInputElement | null>(null);
 
-  const { refetch } = api.story.search.useQuery(
-    {
-      query: query || "",
-      limit: 5,
-    },
-    {
-      enabled: false,
+  const handleKeyPress = (): void => {
+    if (ref.current) {
+      ref.current.focus();
     }
-  );
-
-  const debouncedFunction = (e: string) => {
-    // startHolyLoader();
-    router.push(`/search?query=${e}`);
-    // stopHolyLoader();
-
-    // Get the data from the server
-    refetch();
   };
 
-  const debounced = useDebouncedCallback(debouncedFunction, 10);
+  useKeyPress(handleKeyPress);
 
   return (
     <div className="relative">
-      <Input
-        size="lg"
-        placeholder="Search..."
-        icon={KbdIcon}
-        onChange={(e) => debounced(e.target.value)}
-        className="bg-white w-80"
-        iconPlacement="right"
-      />
+      <form
+        onSubmit={(e: React.SyntheticEvent<HTMLFormElement>) => {
+          e.preventDefault();
+          router.push(`/search?query=${ref?.current?.value}`);
+        }}
+      >
+        <Input
+          size="lg"
+          placeholder="Search..."
+          icon={KbdIcon}
+          ref={ref}
+          className="bg-white w-80"
+          iconPlacement="right"
+        />
+      </form>
     </div>
   );
 };
@@ -49,7 +41,7 @@ const SearchBar = () => {
 export default SearchBar;
 
 const KbdIcon = () => (
-  <kbd className="pointer-events-none hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-    <span className="text-xs mt-1">⌘</span>K
+  <kbd className="pointer-events-none hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[12px] font-medium opacity-100 sm:flex">
+    <span className="text-xs mt-1">⌘</span> + K
   </kbd>
 );

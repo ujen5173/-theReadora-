@@ -1,6 +1,6 @@
 import StoryDetailsSection from "~/app/_components/layouts/single-story/story-details-section";
 import ThumbnailSection from "~/app/_components/layouts/single-story/thumbnail-section";
-import StoryNotFound from "~/app/_components/shared/StoryNotFound";
+import StoryNotFound from "~/app/_components/shared/story-not-found";
 import { api } from "~/trpc/server";
 import { generateSEOMetadata } from "~/utils/site";
 

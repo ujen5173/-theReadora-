@@ -1,6 +1,6 @@
-import Logo from "../shared/logo";
-import { Button, buttonVariants } from "~/components/ui/button";
 import { Crown, Plus } from "lucide-react";
+import Link from "next/link";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,31 +10,46 @@ import {
   NavigationMenuTrigger,
 } from "~/components/ui/navigation-menu";
 import { cn } from "~/lib/utils";
-import Link from "next/link";
+import Logo from "../shared/logo";
 import UserHeader from "../user/user-header";
 import SearchBar from "./search-bar";
 
-// Genre list for explore dropdown
 const GENRES = {
   column1: [
     { name: "Romance", href: "/search?genre=romance" },
-    { name: "Fanfiction", href: "/search?genre=fanfiction" },
-    { name: "LGBTQ+", href: "/search?genre=lgbtq" },
-    { name: "Werewolf", href: "/search?genre=werewolf" },
-    { name: "Contemporary Lit", href: "/search?genre=contemporary" },
+    { name: "Fantasy", href: "/search?genre=fantasy" },
+    { name: "Science Fiction", href: "/search?genre=science-fiction" },
+    { name: "Mystery / Thriller", href: "/search?genre=mystery-thriller" },
+    { name: "Adventure", href: "/search?genre=adventure" },
   ],
   column2: [
-    { name: "New Adult", href: "/search?genre=new-adult" },
-    { name: "Fantasy", href: "/search?genre=fantasy" },
-    { name: "Short Story", href: "/search?genre=short-story" },
-    { name: "Teen Fiction", href: "/search?genre=teen-fiction" },
-    { name: "Historical Fiction", href: "/search?genre=historical-fiction" },
+    {
+      name: "Drama Fiction",
+      href: "/search?genre=drama-realistic-fiction",
+    },
+    {
+      name: "Epic Fantasy",
+      href: "/search?genre=high-fantasy-epic-fantasy",
+    },
+    { name: "LitRPG", href: "/search?genre=litrpg" },
+    { name: "Isekai", href: "/search?genre=isekai" },
+    {
+      name: "Contemporary Romance",
+      href: "/search?genre=contemporary-romance",
+    },
   ],
   column3: [
-    { name: "Paranormal", href: "/search?genre=paranormal" },
-    { name: "Editor's Picks", href: "/search?genre=editors-picks" },
-    { name: "Humor", href: "/search?genre=humor" },
+    { name: "Enemies to Lovers", href: "/search?genre=enemies-to-lovers" },
+    {
+      name: "Teen Adult Romance",
+      href: "/search?genre=teen-young-adult-romance",
+    },
+    {
+      name: "Anti-Hero Stories",
+      href: "/search?genre=villainess-anti-hero-stories",
+    },
     { name: "Horror", href: "/search?genre=horror" },
+    { name: "Slice of Life", href: "/search?genre=slice-of-life" },
   ],
 };
 
@@ -99,7 +114,7 @@ const Header = ({
             <Logo />
 
             <ul className="flex items-center gap-2">
-              <NavigationMenu delayDuration={0} className="relative">
+              <NavigationMenu delayDuration={0} className="z-[100] relative">
                 <NavigationMenuList>
                   <NavigationMenuItem>
                     <NavigationMenuTrigger

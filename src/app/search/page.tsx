@@ -1,23 +1,23 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useLayoutEffect, useState } from "react";
+import type { SearchResponse } from "~/server/api/routers/story";
+import { useFilterStore } from "~/store/useFilter";
+import { api } from "~/trpc/react";
+import { getValidGenre } from "~/utils/helpers";
+import Header from "../_components/layouts/header";
 import BooksSection from "../_components/layouts/search/books-section";
 import FilterSection from "../_components/layouts/search/filter-section";
-import Header from "../_components/layouts/header";
-import { useSearchParams, useRouter } from "next/navigation";
-import { getValidGenre } from "~/utils/helpers";
-import { useLayoutEffect, useState, useCallback } from "react";
-import { api } from "~/trpc/react";
-import { useFilterStore } from "~/store/useFilter";
-import type { SearchResponse } from "~/server/api/routers/story";
 
 const Search = () => {
   // @params
-  // /search?query=<QUERQUERY>&genre=<GENRE>
+  // /search?query=<QUERY>&genre=<GENRE>
   const searchParams = useSearchParams();
   const query = searchParams.get("query") ?? "";
   const genre = searchParams.get("genre") ?? "";
   const router = useRouter();
-  const { applyFilters } = useFilterStore();
+  const { applyFilters, setGenre, setQuery } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [s, setSearchParams] = useState({
     ...applyFilters(),
@@ -26,15 +26,22 @@ const Search = () => {
     limit: 10,
   });
 
+  // Handle genre synchronization
   useLayoutEffect(() => {
     if (genre) {
       const validGenre = getValidGenre(genre);
-      if (!validGenre) {
-        // remove genre from url only if it's invalid
+      if (validGenre) {
+        setGenre(validGenre);
+      } else {
         router.push(`/search${query ? `?query=${query}` : ""}`);
       }
     }
-  }, [query, genre, router]);
+  }, [genre, query, router, setGenre]);
+
+  // Handle query synchronization
+  useLayoutEffect(() => {
+    setQuery(query);
+  }, [query]);
 
   const { data: books, isLoading } = api.story.search.useQuery(s, {
     enabled: true,

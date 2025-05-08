@@ -1,5 +1,4 @@
 "use client";
-
 import {
   ArrowRight02Icon,
   FavouriteIcon,
@@ -7,7 +6,6 @@ import {
   LinkSquare02Icon,
   ViewIcon,
 } from "hugeicons-react";
-import { PlusIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { type FC } from "react";
@@ -18,6 +16,7 @@ import { cn } from "~/lib/utils";
 import { cardHeight, cardWidth } from "~/utils/constants";
 import { merriweatherFont } from "~/utils/font";
 import { formatNumber } from "~/utils/helpers";
+import AddToList from "./add-to-list";
 
 export type TCard = {
   id: string;
@@ -137,18 +136,7 @@ const NovelCard: FC<{
                 <span>View Details</span>
               </Link>
             </Button>
-            <Button variant="secondary" className="w-full gap-2">
-              <PlusIcon size={16} className="stroke-2" />
-              <span>Add to List</span>
-              {/* {!(removingTail || removing) ? (
-                <MinusSignSquareIcon size={16} className="stroke-2" />
-              ) : (
-                <Loading03Icon
-                  className={cn("animate-spin size-4 text-slate-600")}
-                />
-              )}
-              <span>Remove from List</span> */}
-            </Button>
+            <AddToList storyId={details.id} />
           </div>
         </div>
 

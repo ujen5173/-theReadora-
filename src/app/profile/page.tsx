@@ -42,7 +42,6 @@ const UserProfile = async ({
       <main className="">
         <ProfileWrapper details={userDetails}>
           <ProfileMetaData />
-          {/* Tab Contents will go here */}
         </ProfileWrapper>
       </main>
     </>

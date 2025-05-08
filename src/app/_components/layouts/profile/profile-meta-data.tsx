@@ -188,6 +188,12 @@ const ProfileMetaData = () => {
             </Button>
           </div>
 
+          <div className="mt-6">
+            <p className="border-l-4 border-primary/50 text-slate-600 text-base font-medium italic pl-2">
+              {user?.bio}
+            </p>
+          </div>
+
           {/* Secondary Action Bar */}
           <div className="mt-8 flex flex-wrap gap-3 justify-center sm:justify-start">
             {socialLinks.map(

@@ -1,7 +1,11 @@
 "use client";
 
-import { Bookmark01Icon, Bookshelf01Icon, UserIcon } from "hugeicons-react";
-import { BookIcon, CreditCard, LogOut } from "lucide-react";
+import {
+  AnalyticsUpIcon,
+  Bookshelf01Icon,
+  UserCircle02Icon,
+} from "hugeicons-react";
+import { BookIcon, CreditCard, LogOut, SettingsIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -66,17 +70,27 @@ export default function UserHeader() {
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end">
+          <div className="p-2 space-y-1">
+            <h2 className="text-sm font-bold text-slate-700">{user.name}</h2>
+            <p className="text-xs font-medium text-slate-600">{user.email}</p>
+          </div>
+          <DropdownMenuSeparator />
           <Link href="/profile">
             <DropdownMenuItem className="cursor-pointer px-3 py-2">
-              <UserIcon className="w-4 h-4 text-slate-800" />
+              <UserCircle02Icon className="w-5 h-5 stroke-2 text-slate-800" />
               Profile
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuSeparator />
           <Link href="/creations">
             <DropdownMenuItem className="cursor-pointer px-3 py-2">
               <BookIcon className="w-4 h-4 text-slate-800" />
               My Creations
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/analytics">
+            <DropdownMenuItem className="cursor-pointer px-3 py-2">
+              <AnalyticsUpIcon className="w-4 h-4 text-slate-800" />
+              Analytics
             </DropdownMenuItem>
           </Link>
           <Link href={"/premium"}>
@@ -91,10 +105,10 @@ export default function UserHeader() {
               Reading List
             </DropdownMenuItem>
           </Link>
-          <Link href="/favourites">
+          <Link href="/settings">
             <DropdownMenuItem className="cursor-pointer px-3 py-2">
-              <Bookmark01Icon className="w-4 h-4 text-slate-800" />
-              Favorites
+              <SettingsIcon className="w-4 h-4 text-slate-800" />
+              Settings
             </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />
