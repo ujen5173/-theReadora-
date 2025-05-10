@@ -10,9 +10,10 @@ import {
   chapterCollectionName,
   chunkCollectionName,
   cuidRegex,
+  METRICS_DEFAULT_VALUES,
+  READERSHIP_ANALYTICS_DEFAULT_VALUES,
 } from "~/utils/constants";
 import { makeSlug, mongoObjectId } from "~/utils/helpers";
-import type { ChapterMetrics } from "./story";
 
 export const chapterRouter = createTRPCRouter({
   create: publicProcedure
@@ -88,14 +89,9 @@ export const chapterRouter = createTRPCRouter({
             slug: makeSlug(input.title),
             storyId: input.storyId,
             metrics: JSON.stringify({
+              ...METRICS_DEFAULT_VALUES,
               wordCount: input.wordCount,
               readingTime: input.readingTime,
-              likesCount: 0,
-              commentsCount: 0,
-              sharesCount: 0,
-              ratingCount: 0,
-              ratingValue: 0,
-              ratingAvg: 0,
             }),
             mongoContentID: [mongoContentID.insertedId.toString()],
           },
@@ -229,28 +225,8 @@ export const chapterRouter = createTRPCRouter({
           throw new Error("Chapter content not found");
         }
 
-        const { metrics, readershipAnalytics, ...restChapter } = rest;
-
         return {
-          chapter: {
-            ...restChapter,
-            metrics: JSON.parse(JSON.stringify(metrics)) as ChapterMetrics,
-            readershipAnalytics: JSON.parse(
-              JSON.stringify(readershipAnalytics)
-            ) as {
-              total: number;
-              unique: number;
-              average: number;
-            },
-            id: restChapter.id,
-            createdAt: restChapter.createdAt,
-            updatedAt: restChapter.updatedAt,
-            title: restChapter.title,
-            slug: restChapter.slug,
-            storyId: restChapter.storyId,
-            chapterNumber: restChapter.chapterNumber,
-            mongoContentID: restChapter.mongoContentID,
-          },
+          chapter: rest,
           story,
           initialChunk: {
             id: initialChunk._id.toString(),
@@ -404,21 +380,8 @@ export const chapterRouter = createTRPCRouter({
               : chapter.readershipAnalytics;
         } catch (e) {
           // If parsing fails, use default values
-          metrics = {
-            wordCount: 0,
-            readingTime: 0,
-            likesCount: 0,
-            commentsCount: 0,
-            sharesCount: 0,
-            ratingCount: 0,
-            ratingValue: 0,
-            ratingAvg: 0,
-          };
-          readershipAnalytics = {
-            total: 0,
-            unique: 0,
-            average: 0,
-          };
+          metrics = METRICS_DEFAULT_VALUES;
+          readershipAnalytics = READERSHIP_ANALYTICS_DEFAULT_VALUES;
         }
 
         // Update metrics and analytics
@@ -431,8 +394,6 @@ export const chapterRouter = createTRPCRouter({
         if (isNewUniqueRead) {
           readershipAnalytics.unique = (readershipAnalytics.unique || 0) + 1;
         }
-        readershipAnalytics.average =
-          readershipAnalytics.total / readershipAnalytics.unique;
 
         // Update chapter and read record
         await Promise.all([

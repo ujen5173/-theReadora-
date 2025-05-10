@@ -1,5 +1,4 @@
 "use client";
-
 import {
   closestCenter,
   DndContext,
@@ -39,9 +38,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import type { ChapterMetrics } from "~/server/api/routers/story";
 import { api } from "~/trpc/react";
-import { formatDate, getReadingTimeText } from "~/utils/helpers";
+import { formatDate, getReadingTimeText, parseMetrics } from "~/utils/helpers";
 
 interface Chapter {
   id: string;
@@ -67,7 +65,7 @@ const SortableChapter = ({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: chapter.id });
 
-  const metrics = JSON.parse(chapter.metrics as string) as ChapterMetrics;
+  const metrics = parseMetrics(chapter.metrics);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -112,7 +110,7 @@ const SortableChapter = ({
               </span>
               <RecordIcon className="size-1 text-slate-500 fill-slate-500" />
               <span className="text-sm text-slate-500 font-semibold">
-                {getReadingTimeText(metrics?.readingTime ?? 0)}
+                {getReadingTimeText(metrics.readingTime)}
               </span>
               <ChevronRight className="size-5 text-slate-500" />
             </div>

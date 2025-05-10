@@ -3,13 +3,23 @@ declare global {
     type ChapterMatrics = {
       wordCount: number;
       readingTime: number;
-      likesCount: number;
       commentsCount: number;
-      viewsCount: number;
-      sharesCount: number;
       ratingCount: number;
       ratingValue: number;
       ratingAvg: number;
     };
   }
 }
+
+export type ChapterMetrics = PrismaJson.ChapterMatrics;
+
+declare global {
+  namespace PrismaJson {
+    type ReadershipAnalytics = {
+      total: number;
+      unique: number;
+    };
+  }
+}
+
+export type ReadershipAnalytics = PrismaJson.ReadershipAnalytics;

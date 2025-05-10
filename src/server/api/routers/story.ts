@@ -11,18 +11,6 @@ import { LANGUAGES, cuidRegex } from "~/utils/constants";
 import { GENRES } from "~/utils/genre";
 import { makeSlug } from "~/utils/helpers";
 
-export type ChapterMetrics = {
-  commentsCount: number;
-  likesCount: number;
-  ratingAvg: number;
-  ratingCount: number;
-  ratingValue: number;
-  readingTime: number;
-  sharesCount: number;
-  viewsCount: number;
-  wordCount: number;
-};
-
 export const NCardEntity = {
   id: true,
   slug: true,
@@ -72,21 +60,6 @@ export const storyRouter = createTRPCRouter({
     });
 
     return novels;
-  }),
-
-  getFavorites: protectedProcedure.query(async ({ ctx }) => {
-    const favorites = await ctx.postgresDb.story.findMany({
-      where: {
-        favorites: {
-          some: {
-            userId: ctx.session?.user.id,
-          },
-        },
-      },
-      select: NCardEntity,
-    });
-
-    return favorites;
   }),
 
   latest: publicProcedure
@@ -262,13 +235,13 @@ export const storyRouter = createTRPCRouter({
               select: {
                 id: true,
                 title: true,
+                chapterNumber: true,
+                metrics: true,
                 readershipAnalytics: true,
                 createdAt: true,
-                metrics: true,
-                chapterNumber: true,
               },
               orderBy: {
-                createdAt: "asc",
+                chapterNumber: "asc",
               },
             },
           },

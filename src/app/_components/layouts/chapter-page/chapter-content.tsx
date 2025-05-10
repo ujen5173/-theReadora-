@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  BookOpen01Icon,
-  BubbleChatIcon,
-  FavouriteIcon,
-  RecordIcon,
-} from "hugeicons-react";
-import { ArrowLeftIcon, ArrowRightIcon, PlusIcon } from "lucide-react";
+import { BookOpen01Icon, BubbleChatIcon, RecordIcon } from "hugeicons-react";
+import { ArrowLeftIcon, ArrowRightIcon, EyeIcon, PlusIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -14,6 +9,7 @@ import { Button } from "~/components/ui/button";
 import { useChapterStore } from "~/store/useChapter";
 import "~/styles/editor.css";
 import { api } from "~/trpc/react";
+import { parseMetrics, parseReadershipAnalytics } from "~/utils/helpers";
 
 const ChapterContent = () => {
   return (
@@ -30,17 +26,11 @@ export default ChapterContent;
 
 const ChapterMetaData = () => {
   const { chapter } = useChapterStore();
-  const metrics = JSON.parse(chapter?.metrics as string) as {
-    commentsCount: number;
-    likesCount: number;
-    ratingAvg: number;
-    ratingCount: number;
-    ratingValue: number;
-    readingTime: number;
-    sharesCount: number;
-    viewsCount: number;
-    wordCount: number;
-  };
+
+  const metrics = parseMetrics(chapter?.metrics);
+  const readershipAnalytics = parseReadershipAnalytics(
+    chapter?.readershipAnalytics
+  );
 
   return (
     <div className="py-20 space-y-8 border-b border-slate-200">
@@ -48,7 +38,6 @@ const ChapterMetaData = () => {
         {chapter?.title}
       </h1>
 
-      {/* Metrics Grid */}
       <div className="flex items-center justify-center gap-2 text-sm">
         {metrics && (
           <>
@@ -58,8 +47,8 @@ const ChapterMetaData = () => {
             </div>
             <RecordIcon className="size-1.5 fill-slate-600 text-slate-600" />
             <div className="flex items-center gap-2">
-              <FavouriteIcon className="w-4 h-4 text-slate-600" />
-              <span>{metrics.likesCount.toLocaleString()} likes</span>
+              <EyeIcon className="w-4 h-4 text-slate-600" />
+              <span>{readershipAnalytics.total.toLocaleString()} views</span>
             </div>
             <RecordIcon className="size-1.5 fill-slate-600 text-slate-600" />
             <div className="flex items-center gap-2">

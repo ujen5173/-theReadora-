@@ -1,17 +1,18 @@
 "use client";
+import { StarIcon } from "hugeicons-react";
+import { BookOpenIcon, ChevronDownIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { BookOpenIcon, ChevronDownIcon, PlusIcon } from "lucide-react";
-import Link from "next/link";
-import { useChapterStore } from "~/store/useChapter";
-import Image from "next/image";
-import { Button } from "~/components/ui/button";
-import { StarIcon } from "hugeicons-react";
 import { cn } from "~/lib/utils";
+import { useChapterStore } from "~/store/useChapter";
+import ReadingListDialog from "../../shared/reading-list";
 
 const ChapterTOC = () => {
   const { story, chapter: currentChapter } = useChapterStore();
@@ -19,7 +20,7 @@ const ChapterTOC = () => {
   return (
     <section className="w-full border-b border-gray-200">
       <div className="flex items-center justify-between px-4 gap-6">
-        <div>
+        <div className="border-r border-border pr-4">
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="w-80 flex items-center justify-between gap-4">
@@ -111,9 +112,11 @@ const ChapterTOC = () => {
           </DropdownMenu>
         </div>
         <div className="flex items-center gap-2">
-          <Button icon={PlusIcon} variant="default">
-            Add to Reading List
-          </Button>
+          <ReadingListDialog>
+            <Button icon={StarIcon} variant="outline">
+              Add to Reading List
+            </Button>
+          </ReadingListDialog>
           <Button icon={StarIcon} variant="outline">
             Vote
           </Button>

@@ -176,9 +176,9 @@ model Chapter {
     slug          String
 
     // Metrics data for the chapter including engagement and reading statistics
-    metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"sharesCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"ratingAvg\": 0}")
+    metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"ratingAvg\": 0}")
 
-    readershipAnalytics Json @default("{\"total\": 0, \"unique\": 0, \"average\": 0}")
+    readershipAnalytics Json @default("{\"total\": 0, \"unique\": 0}")
 
     storyId String
     story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
