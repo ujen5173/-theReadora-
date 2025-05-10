@@ -7,15 +7,15 @@ type Chapter = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
+  price: keyof typeof CHAPTER_PRICE_POOL | null;
   title: string;
   slug: string;
   storyId: string;
+  isLocked: boolean;
   chapterNumber: number;
   metrics: JsonValue;
   readershipAnalytics: JsonValue;
   mongoContentID: string[];
-  isLocked: boolean;
-  price: keyof typeof CHAPTER_PRICE_POOL | null;
 };
 
 type User = {
@@ -37,6 +37,8 @@ type Story = {
     title: string;
     slug: string;
     chapterNumber: number;
+    isLocked: boolean;
+    price: keyof typeof CHAPTER_PRICE_POOL | null;
   }[];
 };
 

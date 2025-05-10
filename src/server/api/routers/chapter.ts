@@ -237,8 +237,8 @@ export const chapterRouter = createTRPCRouter({
           story,
           initialChunk: {
             id: initialChunk._id.toString(),
-            content: initialChunk.content,
-            index: initialChunk.index,
+            content: initialChunk.content as string,
+            index: initialChunk.index as number,
           },
         };
       } catch (error) {

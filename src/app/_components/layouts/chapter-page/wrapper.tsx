@@ -11,9 +11,12 @@ const ChapterWrapper = ({
   details: getChapterDetailsBySlugOrIdResponse;
   children: React.ReactNode;
 }) => {
-  const { setStory, setChapter, setInitialChunk } = useChapterStore();
+  /*
+    Type error: Argument of type '{ id: string; storyId: string; chapterNumber: number | null; version: number; createdAt: Date; }' is not assignable to parameter of type 'Chapter'.
+    Type '{ id: string; storyId: string; chapterNumber: number | null; version: number; createdAt: Date; }' is missing the following properties from type 'Chapter': updatedAt, title, slug, metrics, and 4 more.
+  */
 
-  console.log({ details });
+  const { setStory, setChapter, setInitialChunk } = useChapterStore();
 
   useEffect(() => {
     if (details) {
