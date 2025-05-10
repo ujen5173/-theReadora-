@@ -55,7 +55,6 @@ const BooksSection = ({
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4">
-      {/* Header with result count and active filters */}
       <div className="flex items-center justify-between py-4 border-b border-border">
         <div className="space-y-1">
           <h1 className="text-xl font-semibold text-slate-800">
@@ -93,10 +92,8 @@ const BooksSection = ({
         </div>
       </div>
 
-      {/* Enhanced Books Grid with Loading State */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 py-6 min-h-[400px]">
         {isLoading ? (
-          // Loading skeletons
           [...Array(10)].map((_, i) => (
             <div key={i} className="space-y-3">
               <Skeleton className="h-[200px] w-full rounded-lg" />
@@ -107,7 +104,6 @@ const BooksSection = ({
             </div>
           ))
         ) : books?.stories.length === 0 ? (
-          // No results state
           <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
             <p className="text-lg font-medium text-slate-900">
               No stories found
@@ -117,7 +113,6 @@ const BooksSection = ({
             </p>
           </div>
         ) : (
-          // Results grid with proper typing
           books?.stories.map((book: TCard) => (
             <div key={book.id}>
               <NovelCard details={book} />
@@ -126,7 +121,6 @@ const BooksSection = ({
         )}
       </div>
 
-      {/* Pagination */}
       {!isLoading && books?.stories.length && books?.stories.length > 0 && (
         <div className="py-4 border-t border-border">
           <Pagination>
