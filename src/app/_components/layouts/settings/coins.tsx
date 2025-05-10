@@ -1,4 +1,3 @@
-import type { $Enums } from "@prisma/client";
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { format } from "date-fns";
 import { CoinsBitcoinIcon } from "hugeicons-react";
@@ -12,7 +11,13 @@ import { api } from "~/trpc/server";
 import CoinsPackage from "../../shared/premium/coins-package";
 
 type TransactionType = {
-  type: $Enums.TransactionType;
+  type:
+    | "PURCHASE"
+    | "CHAPTER_UNLOCK"
+    | "MONTHLY_BONUS"
+    | "REFERRAL_BONUS"
+    | "SUBSCRIPTION"
+    | "SUBSCRIPTION_ENDED";
   id: string;
   createdAt: Date;
   userId: string;
