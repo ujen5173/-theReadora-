@@ -13,7 +13,8 @@ declare module "next-auth" {
       name: string;
       username: string;
       email: string;
-      emailVerified: Date | null;
+      premium: boolean;
+      coins: number;
       image: string;
     } & DefaultSession["user"];
   }
@@ -78,8 +79,14 @@ export const authConfig = {
     session: ({ session, user }) => ({
       ...session,
       user: {
-        ...session.user,
+        // ...session.user,
         id: user.id,
+        name: session.user.name,
+        username: session.user.username,
+        email: session.user.email,
+        image: session.user.image,
+        coins: session.user.coins,
+        premium: session.user.premium,
       },
     }),
   },

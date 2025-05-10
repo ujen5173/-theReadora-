@@ -5,13 +5,33 @@ import { ArrowLeftIcon, ArrowRightIcon, EyeIcon, PlusIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import LockedChapter from "~/app/_components/shared/locked-chapter";
 import { Button } from "~/components/ui/button";
 import { useChapterStore } from "~/store/useChapter";
 import "~/styles/editor.css";
 import { api } from "~/trpc/react";
 import { parseMetrics, parseReadershipAnalytics } from "~/utils/helpers";
 
-const ChapterContent = () => {
+const ChapterContent = ({
+  userUnlockedChapter,
+}: {
+  userUnlockedChapter: boolean;
+}) => {
+  const { chapter } = useChapterStore();
+
+  if (!chapter) return null;
+
+  if (chapter.isLocked && !userUnlockedChapter) {
+    return (
+      <LockedChapter
+        chapterId={chapter.id}
+        price={chapter.price}
+        title={chapter.title}
+        chapterNumber={chapter.chapterNumber}
+      />
+    );
+  }
+
   return (
     <section className="w-full bg-slate-100 border-b border-border">
       <div className="max-w-4xl border-x border-border bg-white px-6 mx-auto">

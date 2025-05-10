@@ -1,27 +1,26 @@
 "use client";
-
-import { PenLine, Plus, ChevronDown, ChevronUp, Goal } from "lucide-react";
+import { ChevronDown, ChevronUp, Goal, PenLine, Plus } from "lucide-react";
+import Image from "next/image";
+import { redirect, useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import readingTimeCalc from "reading-time";
+import { toast } from "sonner";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
-import { Button } from "~/components/ui/button";
-import PremiumBanner from "../../shared/premium-banner";
-import ExportChapter from "./export";
-import { useNewChapterStore } from "~/store/useNewChapter";
-import readingTimeCalc from "reading-time";
-import { redirect, useParams, useSearchParams } from "next/navigation";
-import { api } from "~/trpc/react";
-import Image from "next/image";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
-import { toast } from "sonner";
-import NewChapterDialog from "./new-chapter-dialog";
-import { ScrollArea } from "~/components/ui/scroll-area";
+import { useNewChapterStore } from "~/store/useNewChapter";
+import { api } from "~/trpc/react";
 import { getReadingTimeText } from "~/utils/helpers";
+import PremiumBanner from "../../shared/premium-banner";
+import NewChapterDialog from "./new-chapter-dialog";
+import PremiumChapter from "./premium-chapter";
 
 const StoryEditorSidebar = () => {
   const { story_id } = useParams();
@@ -29,7 +28,7 @@ const StoryEditorSidebar = () => {
   const chapter_id = useSearchParams().get("chapter_id");
 
   const [isStatsOpen, setIsStatsOpen] = useState(false);
-  const { title, htmlContent, wordCount, setStoryId } = useNewChapterStore();
+  const { title, htmlContent, wordCount } = useNewChapterStore();
 
   const {
     data: story,
@@ -176,7 +175,9 @@ const StoryEditorSidebar = () => {
 
         <PremiumBanner />
 
-        <ExportChapter />
+        {/* <ExportChapter /> */}
+
+        <PremiumChapter />
       </div>
     </>
   );

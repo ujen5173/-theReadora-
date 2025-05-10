@@ -1,6 +1,7 @@
 import type { JSONContent } from "novel";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { CHAPTER_PRICE_POOL } from "~/utils/constants";
 
 type NewChapterStore = {
   storyId: string | null;
@@ -12,6 +13,10 @@ type NewChapterStore = {
   setContent: (content: JSONContent) => void;
   htmlContent: string;
   focusMode: boolean;
+  isLocked: boolean;
+  price: keyof typeof CHAPTER_PRICE_POOL | null;
+  setIsLocked: (isLocked: boolean) => void;
+  setPrice: (price: keyof typeof CHAPTER_PRICE_POOL | null) => void;
   setHtmlContent: (htmlContent: string) => void;
   setWordCount: (wordCount: number) => void;
   setIsAutoSaving: (isAutoSaving: boolean) => void;
@@ -33,6 +38,10 @@ export const useNewChapterStore = create<NewChapterStore>()(
       isAutoSaving: false,
       focusMode: false,
       hardSaved: false,
+      isLocked: false,
+      price: null,
+      setIsLocked: (isLocked) => set({ isLocked }),
+      setPrice: (price) => set({ price }),
       setTitle: (title) => set({ title }),
       setContent: (content) => set({ content }),
       setHtmlContent: (htmlContent) => set({ htmlContent }),

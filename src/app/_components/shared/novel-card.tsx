@@ -1,5 +1,7 @@
 "use client";
+
 import {
+  AnalyticsUpIcon,
   ArrowRight02Icon,
   FavouriteIcon,
   LeftToRightListNumberIcon,
@@ -37,7 +39,8 @@ export type TCard = {
 
 const NovelCard: FC<{
   details: TCard;
-}> = ({ details }) => {
+  isAuthorViewer?: boolean;
+}> = ({ details, isAuthorViewer = false }) => {
   return (
     <div title={details.title} className="cover-card group relative">
       <Link href="/story/[slug]" as={`/story/${details.slug}`} legacyBehavior>
@@ -65,9 +68,11 @@ const NovelCard: FC<{
               {details.title}
             </h1>
 
-            <p className="line-clamp-1 text-base text-gray-600">
-              {details.author.name}
-            </p>
+            {!isAuthorViewer && (
+              <p className="line-clamp-1 text-base text-gray-600">
+                {details.author.name}
+              </p>
+            )}
           </div>
         </a>
       </Link>
@@ -136,7 +141,17 @@ const NovelCard: FC<{
                 <span>View Details</span>
               </Link>
             </Button>
-            <AddToList storyId={details.id} />
+            {isAuthorViewer ? (
+              <Button
+                variant="outline"
+                icon={AnalyticsUpIcon}
+                className="w-full gap-2"
+              >
+                View Analytics
+              </Button>
+            ) : (
+              <AddToList storyId={details.id} />
+            )}
           </div>
         </div>
 
@@ -145,9 +160,11 @@ const NovelCard: FC<{
             {details.title}
           </h1>
 
-          <p className="line-clamp-1 text-base text-gray-600">
-            {details.author.name}
-          </p>
+          {!isAuthorViewer && (
+            <p className="line-clamp-1 text-base text-gray-600">
+              {details.author.name}
+            </p>
+          )}
         </div>
       </div>
     </div>

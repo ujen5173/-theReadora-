@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 type FilterStore = {
   query: string;
@@ -71,63 +70,40 @@ const initialState: FilterState = {
   tags: [],
 };
 
-export const useFilterStore = create<FilterStore>()(
-  persist(
-    (set, get) => ({
-      ...initialState,
-      setQuery: (query) => set({ query }),
-      setGenre: (genre) => set({ genre }),
-      setSortBy: (sortBy) => set({ sortBy }),
-      setStatus: (status) => set({ status }),
-      setContentType: (contentType) => set({ contentType }),
-      setChapterCount: (minChapterCount, maxChapterCount) =>
-        set({ minChapterCount, maxChapterCount }),
-      setViewsCount: (minViewsCount, maxViewsCount) =>
-        set({ minViewsCount, maxViewsCount }),
-      setPublishedAt: (publishedAt) => set({ publishedAt }),
-      setTags: (tags) => set({ tags }),
-      resetAll: () => set(initialState),
-      applyFilters: () => {
-        const state = get();
-        const filters: FilterParams = {};
+export const useFilterStore = create<FilterStore>()((set, get) => ({
+  ...initialState,
+  setQuery: (query) => set({ query }),
+  setGenre: (genre) => set({ genre }),
+  setSortBy: (sortBy) => set({ sortBy }),
+  setStatus: (status) => set({ status }),
+  setContentType: (contentType) => set({ contentType }),
+  setChapterCount: (minChapterCount, maxChapterCount) =>
+    set({ minChapterCount, maxChapterCount }),
+  setViewsCount: (minViewsCount, maxViewsCount) =>
+    set({ minViewsCount, maxViewsCount }),
+  setPublishedAt: (publishedAt) => set({ publishedAt }),
+  setTags: (tags) => set({ tags }),
+  resetAll: () => set(initialState),
+  applyFilters: () => {
+    const state = get();
+    const filters: FilterParams = {};
 
-        // Only include non-empty values
-        if (state.query) filters.query = state.query;
-        if (state.genre) filters.genre = state.genre;
-        if (state.sortBy) filters.sortBy = state.sortBy;
-        if (state.status.length > 0) filters.status = state.status;
-        if (state.contentType.length > 0)
-          filters.contentType = state.contentType;
-        if (state.minChapterCount > 0)
-          filters.minChapterCount = state.minChapterCount;
-        if (state.maxChapterCount > 0)
-          filters.maxChapterCount = state.maxChapterCount;
-        if (state.minViewsCount > 0)
-          filters.minViewsCount = state.minViewsCount;
-        if (state.maxViewsCount > 0)
-          filters.maxViewsCount = state.maxViewsCount;
-        if (state.publishedAt !== "ALL_TIME")
-          filters.publishedAt = state.publishedAt;
-        if (state.tags.length > 0) filters.tags = state.tags;
+    // Only include non-empty values
+    if (state.query) filters.query = state.query;
+    if (state.genre) filters.genre = state.genre;
+    if (state.sortBy) filters.sortBy = state.sortBy;
+    if (state.status.length > 0) filters.status = state.status;
+    if (state.contentType.length > 0) filters.contentType = state.contentType;
+    if (state.minChapterCount > 0)
+      filters.minChapterCount = state.minChapterCount;
+    if (state.maxChapterCount > 0)
+      filters.maxChapterCount = state.maxChapterCount;
+    if (state.minViewsCount > 0) filters.minViewsCount = state.minViewsCount;
+    if (state.maxViewsCount > 0) filters.maxViewsCount = state.maxViewsCount;
+    if (state.publishedAt !== "ALL_TIME")
+      filters.publishedAt = state.publishedAt;
+    if (state.tags.length > 0) filters.tags = state.tags;
 
-        return filters;
-      },
-    }),
-    {
-      name: "filter-store",
-      partialize: (state) => ({
-        query: state.query,
-        genre: state.genre,
-        sortBy: state.sortBy,
-        status: state.status,
-        contentType: state.contentType,
-        minChapterCount: state.minChapterCount,
-        maxChapterCount: state.maxChapterCount,
-        minViewsCount: state.minViewsCount,
-        maxViewsCount: state.maxViewsCount,
-        publishedAt: state.publishedAt,
-        tags: state.tags,
-      }),
-    }
-  )
-);
+    return filters;
+  },
+}));

@@ -1,9 +1,11 @@
 "use client";
+
 import type { Story } from "@prisma/client";
 import { Analytics01Icon, BookOpen01Icon, Edit01Icon } from "hugeicons-react";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { env } from "~/env";
 import { useChapterStore } from "~/store/useChapter";
@@ -17,9 +19,18 @@ interface ThumbnailSectionProps {
 }
 
 const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
-  const user = useUserStore();
+  const [mounted, setMounted] = useState(false);
+  const { user } = useUserStore();
   const { chapter } = useChapterStore();
   const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <section className="w-full space-y-6">
@@ -55,7 +66,7 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
             <span className="ml-2">...</span>
           </div>
         </Button>
-        {user?.user?.id === story.authorId ? (
+        {user?.id === story.authorId ? (
           <>
             <Button
               variant={"outline"}
@@ -75,6 +86,7 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
         ) : (
           <AddToList storyId={story.id} />
         )}
+
         <ShareDialog
           title={story.title}
           url={`${env.NEXT_PUBLIC_APP_URL}/story/${story.slug}`}

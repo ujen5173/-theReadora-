@@ -1,5 +1,5 @@
-import { StoryStatus } from "@prisma/client";
-import type { inferProcedureOutput } from "@trpc/server";
+import { ChapterPricePool, StoryStatus } from "@prisma/client";
+import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -7,6 +7,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import {
+  CHAPTER_PRICE_POOL,
   chapterCollectionName,
   chunkCollectionName,
   cuidRegex,
@@ -25,6 +26,8 @@ export const chapterRouter = createTRPCRouter({
         readingTime: z.number(),
         status: z.nativeEnum(StoryStatus),
         storyId: z.string().nullable(),
+        isLocked: z.boolean().optional(),
+        price: z.nativeEnum(ChapterPricePool).nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -93,6 +96,8 @@ export const chapterRouter = createTRPCRouter({
               wordCount: input.wordCount,
               readingTime: input.readingTime,
             }),
+            isLocked: input.isLocked,
+            price: input.price,
             mongoContentID: [mongoContentID.insertedId.toString()],
           },
         });
@@ -198,6 +203,8 @@ export const chapterRouter = createTRPCRouter({
                     title: true,
                     slug: true,
                     chapterNumber: true,
+                    isLocked: true,
+                    price: true,
                   },
                 },
                 chapterCount: true,
@@ -354,8 +361,6 @@ export const chapterRouter = createTRPCRouter({
           ? (now.getTime() - lastRead.getTime()) / (1000 * 60 * 60)
           : 24;
 
-        console.log({ lastRead, hoursSinceLastRead });
-
         if (hoursSinceLastRead < 24) {
           return {
             success: true,
@@ -450,6 +455,109 @@ export const chapterRouter = createTRPCRouter({
         console.error(error);
         throw new Error("Failed to increase read count");
       }
+    }),
+
+  unlock: protectedProcedure
+    .input(z.object({ chapterId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { chapterId } = input;
+
+      const { user } = ctx.session;
+
+      try {
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        const chapter = await ctx.postgresDb.chapter.findUnique({
+          where: { id: chapterId },
+          select: {
+            price: true,
+            unlockedUsers: {
+              where: {
+                userId: user.id,
+              },
+            },
+          },
+        });
+
+        if (!chapter) {
+          throw new Error("Chapter not found");
+        }
+
+        if (chapter.price === null) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Chapter is free",
+          });
+        }
+
+        if (chapter.unlockedUsers.length > 0) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Chapter is already unlocked",
+          });
+        }
+
+        await Promise.all([
+          ctx.postgresDb.unlockedChapter.create({
+            data: {
+              userId: user.id,
+              chapterId,
+              price: chapter.price,
+            },
+          }),
+          ctx.postgresDb.user.update({
+            where: { id: user.id },
+            data: {
+              coins: {
+                decrement: CHAPTER_PRICE_POOL[chapter.price],
+              },
+            },
+          }),
+        ]);
+
+        return {
+          success: true,
+          message: "Chapter unlocked successfully",
+        };
+      } catch (err) {
+        console.error(err);
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to unlock chapter",
+        });
+      }
+    }),
+  getUserUnlockedChapter: publicProcedure
+    .input(z.object({ chapterId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { chapterId } = input;
+
+      const user = ctx.session?.user;
+
+      if (!user) {
+        return false;
+      }
+
+      const hasUnlockedChapter = await ctx.postgresDb.unlockedChapter.findFirst(
+        {
+          where: {
+            userId: user.id,
+            chapterId,
+          },
+        }
+      );
+
+      if (!hasUnlockedChapter) {
+        return false;
+      }
+
+      return true;
     }),
 });
 

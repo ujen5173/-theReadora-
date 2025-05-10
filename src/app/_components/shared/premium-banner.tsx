@@ -1,17 +1,24 @@
-import { CheckCircle2, Crown } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { Sparkles } from "lucide-react";
+"use client";
+
+import { CheckCircle2, Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { useUserStore } from "~/store/userStore";
+import { STRIPE_MONTHLY_PLAN_PRICE } from "~/utils/constants";
 
 const PremiumBanner = () => {
+  const { user } = useUserStore();
+
   const premiumFeatures = [
     "Ad-free reading experience",
     "Discounts on premium chapters",
-    "Get 100 monthly coins",
+    "Get 110 monthly coins",
     "Unlimited Chapters",
     "Unlimited AI Credits",
     "Advanced Writing Tools",
   ];
+
+  if (user?.premium) return null;
 
   return (
     <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
@@ -39,7 +46,7 @@ const PremiumBanner = () => {
 
         <Link href="/premium" className="w-full">
           <Button icon={Crown} className="w-full" variant="default">
-            Subscribe – $9.99/-
+            Subscribe – ${STRIPE_MONTHLY_PLAN_PRICE}/-
           </Button>
         </Link>
       </div>

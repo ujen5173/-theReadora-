@@ -15,6 +15,10 @@ const SingleChapterPage = async ({
     slugOrId: slug,
   });
 
+  const userUnlockedChapter = await api.chapter.getUserUnlockedChapter({
+    chapterId: chapter.chapter.id,
+  });
+
   if (!chapter) {
     notFound();
   }
@@ -23,7 +27,7 @@ const SingleChapterPage = async ({
     <ChapterWrapper details={chapter}>
       <IncreaseReadCount />
       <ChapterTOC />
-      <ChapterContent />
+      <ChapterContent userUnlockedChapter={userUnlockedChapter} />
       {/* <ChapterFooter />
       <RecommendedStories /> */}
     </ChapterWrapper>

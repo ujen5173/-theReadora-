@@ -21,12 +21,10 @@ const MyCreations = () => {
             </h1>
             <Button
               asChild
+              icon={PenLineIcon}
               className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
             >
-              <Link href="/write/story/new">
-                <PenLineIcon className="size-4 mr-2" />
-                Start a new story
-              </Link>
+              <Link href="/write/story/new">Start a new story</Link>
             </Button>
           </div>
 
@@ -37,7 +35,7 @@ const MyCreations = () => {
           ) : novels && novels.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
               {novels.map((novel) => (
-                <NovelCard key={novel.id} details={novel} />
+                <NovelCard key={novel.id} details={novel} isAuthorViewer />
               ))}
             </div>
           ) : (

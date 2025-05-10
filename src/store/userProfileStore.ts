@@ -6,6 +6,7 @@ type Story = {
   slug: string;
   title: string;
   votes: number;
+  readCount: number;
   readingTime: number;
   isMature: boolean;
   thumbnail: string;
@@ -27,6 +28,7 @@ export type ExtendedUser = {
   followingCount: number;
   followersCount: number;
   stories: Story[];
+  premium: boolean;
 };
 
 type UserStore = {

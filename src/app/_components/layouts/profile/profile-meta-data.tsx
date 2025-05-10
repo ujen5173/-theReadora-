@@ -1,4 +1,5 @@
 "use client";
+
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
 import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
 import Image from "next/image";

@@ -19,6 +19,8 @@ import { Textarea } from "~/components/ui/textarea";
 import { LANGUAGES } from "~/utils/constants";
 import { GENRES } from "~/utils/genre";
 
+const MAX_TAGS = 15;
+
 const BookMetadata = ({
   status,
   onSubmit,
@@ -42,18 +44,25 @@ const BookMetadata = ({
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && currentTag.trim()) {
       e.preventDefault();
-      if (metadata.tags.length >= 5) {
-        toast.error("Maximum 5 tags allowed");
+
+      const tagsToAdd = currentTag
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag);
+
+      if (metadata.tags.length + tagsToAdd.length > MAX_TAGS) {
+        toast.error(`Maximum ${MAX_TAGS} tags allowed`);
         return;
       }
-      if (metadata.tags.includes(currentTag.trim())) {
-        toast.error("Tag already exists");
-        return;
+
+      const newTags = tagsToAdd.filter((tag) => !metadata.tags.includes(tag));
+
+      if (newTags.length > 0) {
+        setMetadata((prev) => ({
+          ...prev,
+          tags: [...new Set([...prev.tags, ...newTags])],
+        }));
       }
-      setMetadata((prev) => ({
-        ...prev,
-        tags: [...prev.tags, currentTag.trim()],
-      }));
       setCurrentTag("");
     }
   };
@@ -111,7 +120,7 @@ const BookMetadata = ({
           Tags
         </Label>
         <p className="text-sm text-muted-foreground">
-          Add up to 5 tags to help readers find your book
+          Add up to {MAX_TAGS} tags to help readers find your book
         </p>
         <div className="space-y-2">
           <Input
@@ -120,7 +129,7 @@ const BookMetadata = ({
             value={currentTag}
             onChange={(e) => setCurrentTag(e.target.value)}
             onKeyDown={handleAddTag}
-            disabled={metadata.tags.length >= 5}
+            disabled={metadata.tags.length >= MAX_TAGS}
             className="bg-white"
           />
           <div className="flex flex-wrap gap-2">

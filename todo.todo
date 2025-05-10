@@ -1,55 +1,53 @@
-- [theReadora] Project Workflow
+[theReadora] Project Workflow
 
-===============================================================================
+---
+
 1. BACKLOG (TO DO)
-===============================================================================
-#   | Category           | Task                                            | Priority | Notes                                   | Difficulty     | Status
-----|--------------------|-------------------------------------------------|----------|-----------------------------------------|----------------|-------------
-2   | Core Logic         | Read count logic                                | High     | Increment on scroll/chapter end         | High           |   ✅
-3   | Social/Follow      | Implement follow/unfollow users                 | Medium   | Update feed based on follows            | Low            |   ✅
-5   | Reading Lists      | CRUD for reading lists                          | Medium   |                                         | Low            |   ✅
-23  | Core Logic         | Story Read count logic                          | High     | Read count in story                     | Medium         |   ✅
-13  | Settings           | Profile settings page                           | Low      | Avatar, bio, preferences                | Low            |   ✅
-4   | Monetization       | Premium subscription flow                       | High     | Stripe, esewa and khalti integration    | Medium         |
-7   | Engagement         | Rating                                          | Medium   | One rating per user/story               | Low            |   
-16  | Notifications      | Email (digests, alerts)                         | Medium   |                                         | Low            |
-22  | Content Access     | Locked chapters (premium gating)                | Medium   | Unlock via subscription                 | Low            |
-23  | Core Logic         | Schedule chapter publish                        | Medium   |                                         | Medium         |
-6   | Engagement         | Comments on stories                             | Medium   |                                         | Medium         |
-9   | Content Mgmt       | Edit stories and chapters                       | Medium   | Revision history                        | Medium         |
-10  | Ratings            | Story rating system (1–5 stars)                 | Low      |                                         | Medium         |
-12  | Dashboard          | User analytics & dashboard                      | Low      | Usage stats, reading habits             | High           |
-20  | Collaboration      | Discussion panels                               | Low      | Threaded discussions                    | High           |
-11  | Premium Features   | Exclusive functionality for subscribers         | Low      | e.g., locked chapters, analytics        | Extreme        |
-18  | AI Integration     | AI assistance (summaries, suggestions)          | Low      | GPT-powered                             | Extreme        |
-19  | Collaboration      | Paragraph-level comments                        | Low      | Inline review                           | Extreme        |
-21  | Chapter Actions    | Likes, comments, reads per chapter              | Low      | Engagement metrics                      | Extreme        |
-22  | Pagination         | Chapter Chunk navigation using page params      | Low      | e.g, /?page_id=?<number>                | Extreme ↔ High |
-24  | Filter Bug         | Remove the filters stored in somewhere          | Medium   |                                         | Medium         |
 
+| Category           | Task                                       | Priority | Notes                                | Difficulty   | Status |
+| ------------------ | ------------------------------------------ | -------- | ------------------------------------ | ------------ | ------ |
+| Core Logic         | Read count logic                           | High     | Increment on scroll/chapter end      | High         | ✅     |
+| Social/Follow      | Implement follow/unfollow users            | Medium   | Update feed based on follows         | Low          | ✅     |
+| Reading Lists      | CRUD for reading lists                     | Medium   |                                      | Low          | ✅     |
+| Settings           | Profile settings page                      | Low      | Avatar, bio, preferences             | Low          | ✅     |
+| Core Logic         | Story Read count logic                     | High     | Read count in story                  | Medium       | ✅     |
+| Filter Issue       | Remove the filters stored in somewhere     | Medium   |                                      | Medium       | ✅     |
+| Monetization       | Premium subscription flow                  | High     | Stripe integration                   | Medium       | ✅     |
+| Content Access     | Locked chapters (premium gating)           | Medium   | Unlock via subscription              | Low          | ✅     |
+| Monetization       | Coin purchase flow                         | High     | Stripe, eSewa and Khalti integration | Medium       |        |
+| Engagement         | Rating                                     | Medium   | One rating per user/story            | Low          |        |
+| Ratings            | Story rating system (1–5 stars)            | Low      |                                      | Medium       |        |
+| Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
+| Core Logic         | Schedule chapter publish                   | Medium   |                                      | Medium       |        |
+| Engagement         | Comments on stories                        | Medium   |                                      | Medium       |        |
+| Content Mgmt       | Edit stories and chapters                  | Medium   | Revision history                     | Medium       |        |
+| Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         |        |
+| Collaboration      | Discussion panels                          | Low      | Threaded discussions                 | High         |        |
+| Premium Features   | Exclusive functionality for subscribers    | Low      | e.g., locked chapters, analytics     | Extreme      |        |
+| AI Integration     | AI assistance (summaries, suggestions)     | Low      | GPT-powered                          | Extreme      |        |
+| Engagement         | Paragraph-level comments                   | Low      | Inline review                        | Extreme      |        |
+| Chapter Actions    | Likes, comments, reads per chapter         | Low      | Engagement metrics                   | Extreme      |        |
+| Pagination         | Chapter Chunk navigation using page params | Low      | e.g., /?page\_id=?<number>           | Extreme/High |        |
+| UI/UX Improvements | Improve chapter reading experience         | High     | Reading experience is not quite good | Medium       |        |
+| UI/UX Improvements | Responsive design                          | Extreme  |                                      | Low          |        |
+---
 
-========================================================================================================
 2. BUG REPORT QUEUE
-========================================================================================================
-#   | Description                                                       | Priority | Date Identified |  Date Resolved  | Status |  Where? 
-----|-------------------------------------------------------------------|----------|-----------------|-----------------|--------|--------
-1   | Got error while parsing the chapter metrics.                      | High     |    4/30/2025    |    5/1/2025     |   OK   |   Dev  |
-      got [Object Object] without parsing the json file                                                                         | 
-2   | Errors while getting chapterChunk and chapterLength ig            | Medium   |    4/30/2025    |    5/1/2025     |   OK   |   Dev  |
-3   | /_components/layouts/chapter-page/wrapper.tsx:19:18               | High     |    5/1/2025     |    _/1/2025     |        |  Prod. |
-      Type error: Argument of type '{ id: string; storyId: 
-      string; chapterNumber: number | null; version: number
-      createdAt: Date; }' is not assignable to parameter of
-      type 'Chapter'.                                      
-4   | Search system have conflict with params and filter system         | High     |    5/4/2025     |                 |        | Both   |
 
+| Description                                         | Priority | Date Identified | Date Resolved | Status | Where? |
+| --------------------------------------------------- | -------- | --------------- | ------------- | ------ | ------ |
+| Got error while parsing the chapter metrics.        | High     | 2025-04-30      | 2025-05-01    | OK     | Dev    |
+| got \[Object Object] without parsing the JSON file  |          |                 |               |        |        |
+| Errors while getting chapterChunk and chapterLength | Medium   | 2025-04-30      | 2025-05-01    | OK     | Dev    |
+| Type error in chapter-page/wrapper.tsx (line 19:18) | High     | 2025-05-01      |               |        | Prod   |
+| Type mismatch on chapter object props               |          |                 |               |        |        |
+| Conflict between search params and filter system    | High     | 2025-05-04      |               |        | Both   |
+---
 
+3. FEATURE IDEAS (Unfiltered / Speculative)
 
-========================================================================================================
-3.  SHIT FEATURE IDEAS
-========================================================================================================
-#   | Title                                            | Description
-----|--------------------------------------------------|-------------------------------------------------
-1   | Youtube like viewer retention (Chapter Heatmaps) | create a graph section where user can view the retention on the area of the chapter just like in the youtube and hub video player viewer retention feature
-2   | AI for Thumbnail generation                      | why not use AI to generate thumbnails to early authors???
-3   |                                                  |
+| Title                                            | Description                                                               |
+| ------------------------------------------------ | ------------------------------------------------------------------------- |
+| YouTube-like viewer retention (Chapter Heatmaps) | Graph to show which parts of the chapter are most/least read/viewed       |
+| AI for Thumbnail generation                      | Use AI to generate thumbnails for stories authored by early-stage writers |
+|                                                  |                                                                           |

@@ -38,6 +38,26 @@ enum AccountStatus {
     DELETED
 }
 
+enum Language {
+    English
+    Spanish
+    French
+    German
+    Italian
+    Portuguese
+    Russian
+    Chinese
+    Japanese
+    Korean
+}
+
+enum ChapterPricePool {
+    POOL_50 // 50 coins ~ 0.50 USD --> short - medium chapter
+    POOL_70 // 70 coins ~ 0.69 USD --> medium - long chapter
+    POOL_110 // 110 coins ~ 1.09 USD --> long - very long chapter
+    POOL_150 // 150 coins ~ 1.49 USD --> premium author chapter (for epic chapters)
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String
@@ -76,7 +96,24 @@ model User {
 
     accountStatus AccountStatus @default(ACTIVE)
 
+    unlockedChapters UnlockedChapter[]
+
     @@index([username, email])
+}
+
+model UnlockedChapter {
+    id        String  @id @default(cuid())
+    userId    String
+    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    chapterId String
+    chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+
+    price ChapterPricePool
+
+    @@unique([userId, chapterId])
+    @@map("unlocked_chapters")
 }
 
 model Transactions {
@@ -105,19 +142,6 @@ model follow {
     updatedAt DateTime @updatedAt
 
     @@unique([followerId, followingId])
-}
-
-enum Language {
-    English
-    Spanish
-    French
-    German
-    Italian
-    Portuguese
-    Russian
-    Chinese
-    Japanese
-    Korean
 }
 
 model ChapterRead {
@@ -186,6 +210,11 @@ model Chapter {
     mongoContentID String[] // multple mongo document if the chapter is split due to size
 
     reader ChapterRead[]
+
+    isLocked Boolean           @default(false)
+    price    ChapterPricePool?
+
+    unlockedUsers UnlockedChapter[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

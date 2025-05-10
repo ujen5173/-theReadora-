@@ -1,6 +1,7 @@
 {
-  "name": "readora-1.0",
-  "version": "0.1.0",
+  "name": "readora",
+  "version": "0.5.0",
+  "description": "A platform for reading and writing",
   "private": true,
   "type": "module",
   "scripts": {

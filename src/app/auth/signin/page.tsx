@@ -3,12 +3,15 @@
 import { Facebook01Icon, GoogleIcon, Mail01Icon } from "hugeicons-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Header from "~/app/_components/layouts/header";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
 export default function SignInPage() {
+  const callBackURL = useSearchParams().get("callbackUrl");
+
   return (
     <>
       <Header />
@@ -33,7 +36,7 @@ export default function SignInPage() {
               variant="outline"
               onClick={() =>
                 signIn("google", {
-                  redirectTo: "/",
+                  redirectTo: callBackURL ?? "/",
                 })
               }
               className="w-full flex items-center justify-center bg-white hover:bg-slate-50 border-border"

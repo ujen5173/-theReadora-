@@ -34,6 +34,8 @@ export const userRouter = createTRPCRouter({
             username: true,
             image: true,
             bio: true,
+            premium: true,
+            coins: true,
             createdAt: true,
             followersCount: true,
             followingCount: true,
@@ -47,17 +49,7 @@ export const userRouter = createTRPCRouter({
           throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
         }
 
-        return {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          image: user.image,
-          bio: user.bio,
-          createdAt: user.createdAt,
-          followersCount: user.followersCount,
-          followingCount: user.followingCount,
-          stories: user.stories,
-        };
+        return user;
       } catch (error) {
         console.log({ error });
         if (error instanceof TRPCError) {

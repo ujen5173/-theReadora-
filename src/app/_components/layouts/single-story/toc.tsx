@@ -1,4 +1,5 @@
 "use client";
+
 import {
   closestCenter,
   DndContext,
@@ -15,12 +16,14 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import type { ChapterPricePool } from "@prisma/client";
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { LeftToRightListNumberIcon, RecordIcon } from "hugeicons-react";
 import {
   ChevronRight,
   GripVertical,
   Loader2,
+  Lock,
   MoreVertical,
   Pencil,
   Plus,
@@ -39,6 +42,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { api } from "~/trpc/react";
+import { CHAPTER_PRICE_POOL } from "~/utils/constants";
 import { formatDate, getReadingTimeText, parseMetrics } from "~/utils/helpers";
 
 interface Chapter {
@@ -47,6 +51,8 @@ interface Chapter {
   createdAt: Date;
   chapterNumber: number;
   metrics: JsonValue;
+  isLocked: boolean;
+  price: ChapterPricePool | null;
 }
 
 interface TableOfContentProps {
@@ -105,6 +111,21 @@ const SortableChapter = ({
               </span>
             </div>
             <div className="flex items-center gap-2">
+              {chapter.isLocked && (
+                <span className="px-2 py-1 mr-2 rounded-md bg-primary/20 text-sm text-primary font-semibold flex items-center gap-1">
+                  <span className="text-primary">
+                    <Lock className="size-4" />
+                  </span>
+                  <span>
+                    {
+                      CHAPTER_PRICE_POOL[
+                        chapter.price as keyof typeof CHAPTER_PRICE_POOL
+                      ]
+                    }{" "}
+                    coins
+                  </span>
+                </span>
+              )}
               <span className="text-sm text-slate-500 font-semibold">
                 {formatDate(chapter.createdAt)}
               </span>

@@ -9,17 +9,17 @@
 // - add search and find and replace feature.
 
 "use client";
-import { Tabs, TabsContent } from "~/components/ui/tabs";
 import { Editor } from "~/app/_components/layouts/editor";
+import { Tabs, TabsContent } from "~/components/ui/tabs";
 import "~/styles/editor.css";
 
 // Import the editor styles
-import StoryEditorHeader from "~/app/_components/layouts/story-editor/header";
-import StoryEditorTabs from "~/app/_components/layouts/story-editor/tabs";
-import StoryEditorSidebar from "~/app/_components/layouts/story-editor/side-bar";
-import StoryEditorFooter from "~/app/_components/layouts/story-editor/footer";
-import { useNewChapterStore } from "~/store/useNewChapter";
 import type { JSONContent } from "novel";
+import StoryEditorFooter from "~/app/_components/layouts/story-editor/footer";
+import StoryEditorHeader from "~/app/_components/layouts/story-editor/header";
+import StoryEditorSidebar from "~/app/_components/layouts/story-editor/side-bar";
+import StoryEditorTabs from "~/app/_components/layouts/story-editor/tabs";
+import { useNewChapterStore } from "~/store/useNewChapter";
 
 const StoryEditor = () => {
   const {
@@ -48,7 +48,7 @@ const StoryEditor = () => {
   };
 
   return (
-    <div className="bg-[#FCFCFC]">
+    <div className="bg-[#FCFCFC] border-b border-border">
       <StoryEditorHeader />
 
       <div className="max-w-[1440px] mx-auto px-4 py-6">

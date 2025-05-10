@@ -28,6 +28,8 @@ const StoryEditorFooter = () => {
     title,
     wordCount,
     htmlContent,
+    isLocked,
+    price,
     setHardSaved,
     setResetForm,
     setWordCount,
@@ -54,7 +56,7 @@ const StoryEditorFooter = () => {
         toast.error(result?.error?.errors?.[0]?.message);
         return;
       }
-
+ 
       const res = await createChapter({
         title,
         wordCount,
@@ -62,6 +64,8 @@ const StoryEditorFooter = () => {
         status: StoryStatus.PUBLISHED,
         content: htmlContent,
         storyId: story_id as string,
+        isLocked,
+        price,
       });
 
       if (res.success) {
@@ -87,6 +91,8 @@ const StoryEditorFooter = () => {
         content: htmlContent,
         readingTime: readingTime(htmlContent).time,
         storyId: story_id as string,
+        isLocked,
+        price,
       });
 
       setHardSaved(true);

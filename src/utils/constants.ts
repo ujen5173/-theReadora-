@@ -49,3 +49,19 @@ export const METRICS_DEFAULT_VALUES = {
   ratingValue: 0,
   ratingAvg: 0,
 };
+
+// NOTE:
+/**
+ * Chapter price pool
+ *
+ * 50 coins ~ 0.50 USD --> short - medium chapter
+ * 100 coins ~ 0.69 USD --> medium - long chapter
+ * 110 coins ~ 1.09 USD --> long - very long chapter
+ * 150 coins ~ 1.49 USD --> premium author chapter (for epic chapters)
+ */
+export const CHAPTER_PRICE_POOL = {
+  POOL_50: 50,
+  POOL_70: 70,
+  POOL_110: 110,
+  POOL_150: 150,
+} as const;

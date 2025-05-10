@@ -1,6 +1,7 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { CHAPTER_PRICE_POOL } from "~/utils/constants";
 
 type Chapter = {
   id: string;
@@ -13,6 +14,8 @@ type Chapter = {
   metrics: JsonValue;
   readershipAnalytics: JsonValue;
   mongoContentID: string[];
+  isLocked: boolean;
+  price: keyof typeof CHAPTER_PRICE_POOL | null;
 };
 
 type User = {
