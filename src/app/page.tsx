@@ -17,7 +17,7 @@ export default async function Home() {
   const features = [
     {
       icon: Coins,
-      title: "70% Revenue Share",
+      title: "7o% Revenue Share",
       description:
         "Earn from day one through ads, subscriptions, chapter unlocks, and reader tips. Get paid for your work, no minimum follower requirements.",
     },
@@ -61,7 +61,7 @@ export default async function Home() {
           <div className="mt-10">
             <h1 className="text-center font-extrabold text-5xl tracking-tight sm:text-[5rem]">
               Hello Writers, <br /> Welcome to{" "}
-              <span className={`underline ${outfit.className} text-primary/90`}>
+              <span className={`underline ${outfit.className} text-primary/80`}>
                 [theReadora]
               </span>
             </h1>

@@ -207,7 +207,8 @@ export const userRouter = createTRPCRouter({
         updatedAt: true,
         bio: true,
         email: true,
-        emailVerified: true,
+        premium: true,
+        premiumUntil: true,
       },
     });
 
@@ -266,6 +267,39 @@ export const userRouter = createTRPCRouter({
 
       return updatedUser;
     }),
+
+  getPurchasesDetails: protectedProcedure.query(async ({ ctx }) => {
+    const purchases = await ctx.postgresDb.transactions.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    const balance = await ctx.postgresDb.user.findFirst({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        coins: true,
+        premium: true,
+        premiumUntil: true,
+        premiumSince: true,
+        premiumPurchasedAt: true,
+        purchaseMedium: true,
+        purchaseId: true,
+        transactionHistory: true,
+        coinsLastUpdated: true,
+      },
+    });
+
+    return {
+      purchases,
+      balance,
+    };
+  }),
 });
 
 export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;

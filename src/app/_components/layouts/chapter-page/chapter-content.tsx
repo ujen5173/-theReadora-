@@ -6,7 +6,7 @@ import {
   FavouriteIcon,
   RecordIcon,
 } from "hugeicons-react";
-import { ArrowLeftIcon, ArrowRightIcon, EyeIcon, PlusIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, PlusIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -30,20 +30,17 @@ export default ChapterContent;
 
 const ChapterMetaData = () => {
   const { chapter } = useChapterStore();
-  const metrics =
-    (chapter?.metrics as {
-      commentsCount: number;
-      likesCount: number;
-      ratingAvg: number;
-      ratingCount: number;
-      ratingValue: number;
-      readingTime: number;
-      sharesCount: number;
-      viewsCount: number;
-      wordCount: number;
-    }) ?? null;
-
-  console.log({ metrics, chapter });
+  const metrics = JSON.parse(chapter?.metrics as string) as {
+    commentsCount: number;
+    likesCount: number;
+    ratingAvg: number;
+    ratingCount: number;
+    ratingValue: number;
+    readingTime: number;
+    sharesCount: number;
+    viewsCount: number;
+    wordCount: number;
+  };
 
   return (
     <div className="py-20 space-y-8 border-b border-slate-200">
@@ -58,11 +55,6 @@ const ChapterMetaData = () => {
             <div className="flex items-center gap-2">
               <BookOpen01Icon className="w-4 h-4 text-slate-600" />
               <span>{Intl.NumberFormat().format(metrics.wordCount)} words</span>
-            </div>
-            <RecordIcon className="size-1.5 fill-slate-600 text-slate-600" />
-            <div className="flex items-center gap-2">
-              <EyeIcon className="w-4 h-4 text-slate-600" />
-              <span>{metrics.viewsCount.toLocaleString()} views</span>
             </div>
             <RecordIcon className="size-1.5 fill-slate-600 text-slate-600" />
             <div className="flex items-center gap-2">

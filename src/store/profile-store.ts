@@ -7,9 +7,10 @@ interface ProfileState {
   email: string;
   bio: string | null;
   image: string | null;
-  emailVerified: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  premium: boolean;
+  premiumUntil: Date | null;
   // Actions
   setProfile: (profile: Partial<ProfileState>) => void;
   updateProfileImage: (image: string) => void;
@@ -22,9 +23,10 @@ const initialState = {
   email: "",
   bio: null,
   image: null,
-  emailVerified: null,
   createdAt: new Date(),
   updatedAt: new Date(),
+  premium: false,
+  premiumUntil: null,
 };
 
 export const useProfileStore = create<ProfileState>()(

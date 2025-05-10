@@ -1,7 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { format } from "date-fns";
+import { CheckCircle2, Crown, Loader2, Lock, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,7 +23,6 @@ import { cn } from "~/lib/utils";
 import { useProfileStore } from "~/store/profile-store";
 import { api } from "~/trpc/react";
 import { makeSlug } from "~/utils/helpers";
-null;
 
 const profileFormSchema = z.object({
   name: z
@@ -66,7 +66,8 @@ const ProfileForm = () => {
     image,
     createdAt,
     updatedAt,
-    emailVerified,
+    premium,
+    premiumUntil,
   } = useProfileStore();
 
   const [usernameStatus, setUsernameStatus] = useState<{
@@ -170,11 +171,8 @@ const ProfileForm = () => {
         return;
       }
 
-      // Update the store
       setProfile({ ...data, image: image ?? undefined });
-      // TODO: Implement your API update logic here
       await mutateAsync({ ...data, image: image ?? undefined });
-      console.log(data);
       toast.success("Profile updated successfully");
     } catch (error) {
       toast.error("Something went wrong");
@@ -343,19 +341,33 @@ const ProfileForm = () => {
             </div>
             <div>
               <label className="text-sm font-medium mb-1.5 block">
-                Email Verification
+                Premium Status
               </label>
               <div className="flex items-center gap-2">
                 <div
-                  className={cn(
-                    "h-2 w-2 rounded-full",
-                    emailVerified ? "bg-green-500" : "bg-red-500"
-                  )}
-                ></div>
+                  className={`h-2 w-2 rounded-full ${
+                    premium ? "bg-green-500" : "bg-muted"
+                  }`}
+                />
                 <p className="text-sm text-muted-foreground">
-                  {emailVerified ? "Verified" : "Unverified"}
+                  {premium ? (
+                    <span className="flex items-center gap-1.5">
+                      <Crown className="size-4 text-primary" />
+                      Active Premium Member
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1.5">
+                      <Lock className="size-4 text-muted-foreground" />
+                      Free Account
+                    </span>
+                  )}
                 </p>
               </div>
+              {premium && premiumUntil && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Until {format(premiumUntil, "MMM d, yyyy")}
+                </p>
+              )}
             </div>
           </div>
         </div>

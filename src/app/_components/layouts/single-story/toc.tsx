@@ -67,7 +67,7 @@ const SortableChapter = ({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: chapter.id });
 
-  const metrics = chapter.metrics as ChapterMetrics;
+  const metrics = JSON.parse(chapter.metrics as string) as ChapterMetrics;
 
   const style = {
     transform: CSS.Transform.toString(transform),

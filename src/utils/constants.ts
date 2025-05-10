@@ -21,3 +21,17 @@ export const cuidRegex = /^c[a-z0-9]{24}$/;
 
 export const chapterCollectionName = "Chapters";
 export const chunkCollectionName = "Chunks";
+
+export const STRIPE_YEARLY_PLAN =
+  "https://buy.stripe.com/test_5kA15J1EsghY0U08wx";
+export const STRIPE_MONTLY_PLAN =
+  "https://buy.stripe.com/test_14k3dRdna0j046caEE";
+
+export const STRIPE_YEARLY_PLAN_PRICE = 191.9;
+export const STRIPE_MONTHLY_PLAN_PRICE = 19.99;
+
+export const DEFAULT_COIN_AMOUNTS = [550, 1200, 2500, 6500] as const;
+export const MIN_COINS = 500;
+export const MAX_COINS = 10000;
+
+export const COIN_PRICE = 0.0099;

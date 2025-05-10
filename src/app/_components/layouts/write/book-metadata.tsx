@@ -1,9 +1,12 @@
 "use client";
+import { ArrowRight, Loader2, X } from "lucide-react";
 import React, { useState } from "react";
-import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
-import { Button } from "~/components/ui/button";
+import { toast } from "sonner";
+import type { BookMetadataType } from "~/app/write/page";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -12,11 +15,9 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
-import { ArrowRight, Loader2, X } from "lucide-react";
-import { Label } from "~/components/ui/label";
-import { toast } from "sonner";
-import { GENRES, LANGUAGES } from "~/utils/constants";
-import type { BookMetadataType } from "~/app/write/page";
+import { Textarea } from "~/components/ui/textarea";
+import { LANGUAGES } from "~/utils/constants";
+import { GENRES } from "~/utils/genre";
 
 const BookMetadata = ({
   status,
@@ -29,7 +30,7 @@ const BookMetadata = ({
     title: "",
     synopsis: "",
     tags: [],
-    genre: "Romance",
+    genre: "",
     isMature: false,
     hasAiContent: false,
     language: "English",
@@ -151,21 +152,21 @@ const BookMetadata = ({
             Genre
           </Label>
           <Select
-            value={metadata.genre}
+            value={metadata.genre ?? undefined}
             onValueChange={(value) =>
               setMetadata((prev) => ({
                 ...prev,
-                genre: value as (typeof GENRES)[number],
+                genre: value as (typeof GENRES)[number]["slug"],
               }))
             }
           >
             <SelectTrigger id="genre" className="w-full bg-white">
               <SelectValue placeholder="Select genre" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-96 overflow-y-auto">
               {GENRES.map((genre) => (
-                <SelectItem key={genre} value={genre}>
-                  {genre}
+                <SelectItem key={genre.name} value={genre.slug}>
+                  {genre.name}
                 </SelectItem>
               ))}
             </SelectContent>

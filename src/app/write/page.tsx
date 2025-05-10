@@ -1,28 +1,32 @@
 "use client";
+
 import { Label } from "@radix-ui/react-label";
-import Header from "../_components/layouts/header";
-import { FileUploader } from "~/components/ui/file-upload";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { uploadToCloudinary } from "~/utils/uploadToCloudinary";
-import { GENRES, LANGUAGES } from "~/utils/constants";
-import BookMetadata from "../_components/layouts/write/book-metadata";
-import { api } from "~/trpc/react";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
+import { FileUploader } from "~/components/ui/file-upload";
+import { api } from "~/trpc/react";
+import { LANGUAGES } from "~/utils/constants";
+import { GENRES } from "~/utils/genre";
+import { uploadToCloudinary } from "~/utils/uploadToCloudinary";
+import Header from "../_components/layouts/header";
+import BookMetadata from "../_components/layouts/write/book-metadata";
 
 export interface BookMetadataType {
   title: string;
   synopsis: string;
   tags: string[];
-  genre: (typeof GENRES)[number];
+  genre: (typeof GENRES)[number]["slug"];
   isMature: boolean;
   hasAiContent: boolean;
   language: (typeof LANGUAGES)[number]["name"];
   isLGBTQContent: boolean;
 }
 
-const zodGenre = z.enum(GENRES);
+const zodGenre = z.enum(
+  GENRES.map((genre) => genre.slug) as [string, ...string[]]
+);
 
 const Write = () => {
   const router = useRouter();
@@ -97,6 +101,7 @@ const Write = () => {
       .safeParse({ ...storyDetails, thumbnail: uploadedFile });
 
     if (!zodResponse.success) {
+      console.log({ zodResponse: zodResponse.error });
       toast.error("Invalid story details");
       return;
     }
@@ -105,6 +110,7 @@ const Write = () => {
       const result = await createStory({
         ...storyDetails,
         thumbnail: uploadedFile,
+        genre: storyDetails.genre,
       });
 
       if (result) {

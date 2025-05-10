@@ -3,9 +3,10 @@
 import {
   AnalyticsUpIcon,
   Bookshelf01Icon,
+  CoinsBitcoinIcon,
   UserCircle02Icon,
 } from "hugeicons-react";
-import { BookIcon, CreditCard, LogOut, SettingsIcon } from "lucide-react";
+import { BookIcon, LogOut, SettingsIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -93,10 +94,10 @@ export default function UserHeader() {
               Analytics
             </DropdownMenuItem>
           </Link>
-          <Link href={"/premium"}>
+          <Link href={"/settings?tab=coins"}>
             <DropdownMenuItem className="cursor-pointer px-3 py-2">
-              <CreditCard className="w-4 h-4 text-slate-800" />
-              Billing
+              <CoinsBitcoinIcon className="w-4 h-4 text-slate-800" />
+              My Wallet
             </DropdownMenuItem>
           </Link>
           <Link href="/reading-list">

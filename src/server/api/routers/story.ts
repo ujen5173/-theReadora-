@@ -547,28 +547,6 @@ export const storyRouter = createTRPCRouter({
       }
     }),
 
-  // increaseReadCount: publicProcedure
-  //   .input(z.object({ storyId: z.string() }))
-  //   .mutation(async ({ ctx, input }) => {
-  //     try {
-  //       // TODO: complete this procedure
-  //       const story = await ctx.postgresDb.story.update({
-  //         where: {
-  //           id: input.storyId,
-  //         },
-  //         data: {
-  //           reads: {
-  //             increment: 1,
-  //           },
-  //         },
-  //       });
-  //       return story;
-  //     } catch (err) {
-  //       console.error("Error increasing read count:", err);
-  //       throw new Error("Error increasing read count");
-  //     }
-  //   }),
-
   getByAuthor: publicProcedure
     .input(
       z.object({
@@ -605,7 +583,7 @@ export const storyRouter = createTRPCRouter({
       z.object({
         title: z.string(),
         synopsis: z.string(),
-        genre: z.enum(GENRES.map((e) => e.name) as [string, ...string[]]),
+        genre: z.enum(GENRES.map((e) => e.slug) as [string, ...string[]]),
         tags: z.array(z.string()),
         thumbnail: z.object({
           url: z.string(),
@@ -625,6 +603,8 @@ export const storyRouter = createTRPCRouter({
 
         const { genre, thumbnail, ...rest } = input;
 
+        console.log({ genre });
+
         const story = await ctx.postgresDb.story.create({
           data: {
             ...rest,
@@ -632,7 +612,7 @@ export const storyRouter = createTRPCRouter({
             slug,
             thumbnailId: input.thumbnail.public_id,
             thumbnail: input.thumbnail.url,
-            genreSlug: genre.toLowerCase(),
+            genreSlug: genre,
             readingTime: 0,
             language: input.language as Language,
           },

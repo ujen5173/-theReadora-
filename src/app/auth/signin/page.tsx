@@ -1,16 +1,18 @@
 "use client";
 
-import { Button } from "~/components/ui/button";
-import Header from "~/app/_components/layouts/header";
 import { Facebook01Icon, GoogleIcon, Mail01Icon } from "hugeicons-react";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import Header from "~/app/_components/layouts/header";
+import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import Link from "next/link";
-import { signIn } from "next-auth/react";
+
 export default function SignInPage() {
   return (
     <>
       <Header />
+
       <main className="flex flex-col items-center justify-center text-slate-900">
         <div className="border-b border-border container flex flex-col items-center justify-center gap-8 px-4 py-28">
           <div className="text-center">
@@ -29,19 +31,23 @@ export default function SignInPage() {
             <Button
               size="lg"
               variant="outline"
-              onClick={() => signIn("google")}
-              className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-border"
+              onClick={() =>
+                signIn("google", {
+                  redirectTo: "/",
+                })
+              }
+              className="w-full flex items-center justify-center bg-white hover:bg-slate-50 border-border"
+              icon={GoogleIcon}
             >
-              <GoogleIcon className="size-5" />
               Continue with Google
             </Button>
 
             <Button
               size="lg"
               variant="outline"
-              className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-border"
+              className="w-full flex items-center justify-center bg-white hover:bg-slate-50 border-border"
+              icon={Facebook01Icon}
             >
-              <Facebook01Icon className="size-5" />
               Continue with Facebook
             </Button>
 
@@ -94,9 +100,9 @@ export default function SignInPage() {
               <Button
                 type="submit"
                 size="lg"
-                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white"
+                className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white"
+                icon={Mail01Icon}
               >
-                <Mail01Icon className="size-5" />
                 Sign in with Email
               </Button>
             </form>

@@ -9,13 +9,12 @@
 3   | Social/Follow      | Implement follow/unfollow users                 | Medium   | Update feed based on follows            | Low            |   ✅
 5   | Reading Lists      | CRUD for reading lists                          | Medium   |                                         | Low            |   ✅
 23  | Core Logic         | Story Read count logic                          | High     | Read count in story                     | Medium         |   ✅
--------------------------|-------------------------------------------------|----------|-----------------------------------------|----------------|-------------
+13  | Settings           | Profile settings page                           | Low      | Avatar, bio, preferences                | Low            |   ✅
+4   | Monetization       | Premium subscription flow                       | High     | Stripe, esewa and khalti integration    | Medium         |
 7   | Engagement         | Rating                                          | Medium   | One rating per user/story               | Low            |   
-13  | Settings           | Profile settings page                           | Low      | Avatar, bio, preferences                | Low            |
 16  | Notifications      | Email (digests, alerts)                         | Medium   |                                         | Low            |
 22  | Content Access     | Locked chapters (premium gating)                | Medium   | Unlock via subscription                 | Low            |
 23  | Core Logic         | Schedule chapter publish                        | Medium   |                                         | Medium         |
-4   | Monetization       | Premium subscription flow                       | High     | Stripe, esewa and khalti integration    | Medium         |
 6   | Engagement         | Comments on stories                             | Medium   |                                         | Medium         |
 9   | Content Mgmt       | Edit stories and chapters                       | Medium   | Revision history                        | Medium         |
 10  | Ratings            | Story rating system (1–5 stars)                 | Low      |                                         | Medium         |
@@ -26,7 +25,7 @@
 19  | Collaboration      | Paragraph-level comments                        | Low      | Inline review                           | Extreme        |
 21  | Chapter Actions    | Likes, comments, reads per chapter              | Low      | Engagement metrics                      | Extreme        |
 22  | Pagination         | Chapter Chunk navigation using page params      | Low      | e.g, /?page_id=?<number>                | Extreme ↔ High |
-
+24  | Filter Bug         | Remove the filters stored in somewhere          | Medium   |                                         | Medium         |
 
 
 ========================================================================================================

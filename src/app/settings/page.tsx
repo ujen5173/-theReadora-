@@ -1,7 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { CoinsBitcoinIcon } from "hugeicons-react";
-import { Bell, ShieldAlert, User } from "lucide-react";
+import { Bell, CreditCard, ShieldAlert, User } from "lucide-react";
 import Header from "../_components/layouts/header";
+import BillingSection from "../_components/layouts/settings/billings/billing";
 import CoinsPackageSettings from "../_components/layouts/settings/coins";
 import DangerZone from "../_components/layouts/settings/danger";
 import NotificationSettings from "../_components/layouts/settings/notification";
@@ -28,9 +29,19 @@ const navItems = [
     label: "Coins",
     icon: <CoinsBitcoinIcon className="size-5 mr-2" />,
   },
+  {
+    value: "billing",
+    label: "Billing",
+    icon: <CreditCard className="size-5 mr-2" />,
+  },
 ];
 
-const Settings = () => {
+const Settings = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab: string }>;
+}) => {
+  const { tab } = await searchParams;
   return (
     <>
       <Header
@@ -40,7 +51,7 @@ const Settings = () => {
       />
       <div className="w-full">
         <div className="border-b border-border max-w-[1440px] mx-auto px-4 py-12">
-          <SettingsNavigation />
+          <SettingsNavigation tab={tab} />
         </div>
       </div>
     </>
@@ -49,9 +60,9 @@ const Settings = () => {
 
 export default Settings;
 
-const SettingsNavigation = () => {
+const SettingsNavigation = ({ tab }: { tab: string }) => {
   return (
-    <Tabs defaultValue="profile" className="flex gap-8">
+    <Tabs defaultValue={tab ?? "profile"} className="flex gap-8">
       <TabsList className="flex flex-col h-fit space-y-1 min-w-[240px]">
         {navItems.map((item) => (
           <TabsTrigger
@@ -76,6 +87,9 @@ const SettingsNavigation = () => {
         </TabsContent>
         <TabsContent value="coins">
           <CoinsPackageSettings />
+        </TabsContent>
+        <TabsContent value="billing">
+          <BillingSection />
         </TabsContent>
       </div>
     </Tabs>

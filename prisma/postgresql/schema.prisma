@@ -16,17 +16,52 @@ enum StoryStatus {
     PRIVATE
 }
 
+enum PurchaseMedium {
+    STRIPE
+    ESEWA
+    KHALTI
+    IMEPAY
+}
+
+enum TransactionType {
+    PURCHASE
+    CHAPTER_UNLOCK
+    MONTHLY_BONUS
+    REFERRAL_BONUS
+    SUBSCRIPTION
+    SUBSCRIPTION_ENDED
+}
+
+enum AccountStatus {
+    ACTIVE
+    BANNED
+    DELETED
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String
-    username      String
+    username      String    @unique @map("username")
     email         String    @unique
     bio           String?
     emailVerified DateTime?
     image         String?
-    accounts      Account[]
-    sessions      Session[]
-    stories       Story[]
+
+    coins            Int      @default(0)
+    coinsLastUpdated DateTime @default(now())
+
+    premium            Boolean         @default(false)
+    premiumUntil       DateTime?
+    premiumSince       DateTime?
+    premiumPurchasedAt DateTime?
+    purchaseMedium     PurchaseMedium?
+    purchaseId         String?
+
+    transactionHistory Transactions[]
+
+    accounts Account[]
+    sessions Session[]
+    stories  Story[]
 
     followingCount Int @default(0)
     followersCount Int @default(0)
@@ -38,6 +73,25 @@ model User {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    accountStatus AccountStatus @default(ACTIVE)
+
+    @@index([username, email])
+}
+
+model Transactions {
+    id                     String          @id @default(cuid())
+    userId                 String
+    user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    type                   TransactionType @default(PURCHASE)
+    amount                 Int
+    price                  String
+    time                   String
+    status                 String
+    pre_transaction_coins  Int
+    post_transaction_coins Int
+    metadata               Json?
+    createdAt              DateTime        @default(now())
 }
 
 model follow {

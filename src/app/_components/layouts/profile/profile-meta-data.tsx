@@ -1,8 +1,8 @@
 "use client";
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
 import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useUserProfileStore } from "~/store/userProfileStore";
@@ -44,23 +44,15 @@ const ProfileMetaData = () => {
             <div className="flex justify-center sm:justify-start">
               <div className="relative">
                 <div className="rounded-full p-1 bg-gradient-to-r from-primary to-primary/80">
-                  <Avatar className="size-36">
-                    <AvatarImage
-                      src={user?.image ?? ""}
-                      alt={user?.name ?? ""}
-                      width={160}
-                      height={160}
-                      className="size-36 rounded-full border-3 border-white shadow-lg"
-                      draggable={false}
-                    />
-                    <AvatarFallback>{user?.name}</AvatarFallback>
-                  </Avatar>
+                  <Image
+                    src={user?.image ?? ""}
+                    alt={user?.name ?? ""}
+                    width={160}
+                    height={160}
+                    className="size-36 rounded-full border-3 border-white shadow-lg"
+                    draggable={false}
+                  />
                 </div>
-                {/* {user?.isPremium && (
-                  <Badge className="absolute -right-2 bottom-4 py-1 px-3 font-semibold bg-gradient-to-r from-amber-400 to-amber-600 text-white border-2 border-white shadow-md">
-                    PRO
-                  </Badge>
-                )} */}
               </div>
             </div>
 
@@ -72,36 +64,6 @@ const ProfileMetaData = () => {
                   <h1 className="text-4xl font-bold text-slate-800 tracking-tight">
                     {user?.name}
                   </h1>
-                  {/* {user?.verified && (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Badge className="bg-primary/15 text-primary hover:bg-primary/20 border-0 shadow-sm">
-                            <span className="flex items-center gap-1">
-                              <svg
-                                className="size-4"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              Verified
-                            </span>
-                          </Badge>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="text-sm">Verified Author</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )} */}
                 </div>
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-slate-600">
                   <span className="font-medium text-slate-700">
@@ -217,16 +179,6 @@ const ProfileMetaData = () => {
                 url={`https://readora.com/${user?.username ?? ""}`}
               />
             </div>
-            {/* {user?.isCurrentUser && (
-              <Button
-                variant="outline"
-                size="sm"
-                icon={Edit2}
-                className="shadow-sm hover:shadow-md transition-shadow"
-              >
-                Edit Profile
-              </Button>
-            )} */}
           </div>
         </div>
 

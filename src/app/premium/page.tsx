@@ -1,11 +1,20 @@
 "use client";
+
+import { format } from "date-fns";
 import { ZapIcon } from "hugeicons-react";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, Crown, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { SubscriptionManagementDialog } from "~/app/_components/shared/premium/subscription-management-dialog";
+import { useCoinPurchase } from "~/app/hooks/use-coin-purchase";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
+import { api } from "~/trpc/react";
+import {
+  STRIPE_MONTHLY_PLAN_PRICE,
+  STRIPE_YEARLY_PLAN_PRICE,
+} from "~/utils/constants";
 import Header from "../_components/layouts/header";
 import CoinsPackage from "../_components/shared/premium/coins-package";
 
@@ -20,8 +29,30 @@ const Premium = () => {
   ];
 
   const uniquePremiumFeatures = [...new Set(premiumFeatures)];
-
   const [isYearly, setIsYearly] = useState(false);
+  const { PurchaseDialog } = useCoinPurchase();
+
+  const { data: userData } = api.user.getPurchasesDetails.useQuery();
+  const { mutateAsync: createSubscription, status } =
+    api.payment.createSubscription.useMutation({
+      onSuccess: (data) => {
+        if (data.clientSecret) {
+          window.location.href = `/payment?client_secret=${data.clientSecret}`;
+        }
+      },
+      onError: (error) => {
+        console.error("Failed to create subscription:", error);
+      },
+    });
+
+  const handleSubscribe = () => {
+    createSubscription({
+      priceId: isYearly
+        ? "price_1RMoywL5ATfigxyFKcLRvctl"
+        : "price_1RMYWtL5ATfigxyFpgyaO8or",
+      isYearly,
+    });
+  };
 
   return (
     <>
@@ -50,37 +81,69 @@ const Premium = () => {
               of happy readers who have already upgraded their experience.
             </p>
 
-            <div className="flex justify-center mb-12">
-              <div className="flex items-center space-x-4 bg-slate-100 p-2 rounded-full">
-                <Label
-                  htmlFor="yearly"
-                  className={`cursor-pointer px-4 py-2 rounded-full transition-colors ${
-                    !isYearly ? "bg-white shadow-sm" : ""
-                  }`}
-                >
-                  Monthly
-                </Label>
-                <Switch
-                  checked={isYearly}
-                  onCheckedChange={setIsYearly}
-                  value="yearly"
-                  id="yearly"
-                />
-                <Label
-                  htmlFor="yearly"
-                  className={`cursor-pointer px-4 py-2 rounded-full transition-colors ${
-                    isYearly ? "bg-white shadow-sm" : ""
-                  }`}
-                >
-                  Yearly
-                  <span className="ml-1 text-xs text-primary font-medium">
-                    Save 20%
-                  </span>
-                </Label>
+            {userData?.balance?.premium && (
+              <div className="w-full max-w-5xl mb-8">
+                <div className="flex items-center justify-between p-6 rounded-lg bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-primary/10">
+                      <Crown className="size-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-lg">
+                        Premium Status Active
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Your premium subscription is active until{" "}
+                        {userData.balance.premiumUntil
+                          ? format(userData.balance.premiumUntil, "MMM d, yyyy")
+                          : "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                  <SubscriptionManagementDialog
+                    subscriptionId={userData.balance.purchaseId ?? ""}
+                    premiumUntil={userData.balance.premiumUntil ?? new Date()}
+                    isYearly={
+                      userData.balance.purchaseId?.includes("yearly") ?? false
+                    }
+                  >
+                    <Button variant="outline" size="lg">
+                      Manage Subscription
+                    </Button>
+                  </SubscriptionManagementDialog>
+                </div>
               </div>
+            )}
+
+            <div className="flex items-center space-x-4 bg-slate-100 p-2 rounded-full mb-8">
+              <Label
+                htmlFor="yearly"
+                className={`cursor-pointer px-4 py-2 rounded-full transition-colors ${
+                  !isYearly ? "bg-white shadow-sm" : ""
+                }`}
+              >
+                Monthly
+              </Label>
+              <Switch
+                checked={isYearly}
+                onCheckedChange={setIsYearly}
+                value="yearly"
+                id="yearly"
+              />
+              <Label
+                htmlFor="yearly"
+                className={`cursor-pointer px-4 py-2 rounded-full transition-colors ${
+                  isYearly ? "bg-white shadow-sm" : ""
+                }`}
+              >
+                Yearly
+                <span className="ml-1 text-xs text-primary font-medium">
+                  Save 20%
+                </span>
+              </Label>
             </div>
 
-            <div className="flex flex-col lg:flex-row items-stretch gap-6 w-full max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
               <div className="flex-1 border border-primary bg-primary rounded-2xl p-8 shadow-lg">
                 <div className="flex flex-col h-full">
                   <h2 className="mb-4 text-2xl font-bold text-white flex items-center">
@@ -102,17 +165,40 @@ const Premium = () => {
                   </div>
 
                   <div className="mt-auto">
-                    <p className="text-white/90 mb-4 text-sm">
-                      {isYearly
-                        ? "Billed annually for better savings"
-                        : "Billed monthly, cancel anytime"}
-                    </p>
+                    <div className="mb-4">
+                      <p className="text-white/90 text-sm">
+                        {isYearly
+                          ? "Billed annually for better savings"
+                          : "Billed monthly, cancel anytime"}
+                      </p>
+                      <div className="mt-2">
+                        <span className="text-3xl font-bold text-white">
+                          $
+                          {isYearly
+                            ? STRIPE_YEARLY_PLAN_PRICE
+                            : STRIPE_MONTHLY_PLAN_PRICE}
+                        </span>
+                        <span className="text-white/80 ml-1">
+                          /{isYearly ? "year" : "month"}
+                        </span>
+                      </div>
+                    </div>
                     <Button
                       className="w-full bg-white text-primary hover:bg-white/90"
                       variant="secondary"
                       size="lg"
+                      onClick={handleSubscribe}
+                      disabled={
+                        status === "pending" || userData?.balance?.premium
+                      }
                     >
-                      Subscribe – ${isYearly ? "95.88/year" : "9.99/month"}
+                      {status === "pending" ? (
+                        <Loader2 className="animate-spin" />
+                      ) : userData?.balance?.premium ? (
+                        "Current Plan"
+                      ) : (
+                        "Subscribe Now"
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -123,6 +209,7 @@ const Premium = () => {
           </div>
         </div>
       </main>
+      <PurchaseDialog />
     </>
   );
 };

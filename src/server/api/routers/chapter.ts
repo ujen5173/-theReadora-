@@ -119,7 +119,7 @@ export const chapterRouter = createTRPCRouter({
 
         return {
           success: true,
-          message: "Chapter created successfully",
+          message: "Chapter published successfully",
 
           storySlug: story.slug,
         };

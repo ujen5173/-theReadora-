@@ -17,6 +17,8 @@ export const env = createEnv({
     CLOUDINARY_API_SECRET: z.string(),
     OPENAI_API_KEY: z.string(),
     NEXT_AUTH_URL: z.string().url(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
   },
 
   client: {
@@ -26,6 +28,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: z.string(),
     NEXT_PUBLIC_POSTHOG_KEY: z.string(),
     NEXT_PUBLIC_POSTHOG_HOST: z.string(),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
   },
 
   runtimeEnv: {
@@ -46,6 +49,10 @@ export const env = createEnv({
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     NEXT_AUTH_URL: process.env.NEXT_AUTH_URL,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
