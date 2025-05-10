@@ -56,7 +56,7 @@ const StoryEditorFooter = () => {
         toast.error(result?.error?.errors?.[0]?.message);
         return;
       }
- 
+
       const res = await createChapter({
         title,
         wordCount,
