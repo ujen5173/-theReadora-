@@ -12,7 +12,7 @@ import {
 import { Skeleton } from "~/components/ui/skeleton";
 import type { SearchResponse } from "~/server/api/routers/story";
 import { getValidGenre } from "~/utils/helpers";
-import NovelCard from "../../shared/novel-card";
+import NovelCard, { type TCard } from "../../shared/novel-card";
 
 const BooksSection = ({
   query,
@@ -117,8 +117,8 @@ const BooksSection = ({
             </p>
           </div>
         ) : (
-          // Results grid
-          books?.stories.map((book) => (
+          // Results grid with proper typing
+          books?.stories.map((book: TCard) => (
             <div key={book.id}>
               <NovelCard details={book} />
             </div>
