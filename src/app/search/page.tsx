@@ -1,8 +1,6 @@
 "use client";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useLayoutEffect, useState } from "react";
-import type { SearchResponse } from "~/server/api/routers/story";
 import { useFilterStore } from "~/store/useFilter";
 import { api } from "~/trpc/react";
 import { getValidGenre } from "~/utils/helpers";
@@ -86,7 +84,7 @@ const Search = () => {
             <BooksSection
               query={query}
               genre={genre}
-              books={books as SearchResponse}
+              books={books}
               isLoading={isLoading}
               currentPage={currentPage}
               onPageChange={handlePageChange}

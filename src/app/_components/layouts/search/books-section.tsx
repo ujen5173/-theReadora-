@@ -1,9 +1,5 @@
 "use client";
 
-import NovelCard from "../../shared/novel-card";
-import { getValidGenre } from "~/utils/helpers";
-import type { SearchResponse } from "~/server/api/routers/story";
-import { Skeleton } from "~/components/ui/skeleton";
 import {
   Pagination,
   PaginationContent,
@@ -13,6 +9,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
+import { Skeleton } from "~/components/ui/skeleton";
+import type { SearchResponse } from "~/server/api/routers/story";
+import { getValidGenre } from "~/utils/helpers";
+import NovelCard from "../../shared/novel-card";
 
 const BooksSection = ({
   query,
@@ -24,7 +24,7 @@ const BooksSection = ({
 }: {
   query: string;
   genre: string;
-  books: SearchResponse;
+  books: SearchResponse | undefined;
   isLoading: boolean;
   currentPage: number;
   onPageChange: (page: number) => void;
@@ -80,12 +80,12 @@ const BooksSection = ({
             <p className="text-sm text-slate-500">
               Showing{" "}
               {books?.stories.length
-                ? (currentPage - 1) * books.metadata.pageSize + 1
+                ? (currentPage - 1) * (books?.metadata.pageSize ?? 0) + 1
                 : 0}
               -
               {Math.min(
-                currentPage * books.metadata.pageSize,
-                books.metadata.total
+                currentPage * (books?.metadata.pageSize ?? 0),
+                books?.metadata.total ?? 0
               )}{" "}
               of {books?.metadata.total} stories
             </p>
@@ -127,7 +127,7 @@ const BooksSection = ({
       </div>
 
       {/* Pagination */}
-      {!isLoading && books?.stories.length > 0 && (
+      {!isLoading && books?.stories.length && books?.stories.length > 0 && (
         <div className="py-4 border-t border-border">
           <Pagination>
             <PaginationContent>
