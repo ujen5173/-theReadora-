@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CHAPTER_PRICE_POOL } from "~/utils/constants";
 
-type Chapter = {
+export type useChapterChapter = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -18,20 +18,20 @@ type Chapter = {
   mongoContentID: string[];
 };
 
-type User = {
+export type useChapterUser = {
   name: string;
   id: string;
   username: string;
   image: string | null;
 };
 
-type Story = {
+export type useChapterStory = {
   id: string;
   title: string;
   slug: string;
   thumbnail: string;
   chapterCount: number;
-  author: User;
+  author: useChapterUser;
   chapters: {
     id: string;
     title: string;
