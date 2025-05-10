@@ -151,7 +151,7 @@ const CoinsPackageSettings = async () => {
                 </p>
               </div>
             )}
-            {data?.purchases.map((transaction: TransactionType, i) => (
+            {data?.purchases.map((transaction: TransactionType, i: number) => (
               <div
                 key={i}
                 className="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-muted/50 transition-colors"
