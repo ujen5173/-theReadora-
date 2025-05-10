@@ -1,14 +1,21 @@
 "use client";
-
 import React, { useEffect } from "react";
-import type { getChapterDetailsBySlugOrIdResponse } from "~/server/api/routers/chapter";
-import { useChapterStore } from "~/store/useChapter";
+import {
+  useChapterStore,
+  type Chunk,
+  type useChapterChapter,
+  type useChapterStory,
+} from "~/store/useChapter";
 
 const ChapterWrapper = ({
   details,
   children,
 }: {
-  details: getChapterDetailsBySlugOrIdResponse;
+  details: {
+    story: useChapterStory;
+    chapter: useChapterChapter;
+    initialChunk: Chunk;
+  };
   children: React.ReactNode;
 }) => {
   /*
