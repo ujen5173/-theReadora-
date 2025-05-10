@@ -49,12 +49,12 @@ export type Chunk = {
 };
 
 type ChapterStore = {
-  story: Story | null;
-  chapter: Chapter | null;
+  story: useChapterStory | null;
+  chapter: useChapterChapter | null;
   isLoading: boolean;
   initialChunk: Chunk | null;
-  setChapter: (chapter: Chapter) => void;
-  setStory: (story: Story) => void;
+  setChapter: (chapter: useChapterChapter) => void;
+  setStory: (story: useChapterStory) => void;
   setInitialChunk: (initialChunk: Chunk) => void;
 };
 
