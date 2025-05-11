@@ -14,7 +14,7 @@
     "db:push": "prisma db push --schema prisma/postgresql/schema.prisma",
     "db:studio": "prisma studio --schema prisma/postgresql/schema.prisma",
     "dev": "next dev --turbo",
-    "postinstall": "prisma generate --schema=./prisma/postgresql/schema.prisma && prisma generate --schema=./prisma/mongodb/chapters.prisma",
+    "postinstall": "prisma generate --schema=./prisma/mongodb/chapters.prisma",
     "preview": "next build && next start",
     "start": "next start",
     "typecheck": "tsc --noEmit",
