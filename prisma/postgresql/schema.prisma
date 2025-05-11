@@ -1,6 +1,5 @@
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["prismaSchemaFolder"]
+    provider = "prisma-client-js"
 }
 
 datasource db {
@@ -8,7 +7,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// Enum for story status
 enum StoryStatus {
     DRAFT
     PUBLISHED

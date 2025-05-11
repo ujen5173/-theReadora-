@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "prisma generate --schema=./prisma/postgresql/schema.prisma && prisma generate --schema=./prisma/mongodb/chapters.prisma && next build",
+    "build": "prisma generate --schema=./prisma/mongodb/chapters.prisma && next build",
     "check": "biome check .",
     "check:unsafe": "biome check --write --unsafe .",
     "check:write": "biome check --write .",
