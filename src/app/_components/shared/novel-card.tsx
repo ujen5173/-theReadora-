@@ -3,9 +3,9 @@
 import {
   AnalyticsUpIcon,
   ArrowRight02Icon,
-  FavouriteIcon,
   LeftToRightListNumberIcon,
   LinkSquare02Icon,
+  StarIcon,
   ViewIcon,
 } from "hugeicons-react";
 import Image from "next/image";
@@ -24,13 +24,14 @@ export type TCard = {
   id: string;
   slug: string;
   title: string;
-  votes: number;
   readCount: number;
   readingTime: number;
   thumbnail: string;
   isMature: boolean;
   isCompleted: boolean;
   genreSlug: string;
+  ratingAvg: number;
+  ratingCount: number;
   chapterCount: number;
   author: {
     name: string;
@@ -117,10 +118,13 @@ const NovelCard: FC<{
             <Separator orientation="vertical" className="h-8" />
             <div className="flex flex-col items-center px-2">
               <div className="flex gap-2">
-                <FavouriteIcon size={16} className="mt-1 stroke-2" />
+                <StarIcon size={16} className="mt-1 stroke-2" />
               </div>
               <p className="text-sm font-semibold">
-                {formatNumber(details.votes)}
+                {details.ratingAvg}{" "}
+                <span className="text-slate-500">
+                  ({Intl.NumberFormat().format(details.ratingCount)})
+                </span>
               </p>
             </div>
             <Separator orientation="vertical" className="h-8" />

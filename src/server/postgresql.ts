@@ -3,7 +3,7 @@ import { env } from "~/env";
 
 const createPostgresClient = () =>
   new PrismaClient({
-    datasourceUrl: env.DATABASE_URL, // PostgreSQL connection URL
+    datasourceUrl: env.DATABASE_URL,
     log:
       env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });

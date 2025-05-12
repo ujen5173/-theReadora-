@@ -84,8 +84,8 @@ model User {
     followingCount Int @default(0)
     followersCount Int @default(0)
 
-    followers follow[] @relation("Follower")
-    following follow[] @relation("Following")
+    followers Follow[] @relation("Follower")
+    following Follow[] @relation("Following")
 
     readinglist Readinglist[]
 
@@ -95,6 +95,8 @@ model User {
     accountStatus AccountStatus @default(ACTIVE)
 
     unlockedChapters UnlockedChapter[]
+
+    storyRatings Rating[]
 
     @@index([username, email])
 }
@@ -129,7 +131,7 @@ model Transactions {
     createdAt              DateTime        @default(now())
 }
 
-model follow {
+model Follow {
     id          String @id @default(cuid())
     follower    User   @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
     followerId  String
@@ -140,6 +142,21 @@ model follow {
     updatedAt DateTime @updatedAt
 
     @@unique([followerId, followingId])
+}
+
+model Rating {
+    id        String   @id @default(uuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    storyId   String
+    story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+    rating    Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, storyId])
+    @@index([userId, storyId])
+    @@index([storyId, rating])
 }
 
 model ChapterRead {
@@ -162,7 +179,6 @@ model Story {
     title          String
     slug           String      @unique
     synopsis       String
-    votes          Int         @default(0)
     readingTime    Int
     readCount      Int         @default(0)
     thumbnail      String
@@ -176,6 +192,11 @@ model Story {
     hasAiContent   Boolean     @default(false)
     language       Language    @default(English)
     isLGBTQContent Boolean     @default(false)
+    ratingCount    Int         @default(0)
+    ratingValue    Float       @default(0)
+    ratingAvg      Float       @default(0)
+
+    ratings Rating[]
 
     genreSlug String
     genre     Genres @relation("StoryGenres", fields: [genreSlug], references: [slug])

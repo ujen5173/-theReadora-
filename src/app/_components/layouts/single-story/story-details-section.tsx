@@ -6,8 +6,8 @@ import {
   BookOpen01Icon,
   CopyrightIcon,
   EyeIcon,
-  FavouriteIcon,
   LeftToRightListNumberIcon,
+  StarIcon,
 } from "hugeicons-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -122,13 +122,13 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
             <TooltipTrigger>
               <div className="w-24 flex flex-col items-center justify-center">
                 <div className="flex items-center gap-1.5">
-                  <FavouriteIcon className="size-4" />
+                  <StarIcon className="size-4" />
                   <span className="font-medium text-base text-slate-800">
-                    Votes
+                    Rating
                   </span>
                 </div>
                 <span className="font-bold text-base text-center text-slate-700">
-                  {story.votes.toLocaleString()}
+                  {story.ratingAvg.toFixed(1)}
                 </span>
               </div>
             </TooltipTrigger>
@@ -138,7 +138,8 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
               tooltipArrowClassName="bg-slate-50 border-b border-r border-slate-300 fill-slate-50"
             >
               <p className="text-slate-700 font-black">
-                {story.votes.toLocaleString()} Votes
+                {story.ratingAvg.toFixed(1)} (
+                {Intl.NumberFormat().format(story.ratingCount)})
               </p>
             </TooltipContent>
           </Tooltip>
@@ -211,7 +212,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
         </p>
         {story.synopsis.length > 250 && (
           <span
-            className="underline text-primary/70 underline-offset-2 cursor-pointer my-4 inline-block font-semibold "
+            className="underline text-primary/70 underline-offset-2 cursor-pointer my-4 block font-semibold"
             onClick={handleReadMore}
           >
             {toggleReadMore ? "Read Less" : "Read More"}

@@ -15,7 +15,6 @@ export const NCardEntity = {
   id: true,
   slug: true,
   title: true,
-  votes: true,
   readingTime: true,
   isMature: true,
   thumbnail: true,
@@ -23,6 +22,8 @@ export const NCardEntity = {
   genreSlug: true,
   chapterCount: true,
   readCount: true,
+  ratingAvg: true,
+  ratingCount: true,
   author: {
     select: {
       name: true,
@@ -94,7 +95,7 @@ export const storyRouter = createTRPCRouter({
       try {
         const stories = await ctx.postgresDb.story.findMany({
           orderBy: {
-            votes: "desc",
+            ratingAvg: "desc",
           },
           select: NCardEntity,
           take: input.limit,
@@ -129,7 +130,7 @@ export const storyRouter = createTRPCRouter({
 
         const stories = await ctx.postgresDb.story.findMany({
           orderBy: {
-            votes: "desc",
+            ratingAvg: "desc",
           },
           take: input.limit,
         });
@@ -198,7 +199,7 @@ export const storyRouter = createTRPCRouter({
           },
           select: NCardEntity,
           orderBy: {
-            votes: "desc",
+            ratingAvg: "desc",
           },
           take: input.limit,
         });
@@ -418,7 +419,7 @@ export const storyRouter = createTRPCRouter({
         const orderBy: any = {};
         switch (sortBy?.toUpperCase()) {
           case "HOT":
-            orderBy.votes = "desc";
+            orderBy.ratingAvg = "desc";
             break;
           case "POPULAR":
             orderBy.readCount = "desc";
@@ -427,7 +428,7 @@ export const storyRouter = createTRPCRouter({
             orderBy.createdAt = "desc";
             break;
           case "TOP RATED":
-            orderBy.votes = "desc";
+            orderBy.ratingAvg = "desc";
             break;
           default:
             orderBy.createdAt = "desc";
@@ -601,9 +602,114 @@ export const storyRouter = createTRPCRouter({
         throw new Error("Error creating story");
       }
     }),
+
   getAuthorReadingList: publicProcedure.query(() => {
     return [];
   }),
+
+  rate: protectedProcedure
+    .input(
+      z.object({
+        storyId: z.string().cuid(),
+        rating: z.number().min(1).max(5),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const { storyId, rating } = input;
+
+        return await ctx.postgresDb.$transaction(async (tx) => {
+          const story = await tx.story.findUnique({
+            where: { id: storyId },
+          });
+
+          if (!story) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "Story not found",
+            });
+          }
+
+          const existingRating = await tx.rating.findFirst({
+            where: {
+              userId: ctx.session?.user.id,
+              storyId,
+            },
+          });
+
+          if (existingRating) {
+            const oldRating = existingRating.rating;
+
+            const newRatingValue = story.ratingValue - oldRating + rating;
+            const newRatingAvg = newRatingValue / story.ratingCount;
+
+            await tx.rating.update({
+              where: { id: existingRating.id },
+              data: {
+                rating,
+                updatedAt: new Date(),
+              },
+            });
+
+            // Update story rating statistics
+            await tx.story.update({
+              where: { id: storyId },
+              data: {
+                ratingValue: newRatingValue,
+                ratingAvg: newRatingAvg,
+              },
+            });
+          } else {
+            // Create new rating
+            await tx.rating.create({
+              data: {
+                storyId,
+                userId: ctx.session?.user.id,
+                rating,
+              },
+            });
+
+            // Calculate new rating statistics
+            const newRatingCount = story.ratingCount + 1;
+            const newRatingValue = story.ratingValue + rating;
+            const newRatingAvg = newRatingValue / newRatingCount;
+
+            // Update story rating statistics
+            await tx.story.update({
+              where: { id: storyId },
+              data: {
+                ratingCount: newRatingCount,
+                ratingValue: newRatingValue,
+                ratingAvg: newRatingAvg,
+              },
+            });
+          }
+
+          return {
+            success: true,
+            message: existingRating ? "Rating updated" : "Rating added",
+            stats: {
+              ratingCount: story.ratingCount + (existingRating ? 0 : 1),
+              ratingValue:
+                story.ratingValue +
+                (existingRating ? rating - existingRating.rating : rating),
+              ratingAvg:
+                (story.ratingValue +
+                  (existingRating ? rating - existingRating.rating : rating)) /
+                (story.ratingCount + (existingRating ? 0 : 1)),
+            },
+          };
+        });
+      } catch (err) {
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong while processing the rating",
+        });
+      }
+    }),
 });
 
 export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;

@@ -292,6 +292,21 @@ export const userRouter = createTRPCRouter({
       balance,
     };
   }),
+
+  getRating: protectedProcedure
+    .input(z.object({ storyId: z.string().cuid() }))
+    .query(async ({ ctx, input }) => {
+      const { storyId } = input;
+
+      const rating = await ctx.postgresDb.rating.findFirst({
+        where: {
+          storyId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      return rating;
+    }),
 });
 
 export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;

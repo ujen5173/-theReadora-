@@ -1,22 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-type Story = {
-  id: string;
-  slug: string;
-  title: string;
-  votes: number;
-  readCount: number;
-  readingTime: number;
-  isMature: boolean;
-  thumbnail: string;
-  isCompleted: boolean;
-  genreSlug: string;
-  chapterCount: number;
-  author: {
-    name: string;
-  };
-};
+import type { TCard } from "~/app/_components/shared/novel-card";
 
 export type ExtendedUser = {
   id: string;
@@ -27,7 +11,7 @@ export type ExtendedUser = {
   createdAt: Date;
   followingCount: number;
   followersCount: number;
-  stories: Story[];
+  stories: TCard[];
   premium: boolean;
 };
 

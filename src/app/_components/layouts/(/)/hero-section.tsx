@@ -1,5 +1,6 @@
 import { BookMarked, SquarePen } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { auth } from "~/server/auth";
@@ -253,17 +254,21 @@ const HeroSection = async () => {
           </p>
 
           <div className="flex items-center gap-2 mt-10">
-            <Button
-              variant={"default"}
-              icon={BookMarked}
-              iconStyle="rotate-12"
-              iconPlacement="left"
-            >
-              Start Reading
-            </Button>
-            <Button variant={"secondary"} icon={SquarePen}>
-              Start Writing
-            </Button>
+            <Link href="/search">
+              <Button
+                variant={"default"}
+                icon={BookMarked}
+                iconStyle="rotate-12"
+                iconPlacement="left"
+              >
+                Start Reading
+              </Button>
+            </Link>
+            <Link href="/write">
+              <Button variant={"secondary"} icon={SquarePen}>
+                Start Writing
+              </Button>
+            </Link>
           </div>
         </div>
 
