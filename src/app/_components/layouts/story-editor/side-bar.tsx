@@ -109,7 +109,8 @@ const StoryEditorSidebar = () => {
                 {story?.chapters.map((chapter) => (
                   <div key={chapter.id} className="flex min-w-0">
                     <p className="w-full text-sm font-semibold text-slate-600 hover:bg-slate-100 p-2 rounded-md border border-border cursor-pointer transition-colors truncate">
-                      Chapter {chapter.chapterNumber}: {chapter.title}
+                      {chapter.chapterNumber.toString().padStart(2, "0")}:{" "}
+                      {chapter.title}
                     </p>
                   </div>
                 ))}

@@ -14,11 +14,12 @@
 | Filter Issue       | Remove the filters stored in somewhere     | Medium   |                                      | Medium       | ✅     |
 | Monetization       | Premium subscription flow                  | High     | Stripe integration                   | Medium       | ✅     |
 | Content Access     | Locked chapters (premium gating)           | Medium   | Unlock via subscription              | Low          | ✅     |
+| Engagement         | Rating                                     | Medium   | One rating per user/story            | Low          | ✅     |
+| Core Logic         | Schedule chapter publish                   | Medium   |                                      | Medium       | ✅     |
+| UI/UX Improvements | Responsive design                          | Extreme  |                                      | Low          |        |
+| Perf. Improvements | Improve page load                          | Extreme  | Data fetching is taking too long     | Medium       |        |
 | Monetization       | Coin purchase flow                         | High     | Stripe, eSewa and Khalti integration | Medium       |        |
-| Engagement         | Rating                                     | Medium   | One rating per user/story            | Low          |        |
-| Ratings            | Story rating system (1–5 stars)            | Low      |                                      | Medium       |        |
 | Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
-| Core Logic         | Schedule chapter publish                   | Medium   |                                      | Medium       |        |
 | Engagement         | Comments on stories                        | Medium   |                                      | Medium       |        |
 | Content Mgmt       | Edit stories and chapters                  | Medium   | Revision history                     | Medium       |        |
 | Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         |        |
@@ -29,7 +30,6 @@
 | Chapter Actions    | Likes, comments, reads per chapter         | Low      | Engagement metrics                   | Extreme      |        |
 | Pagination         | Chapter Chunk navigation using page params | Low      | e.g., /?page\_id=?<number>           | Extreme/High |        |
 | UI/UX Improvements | Improve chapter reading experience         | High     | Reading experience is not quite good | Medium       |        |
-| UI/UX Improvements | Responsive design                          | Extreme  |                                      | Low          |        |
 ---
 
 2. BUG REPORT QUEUE

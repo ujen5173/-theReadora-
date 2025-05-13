@@ -241,6 +241,7 @@ export const storyRouter = createTRPCRouter({
                 readershipAnalytics: true,
                 createdAt: true,
                 isLocked: true,
+                scheduledFor: true,
                 price: true,
               },
               orderBy: {
@@ -480,6 +481,9 @@ export const storyRouter = createTRPCRouter({
                 title: true,
                 chapterNumber: true,
                 createdAt: true,
+              },
+              orderBy: {
+                chapterNumber: "asc",
               },
             },
           },

@@ -1,5 +1,4 @@
 "use client";
-
 import {
   closestCenter,
   DndContext,
@@ -43,7 +42,12 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { api } from "~/trpc/react";
 import { CHAPTER_PRICE_POOL } from "~/utils/constants";
-import { formatDate, getReadingTimeText, parseMetrics } from "~/utils/helpers";
+import {
+  formatDate,
+  getReadingTimeText,
+  isChapterScheduled,
+  parseMetrics,
+} from "~/utils/helpers";
 
 interface Chapter {
   id: string;
@@ -52,6 +56,7 @@ interface Chapter {
   chapterNumber: number;
   metrics: JsonValue;
   isLocked: boolean;
+  scheduledFor: Date | null;
   price: ChapterPricePool | null;
 }
 
@@ -78,11 +83,15 @@ const SortableChapter = ({
     transition,
   };
 
+  if (chapter.scheduledFor && !isAuthor) {
+    return null;
+  }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-white border border-border rounded-lg p-4 hover:bg-slate-50 transition-colors"
+      className="relative bg-white border border-border rounded-lg p-4 hover:bg-slate-50 transition-colors"
     >
       <div className="flex justify-between items-center gap-2">
         {isAuthor && (
@@ -126,9 +135,16 @@ const SortableChapter = ({
                   </span>
                 </span>
               )}
-              <span className="text-sm text-slate-500 font-semibold">
-                {formatDate(chapter.createdAt)}
-              </span>
+              {chapter.scheduledFor &&
+              !isChapterScheduled(chapter.scheduledFor) ? (
+                <span className="text-sm text-primary underline font-semibold">
+                  Scheduled for {formatDate(chapter.scheduledFor)}
+                </span>
+              ) : (
+                <span className="text-sm text-slate-500 font-semibold">
+                  {formatDate(chapter.createdAt)}
+                </span>
+              )}
               <RecordIcon className="size-1 text-slate-500 fill-slate-500" />
               <span className="text-sm text-slate-500 font-semibold">
                 {getReadingTimeText(metrics.readingTime)}
@@ -244,13 +260,26 @@ const TableOfContent = ({
     }
   };
 
+  const [addingChapter, setAddingChapter] = useState(false);
+
+  const handleAddChapter = () => {
+    setAddingChapter(true);
+  };
+
   return (
     <div className="mt-10 border-t border-border pt-6">
       <div className="flex items-center mb-4 justify-between">
         <h2 className="text-xl font-bold text-slate-800">Table of Contents</h2>
         {isAuthor && (
-          <Link href={`/write/story-editor/${storyId}`}>
-            <Button icon={Plus} variant="outline" size="sm">
+          <Link prefetch href={`/write/story-editor/${storyId}`}>
+            <Button
+              icon={addingChapter ? Loader2 : Plus}
+              onClick={handleAddChapter}
+              variant="outline"
+              size="sm"
+              iconStyle={addingChapter ? "animate-spin" : ""}
+              disabled={addingChapter}
+            >
               Add Chapter
             </Button>
           </Link>

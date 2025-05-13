@@ -3,17 +3,19 @@ import "~/styles/globals.css";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import HolyLoader from "holy-loader";
+import { SessionProvider } from "next-auth/react";
+import { Suspense } from "react";
+import { Toaster } from "sonner";
 import { TRPCReactProvider } from "~/trpc/react";
+import { generateSEOMetadata } from "~/utils/site";
+import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
+import RootLayoutClient from "./_components/layouts/root-layout-client";
 import { RootContext } from "./_components/root";
 import Footer from "./_components/shared/footer";
-import { Toaster } from "sonner";
-import { generateSEOMetadata } from "~/utils/site";
 import TailwindIndicator from "./_components/shared/tailwind-size-indicator";
-import { SessionProvider } from "next-auth/react";
-import RootLayoutClient from "./_components/layouts/root-layout-client";
-import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
-import { Suspense } from "react";
-import HolyLoader from "holy-loader";
 
 export const metadata: Metadata = generateSEOMetadata({});
 
@@ -35,6 +37,8 @@ export default function RootLayout({
             <RootContext>
               <RootLayoutClient>
                 <CSPostHogProvider>
+                  <Analytics />
+                  <SpeedInsights />
                   <Suspense>
                     <TailwindIndicator />
                     {/* <NextTopLoader height={5} color="#e11d48" /> */}

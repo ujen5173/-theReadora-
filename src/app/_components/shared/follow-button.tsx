@@ -22,6 +22,7 @@ const FollowButton = ({
     {
       enabled: !!followingTo?.id,
       refetchOnWindowFocus: false,
+      retry: false,
     }
   );
 
@@ -60,7 +61,6 @@ const FollowButton = ({
       await mutateAsync({ followingId: followingTo.id });
     } catch (error) {
       toast.error("Error following user");
-      setIsFollowing((prev) => !prev);
     }
   };
 

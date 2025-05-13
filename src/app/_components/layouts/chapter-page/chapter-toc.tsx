@@ -12,10 +12,13 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
 import { useChapterStore } from "~/store/useChapter";
+import { useUserStore } from "~/store/userStore";
+import { isChapterScheduled } from "~/utils/helpers";
 import ReadingListDialog from "../../shared/reading-list";
 
 const ChapterTOC = () => {
   const { story, chapter: currentChapter } = useChapterStore();
+  const { user } = useUserStore();
 
   return (
     <section className="w-full border-b border-gray-200">
@@ -66,6 +69,16 @@ const ChapterTOC = () => {
               <div className="py-1.5 max-h-[50vh] overflow-y-auto">
                 {story?.chapters.map((chapter) => {
                   const isActive = chapter.id === currentChapter?.id;
+                  const isAuthor = user?.id === story?.author.id;
+
+                  if (
+                    chapter.scheduledFor &&
+                    !isAuthor &&
+                    !isChapterScheduled(chapter.scheduledFor)
+                  ) {
+                    return null;
+                  }
+
                   return (
                     <Link key={chapter.id} href={`/chapter/${chapter.slug}`}>
                       <DropdownMenuItem

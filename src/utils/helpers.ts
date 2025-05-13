@@ -51,14 +51,12 @@ export function formatBytes(
 
 export const mongoObjectId = () => {
   const timestamp = ((new Date().getTime() / 1000) | 0).toString(16);
-  return (
-    timestamp +
-    "xxxxxxxxxxxxxxxx"
-      .replace(/[x]/g, function () {
-        return ((Math.random() * 16) | 0).toString(16);
-      })
-      .toLowerCase()
-  );
+  return timestamp +
+  "xxxxxxxxxxxxxxxx"
+    .replace(/[x]/g, function () {
+      return ((Math.random() * 16) | 0).toString(16);
+    })
+    .toLowerCase();
 };
 
 export const getReadingTimeText = (readingTime: number) => {
@@ -105,4 +103,11 @@ export const parseReadershipAnalytics = (
     console.error("Error parsing metrics:", error);
     return READERSHIP_ANALYTICS_DEFAULT_VALUES;
   }
+};
+
+export const isChapterScheduled = (
+  scheduledFor: Date | null | undefined
+): boolean => {
+  if (!scheduledFor) return false;
+  return new Date() >= new Date(scheduledFor);
 };

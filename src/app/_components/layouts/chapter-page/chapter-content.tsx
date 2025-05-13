@@ -1,5 +1,5 @@
 "use client";
-
+import { formatDate } from "date-fns";
 import { BookOpen01Icon, BubbleChatIcon, RecordIcon } from "hugeicons-react";
 import { ArrowLeftIcon, ArrowRightIcon, EyeIcon, PlusIcon } from "lucide-react";
 import Image from "next/image";
@@ -8,18 +8,52 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import LockedChapter from "~/app/_components/shared/locked-chapter";
 import { Button } from "~/components/ui/button";
 import { useChapterStore } from "~/store/useChapter";
+import { useUserStore } from "~/store/userStore";
 import "~/styles/editor.css";
 import { api } from "~/trpc/react";
-import { parseMetrics, parseReadershipAnalytics } from "~/utils/helpers";
+import {
+  isChapterScheduled,
+  parseMetrics,
+  parseReadershipAnalytics,
+} from "~/utils/helpers";
 
 const ChapterContent = ({
   userUnlockedChapter,
 }: {
   userUnlockedChapter: boolean;
 }) => {
-  const { chapter } = useChapterStore();
+  const { story, chapter } = useChapterStore();
+  const { user } = useUserStore();
 
   if (!chapter) return null;
+
+  if (
+    chapter.scheduledFor &&
+    !isChapterScheduled(chapter.scheduledFor) &&
+    user?.id !== story?.author.id
+  ) {
+    return (
+      <div className="w-full bg-slate-100 border-b border-border">
+        <div className="max-w-4xl border-x border-border bg-white px-6 mx-auto py-20">
+          <div className="text-center space-y-4">
+            <h1 className="text-2xl font-bold text-slate-800">
+              Chapter Coming Soon
+            </h1>
+            <p className="text-slate-600">
+              This chapter will be published on{" "}
+              {new Date(chapter.scheduledFor).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (chapter.isLocked && !userUnlockedChapter) {
     return (
@@ -45,7 +79,8 @@ const ChapterContent = ({
 export default ChapterContent;
 
 const ChapterMetaData = () => {
-  const { chapter } = useChapterStore();
+  const { story, chapter } = useChapterStore();
+  const { user } = useUserStore();
 
   const metrics = parseMetrics(chapter?.metrics);
   const readershipAnalytics = parseReadershipAnalytics(
@@ -79,19 +114,29 @@ const ChapterMetaData = () => {
         )}
       </div>
 
-      {/* Last Updated */}
-      <div className="text-center text-sm text-slate-500">
-        Last updated{" "}
-        <span className="underline-offset-2 text-slate-500 font-semibold underline">
-          {chapter?.updatedAt
-            ? new Date(chapter.updatedAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            : ""}
-        </span>
-      </div>
+      {story?.author.id === user?.id &&
+      chapter?.scheduledFor &&
+      !isChapterScheduled(chapter.scheduledFor) ? (
+        <div className="text-center text-sm text-slate-500">
+          Scheduled for{" "}
+          <span className="underline-offset-2 text-primary font-semibold underline">
+            {formatDate(chapter.scheduledFor, "PPp")}
+          </span>
+        </div>
+      ) : (
+        <div className="text-center text-sm text-slate-500">
+          Last updated{" "}
+          <span className="underline-offset-2 text-slate-500 font-semibold underline">
+            {chapter?.updatedAt
+              ? new Date(chapter.updatedAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              : ""}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

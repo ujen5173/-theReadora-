@@ -16,6 +16,7 @@ export type useChapterChapter = {
   metrics: JsonValue;
   readershipAnalytics: JsonValue;
   mongoContentID: string[];
+  scheduledFor: Date | null;
 };
 
 export type useChapterUser = {
@@ -39,6 +40,7 @@ export type useChapterStory = {
     chapterNumber: number;
     isLocked: boolean;
     price: keyof typeof CHAPTER_PRICE_POOL | null;
+    scheduledFor: Date | null;
   }[];
 };
 

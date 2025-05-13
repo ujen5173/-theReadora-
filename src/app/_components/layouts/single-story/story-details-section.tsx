@@ -33,6 +33,7 @@ type Chapter = {
   readershipAnalytics: JsonValue;
   isLocked: boolean;
   price: ChapterPricePool | null;
+  scheduledFor: Date | null;
 };
 
 interface StoryDetailsSectionProps {

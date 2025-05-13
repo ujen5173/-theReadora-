@@ -28,6 +28,7 @@ export const chapterRouter = createTRPCRouter({
         storyId: z.string().nullable(),
         isLocked: z.boolean().optional(),
         price: z.nativeEnum(ChapterPricePool).nullable(),
+        scheduledFor: z.date().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -98,6 +99,7 @@ export const chapterRouter = createTRPCRouter({
             }),
             isLocked: input.isLocked,
             price: input.price,
+            scheduledFor: input.scheduledFor,
             mongoContentID: [mongoContentID.insertedId.toString()],
           },
         });
@@ -205,6 +207,10 @@ export const chapterRouter = createTRPCRouter({
                     chapterNumber: true,
                     isLocked: true,
                     price: true,
+                    scheduledFor: true,
+                  },
+                  orderBy: {
+                    chapterNumber: "asc",
                   },
                 },
                 chapterCount: true,

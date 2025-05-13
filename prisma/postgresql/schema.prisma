@@ -12,6 +12,7 @@ enum StoryStatus {
     PUBLISHED
     DELETED
     PRIVATE
+    SCHEDULED
 }
 
 enum PurchaseMedium {
@@ -234,6 +235,8 @@ model Chapter {
     price    ChapterPricePool?
 
     unlockedUsers UnlockedChapter[]
+
+    scheduledFor DateTime?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
