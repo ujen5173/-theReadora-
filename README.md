@@ -2,6 +2,8 @@
 
 Readora is a storytelling platform where users can read, write, and share stories across various genres. It offers a clean writing experience for authors and an immersive reading interface for users.
 
+![Readora Homepage](/public/readora-landing-page.png)
+
 Build as a passion project.
 
 > **Warning**
@@ -52,10 +54,27 @@ Then, fill in the required environment variables in the `.env` file. You can fin
 pnpm postinstall
 ```
 
-### 4. Run the App Locally
+### 5. Run the App Locally
 
 ```bash
 pnpm dev
 ```
+
+## 🚀 Features
+
+- 📚 Rich text editor for story writing
+- 📱 Responsive design for all devices
+- 🔒 Secure authentication system
+- 📊 User dashboard with reading progress
+- 🎨 Modern and clean UI
+- 🔍 Advanced search and filtering
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Feel free to open issues or contribute. Cheers 🍻
