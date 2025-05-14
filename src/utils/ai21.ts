@@ -96,10 +96,7 @@ export const generateChapter = async (genre: string) => {
           fs.mkdirSync(CONFIG.outputDir, { recursive: true });
         }
       } catch (error) {
-        throw new AI21Error(
-          `Failed to create output directory: ${error.message}`,
-          "FS_ERROR"
-        );
+        throw new AI21Error(`Failed to create output directory`, "FS_ERROR");
       }
 
       try {
@@ -153,7 +150,6 @@ export const generateChapter = async (genre: string) => {
         /"content":\s*"((?:[^"\\]|\\.)*)"/
       );
       if (!contentMatch) {
-        console.error("Cleaned content:", cleanedContent);
         throw new AI21Error(
           "Could not find content field in response",
           "INVALID_CONTENT"
@@ -178,7 +174,6 @@ export const generateChapter = async (genre: string) => {
       try {
         parsedContent = JSON.parse(fixedContent);
       } catch (error) {
-        console.error("Fixed content:", fixedContent);
         throw new AI21Error("Invalid JSON response from AI", "INVALID_JSON");
       }
 
@@ -225,7 +220,7 @@ export const generateChapter = async (genre: string) => {
       retries++;
       if (retries === CONFIG.maxRetries) {
         throw new AI21Error(
-          `Failed to generate chapter after ${CONFIG.maxRetries} attempts: ${error.message}`,
+          `Failed to generate chapter after ${CONFIG.maxRetries} attempts.`,
           "MAX_RETRIES_EXCEEDED"
         );
       }
