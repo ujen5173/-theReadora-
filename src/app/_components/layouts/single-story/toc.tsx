@@ -28,6 +28,7 @@ import {
   Plus,
   Save,
   Trash2,
+  Unlock,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -40,6 +41,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { CHAPTER_PRICE_POOL } from "~/utils/constants";
 import {
@@ -69,9 +71,13 @@ interface TableOfContentProps {
 const SortableChapter = ({
   chapter,
   isAuthor,
+  unlockedChapters,
+  isLoadingLockedChapters,
 }: {
   chapter: Chapter;
   isAuthor: boolean;
+  unlockedChapters: string[];
+  isLoadingLockedChapters: boolean;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: chapter.id });
@@ -91,39 +97,55 @@ const SortableChapter = ({
     <div
       ref={setNodeRef}
       style={style}
-      className="relative bg-white border border-border rounded-lg p-4 hover:bg-slate-50 transition-colors"
+      className="relative bg-white border border-border rounded-lg p-3 sm:p-4 hover:bg-slate-50  transition-colors"
     >
       <div className="flex justify-between items-center gap-2">
         {isAuthor && (
           <Button
             variant="ghost"
             size="icon"
-            className="border border-transparent transition hover:border-slate-300 h-8 w-8"
+            className="hidden sm:block border border-transparent transition hover:border-slate-300 h-7 w-7 sm:h-8 sm:w-8"
             {...attributes}
             {...listeners}
           >
-            <GripVertical className="size-5 text-slate-400" />
+            <GripVertical className="size-4 sm:size-5 text-slate-400" />
           </Button>
         )}
 
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <Link
             href={`/chapter/${chapter.id}`}
-            className="flex justify-between items-center"
+            className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2"
           >
-            <div className="flex items-center gap-2">
-              <span className="font-medium text-slate-700">
+            <div className="flex flex-1 items-center gap-1 sm:gap-2 min-w-0">
+              <span className="block sm:hidden font-medium truncate text-sm text-slate-700">
+                0{chapter.chapterNumber}:
+              </span>
+              <span className="hidden sm:block font-medium text-sm sm:text-base text-slate-700 whitespace-nowrap">
                 Chapter {chapter.chapterNumber}:
               </span>
-              <span className="text-slate-800 font-semibold">
+              <span className="text-slate-800 font-semibold text-sm sm:text-base truncate">
                 {chapter.title}
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               {chapter.isLocked && (
-                <span className="px-2 py-1 mr-2 rounded-md bg-primary/20 text-sm text-primary font-semibold flex items-center gap-1">
+                <span
+                  className={cn(
+                    "px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border text-xs sm:text-sm font-semibold flex items-center gap-1",
+                    unlockedChapters.includes(chapter.id)
+                      ? "bg-green-100 text-green-600 border-green-300"
+                      : "bg-primary/20 text-primary border-primary"
+                  )}
+                >
                   <span className="text-primary">
-                    <Lock className="size-4" />
+                    {isLoadingLockedChapters ? (
+                      <Loader2 className="animate-spin size-2.5 sm:size-3" />
+                    ) : unlockedChapters.includes(chapter.id) ? (
+                      <Unlock className="size-3 sm:size-4 text-green-600" />
+                    ) : (
+                      <Lock className="size-3 sm:size-4" />
+                    )}
                   </span>
                   <span>
                     {
@@ -137,19 +159,21 @@ const SortableChapter = ({
               )}
               {chapter.scheduledFor &&
               !isChapterScheduled(chapter.scheduledFor) ? (
-                <span className="text-sm text-primary underline font-semibold">
+                <span className="text-xs sm:text-sm text-primary underline font-semibold">
                   Scheduled for {formatDate(chapter.scheduledFor)}
                 </span>
               ) : (
-                <span className="text-sm text-slate-500 font-semibold">
+                <span className="text-xs sm:text-sm text-slate-500 font-semibold">
                   {formatDate(chapter.createdAt)}
                 </span>
               )}
-              <RecordIcon className="size-1 text-slate-500 fill-slate-500" />
-              <span className="text-sm text-slate-500 font-semibold">
-                {getReadingTimeText(metrics.readingTime)}
-              </span>
-              <ChevronRight className="size-5 text-slate-500" />
+              <div className="flex items-center gap-1">
+                <RecordIcon className="size-1 text-slate-500 fill-slate-500" />
+                <span className="text-xs sm:text-sm text-slate-500 font-semibold">
+                  {getReadingTimeText(metrics.readingTime)}
+                </span>
+              </div>
+              <ChevronRight className="size-4 sm:size-5 text-slate-500" />
             </div>
           </Link>
         </div>
@@ -160,9 +184,9 @@ const SortableChapter = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="border border-transparent transition hover:border-slate-300 h-8 w-8"
+                className="border border-transparent transition hover:border-slate-300 h-7 w-7 sm:h-8 sm:w-8"
               >
-                <MoreVertical className="size-4" />
+                <MoreVertical className="size-3.5 sm:size-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
@@ -266,10 +290,22 @@ const TableOfContent = ({
     setAddingChapter(true);
   };
 
+  const { data, isLoading } = api.user.hasUserUnlockedChapter.useQuery(
+    {
+      chapterIds: chapters.map((chapter) => chapter.id),
+    },
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+
   return (
-    <div className="mt-10 border-t border-border pt-6">
-      <div className="flex items-center mb-4 justify-between">
-        <h2 className="text-xl font-bold text-slate-800">Table of Contents</h2>
+    <div className="mt-6 sm:mt-8 border-t border-border pt-4 sm:pt-6">
+      <div className="flex flex-col sm:flex-row sm:items-center mb-4 gap-3 sm:gap-0 sm:justify-between">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-800">
+          Table of Contents
+        </h2>
         {isAuthor && (
           <Link prefetch href={`/write/story-editor/${storyId}`}>
             <Button
@@ -279,6 +315,7 @@ const TableOfContent = ({
               size="sm"
               iconStyle={addingChapter ? "animate-spin" : ""}
               disabled={addingChapter}
+              className="w-full sm:w-auto"
             >
               Add Chapter
             </Button>
@@ -303,6 +340,8 @@ const TableOfContent = ({
                     key={chapter.id}
                     chapter={chapter}
                     isAuthor={isAuthor}
+                    unlockedChapters={data ?? []}
+                    isLoadingLockedChapters={isLoading}
                   />
                 ))}
               </div>
@@ -311,53 +350,55 @@ const TableOfContent = ({
 
           {/* Order Update Section */}
           {hasOrderChanged && (
-            <div className="mt-6 border-t border-border pt-6 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="size-10 rounded-full border border-amber-200 bg-amber-100 flex items-center justify-center">
-                  <LeftToRightListNumberIcon className="size-5 text-amber-600" />
+            <div className="mt-4 sm:mt-6 border-t border-border pt-4 sm:pt-6">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="size-8 sm:size-10 rounded-full border border-amber-200 bg-amber-100 flex items-center justify-center">
+                    <LeftToRightListNumberIcon className="size-4 sm:size-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-sm sm:text-base text-slate-800">
+                      Chapter Order Changed
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600">
+                      Would you like to save the new chapter order?
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-medium text-slate-800">
-                    Chapter Order Changed
-                  </h3>
-                  <p className="text-sm text-slate-600">
-                    Would you like to save the new chapter order?
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleCancel}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  icon={X}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    updateChapterOrder(chapters);
-                    setHasOrderChanged(false);
-                  }}
-                  disabled={status === "pending"}
-                  className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
-                  icon={status !== "pending" ? Save : undefined}
-                >
-                  {status === "pending" && (
-                    <Loader2 className="size-4 animate-spin" />
-                  )}
-                  {status === "pending" ? "Saving..." : "Save Order"}
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleCancel}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 flex-1 sm:flex-none"
+                    icon={X}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      updateChapterOrder(chapters);
+                      setHasOrderChanged(false);
+                    }}
+                    disabled={status === "pending"}
+                    className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90 flex-1 sm:flex-none"
+                    icon={status !== "pending" ? Save : undefined}
+                  >
+                    {status === "pending" && (
+                      <Loader2 className="size-4 animate-spin" />
+                    )}
+                    {status === "pending" ? "Saving..." : "Save Order"}
+                  </Button>
+                </div>
               </div>
             </div>
           )}
         </>
       ) : (
-        <div className="h-30 flex items-center justify-center">
-          <p className="text-slate-700 font-medium text-lg text-center">
+        <div className="h-30 flex items-center justify-center py-8">
+          <p className="text-slate-700 font-medium text-base sm:text-lg text-center">
             Oops! Chapters are not written yet.
           </p>
         </div>

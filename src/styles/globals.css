@@ -14,6 +14,8 @@
   --animate-slide-up-delay-2: slide-up 60s linear infinite -12.5s;
   --animate-slide-up-delay-3: slide-up 60s linear infinite -18.75s;
 
+  --breakpoint-xs: 36rem;
+
   @keyframes shine {
     0% {
       background-position: 200% 0;

@@ -127,19 +127,19 @@ const Write = () => {
     <>
       <Header />
 
-      <div className="max-w-[1240px] border-b border-border mx-auto px-4 py-8">
-        <h1 className="text-2xl md:text-3xl font-semibold mb-6 text-primary">
+      <div className="max-w-[1240px] border-b border-border mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-primary">
           Submit your story
         </h1>
 
-        <div className="flex gap-12">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
           {/* Thumbnail Uploader */}
-          <div className="max-w-xs">
-            <div className="space-y-2">
-              <Label className="text-base text-slate-700 font-semibold inline-block">
+          <div className="w-full lg:max-w-xs">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label className="text-sm sm:text-base text-slate-700 font-semibold inline-block">
                 Book Cover
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Upload a high-quality cover image for your book. Recommended
                 size: <span className="font-semibold">800x1200 pixels.</span>
               </p>
@@ -150,7 +150,7 @@ const Write = () => {
               onValueChange={setFile}
               onUpload={handleUpload}
               onRemove={handleRemove}
-              className="max-h-[450px] mt-2"
+              className="max-h-[350px] sm:max-h-[450px] mt-2"
               progresses={uploadProgress}
               accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
               maxSize={4 * 1024 * 1024}
@@ -162,7 +162,7 @@ const Write = () => {
             />
 
             {uploadedFile && (
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
                 Click the upload area or drag & drop to replace the current
                 cover
               </p>

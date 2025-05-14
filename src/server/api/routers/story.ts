@@ -2,15 +2,25 @@ import type { Language } from "@prisma/client";
 import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 
+import readingTime from "reading-time";
+import { THUMBNAILS } from "~/data/thumbnails";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { LANGUAGES, cuidRegex } from "~/utils/constants";
+import { generateChapter } from "~/utils/ai21";
+import {
+  LANGUAGES,
+  METRICS_DEFAULT_VALUES,
+  READERSHIP_ANALYTICS_DEFAULT_VALUES,
+  chapterCollectionName,
+  chunkCollectionName,
+  cuidRegex,
+} from "~/utils/constants";
 import { GENRES } from "~/utils/genre";
-import { makeSlug } from "~/utils/helpers";
-
+import { makeSlug, mongoObjectId } from "~/utils/helpers";
+import { processChapterContent } from "./chapter";
 export const NCardEntity = {
   id: true,
   slug: true,
@@ -41,7 +51,9 @@ const filterSchema = z.object({
   maxChapterCount: z.number().optional(),
   minViewsCount: z.number().optional(),
   maxViewsCount: z.number().optional(),
-  publishedAt: z.string().optional(),
+  publishedAt: z
+    .enum(["LAST_WEEK", "LAST_MONTH", "LAST_YEAR", "ALL_TIME"])
+    .optional(),
   tags: z.array(z.string()).optional(),
 });
 
@@ -583,8 +595,6 @@ export const storyRouter = createTRPCRouter({
 
         const { genre, thumbnail, ...rest } = input;
 
-        console.log({ genre });
-
         const story = await ctx.postgresDb.story.create({
           data: {
             ...rest,
@@ -714,6 +724,123 @@ export const storyRouter = createTRPCRouter({
         });
       }
     }),
+
+  AIContentGeneration: publicProcedure.mutation(async ({ ctx }) => {
+    try {
+      const users = await ctx.postgresDb.user.findMany({
+        where: {
+          usedForAIContentGeneration: true,
+        },
+      });
+
+      if (users.length === 0) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No users available for AI content generation",
+        });
+      }
+
+      const luckyUser = users[Math.floor(Math.random() * users.length)];
+
+      const genres = await ctx.postgresDb.genres.findMany();
+      const randomGenre = genres[Math.floor(Math.random() * genres.length)];
+
+      const generatedContent = await generateChapter(randomGenre!.name);
+
+      const story = await ctx.postgresDb.story.create({
+        data: {
+          title: generatedContent.storyTitle,
+          slug: makeSlug(generatedContent.storyTitle),
+          synopsis: generatedContent.storySynopsis,
+          genreSlug: randomGenre!.slug,
+          authorId: luckyUser!.id,
+          hasAiContent: true,
+          language: "English",
+          thumbnail: getThumbnail(),
+          thumbnailId: "default-thumbnail-id",
+          readingTime: 0,
+          tags: [...generatedContent.storyTags, "AI Generated"],
+          storyStatus: "PUBLISHED",
+        },
+      });
+
+      const chunks = processChapterContent(generatedContent.content);
+      const objectId = mongoObjectId();
+
+      const mongoContentID = await ctx.mongoDb
+        .collection(chapterCollectionName)
+        .insertOne({
+          id: objectId,
+          storyId: story.id,
+          chapterNumber: 1,
+          version: 1,
+          createdAt: new Date(),
+        });
+
+      await Promise.all(
+        chunks.map((chunk, index) =>
+          ctx.mongoDb.collection(chunkCollectionName).insertOne({
+            chapterId: mongoContentID.insertedId.toString(),
+            content: chunk.content,
+            index: index,
+          })
+        )
+      );
+
+      const isLocked = Math.random() > 0.5;
+
+      const chapter = await ctx.postgresDb.chapter.create({
+        data: {
+          title: generatedContent.title,
+          slug: makeSlug(generatedContent.title),
+          chapterNumber: 1,
+          storyId: story.id,
+          isLocked,
+          price: isLocked ? "POOL_50" : undefined,
+          metrics: JSON.stringify({
+            ...METRICS_DEFAULT_VALUES,
+            wordCount: chunks.reduce((acc, chunk) => acc + chunk.wordCount, 0),
+            readingTime: readingTime(generatedContent.content).time,
+          }),
+          readershipAnalytics: JSON.stringify(
+            READERSHIP_ANALYTICS_DEFAULT_VALUES
+          ),
+          mongoContentID: [mongoContentID.insertedId.toString()],
+        },
+      });
+
+      await ctx.postgresDb.story.update({
+        where: { id: story.id },
+        data: {
+          chapterCount: 1,
+          readingTime: readingTime(generatedContent.content).time,
+        },
+      });
+
+      return {
+        success: true,
+        storyId: story.id,
+        chapterId: chapter.id,
+      };
+    } catch (err) {
+      console.error("Error in AI content generation:", err);
+      if (err instanceof TRPCError) {
+        throw err;
+      }
+
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong while generating content using AI",
+      });
+    }
+  }),
 });
 
 export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;
+export type T_byID_or_slug = inferProcedureOutput<
+  typeof storyRouter.byID_or_slug
+>;
+
+const getThumbnail = (): string => {
+  return THUMBNAILS[Math.floor(Math.random() * THUMBNAILS.length)]!;
+};

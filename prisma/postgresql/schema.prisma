@@ -85,6 +85,8 @@ model User {
     followingCount Int @default(0)
     followersCount Int @default(0)
 
+    usedForAIContentGeneration Boolean? @default(false)
+
     followers Follow[] @relation("Follower")
     following Follow[] @relation("Following")
 
@@ -301,6 +303,7 @@ model Readinglist {
 
     stories ReadinglistStory[]
 
+    @@index([userId])
     @@map("readinglist")
 }
 

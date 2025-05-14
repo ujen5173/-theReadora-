@@ -54,6 +54,7 @@ const ReadingListDialog = ({
   const { mutateAsync, status: createStatus } = api.list.create.useMutation();
   const { mutateAsync: updateMutate, status: updateStatus } =
     api.list.update.useMutation();
+
   const searchQuery$ = api.story.simpleSearch.useQuery(
     { query: searchQuery },
     {

@@ -1,4 +1,5 @@
 "use client";
+
 import { BookmarkCheck02Icon } from "hugeicons-react";
 import { Loader2Icon } from "lucide-react";
 import { useState } from "react";
@@ -20,7 +21,14 @@ import { api } from "~/trpc/react";
 import ReadingListDialog from "./reading-list";
 
 const AddToList = ({ storyId }: { storyId: string }) => {
-  const { data: lists, isLoading, refetch } = api.list.getList.useQuery();
+  const {
+    data: lists,
+    isLoading,
+    refetch,
+  } = api.list.getList.useQuery(undefined, {
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
   const { mutateAsync, status } = api.list.addToList.useMutation();
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const [open, setOpen] = useState(false);

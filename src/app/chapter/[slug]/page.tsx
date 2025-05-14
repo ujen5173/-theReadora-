@@ -25,11 +25,13 @@ const SingleChapterPage = async ({
 
   return (
     <ChapterWrapper details={chapter}>
-      <IncreaseReadCount />
-      <ChapterTOC />
-      <ChapterContent userUnlockedChapter={userUnlockedChapter} />
-      {/* <ChapterFooter />
-      <RecommendedStories /> */}
+      <div className="min-h-screen flex flex-col">
+        <IncreaseReadCount />
+        <ChapterTOC />
+        <ChapterContent userUnlockedChapter={userUnlockedChapter} />
+        {/* <ChapterFooter />
+        <RecommendedStories /> */}
+      </div>
     </ChapterWrapper>
   );
 };

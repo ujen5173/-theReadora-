@@ -22,43 +22,45 @@ const ChapterTOC = () => {
 
   return (
     <section className="w-full border-b border-gray-200">
-      <div className="flex items-center justify-between px-4 gap-6">
-        <div className="border-r border-border pr-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-3 sm:px-4 gap-3 sm:gap-6 py-2 sm:py-0">
+        <div className="w-full sm:w-auto sm:border-r sm:border-border sm:pr-4">
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div className="w-80 flex items-center justify-between gap-4">
-                <div className="flex gap-2 flex-1 items-center">
+            <DropdownMenuTrigger className="w-full">
+              <div className="w-full sm:w-80 flex items-center justify-between gap-2 sm:gap-4">
+                <div className="flex gap-2 flex-1 items-center min-w-0">
                   {story?.thumbnail ? (
                     <Image
                       src={story?.thumbnail}
                       alt={story?.title}
                       width={40}
                       height={36}
-                      className="aspect-[1/1.5] rounded-sm border border-gray-200"
+                      className="aspect-[1/1.5] rounded-sm border border-gray-200 flex-shrink-0"
                     />
                   ) : (
-                    <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-gray-200">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-gray-200 flex-shrink-0">
                       <BookOpenIcon className="h-4 w-4" />
                     </div>
                   )}
-                  <div className="flex flex-col items-start">
-                    <p className="text-base font-semibold">{story?.title}</p>
+                  <div className="flex flex-col items-start min-w-0">
+                    <p className="text-sm sm:text-base font-semibold truncate w-full">
+                      {story?.title}
+                    </p>
                     <p className="text-xs text-gray-500">
                       by @{story?.author.username}
                     </p>
                   </div>
                 </div>
-                <ChevronDownIcon className="w-4 h-4" />
+                <ChevronDownIcon className="w-4 h-4 flex-shrink-0" />
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80 p-0 mx-4">
+            <DropdownMenuContent className="w-[calc(100vw-2rem)] sm:w-80 p-0 mx-2 sm:mx-4">
               {/* Header */}
               <div className="p-3 border-b border-border">
                 <Link
                   href={`/story/${story?.slug}`}
                   className="flex flex-col items-center gap-0.5"
                 >
-                  <h3 className="text-sm font-medium text-slate-700 hover:text-primary transition-colors">
+                  <h3 className="text-sm font-medium text-slate-700 hover:text-primary transition-colors truncate w-full text-center">
                     {story?.title}
                   </h3>
                   <p className="text-xs text-slate-500">Table of Contents</p>
@@ -88,10 +90,9 @@ const ChapterTOC = () => {
                           isActive && "bg-rose-50"
                         )}
                       >
-                        {/* Chapter Number */}
                         <span
                           className={cn(
-                            "text-xs",
+                            "text-xs flex-shrink-0",
                             isActive
                               ? "text-primary font-medium"
                               : "text-slate-500"
@@ -100,7 +101,6 @@ const ChapterTOC = () => {
                           {chapter.chapterNumber.toString().padStart(2, "0")}
                         </span>
 
-                        {/* Chapter Title */}
                         <span
                           className={cn(
                             "text-sm line-clamp-1 flex-1",
@@ -112,9 +112,8 @@ const ChapterTOC = () => {
                           {chapter.title}
                         </span>
 
-                        {/* Active Indicator */}
                         {isActive && (
-                          <div className="size-1 bg-primary rounded-full" />
+                          <div className="size-1 bg-primary rounded-full flex-shrink-0" />
                         )}
                       </DropdownMenuItem>
                     </Link>
@@ -124,13 +123,21 @@ const ChapterTOC = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2 w-full sm:w-auto">
           <ReadingListDialog>
-            <Button icon={StarIcon} variant="outline">
+            <Button
+              icon={StarIcon}
+              variant="outline"
+              className="flex-1 sm:flex-none text-sm"
+            >
               Add to Reading List
             </Button>
           </ReadingListDialog>
-          <Button icon={StarIcon} variant="outline">
+          <Button
+            icon={StarIcon}
+            variant="outline"
+            className="flex-1 sm:flex-none text-sm"
+          >
             Vote
           </Button>
         </div>

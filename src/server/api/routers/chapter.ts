@@ -334,7 +334,6 @@ export const chapterRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id ?? (input.anonymous as string); // Use anonymous ID if user is not logged in
-      console.log({ userId });
 
       const chapterId = input.chapterId;
 
@@ -588,7 +587,7 @@ function countWords(html: string): number {
     .filter((word) => word.length > 0).length;
 }
 
-function processChapterContent(content: string): ContentChunk[] {
+export function processChapterContent(content: string): ContentChunk[] {
   // Split content into paragraphs
   const paragraphs = content
     .split("</p>")

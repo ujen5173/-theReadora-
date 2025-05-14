@@ -22,6 +22,12 @@ const config = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "bookcoverzone.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

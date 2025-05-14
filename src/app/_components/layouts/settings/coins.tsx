@@ -34,17 +34,19 @@ const CoinsPackageSettings = async () => {
   const data = await api.user.getPurchasesDetails();
 
   return (
-    <div className="rounded-lg border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-full bg-primary/10 border border-primary/20">
-          <CoinsBitcoinIcon className="size-5 text-primary" />
+    <div className="rounded-lg border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-4 sm:p-6">
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <div className="p-1.5 sm:p-2 rounded-full bg-primary/10 border border-primary/20">
+          <CoinsBitcoinIcon className="size-4 sm:size-5 text-primary" />
         </div>
-        <h3 className="text-lg font-bold text-primary">Coins Management</h3>
+        <h3 className="text-base sm:text-lg font-bold text-primary">
+          Coins Management
+        </h3>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-lg border border-primary/20 bg-white p-6">
-          <div className="pb-6 border-b border-border border-dashed">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+        <div className="rounded-lg border border-primary/20 bg-white p-4 sm:p-6">
+          <div className="pb-4 sm:pb-6 border-b border-border border-dashed">
             <div className="flex items-center justify-between mb-4">
               <h4 className="font-semibold">Current Balance</h4>
             </div>
@@ -69,7 +71,7 @@ const CoinsPackageSettings = async () => {
               </span>
             </div>
           </div>
-          <div className="pt-6">
+          <div className="pt-4 sm:pt-6">
             <h4 className="font-semibold mb-4">Premium Membership</h4>
             <div className="space-y-4">
               {data.balance?.premium ? (
@@ -138,12 +140,12 @@ const CoinsPackageSettings = async () => {
         <CoinsPackage />
       </div>
 
-      <div className="mt-6 rounded-lg border border-primary/20 bg-white p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="mt-4 sm:mt-6 rounded-lg border border-primary/20 bg-white p-4 sm:p-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h4 className="font-semibold">Transaction History</h4>
         </div>
-        <ScrollArea className="h-[450px]">
-          <div className="space-y-4 pr-4">
+        <ScrollArea className="h-[350px] sm:h-[450px]">
+          <div className="space-y-3 sm:space-y-4 pr-4">
             {data?.purchases.length === 0 && (
               <div className="py-10">
                 <p className="text-center text-muted-foreground">

@@ -45,7 +45,6 @@ export const StarRating = ({
   const emptyStars = maxRating - fullStars - (hasHalfStar ? 1 : 0);
 
   const handleStarClick = (index: number) => {
-    console.log("clicked");
     if (!isInteractive) return;
 
     const newRating = index + 1;
@@ -54,7 +53,6 @@ export const StarRating = ({
   };
 
   const handleStarHover = (index: number) => {
-    console.log({ index, isInteractive });
     if (!isInteractive) return;
     setHoverRating(index + 1);
   };

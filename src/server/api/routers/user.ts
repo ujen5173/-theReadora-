@@ -228,8 +228,6 @@ export const userRouter = createTRPCRouter({
         },
       });
 
-      console.log({ existingUser });
-
       return !!existingUser;
     }),
 
@@ -306,6 +304,41 @@ export const userRouter = createTRPCRouter({
       });
 
       return rating;
+    }),
+
+  hasUserUnlockedChapter: publicProcedure
+    .input(z.object({ chapterIds: z.array(z.string().cuid()) }))
+    .query(async ({ ctx, input }) => {
+      try {
+        if (!ctx.session?.user.id) return [];
+
+        const response = await ctx.postgresDb.user.findFirst({
+          where: {
+            id: ctx.session.user.id,
+          },
+          select: {
+            unlockedChapters: {
+              where: {
+                chapterId: {
+                  in: input.chapterIds,
+                },
+              },
+              select: {
+                chapterId: true,
+              },
+            },
+          },
+        });
+
+        return response?.unlockedChapters.map((e) => e.chapterId) ?? [];
+      } catch (err) {
+        if (err instanceof TRPCError) throw err;
+
+        throw new TRPCError({
+          message: "Something went wrong",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
     }),
 });
 

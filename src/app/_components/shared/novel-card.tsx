@@ -57,7 +57,7 @@ const NovelCard: FC<{
           )}
 
           <Image
-            className="cover-card-img mb-2 w-full rounded-lg object-fill"
+            className="aspect-[1/1.5] cover-card-img mb-2 w-full rounded-lg object-fill"
             src={details.thumbnail}
             alt={details.thumbnail}
             width={cardWidth}

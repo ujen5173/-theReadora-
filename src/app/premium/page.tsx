@@ -32,7 +32,9 @@ const Premium = () => {
   const [isYearly, setIsYearly] = useState(false);
   const { PurchaseDialog } = useCoinPurchase();
 
-  const { data: userData } = api.user.getPurchasesDetails.useQuery();
+  const { data: userData } = api.user.getPurchasesDetails.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
   const { mutateAsync: createSubscription, status } =
     api.payment.createSubscription.useMutation({
       onSuccess: (data) => {

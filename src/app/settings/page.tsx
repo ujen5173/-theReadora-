@@ -62,20 +62,23 @@ export default Settings;
 
 const SettingsNavigation = ({ tab }: { tab: string }) => {
   return (
-    <Tabs defaultValue={tab ?? "profile"} className="flex gap-8">
-      <TabsList className="flex flex-col h-fit space-y-1 min-w-[240px]">
+    <Tabs
+      defaultValue={tab ?? "profile"}
+      className="flex flex-col lg:flex-row gap-3 lg:gap-6"
+    >
+      <TabsList className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 lg:space-y-1 min-w-0 lg:min-w-[220px]">
         {navItems.map((item) => (
           <TabsTrigger
             key={item.value}
             value={item.value}
-            className="flex items-center justify-start w-full px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200 data-[state=active]:bg-muted data-[state=active]:text-foreground data-[state=active]:font-medium"
+            className="flex items-center justify-start whitespace-nowrap px-3 py-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200 data-[state=active]:bg-muted data-[state=active]:text-foreground data-[state=active]:font-medium"
           >
             {item.icon}
             {item.label}
           </TabsTrigger>
         ))}
       </TabsList>
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 space-y-4">
         <TabsContent value="profile">
           <ProfileSettings />
         </TabsContent>

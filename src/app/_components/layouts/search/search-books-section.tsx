@@ -14,7 +14,7 @@ import type { SearchResponse } from "~/server/api/routers/story";
 import { getValidGenre } from "~/utils/helpers";
 import NovelCard, { type TCard } from "../../shared/novel-card";
 
-const BooksSection = ({
+const SearchBooksSection = ({
   query,
   genre,
   books,
@@ -164,4 +164,4 @@ const BooksSection = ({
   );
 };
 
-export default BooksSection;
+export default SearchBooksSection;

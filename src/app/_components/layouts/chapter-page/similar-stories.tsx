@@ -15,6 +15,7 @@ const RecommendedStories = () => {
     },
     {
       enabled: !!chapter?.storyId,
+      refetchOnWindowFocus: false,
     }
   );
 

@@ -136,6 +136,7 @@ const FilterSection = ({
               <Filter className="size-5 text-primary" />
               <h3 className="font-semibold text-slate-900">Story Filters</h3>
             </div>
+
             <Button
               onClick={() => {
                 resetAll();
@@ -219,7 +220,8 @@ const FilterSection = ({
                   icon={option.icon}
                   className={cn(
                     "w-full justify-start",
-                    sortBy === option.label && "bg-primary text-white"
+                    sortBy === option.label &&
+                      "bg-primary hover:bg-primary/80 hover:text-white transition-all text-white"
                   )}
                   onClick={() => {
                     setSortBy(option.label);
@@ -396,10 +398,10 @@ const FilterSection = ({
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="week">Last Week</SelectItem>
-                <SelectItem value="month">Last Month</SelectItem>
-                <SelectItem value="year">Last Year</SelectItem>
-                <SelectItem value="all">All Time</SelectItem>
+                <SelectItem value="LAST_WEEK">Last Week</SelectItem>
+                <SelectItem value="LAST_MONTH">Last Month</SelectItem>
+                <SelectItem value="LAST_YEAR">Last Year</SelectItem>
+                <SelectItem value="ALL_TIME">All Time</SelectItem>
               </SelectContent>
             </Select>
           </div>

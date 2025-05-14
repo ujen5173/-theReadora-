@@ -37,9 +37,9 @@ const SingleStory = async ({ params }: PageProps) => {
 
   return (
     <section className="w-full">
-      <div className="flex border-b border-border max-w-[1240px] mx-auto px-4 py-10 gap-10">
+      <div className="flex flex-wrap border-b border-border max-w-[1240px] mx-auto px-4 py-10 gap-10">
         {/* Thumbnail and actions */}
-        <div className="flex-1 min-w-72 max-w-96">
+        <div className="flex-1 min-w-72 max-w-80 mx-auto">
           <ThumbnailSection story={story} />
         </div>
 

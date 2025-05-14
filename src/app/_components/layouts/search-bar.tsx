@@ -5,7 +5,7 @@ import { useRef } from "react";
 import useKeyPress from "~/app/hooks/use-key-press";
 import { Input } from "~/components/ui/input";
 
-const SearchBar = () => {
+const SearchBar = ({ size = "lg" }: { size?: "md" | "lg" | "sm" }) => {
   const router = useRouter();
   const ref = useRef<HTMLInputElement | null>(null);
 
@@ -18,7 +18,7 @@ const SearchBar = () => {
   useKeyPress(handleKeyPress);
 
   return (
-    <div className="relative">
+    <div className="relative max-w-80 flex-1">
       <form
         onSubmit={(e: React.SyntheticEvent<HTMLFormElement>) => {
           e.preventDefault();
@@ -26,11 +26,11 @@ const SearchBar = () => {
         }}
       >
         <Input
-          size="lg"
+          size={size}
           placeholder="Search..."
           icon={KbdIcon}
           ref={ref}
-          className="bg-white w-80"
+          className="bg-white w-full"
           iconPlacement="right"
         />
       </form>

@@ -68,7 +68,7 @@ const ChapterContent = ({
 
   return (
     <section className="w-full bg-slate-100 border-b border-border">
-      <div className="max-w-4xl border-x border-border bg-white px-6 mx-auto">
+      <div className="max-w-4xl border-x border-border bg-white px-3 sm:px-6 mx-auto">
         <ChapterMetaData />
         <Content />
       </div>
@@ -88,26 +88,26 @@ const ChapterMetaData = () => {
   );
 
   return (
-    <div className="py-20 space-y-8 border-b border-slate-200">
-      <h1 className="text-4xl text-center font-black text-slate-700">
+    <div className="py-12 sm:py-20 space-y-6 sm:space-y-8 border-b border-slate-200">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl text-center font-black text-slate-700 px-2">
         {chapter?.title}
       </h1>
 
-      <div className="flex items-center justify-center gap-2 text-sm">
+      <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm">
         {metrics && (
           <>
-            <div className="flex items-center gap-2">
-              <BookOpen01Icon className="w-4 h-4 text-slate-600" />
+            <div className="flex items-center gap-1 sm:gap-2">
+              <BookOpen01Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
               <span>{Intl.NumberFormat().format(metrics.wordCount)} words</span>
             </div>
-            <RecordIcon className="size-1.5 fill-slate-600 text-slate-600" />
-            <div className="flex items-center gap-2">
-              <EyeIcon className="w-4 h-4 text-slate-600" />
+            <RecordIcon className="size-1 sm:size-1.5 fill-slate-600 text-slate-600" />
+            <div className="flex items-center gap-1 sm:gap-2">
+              <EyeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
               <span>{readershipAnalytics.total.toLocaleString()} views</span>
             </div>
-            <RecordIcon className="size-1.5 fill-slate-600 text-slate-600" />
-            <div className="flex items-center gap-2">
-              <BubbleChatIcon className="w-4 h-4 text-slate-600" />
+            <RecordIcon className="size-1 sm:size-1.5 fill-slate-600 text-slate-600" />
+            <div className="flex items-center gap-1 sm:gap-2">
+              <BubbleChatIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
               <span>{metrics.commentsCount.toLocaleString()} comments</span>
             </div>
           </>
@@ -216,10 +216,10 @@ const Content = () => {
   if (!initialChunk) return null;
 
   return (
-    <div className="editor-container px-[0!important] space-y-8">
+    <div className="editor-container px-[0!important] space-y-6 sm:space-y-8">
       {/* Initial chunk */}
       <div
-        className="preview-content text-slate-500"
+        className="preview-content text-slate-500 text-base sm:text-lg"
         dangerouslySetInnerHTML={{ __html: initialChunk.content }}
       />
 
@@ -227,46 +227,49 @@ const Content = () => {
       {additionalChunks.map((chunk) => (
         <div
           key={chunk.id}
-          className="preview-content text-slate-500"
+          className="preview-content text-slate-500 text-base sm:text-lg"
           dangerouslySetInnerHTML={{ __html: chunk.content }}
         />
       ))}
 
       {isFetching && (
-        <div className="py-4 text-center text-slate-500">
+        <div className="py-4 text-center text-sm sm:text-base text-slate-500">
           Loading more content...
         </div>
       )}
 
       {/* Next Chapter or End of Story Message */}
       {!hasNextPage && data?.pages.length && data.pages.length > 0 && (
-        <div className="py-12 flex flex-col items-center">
+        <div className="py-8 sm:py-12 flex flex-col items-center">
           {nextChapter ? (
-            <div className="flex flex-col items-center gap-4 bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="border border-slate-200 text-slate-500 text-sm font-medium px-4 py-1 bg-slate-100 rounded-full">
+            <div className="flex flex-col items-center gap-3 sm:gap-4 bg-gradient-to-b from-slate-50 to-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm w-full">
+              <span className="border border-slate-200 text-slate-500 text-xs sm:text-sm font-medium px-3 sm:px-4 py-0.5 sm:py-1 bg-slate-100 rounded-full">
                 Up Next
               </span>
-              <h3 className="text-2xl font-bold text-slate-700 text-center">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-700 text-center">
                 Chapter {nextChapter.chapterNumber}: {nextChapter.title}
               </h3>
-              <Link href={`/chapter/${nextChapter.slug}`} className="block">
+              <Link
+                href={`/chapter/${nextChapter.slug}`}
+                className="block w-full"
+              >
                 <Button
                   icon={ArrowRightIcon}
                   effect={"expandIcon"}
                   iconPlacement="right"
-                  className="w-full"
+                  className="w-full text-sm sm:text-base"
                 >
                   Continue Reading
                 </Button>
               </Link>
             </div>
           ) : (
-            <div className="text-center bg-gradient-to-b from-slate-50 to-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-8 max-w-lg w-full mx-auto">
-              <div className="space-y-3">
-                <h3 className="text-2xl font-bold text-slate-800">
+            <div className="text-center bg-gradient-to-b from-slate-50 to-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-6 sm:space-y-8 max-w-lg w-full mx-auto">
+              <div className="space-y-2 sm:space-y-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-800">
                   You're All Caught Up!
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-sm sm:text-base text-slate-600">
                   Stay tuned for more chapters from this amazing story
                 </p>
               </div>
@@ -322,7 +325,6 @@ const Content = () => {
         </div>
       )}
 
-      {/* Intersection observer target */}
       <div
         ref={bottomRef}
         className="h-4"

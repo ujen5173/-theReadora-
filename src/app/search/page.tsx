@@ -1,12 +1,13 @@
 "use client";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useFilterStore } from "~/store/useFilter";
 import { api } from "~/trpc/react";
 import { getValidGenre } from "~/utils/helpers";
 import Header from "../_components/layouts/header";
-import BooksSection from "../_components/layouts/search/books-section";
 import FilterSection from "../_components/layouts/search/filter-section";
+import SearchBooksSection from "../_components/layouts/search/search-books-section";
 
 const Search = () => {
   // @params
@@ -45,6 +46,7 @@ const Search = () => {
     enabled: true,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   const handleRefetch = useCallback(() => {
@@ -81,7 +83,7 @@ const Search = () => {
 
           {/* Books details */}
           <div className="flex-1">
-            <BooksSection
+            <SearchBooksSection
               query={query}
               genre={genre}
               books={books}

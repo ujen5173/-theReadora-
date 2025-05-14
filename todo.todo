@@ -16,8 +16,11 @@
 | Content Access     | Locked chapters (premium gating)           | Medium   | Unlock via subscription              | Low          | ✅     |
 | Engagement         | Rating                                     | Medium   | One rating per user/story            | Low          | ✅     |
 | Core Logic         | Schedule chapter publish                   | Medium   |                                      | Medium       | ✅     |
+| Monetization       | Remove premium tag if unlocked             | High     |                                      | Medium       | ✅     |
+| Perf. Improvements | Improve page load                          | Extreme  | Data fetching is taking too long     | Medium       | ✅     |
+| Automation         | AI generated contents                      | Extreme  |                                      | Low          | ⚒️     |
+
 | UI/UX Improvements | Responsive design                          | Extreme  |                                      | Low          |        |
-| Perf. Improvements | Improve page load                          | Extreme  | Data fetching is taking too long     | Medium       |        |
 | Monetization       | Coin purchase flow                         | High     | Stripe, eSewa and Khalti integration | Medium       |        |
 | Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
 | Engagement         | Comments on stories                        | Medium   |                                      | Medium       |        |
@@ -27,8 +30,6 @@
 | Premium Features   | Exclusive functionality for subscribers    | Low      | e.g., locked chapters, analytics     | Extreme      |        |
 | AI Integration     | AI assistance (summaries, suggestions)     | Low      | GPT-powered                          | Extreme      |        |
 | Engagement         | Paragraph-level comments                   | Low      | Inline review                        | Extreme      |        |
-| Chapter Actions    | Likes, comments, reads per chapter         | Low      | Engagement metrics                   | Extreme      |        |
-| Pagination         | Chapter Chunk navigation using page params | Low      | e.g., /?page\_id=?<number>           | Extreme/High |        |
 | UI/UX Improvements | Improve chapter reading experience         | High     | Reading experience is not quite good | Medium       |        |
 ---
 
@@ -50,4 +51,4 @@
 | ------------------------------------------------ | ------------------------------------------------------------------------- |
 | YouTube-like viewer retention (Chapter Heatmaps) | Graph to show which parts of the chapter are most/least read/viewed       |
 | AI for Thumbnail generation                      | Use AI to generate thumbnails for stories authored by early-stage writers |
-|                                                  |                                                                           |
+| Pagination                                       | Chapter Chunk navigation using page params                                |

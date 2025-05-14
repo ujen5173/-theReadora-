@@ -51,30 +51,30 @@ const StoryEditor = () => {
     <div className="bg-[#FCFCFC] border-b border-border">
       <StoryEditorHeader />
 
-      <div className="max-w-[1440px] mx-auto px-4 py-6">
-        <div className="flex gap-6">
+      <div className="max-w-[1440px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Main Editor Area */}
           <div className="flex-1">
             <Tabs defaultValue="write" className="h-full">
               <StoryEditorTabs />
 
-              <div className="editor-container h-full bg-white dark:bg-slate-800 rounded-xl border border-border dark:border-slate-700/50 shadow-sm transition-all">
+              <div className="editor-container h-full bg-white rounded-lg sm:rounded-xl border border-border shadow-sm transition-all">
                 <TabsContent
                   value="write"
-                  className="min-h-[600px] max-h-[800px] h-[80vh]"
+                  className="min-h-[400px] sm:min-h-[600px] max-h-[600px] sm:max-h-[800px] h-[60vh] sm:h-[80vh]"
                 >
                   <Editor
                     initialContent={content}
                     onChange={handleEditorChange}
                     placeholder="Start writing your story..."
                     autoFocus
-                    className="min-h-[600px] max-h-[800px] h-[80vh] overflow-y-auto"
+                    className="min-h-[400px] sm:min-h-[600px] max-h-[600px] sm:max-h-[800px] h-[60vh] sm:h-[80vh] overflow-y-auto px-3 sm:px-6"
                   />
                 </TabsContent>
 
                 <TabsContent
                   value="preview"
-                  className="preview-content min-h-[70vh] p-6"
+                  className="preview-content min-h-[50vh] sm:min-h-[70vh] p-3 sm:p-6"
                 >
                   <div
                     className="prose prose-slate dark:prose-invert max-w-none"

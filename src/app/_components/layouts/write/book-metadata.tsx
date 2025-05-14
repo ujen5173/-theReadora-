@@ -75,11 +75,11 @@ const BookMetadata = ({
   };
 
   return (
-    <div className="flex-1 space-y-6">
-      <div className="space-y-2">
+    <div className="flex-1 space-y-4 sm:space-y-6">
+      <div className="space-y-1.5 sm:space-y-2">
         <Label
           htmlFor="title"
-          className="text-base text-slate-700 font-semibold inline-block"
+          className="text-sm sm:text-base text-slate-700 font-semibold inline-block"
         >
           Book Title
         </Label>
@@ -90,14 +90,14 @@ const BookMetadata = ({
           onChange={(e) =>
             setMetadata((prev) => ({ ...prev, title: e.target.value }))
           }
-          className=" w-full bg-white"
+          className="w-full bg-white"
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5 sm:space-y-2">
         <Label
           htmlFor="synopsis"
-          className="text-base text-slate-700 font-semibold inline-block"
+          className="text-sm sm:text-base text-slate-700 font-semibold inline-block"
         >
           Synopsis
         </Label>
@@ -108,21 +108,21 @@ const BookMetadata = ({
           onChange={(e) =>
             setMetadata((prev) => ({ ...prev, synopsis: e.target.value }))
           }
-          className=" w-full bg-white h-32"
+          className="w-full bg-white h-24 sm:h-32"
         />
       </div>
 
-      <div className="space-y-2  w-full">
+      <div className="space-y-1.5 sm:space-y-2 w-full">
         <Label
           htmlFor="tags"
-          className="text-base text-slate-700 font-semibold inline-block"
+          className="text-sm sm:text-base text-slate-700 font-semibold inline-block"
         >
           Tags
         </Label>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Add up to {MAX_TAGS} tags to help readers find your book
         </p>
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <Input
             id="tags"
             placeholder="Enter tags and press Enter"
@@ -132,19 +132,19 @@ const BookMetadata = ({
             disabled={metadata.tags.length >= MAX_TAGS}
             className="bg-white"
           />
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {metadata.tags.map((tag) => (
               <Badge
                 key={tag}
                 variant="secondary"
-                className="px-2 py-1 text-sm border border-border text-slate-700"
+                className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs sm:text-sm border border-border text-slate-700"
               >
                 {tag}
                 <button
                   onClick={() => removeTag(tag)}
-                  className="ml-2 hover:text-destructive"
+                  className="ml-1.5 sm:ml-2 hover:text-destructive"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
                 </button>
               </Badge>
             ))}
@@ -152,11 +152,11 @@ const BookMetadata = ({
         </div>
       </div>
 
-      <div className="flex gap-2  w-full">
-        <div className="flex-1 space-y-2">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+        <div className="flex-1 space-y-1.5 sm:space-y-2">
           <Label
             htmlFor="genre"
-            className="text-base text-slate-700 font-semibold inline-block"
+            className="text-sm sm:text-base text-slate-700 font-semibold inline-block"
           >
             Genre
           </Label>
@@ -172,7 +172,7 @@ const BookMetadata = ({
             <SelectTrigger id="genre" className="w-full bg-white">
               <SelectValue placeholder="Select genre" />
             </SelectTrigger>
-            <SelectContent className="max-h-96 overflow-y-auto">
+            <SelectContent className="max-h-[300px] sm:max-h-96 overflow-y-auto">
               {GENRES.map((genre) => (
                 <SelectItem key={genre.name} value={genre.slug}>
                   {genre.name}
@@ -182,10 +182,10 @@ const BookMetadata = ({
           </Select>
         </div>
 
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 space-y-1.5 sm:space-y-2">
           <Label
             htmlFor="language"
-            className="text-base text-slate-700 font-semibold inline-block"
+            className="text-sm sm:text-base text-slate-700 font-semibold inline-block"
           >
             Language
           </Label>
@@ -212,17 +212,17 @@ const BookMetadata = ({
         </div>
       </div>
 
-      <div className="space-y-4  w-full">
-        <h3 className="text-base text-slate-700 font-semibold inline-block">
+      <div className="space-y-3 sm:space-y-4 w-full">
+        <h3 className="text-sm sm:text-base text-slate-700 font-semibold inline-block">
           Content Information
         </h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm text-slate-700 font-semibold">
+              <Label className="text-xs sm:text-sm text-slate-700 font-semibold">
                 Mature Content
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 This book contains mature themes or content
               </p>
             </div>
@@ -235,10 +235,10 @@ const BookMetadata = ({
           </div>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm text-slate-700 font-semibold">
+              <Label className="text-xs sm:text-sm text-slate-700 font-semibold">
                 LGBTQ+ Content
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 This book contains LGBTQ+ themes or characters
               </p>
             </div>
@@ -251,10 +251,10 @@ const BookMetadata = ({
           </div>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm text-slate-700 font-semibold">
+              <Label className="text-xs sm:text-sm text-slate-700 font-semibold">
                 AI-Generated Content
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 This book contains AI-generated content
               </p>
             </div>
@@ -271,17 +271,18 @@ const BookMetadata = ({
         </div>
       </div>
 
-      <div className="pt-4">
+      <div className="pt-3 sm:pt-4">
         <Button
           onClick={() => onSubmit(metadata)}
           icon={ArrowRight}
           effect={status === "pending" ? undefined : "expandIcon"}
           iconPlacement="right"
           disabled={status === "pending"}
+          className="w-full sm:w-auto"
         >
           {status === "pending" ? (
             <>
-              <Loader2 className="size-4 animate-spin" />
+              <Loader2 className="size-3.5 sm:size-4 animate-spin" />
               <span>Processing...</span>
             </>
           ) : (

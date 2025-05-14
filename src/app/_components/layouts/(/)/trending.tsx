@@ -3,7 +3,7 @@ import { api } from "~/trpc/server";
 
 const TrendingSection = async () => {
   const stories = await api.story.rising({
-    limit: 10,
+    limit: 6,
   });
 
   return (

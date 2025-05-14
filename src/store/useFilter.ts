@@ -88,7 +88,6 @@ export const useFilterStore = create<FilterStore>()((set, get) => ({
     const state = get();
     const filters: FilterParams = {};
 
-    // Only include non-empty values
     if (state.query) filters.query = state.query;
     if (state.genre) filters.genre = state.genre;
     if (state.sortBy) filters.sortBy = state.sortBy;

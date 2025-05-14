@@ -8,7 +8,9 @@ import Header from "../_components/layouts/header";
 import NovelCard from "../_components/shared/novel-card";
 
 const MyCreations = () => {
-  const { data: novels, isLoading } = api.story.getNovels.useQuery();
+  const { data: novels, isLoading } = api.story.getNovels.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <>
@@ -33,7 +35,7 @@ const MyCreations = () => {
               <Loader2 className="size-10 text-primary animate-spin" />
             </div>
           ) : novels && novels.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {novels.map((novel) => (
                 <NovelCard key={novel.id} details={novel} isAuthorViewer />
               ))}

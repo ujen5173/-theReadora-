@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { env } from "~/env";
 import { useUserProfileStore } from "~/store/userProfileStore";
 import { formatDate } from "~/utils/helpers";
 import FollowButton from "../../shared/follow-button";
@@ -46,8 +47,8 @@ const ProfileMetaData = () => {
               <div className="relative">
                 <div className="rounded-full p-1 bg-gradient-to-r from-primary to-primary/80">
                   <Image
-                    src={user?.image ?? ""}
-                    alt={user?.name ?? ""}
+                    src={user?.image ?? "/default-profile.avif"}
+                    alt={user?.name ?? "User Profile Image"}
                     width={160}
                     height={160}
                     className="size-36 rounded-full border-3 border-white shadow-lg"
@@ -177,7 +178,9 @@ const ProfileMetaData = () => {
               <ShareDialog
                 title={user?.name ?? ""}
                 description="Share this profile"
-                url={`https://readora.com/${user?.username ?? ""}`}
+                url={`${env.NEXT_PUBLIC_APP_URL}/profile?user_id=${
+                  user?.username ?? ""
+                }`}
               />
             </div>
           </div>
@@ -217,7 +220,7 @@ const ProfileMetaData = () => {
             </TabsList>
           </div>
 
-          <TabsContent value="works" className="mt-8">
+          <TabsContent value="works">
             <UserCreations />
           </TabsContent>
           <TabsContent value="reading-list" className="mt-8">

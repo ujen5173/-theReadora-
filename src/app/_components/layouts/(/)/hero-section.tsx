@@ -1,9 +1,9 @@
+"use client";
 import { BookMarked, SquarePen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import { auth } from "~/server/auth";
 import { merriweatherFont } from "~/utils/font";
 
 const FEATURED_NOVELS = [
@@ -137,7 +137,6 @@ const FEATURED_NOVELS = [
   },
 ];
 
-// Novel Card Component
 const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
   <div className="flex items-center gap-4 py-1 rounded-lg hover:bg-white/5 transition-colors group cursor-pointer">
     <Image
@@ -152,56 +151,44 @@ const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
 
 const VerticalSlider = () => (
   <div className="hidden relative h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
-    {/* Column 1 */}
     <div className="flex-1">
       <div className="animate-slide-up">
-        {/* Original set */}
         {FEATURED_NOVELS.slice(0, 4).map((novel) => (
           <NovelCard key={`original-${novel.id}`} novel={novel} />
         ))}
-        {/* Duplicate set for seamless loop */}
         {FEATURED_NOVELS.slice(0, 4).map((novel) => (
           <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
         ))}
       </div>
     </div>
 
-    {/* Column 2 */}
     <div className="flex-1">
       <div className="animate-slide-1">
-        {/* Original set */}
         {FEATURED_NOVELS.slice(4, 8).map((novel) => (
           <NovelCard key={`original-${novel.id}`} novel={novel} />
         ))}
-        {/* Duplicate set for seamless loop */}
         {FEATURED_NOVELS.slice(4, 8).map((novel) => (
           <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
         ))}
       </div>
     </div>
 
-    {/* Column 3 */}
     <div className="flex-1">
       <div className="animate-slide-2">
-        {/* Original set */}
         {FEATURED_NOVELS.slice(8, 12).map((novel) => (
           <NovelCard key={`original-${novel.id}`} novel={novel} />
         ))}
-        {/* Duplicate set for seamless loop */}
         {FEATURED_NOVELS.slice(8, 12).map((novel) => (
           <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
         ))}
       </div>
     </div>
 
-    {/* Column 4 */}
     <div className="flex-1">
       <div className="animate-slide-3">
-        {/* Original set */}
         {FEATURED_NOVELS.slice(12, 16).map((novel) => (
           <NovelCard key={`original-${novel.id}`} novel={novel} />
         ))}
-        {/* Duplicate set for seamless loop */}
         {FEATURED_NOVELS.slice(12, 16).map((novel) => (
           <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
         ))}
@@ -210,10 +197,15 @@ const VerticalSlider = () => (
   </div>
 );
 
-const HeroSection = async () => {
-  // Server-side auth for security
-  const session = await auth();
-  // We still use server auth for security, but we'll also sync with client store
+const HeroSection = () => {
+  // const { mutateAsync, status } = api.story.AIContentGeneration.useMutation({
+  //   onSuccess: () => {
+  //     toast.success("Content generated successfully");
+  //   },
+  //   onError: () => {
+  //     toast.error("Failed to generate content");
+  //   },
+  // });
 
   return (
     <section className="w-full">
@@ -269,6 +261,16 @@ const HeroSection = async () => {
                 Start Writing
               </Button>
             </Link>
+
+            {/* <Button
+              variant={"dark"}
+              // disabled={status === "pending"}
+              icon={status === "pending" ? Loader2 : undefined}
+              iconStyle={status === "pending" ? "animate-spin" : ""}
+              onClick={() => mutateAsync()}
+            >
+              Generate Content
+            </Button> */}
           </div>
         </div>
 

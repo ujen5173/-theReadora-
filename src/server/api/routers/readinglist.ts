@@ -9,7 +9,7 @@ export const readinglistRouter = createTRPCRouter({
       z.object({
         title: z.string(),
         description: z.string().optional(),
-        initialStories: z.array(z.string().cuid2()),
+        initialStories: z.array(z.string().cuid()),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -45,7 +45,7 @@ export const readinglistRouter = createTRPCRouter({
         id: z.string(),
         title: z.string(),
         description: z.string().optional(),
-        initialStories: z.array(z.string().cuid2()),
+        initialStories: z.array(z.string().cuid()),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -110,7 +110,7 @@ export const readinglistRouter = createTRPCRouter({
   getUserReadingList: publicProcedure
     .input(
       z.object({
-        userId: z.string().cuid2(),
+        userId: z.string().cuid(),
       })
     )
     .query(async ({ ctx, input }) => {

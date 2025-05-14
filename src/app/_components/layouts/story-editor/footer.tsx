@@ -172,16 +172,21 @@ const StoryEditorFooter = () => {
   };
 
   return (
-    <div className="flex justify-between items-center mt-6 pt-6 border-t">
-      <Button variant="outline" icon={Users} className="text-muted-foreground">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t">
+      <Button
+        variant="outline"
+        icon={Users}
+        className="text-muted-foreground w-full sm:w-auto"
+      >
         Add Collaborators
       </Button>
 
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
         <Button
           onClick={handleSaveDraft}
           variant="outline"
           disabled={status === "pending" || isSavingDraft}
+          className="w-full sm:w-auto"
         >
           {isSavingDraft && <Loader2 className="size-4 animate-spin" />}
           Save Draft
@@ -191,7 +196,7 @@ const StoryEditorFooter = () => {
           <DropdownMenuTrigger asChild>
             <Button
               disabled={status === "pending"}
-              className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
+              className="w-full sm:w-auto bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
               effect="shineHover"
               icon={ChevronDown}
               iconPlacement="right"
@@ -227,7 +232,7 @@ const StoryEditorFooter = () => {
         </DropdownMenu>
 
         <Dialog open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
-          <DialogContent className="sm:max-w-min">
+          <DialogContent className="sm:max-w-min w-[95vw] sm:w-auto">
             <DialogHeader>
               <DialogTitle>Schedule Publish</DialogTitle>
               <DialogDescription>
@@ -245,15 +250,15 @@ const StoryEditorFooter = () => {
                 showOutsideDays={false}
                 classNames={{
                   head_cell:
-                    "size-10 text-slate-500 font-medium text-sm flex items-center justify-center",
-                  cell: "size-10",
+                    "size-8 sm:size-10 text-slate-500 font-medium text-sm flex items-center justify-center",
+                  cell: "size-8 sm:size-10",
                 }}
               />
               <div className="mt-4 flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <input
                   type="time"
-                  className="border rounded px-2 py-1"
+                  className="border rounded px-2 py-1 w-full sm:w-auto"
                   onChange={(e) => {
                     if (scheduledDate) {
                       const [hours, minutes] = e.target.value.split(":") as [
@@ -276,17 +281,22 @@ const StoryEditorFooter = () => {
               </span>
             </p>
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-2">
               <Button
                 variant="outline"
                 onClick={() => {
                   setScheduledDate(undefined);
                   setIsScheduleOpen(false);
                 }}
+                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button onClick={handleSchedulePublish} disabled={!scheduledDate}>
+              <Button
+                onClick={handleSchedulePublish}
+                disabled={!scheduledDate}
+                className="w-full sm:w-auto"
+              >
                 Confirm Schedule
               </Button>
             </div>
