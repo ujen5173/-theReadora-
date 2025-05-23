@@ -79,7 +79,7 @@ export const SubscriptionManagementDialog = ({
                 </div>
                 <div className="text-right">
                   <p className="font-medium">
-                    ${isYearly ? "99.99" : "9.99"}/month
+                    ${isYearly ? "99.99/year" : "9.99/month"}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {isYearly ? "Billed annually" : "Billed monthly"}

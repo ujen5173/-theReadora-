@@ -98,7 +98,7 @@ const Write = () => {
           public_id: z.string().min(1),
         }),
       })
-      .safeParse({ ...storyDetails, thumbnail: uploadedFile });
+      .safeParse({ ...storyDetails, thumbnail: uploadedFile.url });
 
     if (!zodResponse.success) {
       console.log({ zodResponse: zodResponse.error });

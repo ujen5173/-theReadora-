@@ -7,7 +7,7 @@ import { useUserStore } from "~/store/userStore";
 import { STRIPE_MONTHLY_PLAN_PRICE } from "~/utils/constants";
 
 const PremiumBanner = () => {
-  const { user } = useUserStore();
+  const { user, isLoading } = useUserStore();
 
   const premiumFeatures = [
     "Ad-free reading experience",
@@ -18,7 +18,7 @@ const PremiumBanner = () => {
     "Advanced Writing Tools",
   ];
 
-  if (user?.premium) return null;
+  if (user?.premium || isLoading) return null;
 
   return (
     <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">

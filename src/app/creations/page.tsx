@@ -35,7 +35,7 @@ const MyCreations = () => {
               <Loader2 className="size-10 text-primary animate-spin" />
             </div>
           ) : novels && novels.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 xxs:grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2">
               {novels.map((novel) => (
                 <NovelCard key={novel.id} details={novel} isAuthorViewer />
               ))}

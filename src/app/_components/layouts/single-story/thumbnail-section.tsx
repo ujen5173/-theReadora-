@@ -1,6 +1,5 @@
 "use client";
 import { Analytics01Icon, BookOpen01Icon, Edit01Icon } from "hugeicons-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
@@ -15,6 +14,7 @@ import type { T_byID_or_slug } from "~/server/api/routers/story";
 import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
 import AddToList from "../../shared/add-to-list";
+import BlurImage from "../../shared/blur-image";
 import PremiumBanner from "../../shared/premium-banner";
 import ShareDialog from "../../shared/share-dialog";
 import { StarRating } from "./star-rating";
@@ -46,12 +46,12 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
   return (
     <section className="w-full space-y-4 sm:space-y-6">
       <div className="w-full h-auto shadow-lg rounded-md">
-        <Image
+        <BlurImage
           src={story.thumbnail as string}
           width={600}
           height={1440}
           draggable={false}
-          className="rounded-md w-full select-none object-cover aspect-[1/1.5] sm:aspect-[1/1.5]"
+          className="rounded-sm w-full select-none object-cover aspect-[1/1.5] sm:aspect-[1/1.6]"
           alt={story.title}
         />
       </div>
@@ -61,7 +61,7 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
           asChild
           variant={"default"}
           icon={BookOpen01Icon}
-          className="w-full text-sm sm:text-base"
+          className="w-full"
         >
           <Link href={`/chapter/${story.chapters[0]?.id}`}>Start Reading</Link>
         </Button>
@@ -69,15 +69,12 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant={"outline"}
-                className="w-full bg-white text-sm sm:text-base"
-              >
+              <Button variant={"outline"} className="w-full bg-white">
                 <div className="flex items-center gap-2">
                   <StarRating
                     storyId={story.id}
                     isInteractive
-                    rating={story.ratingAvg}
+                    rating={story.averageRating}
                     className="flex-shrink-0"
                   />
                   <span className="text-xs sm:text-sm text-muted-foreground">
@@ -105,14 +102,14 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
             <Button
               variant={"outline"}
               icon={Analytics01Icon}
-              className="w-full bg-white text-sm sm:text-base"
+              className="w-full bg-white"
             >
               View Analytics
             </Button>
             <Button
               variant={"outline"}
               icon={Edit01Icon}
-              className="w-full bg-white text-sm sm:text-base"
+              className="w-full bg-white"
             >
               Edit Story
             </Button>

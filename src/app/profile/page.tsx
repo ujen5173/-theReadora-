@@ -7,28 +7,28 @@ import ProfileWrapper from "../_components/layouts/profile/wrapper";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ user_id: string }>;
+  searchParams: Promise<{ user: string }>;
 }): Promise<Metadata> {
-  const { user_id } = await searchParams;
-  const user = await api.user.getUserDetails({
-    usernameOrId: user_id,
+  const { user } = await searchParams;
+  const userdata = await api.user.getUserDetails({
+    usernameOrId: user,
   });
 
   return {
-    title: `${user.name} (@${user.username}) | Readora`,
-    description: `Check out ${user.name}'s profile on Readora`,
+    title: `${userdata.name} (@${userdata.username}) | Readora`,
+    description: `Check out ${userdata.name}'s profile on Readora`,
   };
 }
 
 const UserProfile = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ user_id: string }>;
+  searchParams: Promise<{ user: string }>;
 }) => {
-  const { user_id } = await searchParams;
+  const { user } = await searchParams;
 
   const userDetails = await api.user.getUserDetails({
-    usernameOrId: user_id,
+    usernameOrId: user,
   });
 
   return (

@@ -49,16 +49,17 @@ import { cn } from "~/lib/utils";
 import { useFilterStore } from "~/store/useFilter";
 import { GENRES } from "~/utils/genre";
 import { getValidGenre } from "~/utils/helpers";
-import PremiumBanner from "../../shared/premium-banner";
 
 const FilterSection = ({
   query,
   genre,
   handleRefetch,
+  isMobile = false,
 }: {
   query: string;
   genre: string;
   handleRefetch: () => void;
+  isMobile?: boolean;
 }) => {
   const {
     sortBy,
@@ -125,33 +126,35 @@ const FilterSection = ({
   }, [genre]);
 
   return (
-    <section className="space-y-4">
-      <PremiumBanner />
-
-      <div className="w-full bg-white rounded-lg border border-border">
-        {/* Header */}
-        <div className="border-b border-border p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Filter className="size-5 text-primary" />
-              <h3 className="font-semibold text-slate-900">Story Filters</h3>
+    <section className={cn("space-y-4 h-fit", isMobile && "border-none")}>
+      <div
+        className={cn(
+          "w-full bg-white rounded-lg h-full flex flex-col",
+          !isMobile && "border border-border"
+        )}
+      >
+        {/* Header - Only show on desktop */}
+        {!isMobile && (
+          <div className="border-b border-border p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Filter className="size-5 text-primary" />
+                <h3 className="font-semibold text-slate-900">Story Filters</h3>
+              </div>
             </div>
-
-            <Button
-              onClick={() => {
-                resetAll();
-                handleRefetch();
-              }}
-              variant="ghost"
-              size="sm"
-              className="text-slate-500"
-            >
-              Reset All
-            </Button>
           </div>
-        </div>
+        )}
 
-        <div className="p-4 space-y-6">
+        <div className="py-6 px-4 space-y-6 flex-1 overflow-y-auto">
+          <div className="block lg:hidden pb-4 border-b border-border">
+            <h2 className="text-base mb-1 text-foreground font-semibold">
+              Story Filters
+            </h2>
+            <p className="text-slate-700 text-sm">
+              Customize your search results with filters
+            </p>
+          </div>
+
           {/* Search Input */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-slate-700">
@@ -459,10 +462,25 @@ const FilterSection = ({
           </div>
         </div>
 
-        {/* Apply Filters Button - Sticky */}
-        <div className="sticky bottom-0 p-4 border-t rounded-b-lg border-border bg-white">
+        {/* Action Buttons - Sticky */}
+        <div
+          className={cn(
+            "sticky bottom-0 p-4 border-t flex items-center gap-2 border-border bg-white",
+            isMobile ? "flex gap-2" : ""
+          )}
+        >
           <Button
-            className="w-full"
+            variant="outline"
+            className="flex-1"
+            onClick={() => {
+              resetAll();
+              handleRefetch();
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            className="flex-1"
             onClick={() => {
               // Update the URL with the pending genre
               const params = new URLSearchParams(searchParams.toString());
@@ -473,7 +491,7 @@ const FilterSection = ({
               handleRefetch();
             }}
           >
-            Apply Filters
+            Apply
           </Button>
         </div>
       </div>

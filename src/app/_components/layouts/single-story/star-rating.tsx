@@ -3,35 +3,55 @@
 import { StarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
+import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 interface StarRatingProps {
   rating: number;
   maxRating?: number;
-  size?: number;
   className?: string;
   storyId: string;
   isInteractive?: boolean;
 }
 
+const ratingEmojis = ["😫", "😕", "😐", "😊", "🤩"];
+
 export const StarRating = ({
   rating,
   maxRating = 5,
-  size = 5,
   className,
   storyId,
   isInteractive = false,
 }: StarRatingProps) => {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [selectedRating, setSelectedRating] = useState<number>(rating);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [review, setReview] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dialogHoverRating, setDialogHoverRating] = useState<number | null>(
+    null
+  );
 
   const rateMutation = api.story.rate.useMutation({
     onSuccess: () => {
-      toast.success("Rating submitted");
+      toast.success("Thank you for your review!");
+      setIsDialogOpen(false);
+      setReview("");
+      setIsSubmitting(false);
     },
     onError: (error) => {
       toast.error(error.message);
+      setIsSubmitting(false);
     },
   });
 
@@ -40,6 +60,7 @@ export const StarRating = ({
   }, [rating]);
 
   const displayRating = hoverRating ?? selectedRating;
+  const dialogDisplayRating = dialogHoverRating ?? selectedRating;
   const fullStars = Math.floor(displayRating);
   const hasHalfStar = displayRating % 1 >= 0.5;
   const emptyStars = maxRating - fullStars - (hasHalfStar ? 1 : 0);
@@ -49,7 +70,7 @@ export const StarRating = ({
 
     const newRating = index + 1;
     setSelectedRating(newRating);
-    rateMutation.mutate({ storyId, rating: newRating });
+    setIsDialogOpen(true);
   };
 
   const handleStarHover = (index: number) => {
@@ -62,65 +83,182 @@ export const StarRating = ({
     setHoverRating(null);
   };
 
-  return (
-    <div
-      className={cn(
-        "flex items-center gap-0.5",
-        isInteractive && "cursor-pointer",
-        className
-      )}
-      onMouseLeave={handleMouseLeave}
-    >
-      {[...Array(maxRating)].map((_, i) => {
-        const isFull = i < fullStars;
-        const isHalf = i === fullStars && hasHalfStar;
-        const isHovered = hoverRating !== null && i < hoverRating;
+  const handleDialogStarHover = (index: number) => {
+    setDialogHoverRating(index + 1);
+  };
 
-        return (
-          <div
-            key={i}
-            className={cn(
-              "relative",
-              isInteractive && "transition-transform hover:scale-110"
-            )}
-            onClick={() => handleStarClick(i)}
-            onMouseEnter={() => handleStarHover(i)}
-          >
-            {isFull ? (
+  const handleDialogMouseLeave = () => {
+    setDialogHoverRating(null);
+  };
+
+  const handleSubmitReview = () => {
+    if (!review.trim()) {
+      toast.error("Please write a review before submitting");
+      return;
+    }
+    setIsSubmitting(true);
+    rateMutation.mutate({
+      storyId,
+      rating: selectedRating,
+      review,
+    });
+  };
+
+  const getRatingEmoji = (rating: number) => {
+    return ratingEmojis[Math.floor(rating) - 1] || "";
+  };
+
+  const renderStars = (isDialog: boolean = false) => {
+    const currentHoverRating = isDialog ? dialogHoverRating : hoverRating;
+    const currentDisplayRating = isDialog ? dialogDisplayRating : displayRating;
+    const currentFullStars = Math.floor(currentDisplayRating);
+    const currentHasHalfStar = currentDisplayRating % 1 >= 0.5;
+    const starSize = isDialog ? "size-7" : "size-5";
+
+    return [...Array(maxRating)].map((_, i) => {
+      const isFull = i < currentFullStars;
+      const isHalf = i === currentFullStars && currentHasHalfStar;
+      const isHovered = currentHoverRating !== null && i < currentHoverRating;
+
+      return (
+        <div
+          key={i}
+          className={cn(
+            "relative group",
+            isDialog && "transition-all duration-300 hover:scale-125",
+            !isDialog &&
+              isInteractive &&
+              "transition-all duration-200 hover:scale-110"
+          )}
+          onClick={
+            isDialog ? () => setSelectedRating(i + 1) : () => handleStarClick(i)
+          }
+          onMouseEnter={
+            isDialog ? () => handleDialogStarHover(i) : () => handleStarHover(i)
+          }
+        >
+          {isFull ? (
+            <StarIcon
+              className={cn(
+                starSize,
+                "fill-yellow-400 text-yellow-400 transition-all duration-300",
+                isHovered && "fill-yellow-500 text-yellow-500",
+                "group-hover:fill-yellow-500 group-hover:text-yellow-500",
+                isDialog && "group-hover:rotate-12"
+              )}
+            />
+          ) : isHalf ? (
+            <div className={cn("relative", starSize)}>
               <StarIcon
                 className={cn(
-                  "size-5 fill-yellow-400 text-yellow-400",
-                  isHovered && "fill-yellow-500 text-yellow-500"
+                  "absolute size-full fill-yellow-400 text-yellow-400 transition-all duration-300",
+                  isHovered && "fill-yellow-500 text-yellow-500",
+                  "group-hover:fill-yellow-500 group-hover:text-yellow-500",
+                  isDialog && "group-hover:rotate-12"
                 )}
               />
-            ) : isHalf ? (
-              <div className="relative size-5">
+              <div className="absolute right-0 top-0 h-full w-1/2 overflow-hidden">
                 <StarIcon
                   className={cn(
-                    "absolute size-5 fill-yellow-400 text-yellow-400",
-                    isHovered && "fill-yellow-500 text-yellow-500"
+                    "size-full fill-white text-yellow-400 transition-all duration-300",
+                    isHovered && "text-yellow-500",
+                    "group-hover:text-yellow-500"
                   )}
                 />
-                <div className="absolute right-0 top-0 h-full w-1/2 overflow-hidden">
-                  <StarIcon
-                    className={cn(
-                      "size-5 fill-white text-yellow-400",
-                      isHovered && "text-yellow-500"
-                    )}
-                  />
+              </div>
+            </div>
+          ) : (
+            <StarIcon
+              className={cn(
+                starSize,
+                "text-yellow-400 transition-all duration-300",
+                isHovered && "text-yellow-500",
+                "group-hover:text-yellow-500",
+                isDialog && "group-hover:rotate-12"
+              )}
+            />
+          )}
+        </div>
+      );
+    });
+  };
+
+  return (
+    <>
+      <div
+        className={cn(
+          "flex items-center gap-0.5",
+          isInteractive && "cursor-pointer",
+          className
+        )}
+        onMouseLeave={handleMouseLeave}
+      >
+        {renderStars()}
+      </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">
+              Write a Review
+            </DialogTitle>
+            <DialogDescription>
+              Share your thoughts about this story
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-6 py-4">
+            <div className="space-y-4">
+              <div
+                className="flex items-center gap-3"
+                onMouseLeave={handleDialogMouseLeave}
+              >
+                <div className="flex items-center gap-1">
+                  {renderStars(true)}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-medium">
+                    {getRatingEmoji(selectedRating)}
+                  </span>
                 </div>
               </div>
-            ) : (
-              <StarIcon
-                className={cn(
-                  "size-5 text-yellow-400",
-                  isHovered && "text-yellow-500"
-                )}
+            </div>
+            <div className="space-y-2">
+              <Textarea
+                placeholder="What did you like or dislike about this story? Share your thoughts..."
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                className="min-h-[120px] resize-none"
               />
-            )}
+              <p className="text-xs text-muted-foreground">
+                Your review helps other readers make informed decisions
+              </p>
+            </div>
           </div>
-        );
-      })}
-    </div>
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsDialogOpen(false)}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmitReview}
+              disabled={isSubmitting || !review.trim()}
+              className="min-w-[100px]"
+            >
+              {isSubmitting ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  <span>Submitting...</span>
+                </div>
+              ) : (
+                "Submit Review"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };

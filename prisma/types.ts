@@ -6,7 +6,7 @@ declare global {
       commentsCount: number;
       ratingCount: number;
       ratingValue: number;
-      ratingAvg: number;
+      averageRating: number;
     };
   }
 }

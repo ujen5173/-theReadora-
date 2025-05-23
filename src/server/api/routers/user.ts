@@ -1,8 +1,29 @@
 import { type inferProcedureOutput, TRPCError } from "@trpc/server";
 import { z } from "zod";
+import type { TCard } from "~/app/_components/shared/novel-card";
 import { cuidRegex } from "~/utils/constants";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { NCardEntity } from "./story";
+
+type ChapterReadWithStory = {
+  frequency: number;
+  createdAt: Date;
+  chapter: {
+    story: TCard & {
+      updatedAt: Date;
+      createdAt: Date;
+      tags: string[];
+    };
+  };
+};
+
+export type StoryWithMetadata = TCard & {
+  frequency: number;
+  lastRead: Date;
+  updatedAt: Date;
+  createdAt: Date;
+  tags: string[];
+};
 
 export const userRouter = createTRPCRouter({
   getUserDetails: publicProcedure
@@ -340,6 +361,75 @@ export const userRouter = createTRPCRouter({
         });
       }
     }),
+
+  getHistory: protectedProcedure.query(async ({ ctx, input }) => {
+    try {
+      const data = (await ctx.postgresDb.chapterRead.findMany({
+        where: {
+          readerKey: ctx.session.user.id,
+        },
+        select: {
+          frequency: true,
+          createdAt: true,
+          chapter: {
+            select: {
+              story: {
+                select: {
+                  ...NCardEntity,
+                  tags: true,
+                  updatedAt: true,
+                  createdAt: true,
+                },
+              },
+            },
+          },
+        },
+      })) as ChapterReadWithStory[];
+
+      const uniqueStories = new Map<string, StoryWithMetadata>();
+
+      data.forEach((item: ChapterReadWithStory) => {
+        const story = item.chapter.story;
+        const existingStory = uniqueStories.get(story.id);
+        const currentReadTime = new Date(item.createdAt).getTime();
+
+        if (!existingStory) {
+          uniqueStories.set(story.id, {
+            ...story,
+            frequency: item.frequency,
+            lastRead: item.createdAt,
+          });
+        } else {
+          const existingReadTime = new Date(existingStory.lastRead).getTime();
+
+          if (
+            item.frequency > existingStory.frequency ||
+            (item.frequency === existingStory.frequency &&
+              currentReadTime > existingReadTime)
+          ) {
+            uniqueStories.set(story.id, {
+              ...story,
+              frequency: item.frequency,
+              lastRead: item.createdAt,
+            });
+          }
+        }
+      });
+
+      return Array.from(uniqueStories.values());
+    } catch (err) {
+      console.log({ err });
+
+      if (err instanceof TRPCError) {
+        throw err;
+      }
+
+      throw new TRPCError({
+        message: "Something went wrong while getting history of the user",
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
 });
 
 export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;

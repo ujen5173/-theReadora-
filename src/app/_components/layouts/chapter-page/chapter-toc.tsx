@@ -14,7 +14,7 @@ import { cn } from "~/lib/utils";
 import { useChapterStore } from "~/store/useChapter";
 import { useUserStore } from "~/store/userStore";
 import { isChapterScheduled } from "~/utils/helpers";
-import ReadingListDialog from "../../shared/reading-list";
+import ReadingListDialog from "../../shared/reading-list-dialog";
 
 const ChapterTOC = () => {
   const { story, chapter: currentChapter } = useChapterStore();
@@ -34,7 +34,7 @@ const ChapterTOC = () => {
                       alt={story?.title}
                       width={40}
                       height={36}
-                      className="aspect-[1/1.5] rounded-sm border border-gray-200 flex-shrink-0"
+                      className="aspect-[1/1.6] rounded-sm border border-gray-200 flex-shrink-0"
                     />
                   ) : (
                     <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-gray-200 flex-shrink-0">

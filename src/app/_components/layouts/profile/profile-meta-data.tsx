@@ -1,14 +1,13 @@
 "use client";
-
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
 import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { env } from "~/env";
 import { useUserProfileStore } from "~/store/userProfileStore";
 import { formatDate } from "~/utils/helpers";
+import BlurImage from "../../shared/blur-image";
 import FollowButton from "../../shared/follow-button";
 import ShareDialog from "../../shared/share-dialog";
 import UserCreations from "./user-creations";
@@ -38,22 +37,23 @@ const ProfileMetaData = () => {
   return (
     <div className="w-full bg-white">
       <div className="mx-auto max-w-[1440px] pb-16 border-b border-border px-4">
-        {/* Main Profile Section */}
         <div className="relative pt-16 pb-8">
-          {/* Profile Header */}
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
-            {/* Avatar */}
             <div className="flex justify-center sm:justify-start">
               <div className="relative">
-                <div className="rounded-full p-1 bg-gradient-to-r from-primary to-primary/80">
-                  <Image
-                    src={user?.image ?? "/default-profile.avif"}
-                    alt={user?.name ?? "User Profile Image"}
-                    width={160}
-                    height={160}
-                    className="size-36 rounded-full border-3 border-white shadow-lg"
-                    draggable={false}
-                  />
+                <div className="relative rounded-full p-1 bg-gradient-to-r from-primary to-primary/80">
+                  <div className="absolute inset-1 rounded-full bg-white" />
+                  <div className="relative">
+                    <BlurImage
+                      src={user?.image ?? "/default-profile.avif"}
+                      alt={user?.name ?? "User Profile Image"}
+                      width={160}
+                      height={160}
+                      className="size-36 rounded-full border-3 border-white shadow-lg"
+                      size="size-36"
+                      draggable={false}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -178,7 +178,7 @@ const ProfileMetaData = () => {
               <ShareDialog
                 title={user?.name ?? ""}
                 description="Share this profile"
-                url={`${env.NEXT_PUBLIC_APP_URL}/profile?user_id=${
+                url={`${env.NEXT_PUBLIC_APP_URL}/profile?user=${
                   user?.username ?? ""
                 }`}
               />

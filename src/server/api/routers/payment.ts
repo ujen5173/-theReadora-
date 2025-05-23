@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import Stripe from "stripe";
 import { z } from "zod";
 import { env } from "~/env";
+import { COIN_PRICE } from "~/utils/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -102,7 +103,7 @@ export const paymentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { amount } = input;
       const userId = ctx.session.user.id;
-      const price = (amount / 500) * 0.99;
+      const price = (amount / 500) * COIN_PRICE;
 
       try {
         // Create or retrieve Stripe customer
@@ -262,7 +263,7 @@ export const paymentRouter = createTRPCRouter({
                   userId,
                   type: "PURCHASE",
                   amount: coinsAmount,
-                  price: ((coinsAmount / 500) * 0.99).toString(),
+                  price: ((coinsAmount / 500) * COIN_PRICE).toString(),
                   time: new Date().toISOString(),
                   status: "completed",
                   pre_transaction_coins: user.coins,

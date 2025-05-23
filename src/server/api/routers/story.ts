@@ -1,8 +1,7 @@
 import type { Language } from "@prisma/client";
 import { TRPCError, type inferProcedureOutput } from "@trpc/server";
-import { z } from "zod";
-
 import readingTime from "reading-time";
+import { z } from "zod";
 import { THUMBNAILS } from "~/data/thumbnails";
 import {
   createTRPCRouter,
@@ -21,6 +20,7 @@ import {
 import { GENRES } from "~/utils/genre";
 import { makeSlug, mongoObjectId } from "~/utils/helpers";
 import { processChapterContent } from "./chapter";
+
 export const NCardEntity = {
   id: true,
   slug: true,
@@ -28,11 +28,12 @@ export const NCardEntity = {
   readingTime: true,
   isMature: true,
   thumbnail: true,
+  thumbnailPlaceholder: true,
   isCompleted: true,
   genreSlug: true,
   chapterCount: true,
   readCount: true,
-  ratingAvg: true,
+  averageRating: true,
   ratingCount: true,
   author: {
     select: {
@@ -107,7 +108,7 @@ export const storyRouter = createTRPCRouter({
       try {
         const stories = await ctx.postgresDb.story.findMany({
           orderBy: {
-            ratingAvg: "desc",
+            averageRating: "desc",
           },
           select: NCardEntity,
           take: input.limit,
@@ -142,7 +143,7 @@ export const storyRouter = createTRPCRouter({
 
         const stories = await ctx.postgresDb.story.findMany({
           orderBy: {
-            ratingAvg: "desc",
+            averageRating: "desc",
           },
           take: input.limit,
         });
@@ -211,7 +212,7 @@ export const storyRouter = createTRPCRouter({
           },
           select: NCardEntity,
           orderBy: {
-            ratingAvg: "desc",
+            averageRating: "desc",
           },
           take: input.limit,
         });
@@ -242,6 +243,18 @@ export const storyRouter = createTRPCRouter({
                 id: true,
                 name: true,
                 username: true,
+              },
+            },
+            ratings: {
+              include: {
+                user: {
+                  select: {
+                    image: true,
+                    name: true,
+                    id: true,
+                    username: true,
+                  },
+                },
               },
             },
             chapters: {
@@ -432,7 +445,7 @@ export const storyRouter = createTRPCRouter({
         const orderBy: any = {};
         switch (sortBy?.toUpperCase()) {
           case "HOT":
-            orderBy.ratingAvg = "desc";
+            orderBy.averageRating = "desc";
             break;
           case "POPULAR":
             orderBy.readCount = "desc";
@@ -441,7 +454,7 @@ export const storyRouter = createTRPCRouter({
             orderBy.createdAt = "desc";
             break;
           case "TOP RATED":
-            orderBy.ratingAvg = "desc";
+            orderBy.averageRating = "desc";
             break;
           default:
             orderBy.createdAt = "desc";
@@ -581,6 +594,7 @@ export const storyRouter = createTRPCRouter({
           url: z.string(),
           public_id: z.string(),
         }),
+
         isMature: z.boolean().default(false),
         hasAiContent: z.boolean().default(false),
         language: z.enum(
@@ -625,16 +639,42 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         storyId: z.string().cuid(),
-        rating: z.number().min(1).max(5),
+        rating: z.number().min(0).max(5),
+        review: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const { storyId, rating } = input;
+        const { storyId, rating, review } = input;
+
+        // check if user has read the story or not.
+        const hasRead = await ctx.postgresDb.chapterRead.findFirst({
+          where: {
+            readerKey: ctx.session.user.id,
+            chapter: {
+              storyId: storyId,
+            },
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        if (!hasRead) {
+          throw new TRPCError({
+            message: "Read the story before leaving a review",
+            code: "SERVICE_UNAVAILABLE",
+          });
+        }
 
         return await ctx.postgresDb.$transaction(async (tx) => {
           const story = await tx.story.findUnique({
             where: { id: storyId },
+            select: {
+              id: true,
+              ratingCount: true,
+              averageRating: true,
+            },
           });
 
           if (!story) {
@@ -646,71 +686,66 @@ export const storyRouter = createTRPCRouter({
 
           const existingRating = await tx.rating.findFirst({
             where: {
-              userId: ctx.session?.user.id,
+              userId: ctx.session.user.id,
               storyId,
+            },
+            select: {
+              id: true,
+              rating: true,
             },
           });
 
-          if (existingRating) {
-            const oldRating = existingRating.rating;
+          let newRatingCount = story.ratingCount;
+          let newAverageRating = story.averageRating;
 
-            const newRatingValue = story.ratingValue - oldRating + rating;
-            const newRatingAvg = newRatingValue / story.ratingCount;
+          if (existingRating) {
+            // Update existing rating
+            const totalRating =
+              story.averageRating * story.ratingCount -
+              existingRating.rating +
+              rating;
+            newAverageRating = totalRating / story.ratingCount;
 
             await tx.rating.update({
               where: { id: existingRating.id },
               data: {
                 rating,
+                review,
                 updatedAt: new Date(),
-              },
-            });
-
-            // Update story rating statistics
-            await tx.story.update({
-              where: { id: storyId },
-              data: {
-                ratingValue: newRatingValue,
-                ratingAvg: newRatingAvg,
               },
             });
           } else {
             // Create new rating
+            newRatingCount = story.ratingCount + 1;
+            const totalRating =
+              story.averageRating * story.ratingCount + rating;
+            newAverageRating = totalRating / newRatingCount;
+
             await tx.rating.create({
               data: {
                 storyId,
-                userId: ctx.session?.user.id,
+                userId: ctx.session.user.id,
                 rating,
-              },
-            });
-
-            // Calculate new rating statistics
-            const newRatingCount = story.ratingCount + 1;
-            const newRatingValue = story.ratingValue + rating;
-            const newRatingAvg = newRatingValue / newRatingCount;
-
-            // Update story rating statistics
-            await tx.story.update({
-              where: { id: storyId },
-              data: {
-                ratingCount: newRatingCount,
-                ratingValue: newRatingValue,
-                ratingAvg: newRatingAvg,
+                review,
               },
             });
           }
+
+          // Update story rating statistics
+          await tx.story.update({
+            where: { id: storyId },
+            data: {
+              ratingCount: newRatingCount,
+              averageRating: newAverageRating,
+            },
+          });
 
           return {
             success: true,
             message: existingRating ? "Rating updated" : "Rating added",
             stats: {
-              ratingCount: story.ratingCount + (existingRating ? 0 : 1),
-              ratingValue:
-                story.ratingValue +
-                (existingRating ? rating - existingRating.rating : rating),
-              ratingAvg:
-                (story.ratingValue +
-                  (existingRating ? rating - existingRating.rating : rating)) /
-                (story.ratingCount + (existingRating ? 0 : 1)),
+              count: newRatingCount,
+              average: newAverageRating,
             },
           };
         });

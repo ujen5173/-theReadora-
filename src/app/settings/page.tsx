@@ -1,40 +1,5 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { CoinsBitcoinIcon } from "hugeicons-react";
-import { Bell, CreditCard, ShieldAlert, User } from "lucide-react";
 import Header from "../_components/layouts/header";
-import BillingSection from "../_components/layouts/settings/billings/billing";
-import CoinsPackageSettings from "../_components/layouts/settings/coins";
-import DangerZone from "../_components/layouts/settings/danger";
-import NotificationSettings from "../_components/layouts/settings/notification";
-import ProfileSettings from "../_components/layouts/settings/profile";
-
-const navItems = [
-  {
-    value: "profile",
-    label: "Profile",
-    icon: <User className="size-5 mr-2" />,
-  },
-  {
-    value: "notifications",
-    label: "Notifications",
-    icon: <Bell className="size-5 mr-2" />,
-  },
-  {
-    value: "danger",
-    label: "Danger Zone",
-    icon: <ShieldAlert className="size-5 mr-2" />,
-  },
-  {
-    value: "coins",
-    label: "Coins",
-    icon: <CoinsBitcoinIcon className="size-5 mr-2" />,
-  },
-  {
-    value: "billing",
-    label: "Billing",
-    icon: <CreditCard className="size-5 mr-2" />,
-  },
-];
+import SettingsNavigation from "../_components/layouts/settings/navigation";
 
 const Settings = async ({
   searchParams,
@@ -42,6 +7,7 @@ const Settings = async ({
   searchParams: Promise<{ tab: string }>;
 }) => {
   const { tab } = await searchParams;
+
   return (
     <>
       <Header
@@ -59,42 +25,3 @@ const Settings = async ({
 };
 
 export default Settings;
-
-const SettingsNavigation = ({ tab }: { tab: string }) => {
-  return (
-    <Tabs
-      defaultValue={tab ?? "profile"}
-      className="flex flex-col lg:flex-row gap-3 lg:gap-6"
-    >
-      <TabsList className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 lg:space-y-1 min-w-0 lg:min-w-[220px]">
-        {navItems.map((item) => (
-          <TabsTrigger
-            key={item.value}
-            value={item.value}
-            className="flex items-center justify-start whitespace-nowrap px-3 py-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200 data-[state=active]:bg-muted data-[state=active]:text-foreground data-[state=active]:font-medium"
-          >
-            {item.icon}
-            {item.label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-      <div className="flex-1 space-y-4">
-        <TabsContent value="profile">
-          <ProfileSettings />
-        </TabsContent>
-        <TabsContent value="notifications">
-          <NotificationSettings />
-        </TabsContent>
-        <TabsContent value="danger">
-          <DangerZone />
-        </TabsContent>
-        <TabsContent value="coins">
-          <CoinsPackageSettings />
-        </TabsContent>
-        <TabsContent value="billing">
-          <BillingSection />
-        </TabsContent>
-      </div>
-    </Tabs>
-  );
-};

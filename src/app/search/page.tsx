@@ -1,7 +1,16 @@
 "use client";
-
+import { Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useLayoutEffect, useState } from "react";
+import { Button } from "~/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
 import { useFilterStore } from "~/store/useFilter";
 import { api } from "~/trpc/react";
 import { getValidGenre } from "~/utils/helpers";
@@ -22,7 +31,7 @@ const Search = () => {
     ...applyFilters(),
     query,
     skip: 0,
-    limit: 10,
+    limit: 15,
   });
 
   // Handle genre synchronization
@@ -53,8 +62,8 @@ const Search = () => {
     setSearchParams({
       ...applyFilters(),
       query,
-      skip: (currentPage - 1) * 10,
-      limit: 10,
+      skip: (currentPage - 1) * 15,
+      limit: 15,
     });
   }, [applyFilters, query, currentPage]);
 
@@ -62,7 +71,7 @@ const Search = () => {
     setCurrentPage(page);
     setSearchParams((prev) => ({
       ...prev,
-      skip: (page - 1) * 10,
+      skip: (page - 1) * 15,
     }));
   };
 
@@ -71,17 +80,44 @@ const Search = () => {
       <Header />
 
       <section className="w-full">
-        <div className="flex border-b border-border max-w-[1440px] mx-auto px-4 py-10 gap-10">
-          {/* Filter actions */}
-          <div className="max-w-xs">
+        <div className="flex flex-col lg:flex-row border-b border-border max-w-[1440px] mx-auto px-2 sm:px-4 py-4 lg:py-10 gap-4 xl:gap-10">
+          <div className="lg:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                >
+                  <Filter className="h-4 w-4" />
+                  Filters
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-full sm:max-w-md p-0">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Story Filters</SheetTitle>
+                  <SheetDescription>
+                    Customize your search results with filters
+                  </SheetDescription>
+                </SheetHeader>
+                <FilterSection
+                  query={query}
+                  genre={genre}
+                  handleRefetch={handleRefetch}
+                  isMobile={true}
+                />
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          <div className="hidden lg:block w-full lg:max-w-xs">
             <FilterSection
               query={query}
               genre={genre}
               handleRefetch={handleRefetch}
+              isMobile={false}
             />
           </div>
 
-          {/* Books details */}
           <div className="flex-1">
             <SearchBooksSection
               query={query}

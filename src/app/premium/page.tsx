@@ -15,6 +15,7 @@ import {
   STRIPE_MONTHLY_PLAN_PRICE,
   STRIPE_YEARLY_PLAN_PRICE,
 } from "~/utils/constants";
+import { generateSEOMetadata } from "~/utils/site";
 import Header from "../_components/layouts/header";
 import CoinsPackage from "../_components/shared/premium/coins-package";
 
@@ -217,3 +218,17 @@ const Premium = () => {
 };
 
 export default Premium;
+
+export const metadata = generateSEOMetadata({
+  title: "Readora Premium - Enhanced Reading Experience",
+  description:
+    "Upgrade to Readora Premium for an ad-free experience, exclusive content, offline reading, and more. Start your premium journey today!",
+  pathname: "/premium",
+  keywords: [
+    "premium",
+    "subscription",
+    "premium features",
+    "ad-free reading",
+    "exclusive content",
+  ],
+});

@@ -34,7 +34,7 @@ function Input({
   type,
   iconStyle = "",
   icon: Icon,
-  iconPlacement,
+  iconPlacement = "left",
   size = "md", // Default size
   ...props
 }: InputProps) {

@@ -274,9 +274,10 @@ const Header = ({
           </div>
 
           <div className="flex items-center flex-1 justify-end gap-2">
-            <div className="w-full lg:flex justify-end hidden">
+            <div className="flex-1 lg:flex justify-end hidden">
               <SearchBar />
             </div>
+
             <UserHeader />
           </div>
         </div>

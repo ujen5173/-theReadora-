@@ -198,12 +198,10 @@ const StoryEditorFooter = () => {
               disabled={status === "pending"}
               className="w-full sm:w-auto bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
               effect="shineHover"
-              icon={ChevronDown}
+              icon={status === "pending" ? Loader2 : ChevronDown}
+              iconStyle={status === "pending" ? "animate-spin" : "none"}
               iconPlacement="right"
             >
-              {status === "pending" && (
-                <Loader2 className="size-4 animate-spin mr-2" />
-              )}
               Publish Chapter
             </Button>
           </DropdownMenuTrigger>

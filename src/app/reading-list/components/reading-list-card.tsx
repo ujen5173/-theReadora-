@@ -1,14 +1,13 @@
 "use client";
-
 import {
   Delete02Icon,
   Edit02Icon,
   MoreVerticalSquare01Icon,
 } from "hugeicons-react";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import BlurImage from "~/app/_components/shared/blur-image";
 import { Button } from "~/components/ui/button";
 import {
   Popover,
@@ -82,11 +81,13 @@ const ReadingListCard = ({
           <h2 className="line-clamp-1 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary">
             {readingList.title}
           </h2>
-          {readingList.description && (
-            <p className="mt-1 line-clamp-2 text-sm text-gray-600">
-              {readingList.description}
-            </p>
-          )}
+          <div className="h-5 mt-1">
+            {readingList.description && (
+              <p className="line-clamp-2 text-sm text-gray-600">
+                {readingList.description}
+              </p>
+            )}
+          </div>
         </Link>
         {showActions && (
           <Popover>
@@ -159,24 +160,26 @@ const ReadingListCard = ({
                   className="absolute transition-transform hover:scale-105"
                   style={{
                     maxWidth: bookWidth + "px",
-                    width: "28%",
+                    width: "clamp(120px, 28%, 200px)", // Responsive width with min and max
                     maxHeight: bookHeight + "px",
-                    minHeight: "180px",
+                    minHeight: "185px",
                     height: "45%",
                     zIndex: length - index,
                     transform,
                   }}
                 >
-                  <Image
-                    src={story.thumbnail}
-                    className="relative inset-0 h-full w-full rounded-md border border-border object-fill shadow"
-                    alt={story.title}
-                    width={cardWidth}
-                    height={cardHeight}
-                    style={{
-                      zIndex: readingList.stories.length - index,
-                    }}
-                  />
+                  <div className="relative w-full h-full">
+                    <BlurImage
+                      src={story.thumbnail}
+                      className="relative rounded-md border border-border object-cover shadow"
+                      alt={story.title}
+                      style={{
+                        zIndex: readingList.stories.length - index,
+                      }}
+                      sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, 200px"
+                      priority={index === 0}
+                    />
+                  </div>
                   <div
                     className="absolute -bottom-[5px] -right-[5px] rounded border border-border bg-stone-100 shadow-lg"
                     style={{

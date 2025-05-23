@@ -154,6 +154,7 @@ model Rating {
     storyId   String
     story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
     rating    Int
+    review    String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -196,8 +197,7 @@ model Story {
     language       Language    @default(English)
     isLGBTQContent Boolean     @default(false)
     ratingCount    Int         @default(0)
-    ratingValue    Float       @default(0)
-    ratingAvg      Float       @default(0)
+    averageRating  Float       @default(0.0)
 
     ratings Rating[]
 
@@ -222,7 +222,7 @@ model Chapter {
     slug          String
 
     // Metrics data for the chapter including engagement and reading statistics
-    metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"ratingAvg\": 0}")
+    metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"averageRating\": 0}")
 
     readershipAnalytics Json @default("{\"total\": 0, \"unique\": 0}")
 

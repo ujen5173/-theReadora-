@@ -1,7 +1,4 @@
 "use client";
-
-import type { ChapterPricePool } from "@prisma/client";
-import type { JsonValue } from "@prisma/client/runtime/library";
 import {
   BookOpen01Icon,
   BotIcon,
@@ -24,19 +21,8 @@ import type { T_byID_or_slug } from "~/server/api/routers/story";
 import { useUserStore } from "~/store/userStore";
 import { getReadingTimeText } from "~/utils/helpers";
 import FollowButton from "../../shared/follow-button";
+import Reviews from "./reviews";
 import TableOfContent from "./toc";
-
-type Chapter = {
-  id: string;
-  title: string;
-  createdAt: Date;
-  chapterNumber: number;
-  metrics: JsonValue;
-  readershipAnalytics: JsonValue;
-  isLocked: boolean;
-  price: ChapterPricePool | null;
-  scheduledFor: Date | null;
-};
 
 interface StoryDetailsSectionProps {
   story: T_byID_or_slug;
@@ -50,6 +36,25 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
     setToggleReadMore(!toggleReadMore);
   };
 
+  const discussions = [
+    {
+      id: 1,
+      user: { name: "BookLover42", avatar: "/avatars/1.jpg" },
+      comment: "The character development in this chapter was amazing!",
+      date: "3 hours ago",
+      replies: 5,
+      spoiler: true,
+    },
+    {
+      id: 2,
+      user: { name: "StoryFanatic", avatar: "/avatars/2.jpg" },
+      comment: "Can't wait to see what happens next with the main couple!",
+      date: "1 day ago",
+      replies: 2,
+      spoiler: false,
+    },
+  ];
+
   return (
     <main className="w-full py-2 relative">
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
@@ -59,7 +64,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
           </h1>
           <p className="mb-3 sm:mb-4 text-sm sm:text-base text-slate-700">
             By{" "}
-            <Link href={`/profile?user_id=${story.author.username}`}>
+            <Link href={`/profile?user=${story.author.username}`}>
               <span className="font-semibold text-primary hover:underline underline-offset-2">
                 {story.author.name}
               </span>
@@ -126,7 +131,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
                   </span>
                 </div>
                 <span className="font-bold text-sm sm:text-base text-center text-slate-700">
-                  {story.ratingAvg.toFixed(1)}
+                  {story.averageRating.toFixed(1)}
                 </span>
               </div>
             </TooltipTrigger>
@@ -136,7 +141,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
               tooltipArrowClassName="bg-slate-50 border-b border-r border-slate-300 fill-slate-50"
             >
               <p className="text-slate-700 font-black">
-                {story.ratingAvg.toFixed(1)} (
+                {story.averageRating.toFixed(1)} (
                 {Intl.NumberFormat().format(story.ratingCount)})
               </p>
             </TooltipContent>
@@ -211,7 +216,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
         >
           {story.synopsis}
         </p>
-        {story.synopsis.length > 250 && (
+        {story.synopsis.length > 400 && (
           <span
             className="underline text-primary/70 underline-offset-2 cursor-pointer my-4 block text-sm sm:text-base font-semibold"
             onClick={handleReadMore}
@@ -253,6 +258,15 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
         storyId={story.id}
         chapters={story.chapters}
         isAuthor={user?.user?.id === story.author.id}
+      />
+
+      <Reviews
+        storyId={story.id}
+        reviews={story.ratings}
+        ratingDetails={{
+          count: story.ratingCount,
+          average: story.averageRating,
+        }}
       />
     </main>
   );

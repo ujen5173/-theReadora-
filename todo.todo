@@ -19,30 +19,28 @@
 | Monetization       | Remove premium tag if unlocked             | High     |                                      | Medium       | ✅     |
 | Perf. Improvements | Improve page load                          | Extreme  | Data fetching is taking too long     | Medium       | ✅     |
 | Automation         | AI generated contents                      | Extreme  |                                      | Low          | ⚒️     |
+| UI/UX Improvements | Responsive design                          | Extreme  |                                      | Low          | ✅     |
+| History            | User Reading History                       | Low      |                                      | Low          | ✅     |
+| Engagement         | Blurred placeholder                        | Extreme  |                                      | Low          | ✅     |
 
-| UI/UX Improvements | Responsive design                          | Extreme  |                                      | Low          |        |
+| Content Mgmt       | Edit stories and chapters                  | Medium   |                                      | Medium       |        |
+| Engagement         | Review panels                              | Medium   |                                      | Low          |        |
+| Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         |        |
+| Core Logic         | Different section data fetching            | Extreme  | Recom., history, top, rising, latest | Medium       |        |
+| Engagement         | Paragraph-level comments                   | Low      | Inline comment                       | Extreme      |        |
 | Monetization       | Coin purchase flow                         | High     | Stripe, eSewa and Khalti integration | Medium       |        |
 | Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
-| Engagement         | Comments on stories                        | Medium   |                                      | Medium       |        |
-| Content Mgmt       | Edit stories and chapters                  | Medium   | Revision history                     | Medium       |        |
-| Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         |        |
-| Collaboration      | Discussion panels                          | Low      | Threaded discussions                 | High         |        |
-| Premium Features   | Exclusive functionality for subscribers    | Low      | e.g., locked chapters, analytics     | Extreme      |        |
-| AI Integration     | AI assistance (summaries, suggestions)     | Low      | GPT-powered                          | Extreme      |        |
-| Engagement         | Paragraph-level comments                   | Low      | Inline review                        | Extreme      |        |
 | UI/UX Improvements | Improve chapter reading experience         | High     | Reading experience is not quite good | Medium       |        |
+| AI Integration     | AI assistance (summaries, suggestions)     | Low      | GPT-powered                          | Extreme      |        |
 ---
 
 2. BUG REPORT QUEUE
 
 | Description                                         | Priority | Date Identified | Date Resolved | Status | Where? |
 | --------------------------------------------------- | -------- | --------------- | ------------- | ------ | ------ |
-| Got error while parsing the chapter metrics.        | High     | 2025-04-30      | 2025-05-01    | OK     | Dev    |
-| got \[Object Object] without parsing the JSON file  |          |                 |               |        |        |
-| Errors while getting chapterChunk and chapterLength | Medium   | 2025-04-30      | 2025-05-01    | OK     | Dev    |
-| Type error in chapter-page/wrapper.tsx (line 19:18) | High     | 2025-05-01      |               |        | Prod   |
-| Type mismatch on chapter object props               |          |                 |               |        |        |
 | Conflict between search params and filter system    | High     | 2025-05-04      |               |        | Both   |
+| Bug in payment pricing                              | High     | 2025-05-15      |               |        | Both   |
+| Slug is not unique of story                         | High     | 2025-05-16      |               |        | Both   |
 ---
 
 3. FEATURE IDEAS (Unfiltered / Speculative)
@@ -52,3 +50,4 @@
 | YouTube-like viewer retention (Chapter Heatmaps) | Graph to show which parts of the chapter are most/least read/viewed       |
 | AI for Thumbnail generation                      | Use AI to generate thumbnails for stories authored by early-stage writers |
 | Pagination                                       | Chapter Chunk navigation using page params                                |
+| Subscribers only novels                          | Novels subscribers can only read                                          |

@@ -9,7 +9,7 @@ import { useReadinglistStore } from "~/store/useReadinglist";
 import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
 import Header from "../_components/layouts/header";
-import ReadingListDialog from "../_components/shared/reading-list";
+import ReadingListDialog from "../_components/shared/reading-list-dialog";
 import ReadingListCard from "./components/reading-list-card";
 
 const ReadingList = () => {

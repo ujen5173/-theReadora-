@@ -78,7 +78,7 @@ const StoryEditorSidebar = () => {
                     alt={story?.title || "Story Thumbnail"}
                     width={80}
                     height={120}
-                    className="aspect-[1/1.5] rounded-md w-16 sm:w-20"
+                    className="aspect-[1/1.6] rounded-md w-16 sm:w-20"
                   />
                 </div>
                 <div className="flex flex-col gap-1 sm:gap-2">

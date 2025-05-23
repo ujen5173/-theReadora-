@@ -31,6 +31,7 @@ const SearchBar = ({ size = "lg" }: { size?: "md" | "lg" | "sm" }) => {
           icon={KbdIcon}
           ref={ref}
           className="bg-white w-full"
+          autoFocus={false}
           iconPlacement="right"
         />
       </form>

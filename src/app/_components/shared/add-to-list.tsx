@@ -18,7 +18,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { api } from "~/trpc/react";
-import ReadingListDialog from "./reading-list";
+import ReadingListDialog from "./reading-list-dialog";
 
 const AddToList = ({ storyId }: { storyId: string }) => {
   const {

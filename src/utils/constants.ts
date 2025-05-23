@@ -1,5 +1,5 @@
 export const cardWidth = 230.5;
-export const cardHeight = 310;
+export const cardHeight = 1383;
 
 export const bookWidth = cardWidth / 1.5;
 export const bookHeight = cardHeight / 1.4;
@@ -47,7 +47,7 @@ export const METRICS_DEFAULT_VALUES = {
   commentsCount: 0,
   ratingCount: 0,
   ratingValue: 0,
-  ratingAvg: 0,
+  averageRating: 0,
 };
 
 // NOTE:

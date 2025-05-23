@@ -67,7 +67,7 @@ export default function UserHeader({
   return (
     <div className="flex items-center gap-3">
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-2">
+        <DropdownMenuTrigger className="flex items-center gap-2 rounded-full">
           <div className="cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20">
             {user.image ? (
               <Image
@@ -77,16 +77,16 @@ export default function UserHeader({
                 height={40}
                 priority
                 sizes="(max-width: 640px) 28px, 40px"
-                className="rounded-full object-cover w-7 h-7 sm:w-10 sm:h-10"
+                className="rounded-full object-cover size-7 sm:size-10"
               />
             ) : (
-              <div className="h-7 w-7 sm:h-10 sm:w-10 bg-primary/10 text-primary rounded-full flex items-center justify-center font-medium text-xs sm:text-base">
+              <div className="size-7 sm:h-10 sm:w-10 bg-primary/10 text-primary rounded-full flex items-center justify-center font-medium text-xs sm:text-base">
                 {user.name?.[0] || "U"}
               </div>
             )}
           </div>
           {fromMobileMenu && (
-            <div className="flex items-center gap-2 sm:hidden">
+            <div className="flex items-center gap-2">
               <div className="flex flex-col text-left">
                 <span className="text-sm font-semibold text-slate-700 truncate">
                   {user.name}

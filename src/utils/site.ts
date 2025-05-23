@@ -3,11 +3,24 @@ import { type Metadata } from "next";
 // Site Configuration
 export const siteConfig = {
   name: "Readora",
-  title: "Readora - Where Stories Come Alive",
+  title:
+    "Readora - Where Stories Come Alive | Free Online Reading & Writing Platform",
   description:
-    "Discover and share your stories on Readora. A modern platform for readers and writers to explore, create, and connect through storytelling.",
+    "Readora - Your ultimate destination for free online reading and writing. Discover thousands of stories across multiple genres, connect with writers, and share your own stories. Join our community of readers and writers today!",
   url: "https://readora.com",
   ogImage: "https://readora.com/og-image.jpg",
+  keywords: [
+    "online reading",
+    "free stories",
+    "writing platform",
+    "story sharing",
+    "reading community",
+    "online books",
+    "free novels",
+    "writing community",
+    "story platform",
+    "read online",
+  ],
   links: {
     twitter: "https://twitter.com/readora",
     github: "https://github.com/readora",
@@ -58,6 +71,19 @@ export const genreCategories = [
   { name: "Children's", slug: "children" },
 ] as const;
 
+// Add structured data for better SEO
+export const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Readora",
+  url: "https://readora.com",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://readora.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
 // SEO Metadata Generator
 interface SEOMetadataProps {
   title?: string;
@@ -65,6 +91,7 @@ interface SEOMetadataProps {
   image?: string;
   noIndex?: boolean;
   pathname?: string;
+  keywords?: string[];
 }
 
 export function generateSEOMetadata({
@@ -73,16 +100,18 @@ export function generateSEOMetadata({
   image,
   noIndex = false,
   pathname = "",
+  keywords = [],
 }: SEOMetadataProps = {}): Metadata {
   const metaTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.title;
-
   const metaDescription = description ?? siteConfig.description;
   const metaImage = image ?? siteConfig.ogImage;
   const url = `${siteConfig.url}${pathname}`;
+  const metaKeywords = [...siteConfig.keywords, ...keywords].join(", ");
 
   return {
     title: metaTitle,
     description: metaDescription,
+    keywords: metaKeywords,
     authors: [{ name: siteConfig.creator.name }],
     openGraph: {
       title: metaTitle,
@@ -113,11 +142,18 @@ export function generateSEOMetadata({
       googleBot: {
         index: !noIndex,
         follow: !noIndex,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
     metadataBase: new URL(siteConfig.url),
     alternates: {
       canonical: url,
+    },
+    verification: {
+      google: "your-google-verification-code",
+      yandex: "your-yandex-verification-code",
     },
   };
 }

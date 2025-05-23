@@ -1,5 +1,4 @@
 "use client";
-
 import {
   AnalyticsUpIcon,
   ArrowRight02Icon,
@@ -8,17 +7,16 @@ import {
   StarIcon,
   ViewIcon,
 } from "hugeicons-react";
-import Image from "next/image";
 import Link from "next/link";
 import { type FC } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
-import { cardHeight, cardWidth } from "~/utils/constants";
 import { merriweatherFont } from "~/utils/font";
 import { formatNumber } from "~/utils/helpers";
 import AddToList from "./add-to-list";
+import BlurImage from "./blur-image";
 
 export type TCard = {
   id: string;
@@ -30,7 +28,7 @@ export type TCard = {
   isMature: boolean;
   isCompleted: boolean;
   genreSlug: string;
-  ratingAvg: number;
+  averageRating: number;
   ratingCount: number;
   chapterCount: number;
   author: {
@@ -44,38 +42,34 @@ const NovelCard: FC<{
 }> = ({ details, isAuthorViewer = false }) => {
   return (
     <div title={details.title} className="cover-card group relative">
-      <Link href="/story/[slug]" as={`/story/${details.slug}`} legacyBehavior>
-        <a className="relative block">
-          {details.isMature && (
-            <div className="absolute right-2 top-2 z-50">
-              <Badge
-                className={cn(`bg-primary text-xs`, merriweatherFont.className)}
-              >
-                18+
-              </Badge>
-            </div>
-          )}
-
-          <Image
-            className="aspect-[1/1.5] cover-card-img mb-2 w-full rounded-lg object-fill"
-            src={details.thumbnail}
-            alt={details.thumbnail}
-            width={cardWidth}
-            height={cardHeight}
-          />
-
-          <div className="w-full">
-            <h1 className="line-clamp-1 text-lg font-semibold text-slate-800 xxs:text-lg">
-              {details.title}
-            </h1>
-
-            {!isAuthorViewer && (
-              <p className="line-clamp-1 text-base text-gray-600">
-                {details.author.name}
-              </p>
-            )}
+      <Link href={`/story/${details.slug}`} className="pb-2 relative block">
+        {details.isMature && (
+          <div className="absolute right-2 top-2 z-50">
+            <Badge
+              className={cn(`bg-primary text-xs`, merriweatherFont.className)}
+            >
+              18+
+            </Badge>
           </div>
-        </a>
+        )}
+
+        <BlurImage
+          src={details.thumbnail}
+          alt={details.title}
+          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 15vw"
+        />
+
+        <div className="w-full mt-2">
+          <h1 className="line-clamp-1 text-sm font-semibold text-slate-800">
+            {details.title}
+          </h1>
+
+          {!isAuthorViewer && (
+            <p className="line-clamp-1 text-sm text-gray-600">
+              {details.author.name}
+            </p>
+          )}
+        </div>
       </Link>
 
       <div className="absolute inset-0 hidden flex-col sm:flex">
@@ -121,7 +115,7 @@ const NovelCard: FC<{
                 <StarIcon size={16} className="mt-1 stroke-2" />
               </div>
               <p className="text-sm font-semibold">
-                {details.ratingAvg}{" "}
+                {details.averageRating}{" "}
                 <span className="text-slate-500">
                   ({Intl.NumberFormat().format(details.ratingCount)})
                 </span>
@@ -159,13 +153,13 @@ const NovelCard: FC<{
           </div>
         </div>
 
-        <div className="invisible w-full">
-          <h1 className="line-clamp-1 text-lg font-semibold text-slate-800 xxs:text-lg">
+        <div className="invisible w-full mt-2">
+          <h1 className="line-clamp-1 text-sm font-semibold text-slate-800">
             {details.title}
           </h1>
 
           {!isAuthorViewer && (
-            <p className="line-clamp-1 text-base text-gray-600">
+            <p className="line-clamp-1 text-sm text-gray-600">
               {details.author.name}
             </p>
           )}

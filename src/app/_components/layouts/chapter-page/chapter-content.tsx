@@ -240,7 +240,7 @@ const Content = () => {
 
       {/* Next Chapter or End of Story Message */}
       {!hasNextPage && data?.pages.length && data.pages.length > 0 && (
-        <div className="py-8 sm:py-12 flex flex-col items-center">
+        <div className="py-8 sm:py-12 flex max-w-md mx-auto flex-col items-center">
           {nextChapter ? (
             <div className="flex flex-col items-center gap-3 sm:gap-4 bg-gradient-to-b from-slate-50 to-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm w-full">
               <span className="border border-slate-200 text-slate-500 text-xs sm:text-sm font-medium px-3 sm:px-4 py-0.5 sm:py-1 bg-slate-100 rounded-full">
@@ -257,7 +257,7 @@ const Content = () => {
                   icon={ArrowRightIcon}
                   effect={"expandIcon"}
                   iconPlacement="right"
-                  className="w-full text-sm sm:text-base"
+                  className="w-full "
                 >
                   Continue Reading
                 </Button>
@@ -269,7 +269,7 @@ const Content = () => {
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-800">
                   You're All Caught Up!
                 </h3>
-                <p className="text-sm sm:text-base text-slate-600">
+                <p className="text-slate-600">
                   Stay tuned for more chapters from this amazing story
                 </p>
               </div>

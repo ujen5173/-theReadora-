@@ -1,3 +1,6 @@
+// TODO: Pagination does not work properly, need to fix it
+// TODO: Need some UI improvements in the filter section
+
 "use client";
 
 import {
@@ -54,29 +57,31 @@ const SearchBooksSection = ({
   };
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4">
-      <div className="flex items-center justify-between py-4 border-b border-border">
+    <main className="w-full max-w-7xl mx-auto px-2 sm:px-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between py-3 lg:py-4 border-b border-border">
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold text-slate-800">
-            {query ? (
-              <>
-                Results for "
-                <span className="text-primary underline underline-offset-2">
-                  {query}
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg lg:text-xl font-semibold text-slate-800">
+              {query ? (
+                <>
+                  Results for "
+                  <span className="text-primary underline underline-offset-2">
+                    {query}
+                  </span>
+                  "
+                </>
+              ) : (
+                <span className="text-primary">
+                  {getValidGenre(genre) ?? "All"}
                 </span>
-                "
-              </>
-            ) : (
-              <span className="text-primary">
-                {getValidGenre(genre) ?? "All"}
-              </span>
-            )}{" "}
-            Stories
-          </h1>
+              )}{" "}
+              Stories
+            </h1>
+          </div>
           {isLoading ? (
-            <Skeleton className="h-4 w-48" />
+            <Skeleton className="h-4 w-28" />
           ) : (
-            <p className="text-sm text-slate-500">
+            <p className="text-xs lg:text-sm text-slate-500">
               Showing{" "}
               {books?.stories.length
                 ? (currentPage - 1) * (books?.metadata.pageSize ?? 0) + 1
@@ -92,7 +97,7 @@ const SearchBooksSection = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 py-6 min-h-[400px]">
+      <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-3 lg:gap-4 py-4 lg:py-6 min-h-[400px]">
         {isLoading ? (
           [...Array(10)].map((_, i) => (
             <div key={i} className="space-y-3">
@@ -122,9 +127,9 @@ const SearchBooksSection = ({
       </div>
 
       {!isLoading && books?.stories.length && books?.stories.length > 0 && (
-        <div className="py-4 border-t border-border">
+        <div className="py-4 border-t border-border overflow-x-auto">
           <Pagination>
-            <PaginationContent>
+            <PaginationContent className="flex-wrap">
               <PaginationItem>
                 <PaginationPrevious
                   href="#"

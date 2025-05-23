@@ -301,7 +301,7 @@ const TableOfContent = ({
   );
 
   return (
-    <div className="mt-6 sm:mt-8 border-t border-border pt-4 sm:pt-6">
+    <div className="border-b my-6 sm:my-8 border-t border-border py-4 sm:py-6">
       <div className="flex flex-col sm:flex-row sm:items-center mb-4 gap-3 sm:gap-0 sm:justify-between">
         <h2 className="text-lg sm:text-xl font-bold text-slate-800">
           Table of Contents
