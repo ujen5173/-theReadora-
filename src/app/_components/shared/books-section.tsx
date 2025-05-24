@@ -27,7 +27,7 @@ const BookSection = ({
 }) => {
   return (
     <section className="w-full">
-      <div className={cn(!multiple ? "max-w-[1440px] mx-auto px-4 py-8" : "")}>
+      <div className={cn(!multiple ? "max-w-[1540px] mx-auto px-4 py-8" : "")}>
         {!removeHeader && (
           <div className="flex mb-4 items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-semibold text-primary">

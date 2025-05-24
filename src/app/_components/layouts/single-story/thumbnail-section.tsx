@@ -97,7 +97,7 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
           </Tooltip>
         </TooltipProvider>
 
-        {user?.id === story.authorId ? (
+        {user?.id === story.authorId && (
           <>
             <Button
               variant={"outline"}
@@ -115,9 +115,9 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
               <Link href={`/write?editId=${story.id}`}>Edit Story</Link>
             </Button>
           </>
-        ) : (
-          <AddToList storyId={story.id} />
         )}
+
+        <AddToList storyId={story.id} />
 
         <ShareDialog
           title={story.title}

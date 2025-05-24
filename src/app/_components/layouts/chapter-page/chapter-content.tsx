@@ -7,10 +7,12 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LockedChapter from "~/app/_components/shared/locked-chapter";
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import { useChapterStore } from "~/store/useChapter";
 import { useUserStore } from "~/store/userStore";
 import "~/styles/editor.css";
 import { api } from "~/trpc/react";
+import { contentFont } from "~/utils/font";
 import {
   isChapterScheduled,
   parseMetrics,
@@ -219,7 +221,10 @@ const Content = () => {
     <div className="editor-container px-[0!important] space-y-6 sm:space-y-8">
       {/* Initial chunk */}
       <div
-        className="preview-content text-slate-500 text-base sm:text-lg"
+        className={cn(
+          "preview-content text-slate-500 text-base sm:text-lg",
+          contentFont.className
+        )}
         dangerouslySetInnerHTML={{ __html: initialChunk.content }}
       />
 
@@ -227,7 +232,10 @@ const Content = () => {
       {additionalChunks.map((chunk) => (
         <div
           key={chunk.id}
-          className="preview-content text-slate-500 text-base sm:text-lg"
+          className={cn(
+            "preview-content text-slate-500 text-base sm:text-lg",
+            contentFont.className
+          )}
           dangerouslySetInnerHTML={{ __html: chunk.content }}
         />
       ))}

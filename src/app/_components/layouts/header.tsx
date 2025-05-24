@@ -209,7 +209,7 @@ const Header = ({
         <div
           className={cn(
             "mx-auto flex items-center justify-between gap-3 sm:gap-6 px-3 sm:px-4 py-3 sm:py-4",
-            !full && "max-w-[1440px]"
+            !full && "max-w-[1540px]"
           )}
         >
           <div className="flex items-center gap-4 sm:gap-10">

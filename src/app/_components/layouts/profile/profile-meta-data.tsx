@@ -36,7 +36,7 @@ const ProfileMetaData = () => {
 
   return (
     <div className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] pb-16 px-4">
+      <div className="mx-auto max-w-[1540px] pb-16 px-4">
         <div className="relative pt-16 pb-8">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
             <div className="flex justify-center sm:justify-start">

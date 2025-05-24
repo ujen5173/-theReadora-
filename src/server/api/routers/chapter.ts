@@ -265,6 +265,9 @@ export const chapterRouter = createTRPCRouter({
               select: {
                 id: true,
                 title: true,
+                ratingCount: true,
+                averageRating: true,
+
                 slug: true,
                 author: {
                   select: {

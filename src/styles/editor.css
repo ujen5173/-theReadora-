@@ -1,5 +1,4 @@
 .editor-container {
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap");
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
@@ -7,7 +6,6 @@
 }
 .editor-container .editor-content,
 .editor-container .preview-content {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
   font-size: 1rem;
   line-height: 1.75;
   color: #334155;

@@ -80,7 +80,7 @@ const Search = () => {
       <Header />
 
       <section className="w-full">
-        <div className="flex flex-col lg:flex-row max-w-[1440px] mx-auto px-2 sm:px-4 py-4 lg:py-10 gap-4 xl:gap-10">
+        <div className="flex flex-col lg:flex-row max-w-[1540px] mx-auto px-2 sm:px-4 py-4 lg:py-10 gap-4 xl:gap-10">
           <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>

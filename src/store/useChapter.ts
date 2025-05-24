@@ -33,6 +33,8 @@ export type useChapterStory = {
   thumbnail: string;
   chapterCount: number;
   author: useChapterUser;
+  ratingCount: number;
+  averageRating: number;
   chapters: {
     id: string;
     title: string;

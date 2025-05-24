@@ -1,5 +1,5 @@
 "use client";
-import { StarIcon } from "hugeicons-react";
+
 import { BookOpenIcon, ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,15 +10,33 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { useChapterStore } from "~/store/useChapter";
 import { useUserStore } from "~/store/userStore";
+import { api } from "~/trpc/react";
 import { isChapterScheduled } from "~/utils/helpers";
-import ReadingListDialog from "../../shared/reading-list-dialog";
+import AddToList from "../../shared/add-to-list";
+import { StarRating } from "../single-story/star-rating";
 
 const ChapterTOC = () => {
   const { story, chapter: currentChapter } = useChapterStore();
   const { user } = useUserStore();
+
+  const { data: rating } = api.user.getRating.useQuery(
+    {
+      storyId: story!.id,
+    },
+    {
+      enabled: !!story?.id,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   return (
     <section className="w-full border-b border-gray-200">
@@ -124,22 +142,40 @@ const ChapterTOC = () => {
           </DropdownMenu>
         </div>
         <div className="hidden md:flex items-center gap-2 w-full sm:w-auto">
-          <ReadingListDialog>
-            <Button
-              icon={StarIcon}
-              variant="outline"
-              className="flex-1 sm:flex-none text-sm"
-            >
-              Add to Reading List
-            </Button>
-          </ReadingListDialog>
-          <Button
-            icon={StarIcon}
-            variant="outline"
-            className="flex-1 sm:flex-none text-sm"
-          >
-            Vote
-          </Button>
+          {story && <AddToList storyId={story.id} />}
+          {story && (
+            <TooltipProvider delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant={"outline"} className="w-full">
+                    <div className="flex items-center gap-2">
+                      <StarRating
+                        storyId={story.id}
+                        isInteractive={false}
+                        rating={story.averageRating}
+                        className="flex-shrink-0"
+                        removeStars
+                      />
+                      <span className="text-xs sm:text-sm text-muted-foreground">
+                        {`(${story.ratingCount})` || "..."}
+                      </span>
+                    </div>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  variant="outline"
+                  className="text-xs sm:text-sm"
+                  side="top"
+                >
+                  {rating ? (
+                    <p>Your rating: {rating.rating}</p>
+                  ) : (
+                    <p>Rate this story</p>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
       </div>
     </section>

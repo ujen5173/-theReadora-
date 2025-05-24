@@ -39,7 +39,7 @@ const ReadingListDetail = () => {
       <Header removeBackground />
 
       <main className="bg-white min-h-screen">
-        <div className="max-w-[1440px] mx-auto px-4 py-8">
+        <div className="max-w-[1540px] mx-auto px-4 py-8">
           {/* Back button and title section */}
           <div className="mb-8">
             <Link href="/reading-list">

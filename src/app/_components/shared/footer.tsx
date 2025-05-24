@@ -20,7 +20,7 @@ import Logo from "./logo";
 const Footer = () => {
   return (
     <footer className="w-full">
-      <div className="mx-auto max-w-[1440px] border-t border-border">
+      <div className="mx-auto max-w-[1540px] border-t border-border">
         <div className="grid grid-cols-1 gap-8 px-4 py-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="grid-cols-2">
             <div className="mb-4 mr-6 flex w-fit items-end gap-1">

@@ -17,6 +17,7 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 interface StarRatingProps {
+  removeStars?: boolean;
   rating: number;
   maxRating?: number;
   className?: string;
@@ -27,6 +28,7 @@ interface StarRatingProps {
 const ratingEmojis = ["😫", "😕", "😐", "😊", "🤩"];
 
 export const StarRating = ({
+  removeStars = false,
   rating,
   maxRating = 5,
   className,
@@ -114,6 +116,10 @@ export const StarRating = ({
     const currentFullStars = Math.floor(currentDisplayRating);
     const currentHasHalfStar = currentDisplayRating % 1 >= 0.5;
     const starSize = isDialog ? "size-7" : "size-5";
+
+    if (removeStars) {
+      return "Add Rating";
+    }
 
     return [...Array(maxRating)].map((_, i) => {
       const isFull = i < currentFullStars;

@@ -1,6 +1,6 @@
 "use client";
 
-import { BookmarkCheck02Icon } from "hugeicons-react";
+import { Bookmark02Icon } from "hugeicons-react";
 import { Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -50,7 +50,7 @@ const AddToList = ({ storyId }: { storyId: string }) => {
       <DialogTrigger asChild>
         <Button
           variant={"outline"}
-          icon={BookmarkCheck02Icon}
+          icon={Bookmark02Icon}
           className="w-full bg-white"
         >
           Save to List

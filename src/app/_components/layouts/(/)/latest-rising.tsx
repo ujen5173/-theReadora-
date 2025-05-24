@@ -3,7 +3,7 @@ import BookSection from "~/app/_components/shared/books-section";
 const LatestAndRising = () => {
   return (
     <section className="w-full">
-      <div className="flex items-center gap-2 max-w-[1440px] mx-auto px-4 py-8">
+      <div className="flex items-center gap-2 max-w-[1540px] mx-auto px-4 py-8">
         <div className="flex-1">
           <BookSection
             title="Latest Releases"

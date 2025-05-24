@@ -51,19 +51,19 @@ export default async function Home() {
       {!user?.user.id ? (
         <>
           <HeroSection />
-          <Separator className="max-w-[1440px] mx-auto" />
+          <Separator className="max-w-[1540px] mx-auto" />
         </>
       ) : (
         <SimilarReadsNReadingList />
       )}
       <TrendingSection />
-      <Separator className="max-w-[1440px] mx-auto" />
+      <Separator className="max-w-[1540px] mx-auto" />
       <Recommendations />
-      <Separator className="max-w-[1440px] mx-auto" />
+      <Separator className="max-w-[1540px] mx-auto" />
       <TopTags />
-      <Separator className="max-w-[1440px] mx-auto" />
+      <Separator className="max-w-[1540px] mx-auto" />
       <LatestAndRising />
-      <Separator className="max-w-[1440px] mx-auto" />
+      <Separator className="max-w-[1540px] mx-auto" />
       <PopularCompleted />
 
       {!user?.user.id && (
@@ -81,7 +81,7 @@ export default async function Home() {
             </div>
 
             <section className="pt-4 px-4">
-              <div className="max-w-[1440px] mx-auto">
+              <div className="max-w-[1540px] mx-auto">
                 <div className="text-center mb-12">
                   <Badge variant="secondary" className="mb-4">
                     The Readora Difference

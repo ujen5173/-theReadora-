@@ -51,16 +51,16 @@ enum Language {
 }
 
 enum ChapterPricePool {
-    POOL_50 // 50 coins ~ 0.50 USD --> short - medium chapter
-    POOL_70 // 70 coins ~ 0.69 USD --> medium - long chapter
-    POOL_110 // 110 coins ~ 1.09 USD --> long - very long chapter
-    POOL_150 // 150 coins ~ 1.49 USD --> premium author chapter (for epic chapters)
+    POOL_50
+    POOL_70
+    POOL_110
+    POOL_150
 }
 
 model User {
     id            String    @id @default(cuid())
     name          String
-    username      String    @unique @map("username")
+    username      String    @unique
     email         String    @unique
     bio           String?
     emailVerified DateTime?
@@ -101,7 +101,15 @@ model User {
 
     storyRatings Rating[]
 
+    replies Replies[]
+    // Removed unused repliesId field
+
+    likedReplies Replies[] @relation("ReplyLikes") // Fixed relation name
+    likedRatings Rating[]  @relation("RatingLikes")
+
     @@index([username, email])
+    @@index([accountStatus])
+    @@index([premium])
 }
 
 model UnlockedChapter {
@@ -116,6 +124,8 @@ model UnlockedChapter {
     price ChapterPricePool
 
     @@unique([userId, chapterId])
+    @@index([userId])
+    @@index([chapterId])
     @@map("unlocked_chapters")
 }
 
@@ -132,6 +142,9 @@ model Transactions {
     post_transaction_coins Int
     metadata               Json?
     createdAt              DateTime        @default(now())
+
+    @@index([userId, createdAt])
+    @@index([type, status])
 }
 
 model Follow {
@@ -154,27 +167,56 @@ model Rating {
     storyId   String
     story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
     rating    Int
-    review    String?
+    review    String?  @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    replies Replies[]
+
+    likes      User[] @relation("RatingLikes")
+    likesCount Int    @default(0)
 
     @@unique([userId, storyId])
     @@index([userId, storyId])
     @@index([storyId, rating])
+    @@index([createdAt])
+}
+
+model Replies {
+    id         String @id @default(cuid())
+    userId     String
+    user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    ratingId   String
+    rating     Rating @relation(fields: [ratingId], references: [id], onDelete: Cascade)
+    reply      String
+    likesCount Int    @default(0)
+    likes      User[] @relation("ReplyLikes") // Fixed relation name
+
+    parentId String?
+    parent   Replies? @relation("RepliesChildren", fields: [parentId], references: [id], onDelete: Cascade)
+
+    children Replies[] @relation("RepliesChildren")
+
+    createdAt DateTime @default(now())
+
+    @@index([userId])
+    @@index([ratingId])
+    @@index([parentId])
+    @@index([createdAt])
 }
 
 model ChapterRead {
     id        String   @id @default(uuid())
     chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
     chapterId String
-    readerKey String // e.g. userId for logged-in and for anonymous
-    frequency Int      @default(1) // how many times the chapter is read
-    lastRead  DateTime @default(now()) // last read time
-    readTime  Int      @default(0) // time spent reading in seconds
+    readerKey String
+    frequency Int      @default(1)
+    lastRead  DateTime @default(now())
+    readTime  Int      @default(0)
     createdAt DateTime @default(now())
-    // userSessionId String? // for anonymous users, we can use a session ID to track reads
 
     @@unique([chapterId, readerKey])
+    @@index([readerKey])
     @@map("chapter_reads")
 }
 
@@ -213,6 +255,10 @@ model Story {
     readinglists ReadinglistStory[]
 
     @@index([title, slug, tags], name: "story_index")
+    @@index([storyStatus, isCompleted])
+    @@index([authorId])
+    @@index([genreSlug])
+    @@index([createdAt])
 }
 
 model Chapter {
@@ -221,7 +267,6 @@ model Chapter {
     title         String
     slug          String
 
-    // Metrics data for the chapter including engagement and reading statistics
     metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"averageRating\": 0}")
 
     readershipAnalytics Json @default("{\"total\": 0, \"unique\": 0}")
@@ -229,7 +274,7 @@ model Chapter {
     storyId String
     story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
 
-    mongoContentID String[] // multple mongo document if the chapter is split due to size
+    mongoContentID String[]
 
     reader ChapterRead[]
 
@@ -243,7 +288,11 @@ model Chapter {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    @@unique([storyId, chapterNumber])
     @@index([title, storyId], name: "chapter_index")
+    @@index([isLocked])
+    @@index([scheduledFor])
+    @@index([createdAt])
 }
 
 model Genres {
@@ -255,7 +304,6 @@ model Genres {
     totalStories Int      @default(0)
 }
 
-// Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
     userId                   String

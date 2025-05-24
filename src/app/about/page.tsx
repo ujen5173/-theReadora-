@@ -15,7 +15,7 @@ export default function AboutPage() {
   return (
     <>
       <Header removeBackground />
-      <main className="mx-auto max-w-[1440px] px-4 py-16 md:py-24 lg:py-32">
+      <main className="mx-auto max-w-[1540px] px-4 py-16 md:py-24 lg:py-32">
         {/* Hero Section */}
         <section className="mb-24 md:mb-32 flex flex-col items-center text-center">
           <div className="mb-16 space-y-6">

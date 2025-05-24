@@ -24,8 +24,8 @@
 | Engagement         | Blurred placeholder                        | Extreme  |                                      | Low          | ✅     |
 | Content Mgmt       | Edit stories and chapters                  | Medium   |                                      | Medium       | ✅     |
 
-| Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
 | Engagement         | Review panels                              | Medium   |                                      | Low          |        |
+| Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
 | Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         |        |
 | Core Logic         | Different section data fetching            | Extreme  | Recom., history, top, rising, latest | Medium       |        |
 | Engagement         | Paragraph-level comments                   | Low      | Inline comment                       | Extreme      |        |
