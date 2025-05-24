@@ -7,8 +7,8 @@ export const siteConfig = {
     "Readora - Where Stories Come Alive | Free Online Reading & Writing Platform",
   description:
     "Readora - Your ultimate destination for free online reading and writing. Discover thousands of stories across multiple genres, connect with writers, and share your own stories. Join our community of readers and writers today!",
-  url: "https://readora.com",
-  ogImage: "https://readora.com/og-image.jpg",
+  url: "https://thereadora.vercel.app",
+  ogImage: "https://thereadora.vercel.app/og-image.jpg",
   keywords: [
     "online reading",
     "free stories",
@@ -55,31 +55,15 @@ export const navigationLinks = {
   },
 } as const;
 
-// Genre Categories
-export const genreCategories = [
-  { name: "Romance", slug: "romance" },
-  { name: "Fantasy", slug: "fantasy" },
-  { name: "Science Fiction", slug: "sci-fi" },
-  { name: "Mystery", slug: "mystery" },
-  { name: "Horror", slug: "horror" },
-  { name: "Thriller", slug: "thriller" },
-  { name: "Historical Fiction", slug: "historical-fiction" },
-  { name: "Contemporary", slug: "contemporary" },
-  { name: "Literary Fiction", slug: "literary-fiction" },
-  { name: "Young Adult", slug: "young-adult" },
-  { name: "New Adult", slug: "new-adult" },
-  { name: "Children's", slug: "children" },
-] as const;
-
 // Add structured data for better SEO
 export const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Readora",
-  url: "https://readora.com",
+  url: "https://thereadora.vercel.app",
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://readora.com/search?q={search_term_string}",
+    target: "https://thereadora.vercel.app/search?q={search_term_string}",
     "query-input": "required name=search_term_string",
   },
 };

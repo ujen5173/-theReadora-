@@ -63,7 +63,8 @@ const Premium = () => {
         removeBackground
         headerExtraStyle="border-b border-border"
       />
-      <main className="w-full min-h-screen bg-slate-100 border-b border-border p-4">
+
+      <main className="w-full min-h-screen bg-slate-100 p-4">
         <div className="rounded-lg bg-white border border-slate-200">
           <div className="container mx-auto px-4 flex items-center justify-center py-28 flex-col">
             <Badge
@@ -211,6 +212,7 @@ const Premium = () => {
           </div>
         </div>
       </main>
+
       <PurchaseDialog />
     </>
   );

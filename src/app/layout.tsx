@@ -42,7 +42,7 @@ export default function RootLayout({
                   <Suspense>
                     <TailwindIndicator />
                     {/* <NextTopLoader height={5} color="#e11d48" /> */}
-                    <HolyLoader height={5} color="#e11d48" />
+                    <HolyLoader height={4} color="#e11d48" />
                     <Toaster />
 
                     {children}

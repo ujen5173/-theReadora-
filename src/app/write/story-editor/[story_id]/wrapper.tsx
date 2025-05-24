@@ -95,7 +95,7 @@ const StoryEditor = ({
   };
 
   return (
-    <div className="bg-[#FCFCFC] border-b border-border">
+    <div className="bg-slate-50">
       <StoryEditorHeader />
 
       <div className="max-w-[1440px] mx-auto px-3 sm:px-4 py-4 sm:py-6">

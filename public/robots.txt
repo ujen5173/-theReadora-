@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://readora.com/sitemap.xml
+Sitemap: https://thereadora.vercel.app/sitemap.xml
 
 # Disallow admin and private routes
 Disallow: /api/

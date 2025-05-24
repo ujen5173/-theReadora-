@@ -5,6 +5,7 @@ import NovelCard, { type TCard } from "./novel-card";
 const BookSection = ({
   title,
   scrollable = false,
+  removeHeader = false,
   novels = [],
   multiple = false,
   isAuthorViewer = false,
@@ -18,6 +19,7 @@ const BookSection = ({
 }: {
   title: string;
   scrollable?: boolean;
+  removeHeader?: boolean;
   novels: TCard[];
   multiple?: boolean;
   isAuthorViewer?: boolean;
@@ -26,12 +28,14 @@ const BookSection = ({
   return (
     <section className="w-full">
       <div className={cn(!multiple ? "max-w-[1440px] mx-auto px-4 py-8" : "")}>
-        <div className="flex mb-4 items-center gap-2">
-          <h1 className="text-xl sm:text-2xl font-semibold text-primary">
-            {title}
-          </h1>
-          <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-        </div>
+        {!removeHeader && (
+          <div className="flex mb-4 items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-semibold text-primary">
+              {title}
+            </h1>
+            <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          </div>
+        )}
 
         {novels.length === 0 ? (
           customEmptyContainer

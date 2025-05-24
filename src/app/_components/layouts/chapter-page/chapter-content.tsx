@@ -33,7 +33,7 @@ const ChapterContent = ({
     user?.id !== story?.author.id
   ) {
     return (
-      <div className="w-full bg-slate-100 border-b border-border">
+      <div className="w-full bg-slate-100">
         <div className="max-w-4xl border-x border-border bg-white px-6 mx-auto py-20">
           <div className="text-center space-y-4">
             <h1 className="text-2xl font-bold text-slate-800">
@@ -67,7 +67,7 @@ const ChapterContent = ({
   }
 
   return (
-    <section className="w-full bg-slate-100 border-b border-border">
+    <section className="w-full bg-slate-100">
       <div className="max-w-4xl border-x border-border bg-white px-3 sm:px-6 mx-auto">
         <ChapterMetaData />
         <Content />
@@ -88,7 +88,7 @@ const ChapterMetaData = () => {
   );
 
   return (
-    <div className="py-12 sm:py-20 space-y-6 sm:space-y-8 border-b border-slate-200">
+    <div className="py-12 sm:py-20 space-y-6 sm:space-y-8 border-b border-border">
       <h1 className="text-2xl sm:text-3xl md:text-4xl text-center font-black text-slate-700 px-2">
         {chapter?.title}
       </h1>
@@ -307,17 +307,18 @@ const Content = () => {
                 </div>
 
                 <div className="space-x-2 flex items-center justify-center">
-                  <Button icon={PlusIcon}>Follow Author for Updates</Button>
+                  <Button className="w-full" icon={PlusIcon}>
+                    Follow Author
+                  </Button>
 
-                  <Link href={`/story/${story?.slug}`} className="block w-full">
-                    <Button
-                      variant="outline"
-                      icon={ArrowLeftIcon}
-                      className="w-full hover:bg-slate-50 transition-colors"
-                    >
-                      Back to Story Overview
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="outline"
+                    icon={ArrowLeftIcon}
+                    asChild
+                    className="w-full hover:bg-slate-50 transition-colors"
+                  >
+                    <Link href={`/story/${story?.slug}`}>Story Overview</Link>
+                  </Button>
                 </div>
               </div>
             </div>

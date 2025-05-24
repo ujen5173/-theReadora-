@@ -57,7 +57,7 @@ const ReadingList = () => {
     <>
       <Header removeBackground />
 
-      <main className="bg-white border-b border-border">
+      <main className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 py-8">
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>

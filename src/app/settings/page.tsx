@@ -16,7 +16,7 @@ const Settings = async ({
         headerExtraStyle="border-b border-border shadow-sm"
       />
       <div className="w-full">
-        <div className="border-b border-border max-w-[1440px] mx-auto px-4 py-12">
+        <div className="max-w-[1440px] mx-auto px-4 py-12">
           <SettingsNavigation tab={tab} />
         </div>
       </div>

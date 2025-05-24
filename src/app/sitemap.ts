@@ -1,7 +1,8 @@
 import { type MetadataRoute } from "next";
-import { genreCategories, siteConfig } from "~/utils/site";
+import { postgresDb } from "~/server/postgresql";
+import { siteConfig } from "~/utils/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url;
 
   // Base routes
@@ -21,8 +22,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1,
   }));
 
+  const genres = await postgresDb.genres.findMany({
+    select: { slug: true },
+  });
+
   // Genre routes
-  const genreRoutes = genreCategories.map((genre) => ({
+  const genreRoutes = genres.map((genre) => ({
     url: `${baseUrl}/genres/${genre.slug}`,
     lastModified: new Date(),
     changeFrequency: "daily" as const,

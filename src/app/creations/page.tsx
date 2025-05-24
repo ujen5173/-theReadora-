@@ -16,7 +16,7 @@ const MyCreations = () => {
     <>
       <Header />
       <div className="w-full">
-        <div className="border-b border-border max-w-[1440px] mx-auto px-4 py-6">
+        <div className="max-w-[1440px] mx-auto px-4 py-6">
           <div className="mb-4 flex items-center justify-between">
             <h1 className="text-xl md:text-2xl font-bold text-slate-800">
               My Creations

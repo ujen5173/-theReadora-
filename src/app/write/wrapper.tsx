@@ -149,7 +149,7 @@ const Write = ({
     <>
       <Header />
 
-      <div className="max-w-[1240px] border-b border-border mx-auto px-3 sm:px-4 py-4 sm:py-8">
+      <div className="max-w-[1240px] mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-primary">
           Submit your story
         </h1>

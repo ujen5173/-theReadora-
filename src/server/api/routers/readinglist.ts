@@ -289,6 +289,68 @@ export const readinglistRouter = createTRPCRouter({
         }
       }
     }),
+
+  getReadingListByid: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const readingList = await ctx.postgresDb.readinglist.findUnique({
+          where: {
+            id: input.id,
+          },
+          include: {
+            stories: {
+              select: {
+                story: {
+                  select: NCardEntity,
+                },
+              },
+            },
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+        });
+
+        if (!readingList) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Reading list not found",
+          });
+        }
+
+        if (
+          readingList.isPrivate &&
+          ctx.session?.user.id !== readingList.userId
+        ) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "This reading list is private",
+          });
+        }
+
+        return {
+          ...readingList,
+          stories: readingList.stories.map((e) => e.story),
+        };
+      } catch (err) {
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+        throw new TRPCError({
+          message: "Something went wrong",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
 });
 
 export type TgetUserReadingList = inferProcedureOutput<
