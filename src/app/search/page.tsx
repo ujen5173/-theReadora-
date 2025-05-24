@@ -3,6 +3,7 @@ import { Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -93,18 +94,20 @@ const Search = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-full sm:max-w-md p-0">
-                <SheetHeader className="sr-only">
-                  <SheetTitle>Story Filters</SheetTitle>
-                  <SheetDescription>
-                    Customize your search results with filters
-                  </SheetDescription>
-                </SheetHeader>
-                <FilterSection
-                  query={query}
-                  genre={genre}
-                  handleRefetch={handleRefetch}
-                  isMobile={true}
-                />
+                <ScrollArea className="h-dvh">
+                  <SheetHeader className="sr-only">
+                    <SheetTitle>Story Filters</SheetTitle>
+                    <SheetDescription>
+                      Customize your search results with filters
+                    </SheetDescription>
+                  </SheetHeader>
+                  <FilterSection
+                    query={query}
+                    genre={genre}
+                    handleRefetch={handleRefetch}
+                    isMobile={true}
+                  />
+                </ScrollArea>
               </SheetContent>
             </Sheet>
           </div>

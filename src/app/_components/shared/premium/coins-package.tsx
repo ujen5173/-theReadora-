@@ -30,7 +30,7 @@ const CoinsPackage = () => {
 
   return (
     <>
-      <div className="flex-1 border border-border bg-white rounded-2xl p-8 hover:shadow-lg transition-shadow">
+      <div className="flex-1 border border-border bg-white rounded-lg md:rounded-2xl p-4 md:p-8 hover:shadow-lg transition-shadow">
         <h2 className="mb-2 text-2xl font-bold text-slate-800 flex items-center">
           Coins Package
           <Badge variant="outline" className="ml-2">

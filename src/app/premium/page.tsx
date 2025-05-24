@@ -147,7 +147,7 @@ const Premium = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
-              <div className="flex-1 border border-primary bg-primary rounded-2xl p-8 shadow-lg">
+              <div className="flex-1 border border-primary bg-primary rounded-lg md:rounded-2xl p-4 md:p-8 shadow-lg">
                 <div className="flex flex-col h-full">
                   <h2 className="mb-4 text-2xl font-bold text-white flex items-center">
                     Premium Plan

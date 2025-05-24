@@ -30,10 +30,11 @@ const ChapterTOC = () => {
 
   const { data: rating } = api.user.getRating.useQuery(
     {
-      storyId: story!.id,
+      storyId: story?.id as string,
     },
     {
-      enabled: !!story?.id,
+      enabled: !!story?.id && !!user?.id,
+      staleTime: 1000 * 60 * 5,
       refetchOnWindowFocus: false,
     }
   );

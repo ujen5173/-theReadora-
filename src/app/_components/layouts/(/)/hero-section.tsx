@@ -216,20 +216,20 @@ const HeroSection = () => {
             alt="Background Pattern"
             width={800}
             height={400}
-            className="w-full h-full object-cover opacity-10"
+            className="w-full h-full z-0 object-cover opacity-10"
           />
         </div>
 
-        <div className="py-20 flex-1">
+        <div className="py-20 flex-1 z-10">
           <h1
             className={cn(
-              "text-3xl md:text-5xl leading-tight font-black text-slate-700 mb-4 tracking-tight",
+              "text-4xl md:text-5xl leading-tight font-black text-slate-600 mb-4 tracking-tight",
               merriweatherFont.className
             )}
           >
             Discover and share your favorite reads!
           </h1>
-          <p className="text-lg text-slate-500 font-medium">
+          <p className="text-base md:text-lg text-slate-500 font-medium">
             The ultimate alternative to{" "}
             <span className="text-primary/70 underline font-semibold">
               Wattpad

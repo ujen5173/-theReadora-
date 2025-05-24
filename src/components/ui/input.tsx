@@ -25,8 +25,8 @@ type InputProps = {
 
 const sizeClasses = {
   sm: "h-8 px-2 text-sm",
-  md: "h-9 px-3 text-base",
-  lg: "h-10 px-4 text-lg",
+  md: "h-9 px-3 text-sm md:text-base",
+  lg: "h-10 px-4 text-sm md:text-base lg:text-lg",
 };
 
 function Input({

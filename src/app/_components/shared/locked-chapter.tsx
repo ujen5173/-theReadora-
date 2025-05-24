@@ -134,28 +134,31 @@ const UnlockButton = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-[425px] p-0 overflow-hidden rounded-xl">
         {/* Header with gradient background */}
-        <div className="bg-gradient-to-r from-primary/90 to-primary p-6 text-white">
+        <div className="bg-gradient-to-r from-primary/90 to-primary px-4 py-6 md:p-8 text-white">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">
+            <DialogTitle className="text-2xl font-bold tracking-tight">
               Unlock Chapter
             </DialogTitle>
-            <DialogDescription className="text-white/80">
+            <DialogDescription className="text-white/90 md:mt-2">
               Confirm your purchase to unlock this chapter
             </DialogDescription>
           </DialogHeader>
         </div>
 
-        <div className="p-6 space-y-3">
+        <div className="p-4 md:p-8">
           {/* Price Breakdown */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-slate-50/80 rounded-xl border border-slate-100">
+          <div className="space-y-4 md:space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 md:pb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <Coins className="h-5 w-5 text-primary" />
+                <Coins className="h-5 w-5 text-primary" />
+                <div>
+                  <span className="font-bold text-slate-700">Base Price</span>
+                  <p className="text-sm text-slate-500">
+                    Standard chapter price
+                  </p>
                 </div>
-                <span className="font-medium text-slate-700">Base Price</span>
               </div>
               <span className="font-semibold text-slate-900">
                 {basePrice} coins
@@ -163,14 +166,17 @@ const UnlockButton = ({
             </div>
 
             {user?.premium && (
-              <div className="flex items-center justify-between p-4 bg-green-50/80 rounded-xl border border-green-100">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3 md:pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <span className="text-green-600 font-medium">20%</span>
+                  <div className="text-green-600 font-semibold">20%</div>
+                  <div>
+                    <span className="font-bold text-green-700">
+                      Premium Discount
+                    </span>
+                    <p className="text-sm text-green-600">
+                      Exclusive member benefit
+                    </p>
                   </div>
-                  <span className="font-medium text-green-700">
-                    Premium Discount
-                  </span>
                 </div>
                 <span className="font-semibold text-green-600">
                   -{basePrice - discountedPrice} coins
@@ -178,69 +184,75 @@ const UnlockButton = ({
               </div>
             )}
 
-            <div className="flex items-center justify-between p-4 bg-primary/5 rounded-xl border border-primary/10">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 md:pb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <span className="font-medium text-primary">Total</span>
+                <Coins className="h-5 w-5 text-primary" />
+                <div>
+                  <span className="font-bold text-slate-700">Your Balance</span>
+                  <p className="text-sm text-slate-500">Available coins</p>
                 </div>
-                <span className="font-medium text-slate-700">Final Price</span>
+              </div>
+              <span className="font-semibold text-slate-900">
+                {user?.coins ?? 0} coins
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-3">
+                <Coins className="h-5 w-5 text-primary" />
+                <div>
+                  <span className="font-bold text-slate-700">Final Price</span>
+                  <p className="text-sm text-slate-500">
+                    Amount to be deducted
+                  </p>
+                </div>
               </div>
               <span className="font-bold text-primary text-lg">
                 {discountedPrice} coins
               </span>
             </div>
-          </div>
 
-          {/* User Balance */}
-          <div className="flex items-center justify-between p-4 bg-slate-50/80 rounded-xl border border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-100 rounded-lg">
-                <Coins className="h-5 w-5 text-slate-600" />
+            {/* Insufficient Balance Warning */}
+            {user && (user.coins ?? 0) < discountedPrice && (
+              <div className="mt-4 flex items-center gap-2 text-sm text-red-600">
+                <span>⚠️</span>
+                <p>
+                  Insufficient balance. Please add more coins to unlock this
+                  chapter.
+                </p>
               </div>
-              <span className="font-medium text-slate-700">Your Balance</span>
-            </div>
-            <span className="font-semibold text-slate-900">
-              {user?.coins ?? 0} coins
-            </span>
+            )}
           </div>
-
-          {/* Insufficient Balance Warning */}
-          {user && (user.coins ?? 0) < discountedPrice && (
-            <div className="p-4 bg-red-50 rounded-xl border border-red-100">
-              <p className="text-sm text-red-600 text-center">
-                Insufficient balance. Please add more coins to unlock this
-                chapter.
-              </p>
-            </div>
-          )}
         </div>
 
-        <DialogFooter className="p-6 bg-slate-50/50 border-t border-slate-100 gap-3">
-          <Button variant="outline" className="flex-1">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleUnlock}
-            disabled={
-              status === "pending" ||
-              (user?.coins ? user.coins < discountedPrice : false)
-            }
-            className="flex-1 bg-primary hover:bg-primary/90"
-          >
-            {status === "pending" ? (
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                Processing...
-              </div>
-            ) : user ? (
-              <>
-                <Coins className="h-4 w-4 mr-2" />
-                Unlock Chapter
-              </>
-            ) : (
-              "Sign in to Unlock"
-            )}
-          </Button>
+        <DialogFooter className="p-3 md:p-6 bg-slate-50/50 border-t border-slate-100">
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex-1 h-12">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUnlock}
+              disabled={
+                status === "pending" ||
+                (user?.coins ? user.coins < discountedPrice : false)
+              }
+              className="flex-1 h-12 bg-primary hover:bg-primary/90"
+            >
+              {status === "pending" ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Processing...
+                </div>
+              ) : user ? (
+                <>
+                  <Coins className="h-5 w-5 mr-2" />
+                  Unlock Chapter
+                </>
+              ) : (
+                "Sign in to Unlock"
+              )}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

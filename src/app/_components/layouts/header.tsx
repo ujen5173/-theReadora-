@@ -94,7 +94,7 @@ const MobileMenu = () => {
         />
       </SheetTrigger>
       <SheetContent
-        side="right"
+        side="left"
         className="w-[280px] sm:w-[320px] p-0 flex flex-col"
       >
         <SheetHeader className="p-4 border-b">
