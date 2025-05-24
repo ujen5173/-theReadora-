@@ -1,108 +1,39 @@
-// @params
-// [story_id] is the id of the story
-// ?chapter_id is the id of the chapter
-// - if chapter_id is not provided, the user is CREATING a new chapter
-//   - chapters can be ordered by the chapter number
-// - if chapter_id is provided, the user is EDITING an existing chapter
+import { Suspense } from "react";
+import { toast } from "sonner";
+import { Skeleton } from "~/components/ui/skeleton";
+import { api } from "~/trpc/server";
+import StoryEditor from "./wrapper";
 
-// TODO:
-// - add search and find and replace feature.
+const ChapterPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ chapter_id: string | undefined }>;
+}) => {
+  const params = await searchParams;
 
-"use client";
-import { Editor } from "~/app/_components/layouts/editor";
-import { Tabs, TabsContent } from "~/components/ui/tabs";
-import "~/styles/editor.css";
+  let chapterDetail = null;
 
-// Import the editor styles
-import type { JSONContent } from "novel";
-import StoryEditorFooter from "~/app/_components/layouts/story-editor/footer";
-import StoryEditorHeader from "~/app/_components/layouts/story-editor/header";
-import StoryEditorSidebar from "~/app/_components/layouts/story-editor/side-bar";
-import StoryEditorTabs from "~/app/_components/layouts/story-editor/tabs";
-import { useNewChapterStore } from "~/store/useNewChapter";
-
-const StoryEditor = () => {
-  const {
-    setContent,
-    content,
-    htmlContent,
-    setHtmlContent,
-    setWordCount,
-    setIsAutoSaving,
-    focusMode,
-    setHardSaved,
-  } = useNewChapterStore();
-
-  const handleEditorChange = (json: string, html: string) => {
-    setHardSaved(false);
-    setContent(JSON.parse(json) as JSONContent);
-    setHtmlContent(html);
-
-    // Calculate word count from HTML content
-    const text = html.replace(/<[^>]*>/g, " ");
-    setWordCount(text.split(/\s+/).filter(Boolean).length);
-
-    // Simulate auto-save
-    setIsAutoSaving(true);
-    setTimeout(() => setIsAutoSaving(false), 2000);
-  };
+  if (params.chapter_id) {
+    try {
+      chapterDetail = await api.chapter.getDataForEdit({
+        chapter_id: params.chapter_id,
+      });
+    } catch (error) {
+      toast.error("Failed to load chapter data. Please try again.");
+    }
+  }
 
   return (
-    <div className="bg-[#FCFCFC] border-b border-border">
-      <StoryEditorHeader />
-
-      <div className="max-w-[1440px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
-        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-          {/* Main Editor Area */}
-          <div className="flex-1">
-            <Tabs defaultValue="write" className="h-full">
-              <StoryEditorTabs />
-
-              <div className="editor-container h-full bg-white rounded-lg sm:rounded-xl border border-border shadow-sm transition-all">
-                <TabsContent
-                  value="write"
-                  className="min-h-[400px] sm:min-h-[600px] max-h-[600px] sm:max-h-[800px] h-[60vh] sm:h-[80vh]"
-                >
-                  <Editor
-                    initialContent={content}
-                    onChange={handleEditorChange}
-                    placeholder="Start writing your story..."
-                    autoFocus
-                    className="min-h-[400px] sm:min-h-[600px] max-h-[600px] sm:max-h-[800px] h-[60vh] sm:h-[80vh] overflow-y-auto px-3 sm:px-6"
-                  />
-                </TabsContent>
-
-                <TabsContent
-                  value="preview"
-                  className="preview-content min-h-[50vh] sm:min-h-[70vh] p-3 sm:p-6"
-                >
-                  <div
-                    className="prose prose-slate dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{
-                      __html: htmlContent || "Your preview will appear here",
-                    }}
-                  />
-                </TabsContent>
-
-                {/* <TabsContent value="notes" className="min-h-[70vh] p-6">
-                  <textarea
-                    className="w-full h-full min-h-[calc(100vh-300px)] bg-transparent resize-none focus:outline-none"
-                    placeholder="Add notes, research, or ideas for this chapter..."
-                  />
-                </TabsContent> */}
-              </div>
-            </Tabs>
-          </div>
-
-          {/* Right Sidebar - Only visible in normal mode */}
-          {!focusMode && <StoryEditorSidebar />}
+    <Suspense
+      fallback={
+        <div className="p-4">
+          <Skeleton className="h-[80vh] w-full" />
         </div>
-
-        {/* Footer Actions - Only in normal mode */}
-        <StoryEditorFooter />
-      </div>
-    </div>
+      }
+    >
+      <StoryEditor chapterDetail={chapterDetail} randomNumber={Math.random()} />
+    </Suspense>
   );
 };
 
-export default StoryEditor;
+export default ChapterPage;

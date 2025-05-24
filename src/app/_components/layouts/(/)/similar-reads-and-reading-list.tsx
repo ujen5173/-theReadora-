@@ -9,8 +9,6 @@ const SimilarReadsNReadingList = async () => {
     userId: user?.user.id ?? "",
   });
 
-  console.log({ readingLists });
-
   return (
     <section className="w-full">
       <div className="flex items-start gap-2 max-w-[1440px] mx-auto px-4 py-8">

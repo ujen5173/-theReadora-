@@ -144,7 +144,6 @@ export const readinglistRouter = createTRPCRouter({
           };
         });
       } catch (err) {
-        console.log({ err });
         if (err instanceof TRPCError) {
           throw err;
         }
@@ -280,7 +279,6 @@ export const readinglistRouter = createTRPCRouter({
 
         return true;
       } catch (err) {
-        console.log({ err });
         if (err instanceof TRPCError) {
           throw err;
         } else {

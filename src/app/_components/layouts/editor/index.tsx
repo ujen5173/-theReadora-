@@ -1,37 +1,33 @@
 "use client";
 
-import { useState } from "react";
 import {
-  EditorCommandItem,
-  EditorCommandEmpty,
   EditorCommand,
+  EditorCommandEmpty,
+  EditorCommandItem,
+  EditorCommandList,
   EditorContent,
   EditorRoot,
   type EditorInstance,
-  EditorCommandList,
 } from "novel";
+import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { defaultExtensions } from "~/lib/noveh-sh-extensions";
-import { slashCommand, suggestionItems } from "./slash-command";
-import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { Separator } from "~/components/ui/separator";
-import { NodeSelector } from "./selectors/node-selector";
+import { defaultExtensions } from "~/lib/noveh-sh-extensions";
+import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { LinkSelector } from "./selectors/link-selector";
+import { NodeSelector } from "./selectors/node-selector";
 import { TextButtons } from "./selectors/text-buttons";
+import { slashCommand, suggestionItems } from "./slash-command";
 
 interface EditorProps {
   initialContent?: any;
   onChange?: (content: string, html: string) => void;
-  placeholder?: string;
-  autoFocus?: boolean;
   className?: string;
 }
 
 export function Editor({
   initialContent,
   onChange,
-  placeholder = "Start writing your story...",
-  autoFocus = false,
   className = "",
 }: EditorProps) {
   const [openNode, setOpenNode] = useState(false);

@@ -322,7 +322,6 @@ export const storyRouter = createTRPCRouter({
 
         return stories;
       } catch (err) {
-        console.log({ err });
         if (err instanceof TRPCError) {
           throw err;
         }
@@ -601,30 +600,50 @@ export const storyRouter = createTRPCRouter({
           LANGUAGES.map((lang) => lang.name) as [string, ...string[]]
         ),
         isLGBTQContent: z.boolean().default(false),
+        edit: z.string().cuid().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
         const slug = makeSlug(input.title);
 
-        const { genre, thumbnail, ...rest } = input;
+        const { genre, thumbnail, edit, ...rest } = input;
 
-        const story = await ctx.postgresDb.story.create({
-          data: {
-            ...rest,
-            authorId: ctx.session?.user.id,
-            slug,
-            thumbnailId: input.thumbnail.public_id,
-            thumbnail: input.thumbnail.url,
-            genreSlug: genre,
-            readingTime: 0,
-            language: input.language as Language,
-          },
-        });
-
-        return {
-          id: story.id,
-        };
+        if (!edit) {
+          const story = await ctx.postgresDb.story.create({
+            data: {
+              ...rest,
+              authorId: ctx.session?.user.id,
+              slug,
+              thumbnailId: input.thumbnail.public_id,
+              thumbnail: input.thumbnail.url,
+              genreSlug: genre,
+              readingTime: 0,
+              language: input.language as Language,
+            },
+          });
+          return {
+            id: story.id,
+          };
+        } else {
+          const story = await ctx.postgresDb.story.update({
+            where: {
+              id: edit,
+            },
+            data: {
+              ...rest,
+              authorId: ctx.session?.user.id,
+              slug,
+              thumbnailId: input.thumbnail.public_id,
+              thumbnail: input.thumbnail.url,
+              genreSlug: genre,
+              language: input.language as Language,
+            },
+          });
+          return {
+            id: story.id,
+          };
+        }
       } catch (err) {
         console.error("Error creating story:", err);
         throw new Error("Error creating story");
@@ -869,6 +888,60 @@ export const storyRouter = createTRPCRouter({
       });
     }
   }),
+
+  getDataForEdit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const story = await ctx.postgresDb.story.findUnique({
+          where: {
+            id: input.id,
+            authorId: ctx.session.user.id,
+          },
+          select: {
+            title: true,
+            synopsis: true,
+            tags: true,
+            genreSlug: true,
+            isMature: true,
+            hasAiContent: true,
+            language: true,
+            isLGBTQContent: true,
+            thumbnail: true,
+            thumbnailId: true,
+            storyStatus: true,
+          },
+        });
+
+        if (!story) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Story not found",
+          });
+        }
+
+        const { genreSlug, ...rest } = story;
+
+        return {
+          ...rest,
+          genre: genreSlug,
+        };
+      } catch (err) {
+        console.error("Error in AI content generation:", err);
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong while generating content using AI",
+        });
+      }
+    }),
 });
 
 export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;

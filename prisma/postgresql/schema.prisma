@@ -165,7 +165,7 @@ model Rating {
 
 model ChapterRead {
     id        String   @id @default(uuid())
-    chapter   Chapter  @relation(fields: [chapterId], references: [id])
+    chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
     chapterId String
     readerKey String // e.g. userId for logged-in and for anonymous
     frequency Int      @default(1) // how many times the chapter is read
@@ -202,9 +202,9 @@ model Story {
     ratings Rating[]
 
     genreSlug String
-    genre     Genres @relation("StoryGenres", fields: [genreSlug], references: [slug])
+    genre     Genres @relation("StoryGenres", fields: [genreSlug], references: [slug], onDelete: Cascade)
 
-    author   User   @relation(fields: [authorId], references: [id])
+    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId String
 
     chapterCount Int       @default(0)

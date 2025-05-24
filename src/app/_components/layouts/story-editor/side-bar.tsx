@@ -1,7 +1,6 @@
 "use client";
-
 import { ChevronDown, ChevronUp, Goal, PenLine, Plus } from "lucide-react";
-import Image from "next/image";
+import Link from "next/link";
 import { redirect, useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import readingTimeCalc from "reading-time";
@@ -13,19 +12,19 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
-import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
+import { cn } from "~/lib/utils";
 import { useNewChapterStore } from "~/store/useNewChapter";
 import { api } from "~/trpc/react";
 import { getReadingTimeText } from "~/utils/helpers";
+import BlurImage from "../../shared/blur-image";
 import PremiumBanner from "../../shared/premium-banner";
 import NewChapterDialog from "./new-chapter-dialog";
 import PremiumChapter from "./premium-chapter";
 
 const StoryEditorSidebar = () => {
   const { story_id } = useParams();
-
   const chapter_id = useSearchParams().get("chapter_id");
 
   const [isStatsOpen, setIsStatsOpen] = useState(false);
@@ -73,12 +72,12 @@ const StoryEditorSidebar = () => {
             ) : (
               <>
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <Image
+                  <BlurImage
                     src={story?.thumbnail as string}
                     alt={story?.title || "Story Thumbnail"}
                     width={80}
                     height={120}
-                    className="aspect-[1/1.6] rounded-md w-16 sm:w-20"
+                    // className="aspect-[1/1.6] rounded-md w-16 sm:w-20"
                   />
                 </div>
                 <div className="flex flex-col gap-1 sm:gap-2">
@@ -105,18 +104,33 @@ const StoryEditorSidebar = () => {
             </h3>
           </div>
           <div className="space-y-2 w-full mt-2 sm:mt-3">
-            <ScrollArea className="max-h-48 sm:max-h-72 w-full">
-              <div className="space-y-2 pr-4">
+            <div className="max-h-48 sm:max-h-72 w-full overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-400">
+              <div className="space-y-2 w-full">
+                {isLoading && (
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-6 w-full rounded-md" />
+                    <Skeleton className="h-6 w-full rounded-md" />
+                    <Skeleton className="h-6 w-full rounded-md" />
+                    <Skeleton className="h-6 w-full rounded-md" />
+                  </div>
+                )}
                 {story?.chapters.map((chapter) => (
-                  <div key={chapter.id} className="flex min-w-0">
-                    <p className="w-full text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 p-1.5 sm:p-2 rounded-md border border-border cursor-pointer transition-colors truncate">
+                  <div key={chapter.id} className="flex min-w-0 w-full">
+                    <Link
+                      href={`/write/story-editor/${story_id}?chapter_id=${chapter.id}`}
+                      className={cn(
+                        "w-full text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 p-1.5 sm:p-2 rounded-md border border-border cursor-pointer transition-colors truncate text-left",
+                        chapter_id === chapter.id &&
+                          "bg-primary/10 border-primary/20 text-primary hover:bg-primary/20"
+                      )}
+                    >
                       {chapter.chapterNumber.toString().padStart(2, "0")}:{" "}
                       {chapter.title}
-                    </p>
+                    </Link>
                   </div>
                 ))}
               </div>
-            </ScrollArea>
+            </div>
             {!chapter_id && (
               <div className="flex flex-col">
                 <p className="text-xs sm:text-sm font-semibold text-rose-600 hover:bg-rose-100 bg-rose-50 border border-rose-200 p-1.5 sm:p-2 rounded-md cursor-pointer transition-colors truncate max-w-full">

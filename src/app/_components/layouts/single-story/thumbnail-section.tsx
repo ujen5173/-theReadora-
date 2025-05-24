@@ -110,8 +110,9 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
               variant={"outline"}
               icon={Edit01Icon}
               className="w-full bg-white"
+              asChild
             >
-              Edit Story
+              <Link href={`/write?editId=${story.id}`}>Edit Story</Link>
             </Button>
           </>
         ) : (

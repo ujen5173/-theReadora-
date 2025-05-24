@@ -2,7 +2,7 @@
 import { ArrowRight, Loader2, X } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import type { BookMetadataType } from "~/app/write/page";
+import type { BookMetadataType } from "~/app/write/wrapper";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -22,22 +22,26 @@ import { GENRES } from "~/utils/genre";
 const MAX_TAGS = 15;
 
 const BookMetadata = ({
+  editData,
   status,
   onSubmit,
 }: {
+  editData: BookMetadataType | null;
   status: "idle" | "success" | "error" | "pending";
   onSubmit: (metadata: BookMetadataType) => void;
 }) => {
-  const [metadata, setMetadata] = useState<BookMetadataType>({
-    title: "",
-    synopsis: "",
-    tags: [],
-    genre: "",
-    isMature: false,
-    hasAiContent: false,
-    language: "English",
-    isLGBTQContent: false,
-  });
+  const [metadata, setMetadata] = useState<BookMetadataType>(
+    editData || {
+      title: "",
+      synopsis: "",
+      tags: [],
+      genre: "",
+      isMature: false,
+      hasAiContent: false,
+      language: "English",
+      isLGBTQContent: false,
+    }
+  );
 
   const [currentTag, setCurrentTag] = useState("");
 
@@ -108,7 +112,7 @@ const BookMetadata = ({
           onChange={(e) =>
             setMetadata((prev) => ({ ...prev, synopsis: e.target.value }))
           }
-          className="w-full bg-white h-24 sm:h-32"
+          className="w-full bg-white h-32 sm:h-64"
         />
       </div>
 
@@ -285,6 +289,8 @@ const BookMetadata = ({
               <Loader2 className="size-3.5 sm:size-4 animate-spin" />
               <span>Processing...</span>
             </>
+          ) : !!editData ? (
+            "Update the story Information"
           ) : (
             "Continue to Story Editor"
           )}

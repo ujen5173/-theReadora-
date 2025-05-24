@@ -17,7 +17,7 @@ import {
 import { makeSlug, mongoObjectId } from "~/utils/helpers";
 
 export const chapterRouter = createTRPCRouter({
-  create: publicProcedure
+  createOrUpdate: publicProcedure
     .input(
       z.object({
         title: z.string(),
@@ -29,6 +29,7 @@ export const chapterRouter = createTRPCRouter({
         isLocked: z.boolean().optional(),
         price: z.nativeEnum(ChapterPricePool).nullable(),
         scheduledFor: z.date().optional(),
+        edit: z.string().cuid().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -37,23 +38,14 @@ export const chapterRouter = createTRPCRouter({
       }
 
       try {
-        //? how we are going to handle the chapter creation?
-        // we need to find a way to break down the content into chunks based on the word count
-        //? how are we going to break down the paragraphs and break them into chunks?
-        //? after the chunks are created, we need to save them to the database, but how?
-        // we would be using mongodb for the storage of the chunks
-        // but but but, i think we need to store the html content or the JSONContent in the postgresql database too.
-        // why? because we need to get the chapter content when user is going to edit the chapter.
-        // again the problem arises, how are we going to edit the chapter?
-
+        // Get story details
         const story = await ctx.postgresDb.story.findUnique({
-          where: {
-            id: input.storyId,
-          },
+          where: { id: input.storyId },
           select: {
             chapterCount: true,
             slug: true,
             readingTime: true,
+            authorId: true,
           },
         });
 
@@ -61,10 +53,97 @@ export const chapterRouter = createTRPCRouter({
           throw new Error("Story not found");
         }
 
-        const chunks = processChapterContent(input.content);
+        console.log({ edit: input.edit });
 
+        // If editing, verify chapter exists and user has permission
+        if (input.edit) {
+          const existingChapter = await ctx.postgresDb.chapter.findUnique({
+            where: { id: input.edit },
+            select: {
+              id: true,
+              storyId: true,
+              mongoContentID: true,
+              chapterNumber: true,
+              story: {
+                select: {
+                  authorId: true,
+                },
+              },
+            },
+          });
+
+          if (!existingChapter) {
+            throw new Error("Chapter not found");
+          }
+
+          // Verify author permissions
+          if (existingChapter.story.authorId !== ctx.session?.user.id) {
+            throw new TRPCError({
+              code: "UNAUTHORIZED",
+              message: "You are not authorized to edit this chapter",
+            });
+          }
+
+          // Process content into chunks
+          const chunks = processChapterContent(input.content);
+          const objectId = mongoObjectId();
+
+          // Create new version in MongoDB
+          const mongoContentID = await ctx.mongoDb
+            .collection(chapterCollectionName)
+            .insertOne({
+              id: objectId,
+              storyId: input.storyId,
+              chapterNumber: existingChapter.chapterNumber,
+              version: existingChapter.mongoContentID.length + 1,
+              createdAt: new Date(),
+            });
+
+          // First insert new chunks
+          await ctx.mongoDb.collection(chunkCollectionName).insertMany(
+            chunks.map((chunk, index) => ({
+              chapterId: mongoContentID.insertedId.toString(),
+              content: chunk.content,
+              index: index,
+            }))
+          );
+
+          // Then update PostgreSQL to point to new content
+          await ctx.postgresDb.chapter.update({
+            where: { id: input.edit },
+            data: {
+              title: input.title,
+              slug: makeSlug(input.title),
+              metrics: JSON.stringify({
+                ...METRICS_DEFAULT_VALUES,
+                wordCount: input.wordCount,
+                readingTime: input.readingTime,
+              }),
+              isLocked: input.isLocked,
+              price: input.price,
+              scheduledFor: input.scheduledFor,
+              mongoContentID: [mongoContentID.insertedId.toString()], // Only keep latest version
+              updatedAt: new Date(),
+            },
+          });
+
+          // Finally delete old chunks
+          await ctx.mongoDb.collection(chunkCollectionName).deleteMany({
+            chapterId: existingChapter.mongoContentID[0],
+          });
+
+          return {
+            success: true,
+            message: "Chapter updated successfully",
+            storySlug: story.slug,
+          };
+        }
+
+        // Create new chapter
+        const chunks = processChapterContent(input.content);
         const objectId = mongoObjectId();
 
+        // Create new chapter in MongoDB
         const mongoContentID = await ctx.mongoDb
           .collection(chapterCollectionName)
           .insertOne({
@@ -75,17 +154,16 @@ export const chapterRouter = createTRPCRouter({
             createdAt: new Date(),
           });
 
-        // Insert chunks separately
-        await Promise.all(
-          chunks.map((chunk, index) =>
-            ctx.mongoDb.collection(chunkCollectionName).insertOne({
-              chapterId: mongoContentID.insertedId.toString(),
-              content: chunk.content,
-              index: index,
-            })
-          )
+        // Insert chunks in a transaction
+        await ctx.mongoDb.collection(chunkCollectionName).insertMany(
+          chunks.map((chunk, index) => ({
+            chapterId: mongoContentID.insertedId.toString(),
+            content: chunk.content,
+            index: index,
+          }))
         );
 
+        // Create PostgreSQL chapter
         await ctx.postgresDb.chapter.create({
           data: {
             title: input.title,
@@ -104,31 +182,28 @@ export const chapterRouter = createTRPCRouter({
           },
         });
 
+        // Update story metadata
         await ctx.postgresDb.story.update({
           where: { id: input.storyId },
           data: {
             chapterCount: story.chapterCount + 1,
             readingTime: story.readingTime + input.readingTime,
+            storyStatus:
+              story.chapterCount === 0 ? StoryStatus.PUBLISHED : undefined,
           },
         });
-
-        // update the story status if the chapter is the first chapter
-        if (story.chapterCount === 0) {
-          await ctx.postgresDb.story.update({
-            where: { id: input.storyId },
-            data: { storyStatus: StoryStatus.PUBLISHED },
-          });
-        }
 
         return {
           success: true,
           message: "Chapter published successfully",
-
           storySlug: story.slug,
         };
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to create chapter");
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        throw new Error("Failed to create/update chapter");
       }
     }),
 
@@ -564,10 +639,106 @@ export const chapterRouter = createTRPCRouter({
 
       return true;
     }),
+
+  getDataForEdit: protectedProcedure
+    .input(
+      z.object({
+        chapter_id: z.string().cuid(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const chapter = await ctx.postgresDb.chapter.findFirst({
+          where: {
+            id: input.chapter_id,
+          },
+          select: {
+            story: {
+              select: {
+                authorId: true,
+                id: true,
+                chapters: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+            title: true,
+            scheduledFor: true,
+            isLocked: true,
+            mongoContentID: true,
+            price: true,
+            metrics: true,
+            chapterNumber: true,
+          },
+        });
+
+        if (!chapter) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Chapter not found",
+          });
+        }
+
+        if (chapter.story.authorId !== ctx.session.user.id) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "You are not authorized to edit this chapter",
+          });
+        }
+
+        // Get all chunks for the chapter
+        const chunks = await Promise.all(
+          chapter.mongoContentID.map((contentId) =>
+            ctx.mongoDb
+              .collection(chunkCollectionName)
+              .find({ chapterId: contentId })
+              .sort({ index: 1 }) // Ensure chunks are in order
+              .toArray()
+          )
+        );
+
+        // Serialize the MongoDB data and ensure proper structure
+        const serializedChunks = chunks.map((chunkArray) =>
+          chunkArray.map((chunk) => ({
+            id: chunk._id.toString(),
+            content: chunk.content,
+            index: chunk.index,
+            chapterId: chunk.chapterId.toString(),
+          }))
+        );
+
+        return {
+          story: chapter.story,
+          title: chapter.title,
+          scheduledFor: chapter.scheduledFor,
+          isLocked: chapter.isLocked,
+          price: chapter.price,
+          metrics: chapter.metrics,
+          chapterNumber: chapter.chapterNumber,
+          content: serializedChunks,
+        };
+      } catch (err) {
+        console.error(err);
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get chapter data for edit",
+        });
+      }
+    }),
 });
 
 export type getChapterDetailsBySlugOrIdResponse = inferProcedureOutput<
   typeof chapterRouter.getChapterDetailsBySlugOrId
+>;
+
+export type getDataForEditResponse = inferProcedureOutput<
+  typeof chapterRouter.getDataForEdit
 >;
 
 const MAX_CHUNK_SIZE = 1500 as const;

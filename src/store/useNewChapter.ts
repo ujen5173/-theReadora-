@@ -25,6 +25,17 @@ type NewChapterStore = {
   hardSaved: boolean;
   setHardSaved: (hardSaved: boolean) => void;
   setResetForm: () => void;
+  updateDefaultData: (data: DefaultChapterData) => void;
+};
+
+type DefaultChapterData = {
+  storyId?: string | null;
+  title?: string;
+  wordCount?: number;
+  content?: JSONContent;
+  htmlContent?: string;
+  isLocked?: boolean;
+  price?: keyof typeof CHAPTER_PRICE_POOL | null;
 };
 
 export const useNewChapterStore = create<NewChapterStore>()(
@@ -57,6 +68,17 @@ export const useNewChapterStore = create<NewChapterStore>()(
           content: {},
           htmlContent: "",
         }),
+      updateDefaultData: (data) =>
+        set((state) => ({
+          ...state,
+          storyId: data.storyId ?? state.storyId,
+          title: data.title ?? state.title,
+          wordCount: data.wordCount ?? state.wordCount,
+          content: data.content ?? state.content,
+          htmlContent: data.htmlContent ?? state.htmlContent,
+          isLocked: data.isLocked ?? state.isLocked,
+          price: data.price ?? state.price,
+        })),
     }),
     {
       name: "user-store",

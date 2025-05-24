@@ -72,7 +72,6 @@ export const userRouter = createTRPCRouter({
 
         return user;
       } catch (error) {
-        console.log({ error });
         if (error instanceof TRPCError) {
           throw error; // Re-throw known TRPC errors
         }
@@ -167,7 +166,6 @@ export const userRouter = createTRPCRouter({
           return { success: true, isFollowing: true };
         }
       } catch (error) {
-        console.log({ error });
         if (error instanceof TRPCError) {
           throw error; // Re-throw known TRPC errors
         }
@@ -195,7 +193,6 @@ export const userRouter = createTRPCRouter({
 
         return !!followStatus;
       } catch (error) {
-        console.log({ error });
         if (error instanceof TRPCError) {
           throw error; // Re-throw known TRPC errors
         }
@@ -418,8 +415,6 @@ export const userRouter = createTRPCRouter({
 
       return Array.from(uniqueStories.values());
     } catch (err) {
-      console.log({ err });
-
       if (err instanceof TRPCError) {
         throw err;
       }

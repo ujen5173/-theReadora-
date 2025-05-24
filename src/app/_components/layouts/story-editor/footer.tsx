@@ -1,4 +1,5 @@
 "use client";
+
 import { StoryStatus } from "@prisma/client";
 import { format } from "date-fns";
 import {
@@ -9,7 +10,7 @@ import {
   Rocket,
   Users,
 } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import readingTime from "reading-time";
 import { toast } from "sonner";
@@ -42,6 +43,7 @@ const chapterSchema = z.object({
 const StoryEditorFooter = () => {
   const router = useRouter();
   const { story_id } = useParams();
+  const isChapterForEdit = !!useSearchParams().get("chapter_id");
 
   const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [scheduledDate, setScheduledDate] = useState<Date | undefined>(
@@ -49,6 +51,7 @@ const StoryEditorFooter = () => {
   );
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const edit_id = useSearchParams().get("chapter_id");
 
   const {
     title,
@@ -64,7 +67,7 @@ const StoryEditorFooter = () => {
     mutateAsync: createChapter,
     status,
     error,
-  } = api.chapter.create.useMutation();
+  } = api.chapter.createOrUpdate.useMutation();
 
   if (error) {
     toast.error(error.message);
@@ -92,6 +95,8 @@ const StoryEditorFooter = () => {
         storyId: story_id as string,
         isLocked,
         price,
+
+        edit: isChapterForEdit ? edit_id ?? undefined : undefined,
       });
 
       if (res.success) {
@@ -202,7 +207,7 @@ const StoryEditorFooter = () => {
               iconStyle={status === "pending" ? "animate-spin" : "none"}
               iconPlacement="right"
             >
-              Publish Chapter
+              {isChapterForEdit ? "Update Chapter" : "Publish Chapter"}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[200px]">
@@ -214,18 +219,24 @@ const StoryEditorFooter = () => {
               className="flex items-center gap-2 cursor-pointer text-primary hover:text-primary"
             >
               <Rocket className="h-4 w-4 text-inherit" />
-              <span>Publish Now</span>
+              {isChapterForEdit ? (
+                <span>Update Now</span>
+              ) : (
+                <span>Publish Now</span>
+              )}
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                setIsDropdownOpen(false);
-                setIsScheduleOpen(true);
-              }}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <Calendar className="h-4 w-4" />
-              <span>Schedule Publish</span>
-            </DropdownMenuItem>
+            {!isChapterForEdit && (
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  setIsScheduleOpen(true);
+                }}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <Calendar className="h-4 w-4" />
+                <span>Schedule Publish</span>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
 

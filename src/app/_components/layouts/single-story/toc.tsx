@@ -73,11 +73,13 @@ const SortableChapter = ({
   isAuthor,
   unlockedChapters,
   isLoadingLockedChapters,
+  storyId,
 }: {
   chapter: Chapter;
   isAuthor: boolean;
   unlockedChapters: string[];
   isLoadingLockedChapters: boolean;
+  storyId: string;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: chapter.id });
@@ -192,7 +194,7 @@ const SortableChapter = ({
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem asChild>
                 <Link
-                  href={`/write/chapter/${chapter.id}/edit`}
+                  href={`/write/story-editor/${storyId}?chapter_id=${chapter.id}`}
                   className="flex items-center"
                 >
                   <Pencil className="size-4 mr-2" />
@@ -342,6 +344,7 @@ const TableOfContent = ({
                     isAuthor={isAuthor}
                     unlockedChapters={data ?? []}
                     isLoadingLockedChapters={isLoading}
+                    storyId={storyId}
                   />
                 ))}
               </div>

@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import React from "react";
 import { generateSEOMetadata } from "~/utils/site";
 
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
-
 export const metadata: Metadata = generateSEOMetadata({
   title: "Write Your Story | Readora",
   description:
@@ -19,19 +17,7 @@ export const metadata: Metadata = generateSEOMetadata({
   ],
 });
 
-const WritingLayout = async ({
-  children,
-  searchParams,
-  params,
-}: {
-  children: React.ReactNode;
-  searchParams: SearchParams;
-  params: { editId: string };
-}) => {
-  const editId = await searchParams;
-  const { editId: editIdParam } = params;
-  console.log({ editId, editIdParam });
-
+const WritingLayout = async ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 

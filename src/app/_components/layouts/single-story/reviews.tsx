@@ -52,7 +52,6 @@ const Reviews = ({
     average: number;
   };
 }) => {
-  console.log({ ratingDetails });
   const [revealedSpoilers, setRevealedSpoilers] = useState<string[]>([]);
   const [likedReviews, setLikedReviews] = useState<string[]>([]);
   const [showReplyForm, setShowReplyForm] = useState<string | null>(null);
