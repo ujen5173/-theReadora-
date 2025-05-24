@@ -28,7 +28,6 @@ export const NCardEntity = {
   readingTime: true,
   isMature: true,
   thumbnail: true,
-  thumbnailPlaceholder: true,
   isCompleted: true,
   genreSlug: true,
   chapterCount: true,
