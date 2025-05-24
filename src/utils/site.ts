@@ -136,8 +136,8 @@ export function generateSEOMetadata({
       canonical: url,
     },
     verification: {
-      google: "your-google-verification-code",
-      yandex: "your-yandex-verification-code",
+      google: "nNbg7ZlJ5DIBp8F61i3uAJSoRpuL3WO1jeAZL7kL86g",
+      yandex: "d5290b42b4bef6ad",
     },
   };
 }
