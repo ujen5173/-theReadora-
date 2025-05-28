@@ -161,7 +161,7 @@ model Follow {
 }
 
 model Rating {
-    id        String   @id @default(uuid())
+    id        String   @id @default(cuid())
     userId    String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     storyId   String
@@ -171,7 +171,8 @@ model Rating {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    replies Replies[]
+    replies      Replies[]
+    repliesCount Int       @default(0)
 
     likes      User[] @relation("RatingLikes")
     likesCount Int    @default(0)
@@ -206,7 +207,7 @@ model Replies {
 }
 
 model ChapterRead {
-    id        String   @id @default(uuid())
+    id        String   @id @default(cuid())
     chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
     chapterId String
     readerKey String

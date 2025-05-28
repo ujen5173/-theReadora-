@@ -20,7 +20,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
-import { useProfileStore } from "~/store/profile-store";
+import { useProfileStore } from "~/store/useProfileStore";
 import { api } from "~/trpc/react";
 import { makeSlug } from "~/utils/helpers";
 

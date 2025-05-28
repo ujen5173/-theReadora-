@@ -8,7 +8,7 @@ import { buttonVariants } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
-import { useProfileStore } from "~/store/profile-store";
+import { useProfileStore } from "~/store/useProfileStore";
 import { uploadToCloudinary } from "~/utils/uploadToCloudinary";
 
 const ProfileFormImage = () => {

@@ -3,7 +3,7 @@
 import { User } from "lucide-react";
 import { useEffect } from "react";
 import { type TGetProfile } from "~/server/api/routers/user";
-import { useProfileStore } from "~/store/profile-store";
+import { useProfileStore } from "~/store/useProfileStore";
 import ProfileForm from "./profile-form";
 import ProfileFormImage from "./profile-form-image";
 

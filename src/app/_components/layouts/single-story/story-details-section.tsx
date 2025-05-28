@@ -1,4 +1,5 @@
 "use client";
+
 import {
   BookOpen01Icon,
   BotIcon,
@@ -8,7 +9,7 @@ import {
   StarIcon,
 } from "hugeicons-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -19,6 +20,7 @@ import {
 import { cn } from "~/lib/utils";
 import type { T_byID_or_slug } from "~/server/api/routers/story";
 import { useUserStore } from "~/store/userStore";
+import { useStoryRating } from "~/store/useStoryRating";
 import { getReadingTimeText } from "~/utils/helpers";
 import FollowButton from "../../shared/follow-button";
 import Reviews from "./reviews";
@@ -31,29 +33,19 @@ interface StoryDetailsSectionProps {
 const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
   const user = useUserStore();
   const [toggleReadMore, setToggleReadMore] = useState(false);
+  const { averageRating, ratingCount, setRatingCount, setAverageRating } =
+    useStoryRating();
+
+  useEffect(() => {
+    const { ratingCount, averageRating } = story;
+
+    setRatingCount(ratingCount);
+    setAverageRating(averageRating);
+  }, [story]);
 
   const handleReadMore = () => {
     setToggleReadMore(!toggleReadMore);
   };
-
-  const discussions = [
-    {
-      id: 1,
-      user: { name: "BookLover42", avatar: "/avatars/1.jpg" },
-      comment: "The character development in this chapter was amazing!",
-      date: "3 hours ago",
-      replies: 5,
-      spoiler: true,
-    },
-    {
-      id: 2,
-      user: { name: "StoryFanatic", avatar: "/avatars/2.jpg" },
-      comment: "Can't wait to see what happens next with the main couple!",
-      date: "1 day ago",
-      replies: 2,
-      spoiler: false,
-    },
-  ];
 
   return (
     <main className="w-full py-2 relative">
@@ -131,7 +123,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
                   </span>
                 </div>
                 <span className="font-bold text-sm sm:text-base text-center text-slate-700">
-                  {story.averageRating.toFixed(1)}
+                  {averageRating.toFixed(1)}
                 </span>
               </div>
             </TooltipTrigger>
@@ -141,8 +133,8 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
               tooltipArrowClassName="bg-slate-50 border-b border-r border-slate-300 fill-slate-50"
             >
               <p className="text-slate-700 font-black">
-                {story.averageRating.toFixed(1)} (
-                {Intl.NumberFormat().format(story.ratingCount)})
+                {averageRating.toFixed(1)} (
+                {Intl.NumberFormat().format(ratingCount)})
               </p>
             </TooltipContent>
           </Tooltip>
@@ -260,14 +252,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
         isAuthor={user?.user?.id === story.author.id}
       />
 
-      <Reviews
-        storyId={story.id}
-        reviews={story.ratings}
-        ratingDetails={{
-          count: story.ratingCount,
-          average: story.averageRating,
-        }}
-      />
+      <Reviews storyId={story.id} />
     </main>
   );
 };

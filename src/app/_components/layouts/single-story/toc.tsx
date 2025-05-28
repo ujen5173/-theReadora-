@@ -107,7 +107,7 @@ const SortableChapter = ({
           <Button
             variant="ghost"
             size="icon"
-            className="hidden sm:block border border-transparent transition hover:border-slate-300 h-7 w-7 sm:h-8 sm:w-8"
+            className="hidden sm:flex border border-transparent transition hover:border-slate-300 h-7 w-7 sm:h-8 sm:w-8"
             {...attributes}
             {...listeners}
           >

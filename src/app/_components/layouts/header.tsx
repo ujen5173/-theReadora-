@@ -101,7 +101,6 @@ const MobileMenu = () => {
           <SheetTitle className="text-left">Menu</SheetTitle>
         </SheetHeader>
 
-        {/* Search Bar at the top */}
         <div className="p-4 pt-0 border-b">
           <SearchBar size="sm" />
         </div>
@@ -166,7 +165,6 @@ const MobileMenu = () => {
             </div>
           </div>
 
-          {/* User Section - Fixed at bottom */}
           <div className="p-4 border-t mt-auto">
             <UserHeader fromMobileMenu />
           </div>
@@ -275,7 +273,7 @@ const Header = ({
 
           <div className="flex items-center flex-1 justify-end gap-2">
             <div className="flex-1 lg:flex justify-end hidden">
-              <SearchBar />
+              <SearchBar size="md" />
             </div>
 
             <UserHeader />

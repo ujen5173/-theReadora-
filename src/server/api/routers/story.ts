@@ -231,10 +231,16 @@ export const storyRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        const story = await ctx.postgresDb.story.findUnique({
+        const story = await ctx.postgresDb.story.findFirst({
           where: {
-            id: cuidRegex.test(input.query) ? input.query : undefined,
-            slug: !cuidRegex.test(input.query) ? input.query : undefined,
+            OR: [
+              {
+                id: cuidRegex.test(input.query) ? input.query : undefined,
+              },
+              {
+                slug: !cuidRegex.test(input.query) ? input.query : undefined,
+              },
+            ],
           },
           include: {
             author: {
@@ -242,18 +248,6 @@ export const storyRouter = createTRPCRouter({
                 id: true,
                 name: true,
                 username: true,
-              },
-            },
-            ratings: {
-              include: {
-                user: {
-                  select: {
-                    image: true,
-                    name: true,
-                    id: true,
-                    username: true,
-                  },
-                },
               },
             },
             chapters: {

@@ -65,7 +65,6 @@ export const StarRating = ({
   const dialogDisplayRating = dialogHoverRating ?? selectedRating;
   const fullStars = Math.floor(displayRating);
   const hasHalfStar = displayRating % 1 >= 0.5;
-  const emptyStars = maxRating - fullStars - (hasHalfStar ? 1 : 0);
 
   const handleStarClick = (index: number) => {
     if (!isInteractive) return;
@@ -93,17 +92,27 @@ export const StarRating = ({
     setDialogHoverRating(null);
   };
 
-  const handleSubmitReview = () => {
+  const utils = api.useUtils();
+
+  const handleSubmitReview = async () => {
     if (!review.trim()) {
       toast.error("Please write a review before submitting");
       return;
     }
     setIsSubmitting(true);
-    rateMutation.mutate({
+    await rateMutation.mutateAsync({
       storyId,
       rating: selectedRating,
       review,
     });
+    Promise.all([
+      utils.reviews.getReviews.refetch({
+        storyId,
+      }),
+      utils.reviews.getMeta.refetch({
+        storyId,
+      }),
+    ]);
   };
 
   const getRatingEmoji = (rating: number) => {

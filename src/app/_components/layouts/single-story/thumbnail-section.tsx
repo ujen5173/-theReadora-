@@ -12,6 +12,7 @@ import {
 import { env } from "~/env";
 import type { T_byID_or_slug } from "~/server/api/routers/story";
 import { useUserStore } from "~/store/userStore";
+import { useStoryRating } from "~/store/useStoryRating";
 import { api } from "~/trpc/react";
 import AddToList from "../../shared/add-to-list";
 import BlurImage from "../../shared/blur-image";
@@ -26,6 +27,7 @@ interface ThumbnailSectionProps {
 const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
   const [mounted, setMounted] = useState(false);
   const { user } = useUserStore();
+  const { ratingCount, averageRating } = useStoryRating();
   const { data: rating } = api.user.getRating.useQuery(
     {
       storyId: story.id,
@@ -74,11 +76,11 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
                   <StarRating
                     storyId={story.id}
                     isInteractive
-                    rating={story.averageRating}
+                    rating={averageRating}
                     className="flex-shrink-0"
                   />
                   <span className="text-xs sm:text-sm text-muted-foreground">
-                    {`(${story.ratingCount})` || "..."}
+                    {`(${ratingCount})` || "..."}
                   </span>
                 </div>
               </Button>
