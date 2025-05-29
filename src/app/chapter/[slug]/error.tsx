@@ -25,13 +25,13 @@ const ChapterNotFound = ({ error }: { error: Error }) => {
         </p>
 
         <div className="flex gap-4 mt-4">
-          <Link href="/explore">
+          <Link href="/search">
             <Button variant="default" size="lg" className="gap-2">
               <ArrowLeft className="size-5" />
               Back to Story
             </Button>
           </Link>
-          <Link href="/explore">
+          <Link href="/search">
             <Button variant="secondary" size="lg" className="gap-2">
               <BookOpen className="size-5" />
               Discover Stories

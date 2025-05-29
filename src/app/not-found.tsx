@@ -1,7 +1,7 @@
-import { Button } from "~/components/ui/button";
-import { merriweatherFont, outfit } from "~/utils/font";
 import { BookOpen, Home } from "lucide-react";
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { merriweatherFont, outfit } from "~/utils/font";
 import Header from "./_components/layouts/header";
 
 const NotFoundPage = () => {
@@ -33,7 +33,7 @@ const NotFoundPage = () => {
                 Back Home
               </Button>
             </Link>
-            <Link href="/explore">
+            <Link href="/search">
               <Button variant="secondary" size="lg" className="gap-2">
                 <BookOpen className="size-5" />
                 Explore Stories

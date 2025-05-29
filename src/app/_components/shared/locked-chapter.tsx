@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -231,9 +232,9 @@ const UnlockButton = ({
 
         <DialogFooter className="p-3 md:p-6 bg-slate-50/50 border-t border-slate-100">
           <div className="flex gap-3">
-            <Button variant="outline" className="flex-1 h-12">
+            <DialogClose className="bg-white border border-border rounded-md flex-1 h-12">
               Cancel
-            </Button>
+            </DialogClose>
             <Button
               onClick={handleUnlock}
               className="flex-1 h-12 bg-primary hover:bg-primary/90"
@@ -251,7 +252,7 @@ const UnlockButton = ({
                   Processing...
                 </div>
               ) : user ? (
-                <>Unlock Chapter</>
+                "Unlock Chapter"
               ) : (
                 "Sign in to Unlock"
               )}

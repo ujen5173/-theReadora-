@@ -125,7 +125,7 @@ const SortableChapter = ({
                 0{chapter.chapterNumber}:
               </span>
               <span className="hidden sm:block font-medium text-sm sm:text-base text-slate-700 whitespace-nowrap">
-                Chapter {chapter.chapterNumber}:
+                Ch {chapter.chapterNumber}:
               </span>
               <span className="text-slate-800 font-semibold text-sm sm:text-base truncate">
                 {chapter.title}

@@ -46,14 +46,14 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
   }
 
   return (
-    <section className="w-full space-y-4 sm:space-y-6">
-      <div className="w-full h-auto shadow-lg rounded-md">
+    <section className="w-full space-y-4 md:space-y-6">
+      <div className="w-8/12 xs:w-3/6 md:w-full mx-auto max-w-[288px] h-auto shadow-lg rounded-md">
         <BlurImage
           src={story.thumbnail as string}
           width={600}
           height={1440}
           draggable={false}
-          className="rounded-sm w-full select-none object-cover aspect-[1/1.5] sm:aspect-[1/1.6]"
+          className="rounded-md w-full select-none object-cover aspect-[1/1.6]"
           alt={story.title}
         />
       </div>

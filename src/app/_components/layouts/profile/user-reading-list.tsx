@@ -38,7 +38,7 @@ const UserReadingList = () => {
           <h3 className="mt-4 text-2xl font-black text-slate-700">
             Author reading list is empty
           </h3>
-          <p className="text-slate-500 text-sm mt-2">
+          <p className="text-center text-slate-500 text-sm mt-2">
             Stay updated on their reading lists by following the author.
           </p>
         </div>

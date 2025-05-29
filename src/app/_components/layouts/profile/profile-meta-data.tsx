@@ -37,12 +37,12 @@ const ProfileMetaData = () => {
 
   return (
     <div className="w-full bg-white">
-      <div className="mx-auto max-w-[1540px] pb-16 px-4">
+      <div className="mx-auto max-w-[1540px] pb-16 sm:px-4">
         <div className="relative pt-16 pb-8">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
             <div className="flex justify-center sm:justify-start">
               <div className="relative">
-                <div className="relative rounded-full p-1 bg-gradient-to-r from-primary to-primary/80">
+                <div className="relative rounded-full overflow-hidden p-1 bg-gradient-to-r from-primary to-primary/80">
                   <div className="absolute inset-1 rounded-full bg-white" />
                   <div className="relative">
                     <BlurImage
@@ -72,9 +72,7 @@ const ProfileMetaData = () => {
                   <span
                     className="font-medium cursor-pointer text-slate-700"
                     onClick={() => {
-                      navigator.clipboard.writeText(
-                        `${env.NEXT_PUBLIC_APP_URL}/profile?user=${user?.username}`
-                      );
+                      navigator.clipboard.writeText(`${user?.username}`);
                       toast.success("Username copied!");
                     }}
                   >
@@ -217,33 +215,14 @@ const ProfileMetaData = () => {
                   <span>Reading List</span>
                 </div>
               </TabsTrigger>
-              <TabsTrigger
-                value="about"
-                className="shadow-none px-6 h-12 rounded-none data-[state=active]:text-primary data-[state=active]:font-medium before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full before:scale-x-0 before:bg-primary before:transition-transform data-[state=active]:before:scale-x-100 relative hover:text-primary/80"
-              >
-                <div className="flex items-center gap-2">
-                  <Users className="size-4" />
-                  <span>About</span>
-                </div>
-              </TabsTrigger>
             </TabsList>
           </div>
 
           <TabsContent value="works">
             <UserCreations />
           </TabsContent>
-          <TabsContent value="reading-list" className="mt-8">
+          <TabsContent value="reading-list" className="mt-8 px-4">
             <UserReadingList />
-          </TabsContent>
-          <TabsContent value="about" className="mt-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-slate-50 p-8 rounded-xl shadow-sm border border-border">
-                <h3 className="text-xl font-extrabold mb-6 text-slate-800">
-                  Author Information
-                </h3>
-                {/* Author info content */}
-              </div>
-            </div>
           </TabsContent>
         </Tabs>
       </div>

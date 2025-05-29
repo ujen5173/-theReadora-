@@ -29,7 +29,7 @@ const BlurImage = ({
   const blurredImage = getBlurUrl(src);
 
   return (
-    <div className="relative">
+    <div className="relative w-full overflow-hidden">
       {/* Blur placeholder */}
       <Image
         className={cn(

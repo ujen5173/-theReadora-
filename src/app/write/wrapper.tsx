@@ -104,8 +104,6 @@ const Write = ({
       return;
     }
 
-    console.log({ storyDetails });
-
     // zod validations
     const zodResponse = z
       .object({
@@ -128,8 +126,6 @@ const Write = ({
         }),
       })
       .safeParse({ ...storyDetails, thumbnail: uploadedFile });
-
-    console.log({ zodResponse });
 
     if (!zodResponse.success) {
       const errorMessage =
@@ -185,7 +181,7 @@ const Write = ({
                 onValueChange={setFile}
                 onUpload={handleUpload}
                 onRemove={handleRemove}
-                className="aspect-[1/1.5] sm:aspect-[1/1.6] mt-2"
+                className="w-8/12 xs:w-3/6 md:w-full mx-auto max-w-[288px] h-auto aspect-[1/1.6] mt-2"
                 progresses={uploadProgress}
                 accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
                 maxSize={4 * 1024 * 1024}
