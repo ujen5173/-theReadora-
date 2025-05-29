@@ -20,6 +20,7 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
     AI21_API_KEY: z.string(),
+    RESEND_KEY: z.string(),
   },
 
   client: {
@@ -55,6 +56,7 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     AI21_API_KEY: process.env.AI21_API_KEY,
+    RESEND_KEY: process.env.RESEND_KEY,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

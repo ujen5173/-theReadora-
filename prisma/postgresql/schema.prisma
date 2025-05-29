@@ -102,9 +102,10 @@ model User {
     storyRatings Rating[]
 
     replies Replies[]
-    // Removed unused repliesId field
 
-    likedReplies Replies[] @relation("ReplyLikes") // Fixed relation name
+    emailPreferences Json @default("{\"chapterUpdates\": true,\"storyCompletion\": true,\"readingReminders\": true,\"storyRecommendations\": true,\"authorUpdates\": true,\"premiumBenefits\": true,\"coinsAndTransactions\": true,\"emailNotifications\": true,\"marketingEmails\": true}")
+
+    likedReplies Replies[] @relation("ReplyLikes")
     likedRatings Rating[]  @relation("RatingLikes")
 
     @@index([username, email])

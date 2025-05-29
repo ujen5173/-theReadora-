@@ -1,5 +1,7 @@
 "use client";
-import { type ReactNode, useRef, useState } from "react";
+import { Loading03Icon } from "hugeicons-react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -11,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
   Select,
@@ -20,27 +23,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { cn } from "~/lib/utils";
-import {
-  InLoveIcon,
-  Loading03Icon,
-  NeutralIcon,
-  Sad01Icon,
-  Sad02Icon,
-  SmileIcon,
-} from "hugeicons-react";
 import { Textarea } from "~/components/ui/textarea";
-import { toast } from "sonner";
+import { useUserStore } from "~/store/userStore";
+import { api } from "~/trpc/react";
 
 const FeedbackDialog = ({ children }: { children: ReactNode }) => {
-  const [selectedEmoji, setSelectedEmoji] = useState<
-    "bad" | "good" | "amazing" | "okay" | "terrible"
-  >("okay");
+  const { user } = useUserStore();
+  const [email, setEmail] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+    }
+  }, [user]);
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // TODO: add actual logic.
-  const [status, setStatus] = useState<"idle" | "pending">("idle");
+  const { status, mutateAsync } = api.email.sendFeedbackEmail.useMutation();
 
   const [from, setFrom] = useState<
     "github" | "twitter" | "none" | "google" | "friends" | undefined
@@ -51,9 +50,16 @@ const FeedbackDialog = ({ children }: { children: ReactNode }) => {
   const onSubmit = async () => {
     const response = inputRef.current?.value;
 
-    if (!response || !selectedEmoji) return;
+    if (!response) return;
+
+    await mutateAsync({
+      feedback: response,
+      userEmail: email ?? user?.email,
+      from,
+    });
 
     toast("Feedback submitted successfully.");
+    setOpen(false);
   };
 
   return (
@@ -94,41 +100,19 @@ const FeedbackDialog = ({ children }: { children: ReactNode }) => {
             </SelectContent>
           </Select>
 
-          <div className="grid grid-cols-5 items-center gap-2">
-            {["Terrible", "Bad", "Okay", "Good", "Amazing"].map((rating) => (
-              <button
-                onClick={() =>
-                  setSelectedEmoji(
-                    rating.toLowerCase() as
-                      | "bad"
-                      | "good"
-                      | "amazing"
-                      | "okay"
-                      | "terrible"
-                  )
-                }
-                key={rating}
-                className={cn(
-                  "rounded-md border aspect-square bg-white p-4 transition hover:bg-zinc-100",
-                  selectedEmoji === rating.toLowerCase()
-                    ? "border-primary/60 bg-primary/10"
-                    : "border-border"
-                )}
-              >
-                {rating === "Terrible" ? (
-                  <Sad02Icon className={cn("size-8 text-red-600")} />
-                ) : rating === "Bad" ? (
-                  <Sad01Icon className={cn("size-8 text-orange-600")} />
-                ) : rating === "Okay" ? (
-                  <NeutralIcon className={cn("size-8 text-yellow-600")} />
-                ) : rating === "Good" ? (
-                  <SmileIcon className={cn("size-8 text-blue-600")} />
-                ) : (
-                  <InLoveIcon className={cn("size-8 text-green-600")} />
-                )}
-              </button>
-            ))}
+          <div className="">
+            <Label htmlFor="email" className="mb-2 block">
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+            />
           </div>
+
           <div className="">
             <Label htmlFor="name" className="mb-2 block">
               Response
@@ -152,10 +136,12 @@ const FeedbackDialog = ({ children }: { children: ReactNode }) => {
               Cancel
             </Button>
           </DialogClose>
-          <Button disabled={status === "pending"} onClick={onSubmit}>
-            {status === "pending" ? (
-              <Loading03Icon className={cn("animate-spin text-gray-500")} />
-            ) : null}
+          <Button
+            disabled={status === "pending"}
+            onClick={onSubmit}
+            icon={status === "pending" ? Loading03Icon : undefined}
+            iconStyle={status === "pending" ? "animate-spin" : ""}
+          >
             Submit
           </Button>
         </DialogFooter>

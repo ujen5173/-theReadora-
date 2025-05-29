@@ -425,6 +425,55 @@ export const userRouter = createTRPCRouter({
       });
     }
   }),
+
+  changeNotificationPreference: protectedProcedure
+    .input(
+      z.object({
+        chapterUpdates: z.boolean(),
+        storyCompletion: z.boolean(),
+        readingReminders: z.boolean(),
+        storyRecommendations: z.boolean(),
+        authorUpdates: z.boolean(),
+        premiumBenefits: z.boolean(),
+        coinsAndTransactions: z.boolean(),
+        emailNotifications: z.boolean(),
+        marketingEmails: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.postgresDb.user.update({
+          where: {
+            id: ctx.session.user.id,
+          },
+          data: {
+            emailPreferences: JSON.stringify(input),
+          },
+        });
+
+        return true;
+      } catch (err) {
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+
+        throw new TRPCError({
+          message: "Something went wrong.",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  getEmailPreferences: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.postgresDb.user.findUnique({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        emailPreferences: true,
+      },
+    });
+  }),
 });
 
 export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;

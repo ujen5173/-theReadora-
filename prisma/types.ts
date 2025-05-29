@@ -22,4 +22,20 @@ declare global {
   }
 }
 
+declare global {
+  namespace PrismaJson {
+    type EmailNotifications = {
+      chapterUpdates: boolean;
+      storyCompletion: boolean;
+      readingReminders: boolean;
+      storyRecommendations: boolean;
+      authorUpdates: boolean;
+      premiumBenefits: boolean;
+      coinsAndTransactions: boolean;
+      emailNotifications: boolean;
+      marketingEmails: boolean;
+    };
+  }
+}
+
 export type ReadershipAnalytics = PrismaJson.ReadershipAnalytics;

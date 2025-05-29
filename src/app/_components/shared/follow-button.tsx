@@ -76,7 +76,7 @@ const FollowButton = ({
           ? UserRemove01Icon
           : UserAdd01Icon
       }
-      iconStyle={isLoading ? "animate-spin" : ""}
+      iconStyle={isLoading || status === "pending" ? "animate-spin" : ""}
       className="shadow-md hover:shadow-lg transition-shadow"
       disabled={isLoading || status === "pending"}
     >

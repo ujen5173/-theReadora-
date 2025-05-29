@@ -25,7 +25,10 @@ export interface BookMetadataType {
 }
 
 const zodGenre = z.enum(
-  GENRES.map((genre) => genre.slug) as [string, ...string[]]
+  GENRES.map((genre) => genre.slug) as [string, ...string[]],
+  {
+    message: "Please select a genre",
+  }
 );
 
 const Write = ({
@@ -101,17 +104,22 @@ const Write = ({
       return;
     }
 
+    console.log({ storyDetails });
+
     // zod validations
     const zodResponse = z
       .object({
-        title: z.string().min(1),
-        synopsis: z.string().min(1),
-        tags: z.array(z.string()).min(1),
-        genre: zodGenre,
+        title: z.string().min(1, "Title is required"),
+        synopsis: z.string().min(1, "Synopsis is required"),
+        tags: z.array(z.string()).min(1, "At least one tag is required"),
+        genre: zodGenre.refine((val) => val !== undefined && val !== "", {
+          message: "Please select a genre for your story",
+        }),
         isMature: z.boolean(),
         hasAiContent: z.boolean(),
         language: z.enum(
-          LANGUAGES.map((lang) => lang.name) as [string, ...string[]]
+          LANGUAGES.map((lang) => lang.name) as [string, ...string[]],
+          { required_error: "Language is required" }
         ),
         isLGBTQContent: z.boolean().default(false),
         thumbnail: z.object({
@@ -121,9 +129,13 @@ const Write = ({
       })
       .safeParse({ ...storyDetails, thumbnail: uploadedFile });
 
+    console.log({ zodResponse });
+
     if (!zodResponse.success) {
-      toast.error("Invalid story details");
-      toast.error(zodResponse.error.issues[0]?.message);
+      const errorMessage =
+        zodResponse.error.issues[0]?.message ||
+        "Please check your story details";
+      toast.error(errorMessage);
       return;
     }
 
@@ -136,7 +148,7 @@ const Write = ({
       });
 
       if (result) {
-        toast.success("Story updated successfully!");
+        toast.success("Story uploaded successfully!");
         router.push(`/story/${result.id}`);
       }
     } catch (error) {
@@ -167,21 +179,23 @@ const Write = ({
               </p>
             </div>
 
-            <FileUploader
-              value={file}
-              onValueChange={setFile}
-              onUpload={handleUpload}
-              onRemove={handleRemove}
-              className="max-h-[350px] sm:max-h-[450px] mt-2"
-              progresses={uploadProgress}
-              accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
-              maxSize={4 * 1024 * 1024}
-              uploadedFile={uploadedFile}
-              preparingUpload={preparingUpload}
-              setPreparingUpload={setPreparingUpload}
-              imageLoad={imageLoad}
-              setImageLoad={setImageLoad}
-            />
+            <div>
+              <FileUploader
+                value={file}
+                onValueChange={setFile}
+                onUpload={handleUpload}
+                onRemove={handleRemove}
+                className="aspect-[1/1.5] sm:aspect-[1/1.6] mt-2"
+                progresses={uploadProgress}
+                accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
+                maxSize={4 * 1024 * 1024}
+                uploadedFile={uploadedFile}
+                preparingUpload={preparingUpload}
+                setPreparingUpload={setPreparingUpload}
+                imageLoad={imageLoad}
+                setImageLoad={setImageLoad}
+              />
+            </div>
 
             {uploadedFile && (
               <p className="mt-2 text-xs sm:text-sm text-muted-foreground">

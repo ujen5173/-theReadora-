@@ -2,6 +2,7 @@
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
 import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { env } from "~/env";
@@ -68,7 +69,15 @@ const ProfileMetaData = () => {
                   </h1>
                 </div>
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-slate-600">
-                  <span className="font-medium text-slate-700">
+                  <span
+                    className="font-medium cursor-pointer text-slate-700"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `${env.NEXT_PUBLIC_APP_URL}/profile?user=${user?.username}`
+                      );
+                      toast.success("Username copied!");
+                    }}
+                  >
                     @{user?.username}
                   </span>
                   <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />

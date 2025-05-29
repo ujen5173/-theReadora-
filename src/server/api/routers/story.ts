@@ -3,6 +3,8 @@ import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import readingTime from "reading-time";
 import { z } from "zod";
 import { THUMBNAILS } from "~/data/thumbnails";
+import { env } from "~/env";
+import { EmailQueue } from "~/lib/email/queue";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -615,6 +617,14 @@ export const storyRouter = createTRPCRouter({
               language: input.language as Language,
             },
           });
+
+          await EmailQueue.addToQueue({
+            authorId: ctx.session.user.id,
+            contentTitle: story.title,
+            contentType: "story",
+            contentUrl: `${env.NEXT_PUBLIC_APP_URL}/story/${story.slug}`,
+          });
+
           return {
             id: story.id,
           };
