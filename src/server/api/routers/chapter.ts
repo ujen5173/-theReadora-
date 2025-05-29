@@ -575,6 +575,18 @@ export const chapterRouter = createTRPCRouter({
           });
         }
 
+        const basePrice = CHAPTER_PRICE_POOL[chapter.price];
+        const requiredCoins = user.premium
+          ? Math.floor(basePrice * 0.8) // 20% discount for premium users
+          : basePrice;
+
+        if (user.coins < requiredCoins) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Insufficient balance to unlock chapter",
+          });
+        }
+
         if (chapter.unlockedUsers.length > 0) {
           throw new TRPCError({
             code: "BAD_REQUEST",
@@ -594,7 +606,7 @@ export const chapterRouter = createTRPCRouter({
             where: { id: user.id },
             data: {
               coins: {
-                decrement: CHAPTER_PRICE_POOL[chapter.price],
+                decrement: requiredCoins,
               },
             },
           }),
@@ -616,6 +628,7 @@ export const chapterRouter = createTRPCRouter({
         });
       }
     }),
+
   getUserUnlockedChapter: publicProcedure
     .input(z.object({ chapterId: z.string() }))
     .query(async ({ ctx, input }) => {

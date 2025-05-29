@@ -125,10 +125,10 @@ const Reviews = ({ storyId }: { storyId: string }) => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Sort By</SelectLabel>
+                <SelectItem value="TOP">Top</SelectItem>
+                <SelectItem value="MOST_VOTES">Most Votes</SelectItem>
                 <SelectItem value="LATEST">Latest</SelectItem>
                 <SelectItem value="OLDEST">Oldest</SelectItem>
-                <SelectItem value="MOST_VOTES">Most Votes</SelectItem>
-                <SelectItem value="TOP">Top</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

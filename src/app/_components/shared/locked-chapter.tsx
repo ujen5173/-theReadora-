@@ -123,6 +123,10 @@ const UnlockButton = ({
       return;
     }
 
+    if (user && (user.coins ?? 0) < discountedPrice) {
+      router.push("/settings?tab=coin");
+      return;
+    }
     unlockChapter({ chapterId });
   };
 
@@ -232,11 +236,14 @@ const UnlockButton = ({
             </Button>
             <Button
               onClick={handleUnlock}
+              className="flex-1 h-12 bg-primary hover:bg-primary/90"
+              icon={
+                status !== "pending" ? (user ? Coins : undefined) : undefined
+              }
               disabled={
                 status === "pending" ||
                 (user?.coins ? user.coins < discountedPrice : false)
               }
-              className="flex-1 h-12 bg-primary hover:bg-primary/90"
             >
               {status === "pending" ? (
                 <div className="flex items-center gap-2">
@@ -244,10 +251,7 @@ const UnlockButton = ({
                   Processing...
                 </div>
               ) : user ? (
-                <>
-                  <Coins className="h-5 w-5 mr-2" />
-                  Unlock Chapter
-                </>
+                <>Unlock Chapter</>
               ) : (
                 "Sign in to Unlock"
               )}

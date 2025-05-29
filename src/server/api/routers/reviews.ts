@@ -1,4 +1,4 @@
-import { TRPCError } from "@trpc/server";
+import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -201,12 +201,113 @@ export const reviewsRouter = createTRPCRouter({
       try {
         const user = ctx.session.user.id;
 
-        const res = await ctx.postgresDb.replies.create({
+        // Start a transaction to ensure data consistency
+        const res = await ctx.postgresDb.$transaction(async (tx) => {
+          // Update the main review's reply count
+          await tx.rating.update({
+            where: { id: input.reviewId },
+            data: { repliesCount: { increment: 1 } },
+          });
+
+          // Create the reply
+          const reply = await tx.replies.create({
+            data: {
+              userId: user,
+              reply: input.reply,
+              ratingId: input.reviewId,
+              parentId: input.parentId,
+            },
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  username: true,
+                  image: true,
+                },
+              },
+              parent: {
+                select: {
+                  user: {
+                    select: {
+                      id: true,
+                      username: true,
+                      name: true,
+                    },
+                  },
+                  reply: true,
+                },
+              },
+            },
+          });
+
+          return reply;
+        });
+
+        return res;
+      } catch (err) {
+        if (err instanceof TRPCError) throw err;
+
+        throw new TRPCError({
+          message: "Something went wrong",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  toggleReplyLike: protectedProcedure
+    .input(
+      z.object({
+        replyId: z.string().cuid(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const reply = await ctx.postgresDb.replies.findUnique({
+          where: {
+            id: input.replyId,
+          },
+          select: {
+            likesCount: true,
+            likes: {
+              where: {
+                id: ctx.session.user.id,
+              },
+              select: { id: true },
+            },
+          },
+        });
+
+        if (!reply)
+          throw new TRPCError({
+            message: "Reply not found",
+            code: "BAD_REQUEST",
+          });
+
+        const isLiked = reply.likes.length > 0;
+
+        const res = await ctx.postgresDb.replies.update({
+          where: {
+            id: input.replyId,
+          },
+          select: {
+            likesCount: true,
+            likes: {
+              where: {
+                id: ctx.session.user.id,
+              },
+              select: { id: true },
+            },
+          },
           data: {
-            userId: user,
-            reply: input.reply,
-            ratingId: input.reviewId,
-            parentId: input.parentId,
+            likesCount: {
+              [isLiked ? "decrement" : "increment"]: 1,
+            },
+            likes: {
+              [isLiked ? "disconnect" : "connect"]: {
+                id: ctx.session.user.id,
+              },
+            },
           },
         });
 
@@ -220,4 +321,66 @@ export const reviewsRouter = createTRPCRouter({
         });
       }
     }),
+
+  getReplies: publicProcedure
+    .input(
+      z.object({
+        reviewId: z.string().cuid(),
+        limit: z.number().optional().default(4),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const replies = await ctx.postgresDb.replies.findMany({
+          where: {
+            ratingId: input.reviewId,
+          },
+          take: input.limit,
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
+            parent: {
+              select: {
+                user: {
+                  select: {
+                    id: true,
+                    username: true,
+                    name: true,
+                  },
+                },
+                reply: true,
+              },
+            },
+            likes: {
+              where: {
+                id: ctx.session?.user.id ?? "",
+              },
+              select: {
+                id: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
+        return replies;
+      } catch (err) {
+        if (err instanceof TRPCError) throw err;
+
+        throw new TRPCError({
+          message: "Something went wrong",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
 });
+
+export type TgetReplies = inferProcedureOutput<typeof reviewsRouter.getReplies>;
