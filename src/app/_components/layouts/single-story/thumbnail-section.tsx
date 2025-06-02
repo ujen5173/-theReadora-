@@ -64,6 +64,7 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
           variant={"default"}
           icon={BookOpen01Icon}
           className="w-full"
+          disabled={!!story.chapters[0]?.id}
         >
           <Link href={`/chapter/${story.chapters[0]?.id}`}>Start Reading</Link>
         </Button>

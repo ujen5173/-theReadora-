@@ -1,7 +1,7 @@
 "use client";
 import { Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import {
@@ -22,13 +22,13 @@ import SearchBooksSection from "../_components/layouts/search/search-books-secti
 const Search = () => {
   // @params
   // /search?query=<QUERY>&genre=<GENRE>
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query") ?? "";
-  const genre = searchParams.get("genre") ?? "";
+  const s = useSearchParams();
+  const query = s.get("query") ?? "";
+  const genre = s.get("genre") ?? "";
   const router = useRouter();
   const { applyFilters, setGenre, setQuery } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
-  const [s, setSearchParams] = useState({
+  const [searchParams, setSearchParams] = useState({
     ...applyFilters(),
     query,
     skip: 0,
@@ -36,11 +36,15 @@ const Search = () => {
   });
 
   // Handle genre synchronization
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (genre) {
       const validGenre = getValidGenre(genre);
       if (validGenre) {
         setGenre(validGenre);
+        setSearchParams((prev) => ({
+          ...prev,
+          genre: validGenre,
+        }));
       } else {
         router.push(`/search${query ? `?query=${query}` : ""}`);
       }
@@ -48,11 +52,22 @@ const Search = () => {
   }, [genre, query, router, setGenre]);
 
   // Handle query synchronization
-  useLayoutEffect(() => {
+  useEffect(() => {
     setQuery(query);
-  }, [query]);
+    setSearchParams((prev) => ({
+      ...prev,
+      query,
+    }));
+  }, [query, setQuery]);
 
-  const { data: books, isLoading } = api.story.search.useQuery(s, {
+  // Add this effect to initialize the store's genre
+  useEffect(() => {
+    if (genre) {
+      setGenre(genre);
+    }
+  }, [genre, setGenre]);
+
+  const { data: books, isLoading } = api.story.search.useQuery(searchParams, {
     enabled: true,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -60,8 +75,9 @@ const Search = () => {
   });
 
   const handleRefetch = useCallback(() => {
+    const currentFilters = applyFilters();
     setSearchParams({
-      ...applyFilters(),
+      ...currentFilters,
       query,
       skip: (currentPage - 1) * 15,
       limit: 15,

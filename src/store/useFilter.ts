@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { getValidGenre } from "~/utils/helpers";
 
 type FilterStore = {
   query: string;
@@ -23,7 +24,7 @@ type FilterStore = {
     publishedAt: "LAST_WEEK" | "LAST_MONTH" | "LAST_YEAR" | "ALL_TIME"
   ) => void;
   setTags: (tags: string[]) => void;
-  resetAll: () => void;
+  resetAll: (preserveGenre?: string) => void;
   applyFilters: () => FilterParams;
 };
 
@@ -73,7 +74,10 @@ const initialState: FilterState = {
 export const useFilterStore = create<FilterStore>()((set, get) => ({
   ...initialState,
   setQuery: (query) => set({ query }),
-  setGenre: (genre) => set({ genre }),
+  setGenre: (genre) => {
+    const validGenre = getValidGenre(genre);
+    set({ genre: validGenre || "" });
+  },
   setSortBy: (sortBy) => set({ sortBy }),
   setStatus: (status) => set({ status }),
   setContentType: (contentType) => set({ contentType }),
@@ -83,14 +87,23 @@ export const useFilterStore = create<FilterStore>()((set, get) => ({
     set({ minViewsCount, maxViewsCount }),
   setPublishedAt: (publishedAt) => set({ publishedAt }),
   setTags: (tags) => set({ tags }),
-  resetAll: () => set(initialState),
+  resetAll: (preserveGenre?: string) => {
+    if (preserveGenre) {
+      set({
+        ...initialState,
+        genre: preserveGenre,
+      });
+    } else {
+      set(initialState);
+    }
+  },
   applyFilters: () => {
     const state = get();
     const filters: FilterParams = {};
 
-    if (state.query) filters.query = state.query;
-    if (state.genre) filters.genre = state.genre;
-    if (state.sortBy) filters.sortBy = state.sortBy;
+    if (state.query?.trim()) filters.query = state.query.trim();
+    if (state.genre?.trim()) filters.genre = state.genre.trim();
+    if (state.sortBy?.trim()) filters.sortBy = state.sortBy.trim();
     if (state.status.length > 0) filters.status = state.status;
     if (state.contentType.length > 0) filters.contentType = state.contentType;
     if (state.minChapterCount > 0)

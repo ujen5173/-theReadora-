@@ -1,4 +1,5 @@
-import { Coins, PenLine, Sparkles, Users } from "lucide-react";
+import { WebDesign01Icon } from "hugeicons-react";
+import { Coins, PenLine, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 import { Badge } from "~/components/ui/badge";
@@ -9,9 +10,8 @@ import { outfit } from "~/utils/font";
 import HeroSection from "./_components/layouts/(/)/hero-section";
 import LatestAndRising from "./_components/layouts/(/)/latest-rising";
 import PopularCompleted from "./_components/layouts/(/)/popular-completed";
+import SimilarReadsNReadingList from "./_components/layouts/(/)/recent-reads-legends-shelf";
 import Recommendations from "./_components/layouts/(/)/recommendations";
-import SimilarReadsNReadingList from "./_components/layouts/(/)/similar-reads-and-reading-list";
-import TopTags from "./_components/layouts/(/)/top-tags";
 import TrendingSection from "./_components/layouts/(/)/trending";
 import Header from "./_components/layouts/header";
 
@@ -38,10 +38,10 @@ export default async function Home() {
         "No content restrictions. Write any genre, theme, or format. Perfect for mature themes and cross-genre stories.",
     },
     {
-      icon: Users,
-      title: "Collaborative Writing Mode",
+      icon: WebDesign01Icon,
+      title: "Better Experience from other platform",
       description:
-        "Co-author stories with friends or writers across the world in real-time.",
+        "Experience matters a lot for both readers and writers, so Readora focus on keeping the design clean, modern, and easy to use.",
     },
   ];
 
@@ -59,8 +59,8 @@ export default async function Home() {
       <TrendingSection />
       <Separator className="max-w-[1540px] mx-auto" />
       <Recommendations />
-      <Separator className="max-w-[1540px] mx-auto" />
-      <TopTags />
+      {/* <Separator className="max-w-[1540px] mx-auto" />
+      <TopTags /> */}
       <Separator className="max-w-[1540px] mx-auto" />
       <LatestAndRising />
       <Separator className="max-w-[1540px] mx-auto" />
@@ -75,7 +75,7 @@ export default async function Home() {
                 <span
                   className={`underline ${outfit.className} text-primary/80`}
                 >
-                  [theReadora]
+                  Readora
                 </span>
               </h1>
             </div>

@@ -18,7 +18,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -79,6 +79,8 @@ const FilterSection = ({
     setPublishedAt,
     setTags,
     resetAll,
+    setGenre,
+    genre: storeGenre,
   } = useFilterStore();
 
   const [chapterRange, setChapterRange] = useState([0, 100]);
@@ -113,17 +115,30 @@ const FilterSection = ({
   };
 
   const [open, setOpen] = useState(false);
-
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Local state for pending genre
-  const [pendingGenre, setPendingGenre] = useState(genre);
+  const handleGenreSelect = (selectedGenre: string) => {
+    setGenre(selectedGenre);
+    setOpen(false);
+  };
 
-  // Keep local state in sync with URL/store when they change
-  useEffect(() => {
-    setPendingGenre(genre);
-  }, [genre]);
+  const handleApply = async () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (storeGenre) {
+      params.set("genre", storeGenre);
+    } else {
+      params.delete("genre");
+    }
+
+    if (query) {
+      params.set("query", query);
+    }
+
+    await router.push(`/search?${params.toString()}`);
+    handleRefetch();
+  };
 
   return (
     <section className={cn("space-y-4 h-fit", isMobile && "border-none")}>
@@ -169,9 +184,7 @@ const FilterSection = ({
                     aria-expanded={open}
                     className="w-full justify-between"
                   >
-                    {pendingGenre
-                      ? getValidGenre(pendingGenre)
-                      : "Select genre"}
+                    {storeGenre ? getValidGenre(storeGenre) : "Select genre"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -185,15 +198,12 @@ const FilterSection = ({
                           <CommandItem
                             key={g.slug}
                             value={g.name}
-                            onSelect={() => {
-                              setPendingGenre(g.slug);
-                              setOpen(false);
-                            }}
+                            onSelect={() => handleGenreSelect(g.slug)}
                           >
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                pendingGenre === g.slug
+                                storeGenre === g.slug
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -473,24 +483,13 @@ const FilterSection = ({
             variant="outline"
             className="flex-1"
             onClick={() => {
-              resetAll();
+              resetAll(genre);
               handleRefetch();
             }}
           >
             Reset
           </Button>
-          <Button
-            className="flex-1"
-            onClick={() => {
-              // Update the URL with the pending genre
-              const params = new URLSearchParams(searchParams.toString());
-              if (pendingGenre) params.set("genre", pendingGenre);
-              else params.delete("genre");
-              if (query) params.set("query", query);
-              router.push(`/search?${params.toString()}`);
-              handleRefetch();
-            }}
-          >
+          <Button className="flex-1" onClick={handleApply}>
             Apply
           </Button>
         </div>

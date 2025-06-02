@@ -3,10 +3,9 @@ import { type Metadata } from "next";
 // Site Configuration
 export const siteConfig = {
   name: "Readora",
-  title:
-    "Readora - Where Stories Come Alive | Free Online Reading & Writing Platform",
+  title: "Readora - Where Stories Come Alive",
   description:
-    "Readora - Your ultimate destination for free online reading and writing. Discover thousands of stories across multiple genres, connect with writers, and share your own stories. Join our community of readers and writers today!",
+    "Readora - Your ultimate destination for free online reading and writing. Discover stories across multiple genres, connect with writers, and share your own stories. Join our community of readers and writers today!",
   url: "https://thereadora.vercel.app",
   ogImage: "https://thereadora.vercel.app/og-image.jpg",
   keywords: [

@@ -217,32 +217,34 @@ const Header = ({
             </div>
 
             <ul className="hidden lg:flex items-center gap-1 sm:gap-2">
-              <NavigationMenu delayDuration={0} className="z-[100] relative">
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger
-                      className={cn(
-                        buttonVariants({ variant: "link" }),
-                        "text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent text-sm sm:text-base"
-                      )}
-                    >
-                      Explore
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent className="bg-white shadow-lg rounded-lg p-3 sm:p-4 transition duration-150 ease-in-out">
-                      <div className="flex mb-2 items-center px-2 justify-between">
-                        <h3 className="text-base sm:text-lg font-bold text-slate-700">
-                          Genres
-                        </h3>
-                      </div>
-                      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <GenreColumn genres={GENRES.column1} />
-                        <GenreColumn genres={GENRES.column2} />
-                        <GenreColumn genres={GENRES.column3} />
-                      </div>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
+              <li>
+                <NavigationMenu delayDuration={0} className="z-[100] relative">
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger
+                        className={cn(
+                          buttonVariants({ variant: "link" }),
+                          "text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent text-sm sm:text-base"
+                        )}
+                      >
+                        Explore
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent className="bg-white shadow-lg rounded-lg p-3 sm:p-4 transition duration-150 ease-in-out">
+                        <div className="flex mb-2 items-center px-2 justify-between">
+                          <h3 className="text-base sm:text-lg font-bold text-slate-700">
+                            Genres
+                          </h3>
+                        </div>
+                        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                          <GenreColumn genres={GENRES.column1} />
+                          <GenreColumn genres={GENRES.column2} />
+                          <GenreColumn genres={GENRES.column3} />
+                        </div>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </li>
 
               <li className="block">
                 <Link href="/premium">

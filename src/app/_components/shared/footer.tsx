@@ -32,8 +32,8 @@ const Footer = () => {
             </p>
             <FeedbackDialog>
               <Button className="mb-5 gap-2">
-                <Idea01Icon className="text-danger" size={18} />
-                <span className="text-sm">Any feedback?</span>
+                <Idea01Icon className="text-white" size={18} />
+                <span className="text-sm text-white">Any feedback?</span>
               </Button>
             </FeedbackDialog>
           </div>
@@ -70,6 +70,7 @@ const Footer = () => {
                       <Link
                         href={siteConfig.links.pinterest}
                         target="_blank"
+                        aria-label="Pinterest Social Link"
                         className={buttonVariants({
                           variant: "outline",
                           size: "icon",
@@ -90,6 +91,7 @@ const Footer = () => {
                     <TooltipTrigger>
                       <Link
                         href={siteConfig.links.instagram}
+                        aria-label="Instagram Social Link"
                         target="_blank"
                         className={buttonVariants({
                           variant: "outline",
@@ -112,6 +114,7 @@ const Footer = () => {
                       <Link
                         href={siteConfig.links.twitter}
                         target="_blank"
+                        aria-label="Twitter Social Link"
                         className={buttonVariants({
                           variant: "outline",
                           size: "icon",
@@ -133,6 +136,7 @@ const Footer = () => {
                       <Link
                         href={siteConfig.links.discord}
                         target="_blank"
+                        aria-label="Discord Social Link"
                         className={buttonVariants({
                           variant: "outline",
                           size: "icon",

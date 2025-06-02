@@ -1,7 +1,5 @@
 "use client";
-
 import { BookOpenIcon, ChevronDownIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import {
@@ -22,6 +20,7 @@ import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
 import { isChapterScheduled } from "~/utils/helpers";
 import AddToList from "../../shared/add-to-list";
+import BlurImage from "../../shared/blur-image";
 import { StarRating } from "../single-story/star-rating";
 
 const ChapterTOC = () => {
@@ -48,13 +47,16 @@ const ChapterTOC = () => {
               <div className="w-full sm:w-80 flex items-center justify-between gap-2 sm:gap-4">
                 <div className="flex gap-2 flex-1 items-center min-w-0">
                   {story?.thumbnail ? (
-                    <Image
-                      src={story?.thumbnail}
-                      alt={story?.title}
-                      width={40}
-                      height={36}
-                      className="aspect-[1/1.6] rounded-sm border border-gray-200 flex-shrink-0"
-                    />
+                    <div className="w-10">
+                      <BlurImage
+                        src={story?.thumbnail}
+                        alt={story?.title}
+                        width={40}
+                        height={36}
+                        size="w-10"
+                        className="aspect-[1/1.6] rounded-sm border border-gray-200 flex-shrink-0"
+                      />
+                    </div>
                   ) : (
                     <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-gray-200 flex-shrink-0">
                       <BookOpenIcon className="h-4 w-4" />

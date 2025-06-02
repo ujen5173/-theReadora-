@@ -51,12 +51,14 @@ export function formatBytes(
 
 export const mongoObjectId = () => {
   const timestamp = ((new Date().getTime() / 1000) | 0).toString(16);
-  return timestamp +
-  "xxxxxxxxxxxxxxxx"
-    .replace(/[x]/g, function () {
-      return ((Math.random() * 16) | 0).toString(16);
-    })
-    .toLowerCase();
+  return (
+    timestamp +
+    "xxxxxxxxxxxxxxxx"
+      .replace(/[x]/g, function () {
+        return ((Math.random() * 16) | 0).toString(16);
+      })
+      .toLowerCase()
+  );
 };
 
 export const getReadingTimeText = (readingTime: number) => {
@@ -65,7 +67,7 @@ export const getReadingTimeText = (readingTime: number) => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
 
-  return `${hours ? `${hours}h` : ""} ${minutes ? `${minutes}m` : ""} read`;
+  return `${hours ? `${hours}h` : ""} ${minutes ? `${minutes}m` : "1m"} read`;
 };
 
 export const getValidGenre = (genre: string) =>

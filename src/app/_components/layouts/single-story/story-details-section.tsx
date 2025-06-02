@@ -208,7 +208,7 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
         >
           {story.synopsis}
         </p>
-        {story.synopsis.length > 400 && (
+        {story.synopsis.split(" ").length > 110 && (
           <span
             className="underline text-primary/70 underline-offset-2 cursor-pointer my-4 block text-sm sm:text-base font-semibold"
             onClick={handleReadMore}

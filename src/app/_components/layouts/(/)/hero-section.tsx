@@ -138,10 +138,11 @@ const FEATURED_NOVELS = [
 ];
 
 const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
-  <div className="flex items-center gap-4 py-1 rounded-lg hover:bg-white/5 transition-colors group cursor-pointer">
+  <div className="flex items-center gap-4 py-1 rounded-lg hover:bg-white/5 transition-colors group">
     <Image
       width={800}
       height={400}
+      draggable={false}
       src={novel.cover}
       alt={novel.title}
       className="border/40 h-full w-full rounded-lg border object-cover transition-all duration-500 ease-in-out"
@@ -150,7 +151,7 @@ const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
 );
 
 const VerticalSlider = () => (
-  <div className="hidden relative h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
+  <div className="hidden relative -skew-x-3 h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
     <div className="flex-1">
       <div className="animate-slide-up">
         {FEATURED_NOVELS.slice(0, 4).map((novel) => (
@@ -216,7 +217,7 @@ const HeroSection = () => {
             alt="Background Pattern"
             width={800}
             height={400}
-            className="w-full h-full z-0 object-cover opacity-10"
+            className="w-full h-full z-0 object-cover select-none opacity-10"
           />
         </div>
 
@@ -230,7 +231,7 @@ const HeroSection = () => {
             Discover and share your favorite reads!
           </h1>
           <p className="text-base md:text-lg text-slate-500 font-medium">
-            The ultimate alternative to{" "}
+            Readora is the ultimate alternative to{" "}
             <span className="text-primary/70 underline font-semibold">
               Wattpad
             </span>

@@ -53,8 +53,6 @@ export const chapterRouter = createTRPCRouter({
           throw new Error("Story not found");
         }
 
-        console.log({ edit: input.edit });
-
         // If editing, verify chapter exists and user has permission
         if (input.edit) {
           const existingChapter = await ctx.postgresDb.chapter.findUnique({
@@ -130,6 +128,14 @@ export const chapterRouter = createTRPCRouter({
           // Finally delete old chunks
           await ctx.mongoDb.collection(chunkCollectionName).deleteMany({
             chapterId: existingChapter.mongoContentID[0],
+          });
+
+          // Update story metadata
+          await ctx.postgresDb.story.update({
+            where: { id: input.storyId },
+            data: {
+              readingTime: input.readingTime,
+            },
           });
 
           return {

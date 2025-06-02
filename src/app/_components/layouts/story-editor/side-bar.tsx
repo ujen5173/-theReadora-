@@ -27,7 +27,7 @@ const StoryEditorSidebar = () => {
   const { story_id } = useParams();
   const chapter_id = useSearchParams().get("chapter_id");
 
-  const [isStatsOpen, setIsStatsOpen] = useState(false);
+  const [isStatsOpen, setIsStatsOpen] = useState(true);
   const { title, htmlContent, wordCount } = useNewChapterStore();
 
   const {

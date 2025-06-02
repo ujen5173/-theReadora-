@@ -24,9 +24,9 @@
 | Engagement         | Blurred placeholder                        | Extreme  |                                      | Low          | ✅     |
 | Content Mgmt       | Edit stories and chapters                  | Medium   |                                      | Medium       | ✅     |
 | Engagement         | Review panels                              | Medium   |                                      | Low          | ✅     |
+| Core Logic         | Different section data fetching            | Extreme  | Recom., history, top, rising, latest | Medium       | ✅     |
 
 | Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         |        |
-| Core Logic         | Different section data fetching            | Extreme  | Recom., history, top, rising, latest | Medium       |        |
 | Engagement         | Paragraph-level comments                   | Low      | Inline comment                       | Extreme      |        |
 | Monetization       | Coin purchase flow                         | High     | Stripe, eSewa and Khalti integration | Medium       |        |
 | UI/UX Improvements | Improve chapter reading experience         | High     | Reading experience is not quite good | Medium       |        |
@@ -34,16 +34,7 @@
 | Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
 ---
 
-2. BUG REPORT QUEUE
-
-| Description                                         | Priority | Date Identified | Date Resolved | Status | Where? |
-| --------------------------------------------------- | -------- | --------------- | ------------- | ------ | ------ |
-| Conflict between search params and filter system    | High     | 2025-05-04      |               |        | Both   |
-| Bug in payment pricing                              | High     | 2025-05-15      |               |        | Both   |
-| Slug is not unique of story                         | High     | 2025-05-16      |               |        | Both   |
----
-
-3. FEATURE IDEAS (Unfiltered / Speculative)
+2. FEATURE IDEAS (Unfiltered / Speculative)
 
 | Title                                            | Description                                                               |
 | ------------------------------------------------ | ------------------------------------------------------------------------- |

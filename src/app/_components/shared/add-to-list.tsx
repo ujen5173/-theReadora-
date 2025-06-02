@@ -2,6 +2,7 @@
 
 import { Bookmark02Icon } from "hugeicons-react";
 import { Loader2Icon } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -17,21 +18,26 @@ import {
 } from "~/components/ui/dialog";
 import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
 import ReadingListDialog from "./reading-list-dialog";
 
 const AddToList = ({ storyId }: { storyId: string }) => {
+  const { user } = useUserStore();
+
+  const { mutateAsync, status } = api.list.addToList.useMutation();
+  const [checkedList, setCheckedList] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
+
   const {
     data: lists,
     isLoading,
     refetch,
   } = api.list.getList.useQuery(undefined, {
+    enabled: !!user,
     retry: 0,
     refetchOnWindowFocus: false,
   });
-  const { mutateAsync, status } = api.list.addToList.useMutation();
-  const [checkedList, setCheckedList] = useState<string[]>([]);
-  const [open, setOpen] = useState(false);
 
   const handleSave = async () => {
     const res = await mutateAsync({
@@ -95,19 +101,27 @@ const AddToList = ({ storyId }: { storyId: string }) => {
           )}
         </div>
         <DialogFooter>
-          <ReadingListDialog onSuccess={() => refetch()}>
-            <Button disabled={status === "pending"} variant={"outline"}>
-              Create New List
+          {!user?.id ? (
+            <Button asChild variant={"default"}>
+              <Link href="/auth/signin">Sign in to save list</Link>
             </Button>
-          </ReadingListDialog>
-          <Button
-            disabled={status === "pending"}
-            icon={status === "pending" ? Loader2Icon : undefined}
-            iconStyle={status === "pending" ? "animate-spin" : ""}
-            onClick={handleSave}
-          >
-            Save
-          </Button>
+          ) : (
+            <>
+              <ReadingListDialog onSuccess={() => refetch()}>
+                <Button disabled={status === "pending"} variant={"outline"}>
+                  Create New List
+                </Button>
+              </ReadingListDialog>
+              <Button
+                disabled={status === "pending"}
+                icon={status === "pending" ? Loader2Icon : undefined}
+                iconStyle={status === "pending" ? "animate-spin" : ""}
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            </>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

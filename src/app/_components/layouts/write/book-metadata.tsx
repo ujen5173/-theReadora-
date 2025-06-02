@@ -112,7 +112,7 @@ const BookMetadata = ({
           onChange={(e) =>
             setMetadata((prev) => ({ ...prev, synopsis: e.target.value }))
           }
-          className="w-full bg-white h-32 sm:h-64"
+          className="w-full bg-white text-base leading-relaxed h-32 sm:h-64"
         />
       </div>
 

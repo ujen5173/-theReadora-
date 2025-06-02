@@ -43,6 +43,7 @@ export const NCardEntity = {
   },
 };
 
+// search filter schema
 const filterSchema = z.object({
   query: z.string().optional(),
   genre: z.string().optional(),
@@ -80,19 +81,52 @@ export const storyRouter = createTRPCRouter({
   latest: publicProcedure
     .input(
       z.object({
-        limit: z.number().optional(),
+        limit: z.number().optional().default(8),
       })
     )
     .query(async ({ ctx, input }) => {
       try {
         const stories = await ctx.postgresDb.story.findMany({
-          orderBy: {
-            createdAt: "desc",
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+            {
+              readCount: "desc",
+            },
+            {
+              averageRating: "desc",
+            },
+          ],
+          select: {
+            ...NCardEntity,
+            createdAt: true,
           },
-          take: input.limit,
+          take: input.limit * 2,
         });
 
-        return stories;
+        // Apply engagement boost to recent stories
+        const now = new Date();
+        const boostedStories = stories.map((story) => {
+          const hoursSinceCreation =
+            (now.getTime() - story.createdAt.getTime()) / (1000 * 60 * 60);
+          const engagementScore = story.readCount * (story.averageRating || 1);
+
+          // Boost stories that are less than 24 hours old and have good engagement
+          const timeBoost = hoursSinceCreation < 24 ? 1.5 : 1;
+          const engagementBoost = engagementScore > 0 ? 1.2 : 1;
+
+          return {
+            ...story,
+            _rankingScore: timeBoost * engagementBoost,
+          };
+        });
+
+        // Sort by ranking score
+        return boostedStories
+          .sort((a, b) => (b._rankingScore || 0) - (a._rankingScore || 0))
+          .slice(0, input.limit)
+          .map(({ _rankingScore, ...story }) => story);
       } catch (err) {
         console.error("Error fetching stories:", err);
         throw new Error("Error fetching stories");
@@ -102,20 +136,60 @@ export const storyRouter = createTRPCRouter({
   rising: publicProcedure
     .input(
       z.object({
-        limit: z.number().optional(),
+        limit: z.number().optional().default(8),
       })
     )
     .query(async ({ ctx, input }) => {
       try {
         const stories = await ctx.postgresDb.story.findMany({
-          orderBy: {
-            averageRating: "desc",
+          select: {
+            ...NCardEntity,
+            createdAt: true,
+            updatedAt: true,
           },
-          select: NCardEntity,
-          take: input.limit,
+          take: input.limit * 2, // Fetch more stories to apply ranking algorithm
         });
 
-        return stories;
+        const now = new Date();
+        const rankedStories = stories.map((story) => {
+          // Calculate time-based metrics
+          const ageInHours =
+            (now.getTime() - story.createdAt.getTime()) / (1000 * 60 * 60);
+          const updateAgeInHours =
+            (now.getTime() - story.updatedAt.getTime()) / (1000 * 60 * 60);
+
+          // Calculate engagement metrics
+          const viewsPerHour = story.readCount / Math.max(ageInHours, 1);
+          const ratingWeight = story.averageRating || 0;
+          const ratingCountWeight = Math.log10(story.ratingCount + 1);
+
+          // Calculate chapter velocity (chapters per day)
+          const daysSinceCreation = ageInHours / 24;
+          const chapterVelocity =
+            story.chapterCount / Math.max(daysSinceCreation, 1);
+
+          // Calculate momentum score (recent activity)
+          const momentumScore = updateAgeInHours < 24 ? 1.5 : 1;
+
+          // Calculate final ranking score
+          const rankingScore =
+            viewsPerHour * 0.3 + // View velocity
+            ratingWeight * 0.25 + // Rating quality
+            ratingCountWeight * 0.15 + // Rating quantity
+            chapterVelocity * 0.2 + // Content velocity
+            momentumScore * 0.1; // Recent activity
+
+          return {
+            ...story,
+            _rankingScore: rankingScore,
+          };
+        });
+
+        // Sort by ranking score and return top stories
+        return rankedStories
+          .sort((a, b) => (b._rankingScore || 0) - (a._rankingScore || 0))
+          .slice(0, input.limit ?? 10)
+          .map(({ _rankingScore, ...story }) => story);
       } catch (err) {
         console.error("Error fetching stories:", err);
         throw new Error("Error fetching stories");
@@ -125,61 +199,388 @@ export const storyRouter = createTRPCRouter({
   recommendations: publicProcedure
     .input(
       z.object({
-        userId: z.string(),
-        limit: z.number().optional(),
+        limit: z.number().optional().default(8),
       })
     )
     .query(async ({ ctx, input }) => {
-      try {
-        // TODO: from readinglist and novels the user have interacted with.
-        const user = await ctx.postgresDb.user.findUnique({
-          where: {
-            id: input.userId,
-          },
-        });
+      const user = ctx.session?.user.id;
 
-        if (!user) {
-          throw new Error("User not found");
-        }
-
-        const stories = await ctx.postgresDb.story.findMany({
-          orderBy: {
-            averageRating: "desc",
-          },
-          take: input.limit,
-        });
-
-        return stories;
-      } catch (err) {
-        console.error("Error fetching recommendations:", err);
-
-        throw new Error("Error fetching recommendations");
+      if (!user) {
+        // Not logged in: return a mix of top-rated and diverse genres
+        const [topRated, diverse] = await Promise.all([
+          ctx.postgresDb.story.findMany({
+            orderBy: { averageRating: "desc" },
+            select: NCardEntity,
+            take: 4,
+          }),
+          ctx.postgresDb.story.findMany({
+            orderBy: { readCount: "desc" },
+            select: NCardEntity,
+            take: 4,
+          }),
+        ]);
+        const seen = new Set();
+        return [...topRated, ...diverse]
+          .filter((s) => {
+            if (seen.has(s.id)) return false;
+            seen.add(s.id);
+            return true;
+          })
+          .slice(0, input.limit);
       }
+
+      // 1. Get user reading history with frequency and genres
+      const reads = await ctx.postgresDb.chapterRead.findMany({
+        where: { readerKey: user },
+        select: {
+          frequency: true,
+          chapter: {
+            select: {
+              story: {
+                select: {
+                  tags: true,
+                  ...NCardEntity,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // 2. Count genre frequencies
+      const genreFreq: Record<string, number> = {};
+      const storyFreq: Record<string, number> = {};
+      for (const read of reads) {
+        const genre = read.chapter.story.genreSlug;
+        genreFreq[genre] = (genreFreq[genre] || 0) + read.frequency;
+        const storyId = read.chapter.story.id;
+        storyFreq[storyId] = (storyFreq[storyId] || 0) + read.frequency;
+      }
+      const topGenres = Object.entries(genreFreq)
+        .sort((a, b) => b[1] - a[1])
+        .map(([g]) => g)
+        .slice(0, 3);
+
+      // 3. 4 from different genres (not in top genres)
+      const diverseGenreStories = await ctx.postgresDb.story.findMany({
+        where: {
+          genreSlug: { notIn: topGenres },
+        },
+        select: NCardEntity,
+        take: 4,
+      });
+
+      // 4. 4 from genres/titles user interacted with most
+      const topStoryIds = Object.entries(storyFreq)
+        .sort((a, b) => b[1] - a[1])
+        .map(([id]) => id)
+        .slice(0, 8);
+
+      const familiarStories = await ctx.postgresDb.story.findMany({
+        where: {
+          id: { in: topStoryIds },
+        },
+        select: NCardEntity,
+        take: 4,
+      });
+
+      // 5. Merge and dedupe
+      const all = [...diverseGenreStories, ...familiarStories];
+      const seen = new Set();
+      const recommendations = all
+        .filter((s) => {
+          if (seen.has(s.id)) return false;
+          seen.add(s.id);
+          return true;
+        })
+        .slice(0, input.limit);
+
+      return recommendations;
     }),
 
   completedStories: publicProcedure
     .input(
       z.object({
-        userId: z.string(),
-        limit: z.number().optional(),
+        limit: z.number().optional().default(8),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const user = ctx.session?.user.id;
+      if (!user) {
+        // Not logged in: return a mix of top-rated and diverse completed stories
+        const [topRated, diverse] = await Promise.all([
+          ctx.postgresDb.story.findMany({
+            where: { isCompleted: true },
+            orderBy: { averageRating: "desc" },
+            select: NCardEntity,
+            take: 4,
+          }),
+          ctx.postgresDb.story.findMany({
+            where: { isCompleted: true },
+            orderBy: { readCount: "desc" },
+            select: NCardEntity,
+            take: 4,
+          }),
+        ]);
+        // Dedupe and return
+        const seen = new Set();
+        return [...topRated, ...diverse]
+          .filter((s) => {
+            if (seen.has(s.id)) return false;
+            seen.add(s.id);
+            return true;
+          })
+          .slice(0, input.limit);
+      }
+
+      // 1. Get user reading history with genres
+      const reads = await ctx.postgresDb.chapterRead.findMany({
+        where: { readerKey: user },
+        select: {
+          chapter: {
+            select: {
+              story: {
+                select: {
+                  id: true,
+                  genreSlug: true,
+                  tags: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // 2. Count genre frequencies
+      const genreFreq: Record<string, number> = {};
+      for (const read of reads) {
+        const genre = read.chapter.story.genreSlug;
+        genreFreq[genre] = (genreFreq[genre] || 0) + 1;
+      }
+      const topGenres = Object.entries(genreFreq)
+        .sort((a, b) => b[1] - a[1])
+        .map(([g]) => g)
+        .slice(0, 3);
+
+      // 3. 4 completed from different genres (not in top genres)
+      const diverseCompleted = await ctx.postgresDb.story.findMany({
+        where: {
+          isCompleted: true,
+          genreSlug: { notIn: topGenres },
+        },
+        select: NCardEntity,
+        take: 4,
+      });
+
+      // 4. 4 completed from similar genres
+      const similarCompleted = await ctx.postgresDb.story.findMany({
+        where: {
+          isCompleted: true,
+          genreSlug: { in: topGenres },
+        },
+        select: NCardEntity,
+        take: 4,
+      });
+
+      // 5. Merge and dedupe
+      const all = [...diverseCompleted, ...similarCompleted];
+      const seen = new Set();
+      const completed = all
+        .filter((s) => {
+          if (seen.has(s.id)) return false;
+          seen.add(s.id);
+          return true;
+        })
+        .slice(0, input.limit);
+
+      return completed;
+    }),
+
+  recentReads: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(8),
       })
     )
     .query(async ({ ctx, input }) => {
       try {
-        const stories = await ctx.postgresDb.story.findMany({
+        // Get user's recent chapter reads with story details
+        const recentReads = await ctx.postgresDb.chapterRead.findMany({
           where: {
-            isCompleted: true,
+            readerKey: ctx.session.user.id,
+          },
+          select: {
+            frequency: true,
+            lastRead: true,
+            chapter: {
+              select: {
+                chapterNumber: true,
+                title: true,
+                story: {
+                  select: {
+                    ...NCardEntity,
+                    chapters: {
+                      select: {
+                        chapterNumber: true,
+                      },
+                      orderBy: {
+                        chapterNumber: "desc",
+                      },
+                      take: 1,
+                    },
+                  },
+                },
+              },
+            },
           },
           orderBy: {
-            createdAt: "desc",
+            lastRead: "desc",
           },
-          take: input.limit,
+          take: input.limit * 2, // Fetch more to dedupe
         });
 
-        return stories;
+        // Dedupe by story, keep only the most recent read per story
+        const seen = new Set();
+        const recentStories = [];
+        for (const read of recentReads) {
+          const story = read.chapter.story;
+          if (!story || seen.has(story.id)) continue;
+          seen.add(story.id);
+
+          // Progress calculation
+          const lastReadChapter = read.chapter.chapterNumber;
+          const totalChapters =
+            story.chapters[0]?.chapterNumber || story.chapterCount || 1;
+          const progress = Math.min(1, lastReadChapter / totalChapters);
+
+          recentStories.push({
+            ...story,
+            lastRead: read.lastRead,
+            lastReadChapter,
+            totalChapters,
+            progress,
+          });
+
+          if (recentStories.length >= input.limit) break;
+        }
+
+        // Sort by lastRead (most recent first)
+        recentStories.sort(
+          (a, b) =>
+            (b.lastRead?.getTime?.() || 0) - (a.lastRead?.getTime?.() || 0)
+        );
+
+        return recentStories;
       } catch (err) {
-        console.error("Error fetching completed stories:", err);
-        throw new Error("Error fetching completed stories");
+        console.error("Error fetching recent reads:", err);
+        throw new Error("Error fetching recent reads");
+      }
+    }),
+
+  theLegendsSelf: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(8),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        // Get a larger pool of stories to apply the sophisticated ranking
+        const stories = await ctx.postgresDb.story.findMany({
+          select: {
+            ...NCardEntity,
+            createdAt: true,
+            updatedAt: true,
+            tags: true,
+            synopsis: true,
+          },
+          take: input.limit * 3, // Get more stories to apply ranking
+        });
+
+        const now = new Date();
+        const rankedStories = stories.map((story) => {
+          // 1. Time-based metrics
+          const ageInDays =
+            (now.getTime() - story.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+          const updateAgeInDays =
+            (now.getTime() - story.updatedAt.getTime()) / (1000 * 60 * 60 * 24);
+
+          // 2. Engagement metrics
+          const viewsPerDay = story.readCount / Math.max(ageInDays, 1);
+          const ratingQuality = story.averageRating || 0;
+          const ratingQuantity = Math.log10(story.ratingCount + 1);
+
+          // 3. Content quality metrics
+          const chapterDensity = story.chapterCount / Math.max(ageInDays, 1);
+          const readingTimeScore = Math.log10(story.readingTime + 1);
+
+          // 4. Legacy metrics
+          const ageScore = Math.log10(ageInDays + 1);
+          const updateFrequency = 1 / Math.max(updateAgeInDays, 1);
+
+          // 5. Community engagement
+          const engagementScore =
+            (story.readCount * (story.averageRating || 0)) /
+            Math.max(ageInDays, 1);
+
+          // 6. Completion status bonus
+          const completionBonus = story.isCompleted ? 1.5 : 1;
+
+          // Calculate final ranking score with weighted components
+          const rankingScore =
+            // Legacy and Time Factors (30%)
+            ageScore * 0.15 +
+            updateFrequency * 0.15 +
+            // Community Engagement (30%)
+            viewsPerDay * 0.1 +
+            ratingQuality * 0.1 +
+            ratingQuantity * 0.1 +
+            // Content Quality (25%)
+            chapterDensity * 0.1 +
+            readingTimeScore * 0.1 +
+            engagementScore * 0.05 +
+            // Completion Bonus (15%)
+            completionBonus * 0.15;
+
+          // Additional boost for stories with high engagement and age
+          const legacyBoost = ageInDays > 30 && engagementScore > 100 ? 1.5 : 1;
+
+          return {
+            ...story,
+            _rankingScore: rankingScore * legacyBoost,
+            _metrics: {
+              ageInDays,
+              viewsPerDay,
+              engagementScore,
+              chapterDensity,
+              ratingQuality,
+              ratingQuantity,
+            },
+          };
+        });
+
+        // Sort by ranking score and apply additional filters
+        const legends = rankedStories
+          .sort((a, b) => (b._rankingScore || 0) - (a._rankingScore || 0))
+          .filter((story) => {
+            // Must have minimum engagement
+            const minReads = 100;
+            const minRatings = 10;
+            const minAge = 7; // days
+
+            return (
+              story.readCount >= minReads &&
+              story.ratingCount >= minRatings &&
+              story._metrics.ageInDays >= minAge
+            );
+          })
+          .slice(0, input.limit)
+          .map(({ _rankingScore, _metrics, ...story }) => story);
+
+        return legends;
+      } catch (err) {
+        console.error("Error fetching legends:", err);
+        throw new Error("Error fetching legends");
       }
     }),
 
@@ -353,6 +754,7 @@ export const storyRouter = createTRPCRouter({
           skip = 0,
           limit = 10,
         } = input;
+        console.log({ query, genre });
 
         // Build where clause
         const where: any = {};
@@ -370,7 +772,7 @@ export const storyRouter = createTRPCRouter({
         // Genre filter
         if (genre) {
           where.genreSlug = {
-            equals: genre.toLowerCase(),
+            equals: makeSlug(genre),
             mode: "insensitive",
           };
         }

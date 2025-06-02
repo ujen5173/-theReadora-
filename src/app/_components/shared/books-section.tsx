@@ -4,7 +4,8 @@ import NovelCard, { type TCard } from "./novel-card";
 
 const BookSection = ({
   title,
-  scrollable = false,
+  titleIcon: TitleIcon,
+  iconStyle = "",
   removeHeader = false,
   novels = [],
   multiple = false,
@@ -18,7 +19,8 @@ const BookSection = ({
   ),
 }: {
   title: string;
-  scrollable?: boolean;
+  titleIcon?: React.ElementType;
+  iconStyle?: string;
   removeHeader?: boolean;
   novels: TCard[];
   multiple?: boolean;
@@ -30,6 +32,7 @@ const BookSection = ({
       <div className={cn(!multiple ? "max-w-[1540px] mx-auto px-4 py-8" : "")}>
         {!removeHeader && (
           <div className="flex mb-4 items-center gap-2">
+            {TitleIcon && <TitleIcon className={iconStyle} />}
             <h1 className="text-xl sm:text-2xl font-semibold text-primary">
               {title}
             </h1>
@@ -40,7 +43,14 @@ const BookSection = ({
         {novels.length === 0 ? (
           customEmptyContainer
         ) : (
-          <div className="grid grid-cols-2 xxs:grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2">
+          <div
+            className={cn(
+              "grid grid-cols-2 xxs:grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 gap-2",
+              multiple
+                ? "md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-4"
+                : "md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8"
+            )}
+          >
             {novels.map((novel) => (
               <NovelCard
                 isAuthorViewer={isAuthorViewer}
