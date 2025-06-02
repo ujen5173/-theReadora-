@@ -87,7 +87,6 @@ const ReadingListDetail = () => {
           <BookSection
             title="Novels in this Reading List"
             novels={filteredNovels || []}
-            scrollable={false}
             removeHeader={true}
             isAuthorViewer={false}
             multiple

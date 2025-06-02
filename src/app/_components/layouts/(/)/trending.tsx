@@ -6,13 +6,7 @@ const TrendingSection = async () => {
     limit: 8,
   });
 
-  return (
-    <BookSection
-      title="Discover Trending Reads"
-      scrollable={true}
-      novels={stories}
-    />
-  );
+  return <BookSection title="Discover Trending Reads" novels={stories} />;
 };
 
 export default TrendingSection;
