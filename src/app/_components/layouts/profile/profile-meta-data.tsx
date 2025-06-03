@@ -1,12 +1,14 @@
 "use client";
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
-import { BellIcon, CalendarDays, MapPin, Users } from "lucide-react";
+import { CalendarDays, Users } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { env } from "~/env";
 import { useUserProfileStore } from "~/store/userProfileStore";
+import { useUserStore } from "~/store/userStore";
 import { formatDate } from "~/utils/helpers";
 import BlurImage from "../../shared/blur-image";
 import FollowButton from "../../shared/follow-button";
@@ -17,6 +19,7 @@ import UserReadingList from "./user-reading-list";
 const ProfileMetaData = () => {
   const { user: author } = useUserProfileStore();
   const [user, setUser] = useState(author);
+  const { user: loggedInUser } = useUserStore();
 
   useEffect(() => {
     if (author) {
@@ -41,34 +44,31 @@ const ProfileMetaData = () => {
         <div className="relative pt-16 pb-8">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
             <div className="flex justify-center sm:justify-start">
-              <div className="relative">
-                <div className="relative rounded-full overflow-hidden p-1 bg-gradient-to-r from-primary to-primary/80">
-                  <div className="absolute inset-1 rounded-full bg-white" />
-                  <div className="relative">
-                    <BlurImage
-                      src={user?.image ?? "/default-profile.avif"}
-                      alt={user?.name ?? "User Profile Image"}
-                      width={160}
-                      height={160}
-                      className="size-36 rounded-full border-3 border-white shadow-lg"
-                      size="size-36"
-                      draggable={false}
-                    />
-                  </div>
+              <div className="relative p-1 rounded-full bg-gradient-to-r from-primary to-primary/80 overflow-hidden">
+                <div className="absolute w-36 h-36 inset-1 rounded-full bg-white" />
+
+                <div className="relative w-36 h-36 rounded-full bg-white border-[3px] border-white shadow-lg overflow-hidden">
+                  <BlurImage
+                    src={user?.image ?? "/default-profile.png"}
+                    alt={user?.name ?? "User Profile Image"}
+                    width={160}
+                    height={160}
+                    className="size-36 rounded-full"
+                    size="size-36"
+                    draggable={false}
+                  />
                 </div>
               </div>
             </div>
 
-            {/* User Info */}
             <div className="flex-1 mt-2 space-y-6">
-              {/* Name and Username */}
               <div className="text-center sm:text-left">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
-                  <h1 className="text-4xl font-bold text-slate-800 tracking-tight">
+                  <h1 className="text-3xl md:text-4xl font-extrabold text-slate-700 tracking-tight">
                     {user?.name}
                   </h1>
                 </div>
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-slate-600">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-slate-600">
                   <span
                     className="font-medium cursor-pointer text-slate-700"
                     onClick={() => {
@@ -78,12 +78,7 @@ const ProfileMetaData = () => {
                   >
                     @{user?.username}
                   </span>
-                  <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="size-4" />
-                    Earth
-                    {/* {user?.location || "Nepal"} */}
-                  </span>
+
                   <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />
                   <span className="flex items-center gap-1.5">
                     <CalendarDays className="size-4" />
@@ -92,8 +87,7 @@ const ProfileMetaData = () => {
                 </div>
               </div>
 
-              {/* Stats */}
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                 <div className="flex items-center gap-1">
                   <Book01Icon className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
@@ -122,41 +116,35 @@ const ProfileMetaData = () => {
 
             {/* Action Buttons - Desktop */}
             <div className="hidden md:flex md:flex-col md:gap-3">
+              {author?.id === loggedInUser?.id ? (
+                <Button variant={"outline"} asChild>
+                  <Link href="/settings">Edit Profile</Link>
+                </Button>
+              ) : (
+                <FollowButton
+                  followingTo={{
+                    id: author?.id,
+                    name: author?.name,
+                  }}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Action Buttons - Mobile */}
+          <div className="flex mt-8 gap-3 md:hidden justify-center">
+            {author?.id === loggedInUser?.id ? (
+              <Button variant={"outline"} asChild>
+                <Link href="/settings">Edit Profile</Link>
+              </Button>
+            ) : (
               <FollowButton
                 followingTo={{
                   id: author?.id,
                   name: author?.name,
                 }}
               />
-              <Button
-                icon={BellIcon}
-                variant="outline"
-                size="sm"
-                className="shadow-sm hover:shadow-md transition-shadow"
-              >
-                Subscribe
-              </Button>
-            </div>
-          </div>
-
-          {/* Action Buttons - Mobile */}
-          <div className="flex mt-8 gap-3 md:hidden justify-center">
-            <Button
-              icon={Users}
-              variant="default"
-              size="sm"
-              className="gap-2 shadow-md hover:shadow-lg transition-shadow"
-            >
-              Follow
-            </Button>
-            <Button
-              icon={BellIcon}
-              variant="outline"
-              size="sm"
-              className="gap-2 shadow-sm hover:shadow-md transition-shadow"
-            >
-              Subscribe
-            </Button>
+            )}
           </div>
 
           <div className="mt-6">

@@ -221,14 +221,16 @@ const Header = ({
                 <NavigationMenu delayDuration={0} className="z-[100] relative">
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger
-                        className={cn(
-                          buttonVariants({ variant: "link" }),
-                          "text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent text-sm sm:text-base"
-                        )}
-                      >
-                        Explore
-                      </NavigationMenuTrigger>
+                      <Link href="/search">
+                        <NavigationMenuTrigger
+                          className={cn(
+                            buttonVariants({ variant: "link" }),
+                            "text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent text-sm sm:text-base"
+                          )}
+                        >
+                          Explore
+                        </NavigationMenuTrigger>
+                      </Link>
                       <NavigationMenuContent className="bg-white shadow-lg rounded-lg p-3 sm:p-4 transition duration-150 ease-in-out">
                         <div className="flex mb-2 items-center px-2 justify-between">
                           <h3 className="text-base sm:text-lg font-bold text-slate-700">

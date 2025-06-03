@@ -193,7 +193,7 @@ const ProfileForm = () => {
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
                     <Input
-                      size="lg"
+                      size="md"
                       {...field}
                       onChange={(e) => {
                         const value = e.target.value.replace(
@@ -222,7 +222,7 @@ const ProfileForm = () => {
                     <div className="flex gap-2">
                       <FormControl>
                         <Input
-                          size="lg"
+                          size="md"
                           {...field}
                           onChange={(e) => {
                             const value = makeSlug(e.target.value);
@@ -282,7 +282,7 @@ const ProfileForm = () => {
                 <FormItem>
                   <FormLabel>Email Address</FormLabel>
                   <FormControl>
-                    <Input disabled size="lg" {...field} />
+                    <Input disabled size="md" {...field} />
                   </FormControl>
                   <FormDescription>Email cannot be changed</FormDescription>
                   <FormMessage />

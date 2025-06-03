@@ -5,7 +5,7 @@ export const metadata = generateSEOMetadata({
   title: "Login to Readora",
   description:
     "Sign in to your Readora account to access your reading list, saved stories, and start writing. Join our community of readers and writers.",
-  pathname: "/auth/login",
+  pathname: "/auth/signin",
   keywords: [
     "login",
     "sign in",

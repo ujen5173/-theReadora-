@@ -3,7 +3,7 @@
 import { Coins, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -232,12 +232,12 @@ const UnlockButton = ({
 
         <DialogFooter className="p-3 md:p-6 bg-slate-50/50 border-t border-slate-100">
           <div className="flex gap-3">
-            <DialogClose className="bg-white border border-border rounded-md flex-1 h-12">
+            <DialogClose className={buttonVariants({ variant: "outline" })}>
               Cancel
             </DialogClose>
             <Button
               onClick={handleUnlock}
-              className="flex-1 h-12 bg-primary hover:bg-primary/90"
+              className="flex-1 bg-primary hover:bg-primary/90"
               icon={
                 status !== "pending" ? (user ? Coins : undefined) : undefined
               }

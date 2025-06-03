@@ -351,6 +351,31 @@ export const readinglistRouter = createTRPCRouter({
         });
       }
     }),
+
+  getStoryLists: protectedProcedure
+    .input(
+      z.object({
+        storyId: z.string().cuid(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const lists = await ctx.postgresDb.readinglist.findMany({
+        where: {
+          userId: ctx.session.user.id,
+          stories: {
+            some: {
+              storyId: input.storyId,
+            },
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+        },
+      });
+
+      return lists;
+    }),
 });
 
 export type TgetUserReadingList = inferProcedureOutput<

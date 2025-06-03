@@ -1,5 +1,4 @@
 "use client";
-
 import { FileSyncIcon } from "hugeicons-react";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -18,7 +17,6 @@ import {
 import { Skeleton } from "~/components/ui/skeleton";
 import type { StoryWithMetadata } from "~/server/api/routers/user";
 import { api } from "~/trpc/react";
-import { cardHeight, cardWidth } from "~/utils/constants";
 import NovelCard from "../../shared/novel-card";
 
 const ReadingHistory = () => {
@@ -89,8 +87,8 @@ const ReadingHistory = () => {
       <div className="space-y-4 sm:space-y-6">
         <div className="flex items-center gap-2">
           <Input
-            className="w-full bg-white"
-            size="lg"
+            className="md:text-sm w-full bg-white"
+            size="md"
             iconPlacement="left"
             iconStyle="size-4 text-slate-600"
             icon={Search}
@@ -135,10 +133,7 @@ const ReadingHistory = () => {
                   .map((e, i) => (
                     <Skeleton
                       key={i}
-                      style={{
-                        width: cardWidth - 55,
-                        height: cardHeight - 55,
-                      }}
+                      className="aspect-[1/1.6] w-full h-full"
                     />
                   ))
               : novels?.map(

@@ -56,11 +56,9 @@ export default async function Home() {
       ) : (
         <SimilarReadsNReadingList />
       )}
-      <TrendingSection />
-      <Separator className="max-w-[1540px] mx-auto" />
       <Recommendations />
-      {/* <Separator className="max-w-[1540px] mx-auto" />
-      <TopTags /> */}
+      <Separator className="max-w-[1540px] mx-auto" />
+      <TrendingSection />
       <Separator className="max-w-[1540px] mx-auto" />
       <LatestAndRising />
       <Separator className="max-w-[1540px] mx-auto" />

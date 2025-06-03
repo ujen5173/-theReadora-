@@ -5,18 +5,10 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { useUserStore } from "~/store/userStore";
 import { STRIPE_MONTHLY_PLAN_PRICE } from "~/utils/constants";
+import { premiumFeatures } from "~/utils/site";
 
 const PremiumBanner = () => {
   const { user, isLoading } = useUserStore();
-
-  const premiumFeatures = [
-    "Ad-free reading experience",
-    "Discounts on premium chapters",
-    "Get 110 monthly coins",
-    "Unlimited Chapters",
-    "Unlimited AI Credits",
-    "Advanced Writing Tools",
-  ];
 
   if (user?.premium || isLoading) return null;
 
@@ -34,7 +26,7 @@ const PremiumBanner = () => {
         </div>
 
         <ul className="space-y-2 mb-4">
-          {premiumFeatures.map((feature, index) => (
+          {premiumFeatures.benefits.map((feature, index) => (
             <li key={index} className="flex items-start gap-2">
               <CheckCircle2 className="size-4 text-primary mt-0.5 flex-shrink-0" />
               <span className="text-sm font-medium text-slate-700">

@@ -145,7 +145,7 @@ const Write = ({
 
       if (result) {
         toast.success("Story uploaded successfully!");
-        router.push(`/story/${result.id}`);
+        router.push(`/write/story-editor/${result.id}`);
       }
     } catch (error) {
       console.error("Error updating story:", error);

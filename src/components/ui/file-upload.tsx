@@ -1,16 +1,16 @@
 "use client";
 
+import { Upload01Icon, UploadSquare02Icon } from "hugeicons-react";
+import { TrashIcon } from "lucide-react";
 import Image from "next/image";
 import * as React from "react";
-import { Upload01Icon, UploadSquare02Icon } from "hugeicons-react";
 import Dropzone, { type DropzoneProps } from "react-dropzone";
-import { cn } from "~/lib/utils";
+import { toast } from "sonner";
 import { useControllableState } from "~/app/hooks/use-controllable-state";
+import { cn } from "~/lib/utils";
 import { formatBytes } from "~/utils/helpers";
 import { Progress } from "./progress";
 import { Skeleton } from "./skeleton";
-import { toast } from "sonner";
-import { TrashIcon } from "lucide-react";
 
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: File;
@@ -142,13 +142,13 @@ export function FileUploader({
       </Dropzone>
 
       {uploadedFile && (
-        <div className="absolute top-2 right-2 z-10">
+        <div className="absolute top-4 right-6 z-10">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onRemove?.();
             }}
-            className="rounded-full bg-destructive/10 p-1 text-destructive hover:bg-destructive/20 transition-colors"
+            className="rounded-full bg-destructive/10 p-2 border border-destructive/40 text-destructive hover:bg-destructive/20 transition-colors"
           >
             <TrashIcon className="h-4 w-4" />
             <span className="sr-only">Remove image</span>

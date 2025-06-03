@@ -1,14 +1,15 @@
 "use client";
-
 import { Book01Icon } from "hugeicons-react";
-import NovelCard from "~/app/_components/shared/novel-card";
+import ReadingListCard from "~/app/reading-list/components/reading-list-card";
 import { useUserProfileStore } from "~/store/userProfileStore";
 import { api } from "~/trpc/react";
 
 const UserReadingList = () => {
   const { user } = useUserProfileStore();
-  const { data, isLoading } = api.story.getAuthorReadingList.useQuery(
-    undefined,
+  const { data, isLoading } = api.list.getUserReadingList.useQuery(
+    {
+      userId: user?.id!,
+    },
     {
       enabled: !!user?.id,
       refetchOnWindowFocus: false,
@@ -43,9 +44,13 @@ const UserReadingList = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {data?.map((story) => (
-            <NovelCard key={story} details={story} />
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {data?.map((list) => (
+            <ReadingListCard
+              key={list.id}
+              readingList={list}
+              showActions={false}
+            />
           ))}
         </div>
       )}

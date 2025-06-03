@@ -98,7 +98,10 @@ const ReadingListCard = ({
                 className="h-8 w-8 rounded-full hover:bg-gray-100"
                 disabled={isDeleting}
               >
-                <MoreVerticalSquare01Icon size={16} />
+                <MoreVerticalSquare01Icon
+                  className="fill-slate-600 stroke-slate-600"
+                  size={16}
+                />
               </Button>
             </PopoverTrigger>
             <PopoverContent

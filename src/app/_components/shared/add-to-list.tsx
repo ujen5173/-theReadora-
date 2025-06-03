@@ -1,12 +1,11 @@
 "use client";
 
-import { Bookmark02Icon } from "hugeicons-react";
+import { Bookmark02Icon, BookmarkCheck01Icon } from "hugeicons-react";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -16,18 +15,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Label } from "~/components/ui/label";
-import { Skeleton } from "~/components/ui/skeleton";
 import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
 import ReadingListDialog from "./reading-list-dialog";
 
 const AddToList = ({ storyId }: { storyId: string }) => {
   const { user } = useUserStore();
+  const [open, setOpen] = useState(false);
+  const [selectedLists, setSelectedLists] = useState<string[]>([]);
 
   const { mutateAsync, status } = api.list.addToList.useMutation();
-  const [checkedList, setCheckedList] = useState<string[]>([]);
-  const [open, setOpen] = useState(false);
 
   const {
     data: lists,
@@ -39,10 +36,25 @@ const AddToList = ({ storyId }: { storyId: string }) => {
     refetchOnWindowFocus: false,
   });
 
+  // Check if story is in any list
+  const { data: storyLists, isLoading: isLoadingStoryLists } =
+    api.list.getStoryLists.useQuery(
+      { storyId },
+      {
+        enabled: !!user && !!storyId,
+      }
+    );
+
+  useEffect(() => {
+    if (storyLists) {
+      setSelectedLists(storyLists.map((list) => list.id));
+    }
+  }, [storyLists]);
+
   const handleSave = async () => {
     const res = await mutateAsync({
       id: storyId,
-      listIds: checkedList,
+      listIds: selectedLists,
     });
 
     if (res) {
@@ -51,13 +63,21 @@ const AddToList = ({ storyId }: { storyId: string }) => {
     setOpen(false);
   };
 
+  const toggleList = (listId: string) => {
+    setSelectedLists((prev) =>
+      prev.includes(listId)
+        ? prev.filter((id) => id !== listId)
+        : [...prev, listId]
+    );
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant={"outline"}
           icon={Bookmark02Icon}
-          className="w-full bg-white"
+          className="w-full bg-white hover:bg-slate-50 transition-colors"
         >
           Save to List
         </Button>
@@ -72,31 +92,32 @@ const AddToList = ({ storyId }: { storyId: string }) => {
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 mb-6">
-          {isLoading ? (
-            <>
-              <Skeleton className="w-full h-5" />
-              <Skeleton className="w-full h-5" />
-              <Skeleton className="w-full h-5" />
-            </>
+          {isLoading || isLoadingStoryLists ? (
+            <div className="space-y-3">
+              <div className="h-12 bg-slate-100 rounded-lg animate-pulse" />
+              <div className="h-12 bg-slate-100 rounded-lg animate-pulse" />
+              <div className="h-12 bg-slate-100 rounded-lg animate-pulse" />
+            </div>
           ) : (
-            lists?.map((e) => (
-              <div key={e.id} className="flex items-center gap-2">
-                <Checkbox
-                  variant="primary"
-                  name={e.title}
-                  id={e.title}
-                  onCheckedChange={() =>
-                    setCheckedList((prev) => [...prev, e.id])
-                  }
-                  size="lg"
-                />
-                <Label
-                  htmlFor={e.title}
-                  className="text-base font-semibold text-slate-600"
-                >
-                  {e.title}
-                </Label>
-              </div>
+            lists?.map((list) => (
+              <button
+                key={list.id}
+                onClick={() => toggleList(list.id)}
+                className={`w-full p-3 rounded-lg border transition-all ${
+                  selectedLists.includes(list.id)
+                    ? "border-primary bg-primary/5"
+                    : "border-slate-200 hover:border-primary/50"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-slate-700">
+                    {list.title}
+                  </span>
+                  {selectedLists.includes(list.id) && (
+                    <BookmarkCheck01Icon className="text-primary" />
+                  )}
+                </div>
+              </button>
             ))
           )}
         </div>

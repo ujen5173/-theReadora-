@@ -25,7 +25,7 @@ const StoryEditorHeader = () => {
           </Link>
           <Input
             placeholder="Untitled Chapter"
-            size="lg"
+            size="md"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-[200px] sm:w-[300px] font-semibold text-sm sm:text-base"

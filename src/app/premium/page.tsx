@@ -15,26 +15,19 @@ import {
   STRIPE_MONTHLY_PLAN_PRICE,
   STRIPE_YEARLY_PLAN_PRICE,
 } from "~/utils/constants";
+import { premiumFeatures } from "~/utils/site";
 import Header from "../_components/layouts/header";
 import CoinsPackage from "../_components/shared/premium/coins-package";
 
 const Premium = () => {
-  const premiumFeatures = [
-    "Ad-free reading experience",
-    "Discounts on premium chapters",
-    "Get 100 monthly coins",
-    "Unlimited Chapters",
-    "Unlimited AI Credits",
-    "Advanced Writing Tools",
-  ];
-
-  const uniquePremiumFeatures = [...new Set(premiumFeatures)];
+  const uniquePremiumFeatures = [...new Set(premiumFeatures.benefits)];
   const [isYearly, setIsYearly] = useState(false);
   const { PurchaseDialog } = useCoinPurchase();
 
   const { data: userData } = api.user.getPurchasesDetails.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
+
   const { mutateAsync: createSubscription, status } =
     api.payment.createSubscription.useMutation({
       onSuccess: (data) => {
