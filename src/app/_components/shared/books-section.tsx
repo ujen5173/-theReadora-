@@ -33,9 +33,9 @@ const BookSection = ({
         {!removeHeader && (
           <div className="flex mb-4 items-center gap-2">
             {TitleIcon && <TitleIcon className={iconStyle} />}
-            <h1 className="text-xl sm:text-2xl font-semibold text-primary">
+            <h2 className="text-xl sm:text-2xl font-semibold text-primary">
               {title}
-            </h1>
+            </h2>
             <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           </div>
         )}

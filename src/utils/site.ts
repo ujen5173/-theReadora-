@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "Readora",
   title: "Readora - Where Stories Come Alive",
   description:
-    "Readora connects a global community of millions of readers and writers through the power of story. Discover romance, fanfiction, teen fiction, and more. Read socially with inline commenting and share your thoughts with fellow readers.",
+    "Readora connects a global community of millions of readers and writers through the power of story. Discover romance, fanfiction, teen fiction, and more.",
   url: "https://thereadora.vercel.app",
   ogImage: "https://thereadora.vercel.app/og-image.jpg",
   keywords: [

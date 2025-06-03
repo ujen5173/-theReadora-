@@ -2,7 +2,7 @@ import StoryDetailsSection from "~/app/_components/layouts/single-story/story-de
 import ThumbnailSection from "~/app/_components/layouts/single-story/thumbnail-section";
 import StoryNotFound from "~/app/_components/shared/story-not-found";
 import { api } from "~/trpc/server";
-import { generateSEOMetadata } from "~/utils/site";
+import { generateSEOMetadata, storyStructuredData } from "~/utils/site";
 
 interface PageProps {
   params: Promise<{
@@ -16,12 +16,32 @@ export const generateMetadata = async ({ params }: PageProps) => {
     query: slug.slug,
   });
 
-  return generateSEOMetadata({
-    title: `${story.title} by ${story.author.name}`,
+  const storySchema = {
+    ...storyStructuredData,
+    name: story.title,
     description: story.synopsis,
-    image: story.thumbnail as string,
-    pathname: `/story/${story.slug}`,
-  });
+    author: {
+      "@type": "Person",
+      name: story.author.name,
+    },
+    genre: story.genreSlug,
+    datePublished: story.createdAt,
+    dateModified: story.updatedAt,
+    image: story.thumbnail,
+    isAccessibleForFree: true,
+  };
+
+  return {
+    ...generateSEOMetadata({
+      title: `${story.title} by ${story.author.name}`,
+      description: story.synopsis,
+      image: story.thumbnail as string,
+      pathname: `/story/${story.slug}`,
+    }),
+    other: {
+      "application/ld+json": JSON.stringify(storySchema),
+    },
+  };
 };
 
 const SingleStory = async ({ params }: PageProps) => {

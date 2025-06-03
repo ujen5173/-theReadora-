@@ -40,9 +40,9 @@ const Footer = () => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {Object.entries(navigationLinks.footer).map(([title, links]) => (
               <div key={title} className="flex-1">
-                <h1 className="mb-2 text-base capitalize font-semibold text-slate-800">
+                <h2 className="mb-2 text-base capitalize font-semibold text-slate-800">
                   {title}
-                </h1>
+                </h2>
                 <ul>
                   {links.map((link) => (
                     <li key={link.name}>
@@ -59,9 +59,9 @@ const Footer = () => {
             ))}
           </div>
           <div className="flex flex-col gap-2">
-            <h1 className="mb-2 text-base capitalize font-semibold text-slate-800">
+            <h2 className="mb-2 text-base capitalize font-semibold text-slate-800">
               Follow Us <span className="lowercase">on</span>
-            </h1>
+            </h2>
             <ul className="flex items-center gap-2">
               <li>
                 <TooltipProvider>

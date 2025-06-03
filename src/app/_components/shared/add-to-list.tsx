@@ -34,9 +34,9 @@ const AddToList = ({ storyId }: { storyId: string }) => {
     enabled: !!user,
     retry: 0,
     refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
   });
 
-  // Check if story is in any list
   const { data: storyLists, isLoading: isLoadingStoryLists } =
     api.list.getStoryLists.useQuery(
       { storyId },

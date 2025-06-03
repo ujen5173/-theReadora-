@@ -10,7 +10,7 @@ import { Suspense } from "react";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "~/trpc/react";
 import { outfit } from "~/utils/font";
-import { generateSEOMetadata } from "~/utils/site";
+import { generateSEOMetadata, structuredData } from "~/utils/site";
 import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
 import RootLayoutClient from "./_components/layouts/root-layout-client";
 import { RootContext } from "./_components/root";
@@ -24,6 +24,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${outfit.className}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+      </head>
       <body>
         <TRPCReactProvider>
           <SessionProvider>

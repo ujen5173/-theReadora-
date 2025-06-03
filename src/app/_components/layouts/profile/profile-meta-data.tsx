@@ -64,9 +64,9 @@ const ProfileMetaData = () => {
             <div className="flex-1 mt-2 space-y-6">
               <div className="text-center sm:text-left">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
-                  <h1 className="text-3xl md:text-4xl font-extrabold text-slate-700 tracking-tight">
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-700 tracking-tight">
                     {user?.name}
-                  </h1>
+                  </h2>
                 </div>
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-slate-600">
                   <span
