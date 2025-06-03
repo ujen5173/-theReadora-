@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { env } from "~/env";
 import { postgresDb } from "~/server/postgresql";
+import { COIN_PRICE } from "~/utils/constants";
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-04-30.basil",
@@ -12,11 +13,6 @@ export async function POST(req: Request) {
   const body = await req.text();
   const headersList = await headers();
   const signature = headersList.get("stripe-signature");
-
-  console.log("Webhook received:", {
-    signature: signature ? "present" : "missing",
-    bodyLength: body.length,
-  });
 
   if (!signature) {
     console.error("No signature found in webhook request");
@@ -29,8 +25,6 @@ export async function POST(req: Request) {
       signature,
       env.STRIPE_WEBHOOK_SECRET
     );
-
-    console.log("Webhook event type:", event.type);
 
     switch (event.type) {
       case "customer.subscription.created":
@@ -239,8 +233,13 @@ export async function POST(req: Request) {
             // Calculate premium until date based on subscription period
             const currentDate = new Date();
             const premiumUntil = new Date(currentDate);
-            // Add 1 month for monthly subscription, 1 year for yearly
-            premiumUntil.setMonth(premiumUntil.getMonth() + 1);
+            const isYearly = subscription.metadata.isYearly === "true";
+
+            if (isYearly) {
+              premiumUntil.setFullYear(premiumUntil.getFullYear() + 1);
+            } else {
+              premiumUntil.setMonth(premiumUntil.getMonth() + 1);
+            }
 
             // Get the user's current premium status
             const user = await postgresDb.user.findUnique({
@@ -318,13 +317,14 @@ export async function POST(req: Request) {
               },
             });
 
-            // Record the transaction
+            const price = coinsAmount * COIN_PRICE;
+
             await postgresDb.transactions.create({
               data: {
                 userId,
                 type: "PURCHASE",
                 amount: coinsAmount,
-                price: ((coinsAmount / 500) * 0.99).toString(),
+                price: price.toString(),
                 time: new Date().toISOString(),
                 status: "completed",
                 pre_transaction_coins: user.coins,
@@ -337,6 +337,50 @@ export async function POST(req: Request) {
             console.error("Error updating coins:", error);
             throw error;
           }
+        }
+        break;
+      }
+
+      case "payment_intent.payment_failed": {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const userId = paymentIntent.metadata.userId;
+        const subscriptionId = paymentIntent.metadata.subscriptionId;
+
+        if (!userId) {
+          throw new Error("No user ID found in payment intent metadata");
+        }
+
+        // Record the failed payment
+        await postgresDb.transactions.create({
+          data: {
+            userId,
+            type: subscriptionId ? "SUBSCRIPTION" : "PURCHASE",
+            amount: 0,
+            price: (paymentIntent.amount / 100).toString(),
+            time: new Date().toISOString(),
+            status: "failed",
+            pre_transaction_coins: 0,
+            post_transaction_coins: 0,
+            metadata: {
+              error: paymentIntent.last_payment_error?.message,
+              subscriptionId,
+            },
+          },
+        });
+
+        // If it's a subscription payment, update the subscription status
+        if (subscriptionId) {
+          await postgresDb.user.update({
+            where: { id: userId },
+            data: {
+              premium: false,
+              premiumUntil: null,
+              premiumSince: null,
+              premiumPurchasedAt: null,
+              purchaseMedium: null,
+              purchaseId: null,
+            },
+          });
         }
         break;
       }

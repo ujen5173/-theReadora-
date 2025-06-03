@@ -5,7 +5,7 @@ import { useRef } from "react";
 import useKeyPress from "~/app/hooks/use-key-press";
 import { Input } from "~/components/ui/input";
 
-const SearchBar = ({ size = "lg" }: { size?: "md" | "lg" | "sm" }) => {
+const SearchBar = ({ size = "md" }: { size?: "md" | "sm" }) => {
   const router = useRouter();
   const ref = useRef<HTMLInputElement | null>(null);
 

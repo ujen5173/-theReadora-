@@ -103,7 +103,7 @@ export const paymentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { amount } = input;
       const userId = ctx.session.user.id;
-      const price = (amount / 500) * COIN_PRICE;
+      const price = amount * COIN_PRICE;
 
       try {
         // Create or retrieve Stripe customer
@@ -124,9 +124,19 @@ export const paymentRouter = createTRPCRouter({
           });
         }
 
-        // Create payment intent
+        // Create payment intent with amount in cents
+        const amountInCents = Math.round(price * 100); // Convert to cents and round to avoid floating point issues
+
+        if (amountInCents < 50) {
+          // Stripe minimum is 50 cents
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Amount too small. Minimum purchase amount is $0.50",
+          });
+        }
+
         const paymentIntent = await stripe.paymentIntents.create({
-          amount: Math.round(price * 100), // Convert to cents
+          amount: amountInCents,
           currency: "usd",
           customer: customer.id,
           metadata: {

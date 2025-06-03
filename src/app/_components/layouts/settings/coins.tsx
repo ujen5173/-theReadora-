@@ -200,10 +200,12 @@ const CoinsPackageSettings = async () => {
                       {(transaction.type === "PURCHASE" ||
                         transaction.type === "SUBSCRIPTION") && <span>•</span>}
                       {transaction.type === "PURCHASE" && (
-                        <span>${transaction.price}</span>
+                        <span>${Number(transaction.price).toFixed(2)}</span>
                       )}
                       {transaction.type === "SUBSCRIPTION" && (
-                        <span>${transaction.price}/month</span>
+                        <span>
+                          ${Number(transaction.price).toFixed(2)}/month
+                        </span>
                       )}
                     </div>
                   </div>
