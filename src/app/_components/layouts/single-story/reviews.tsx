@@ -89,6 +89,7 @@ const Reviews = ({ storyId }: { storyId: string }) => {
               {isReviewMetaLoading ? (
                 <Skeleton className="w-20" />
               ) : (
+                // TODO: make it render the stars accordingly to the average rating
                 [1, 2, 3, 4, 5].map((star) => (
                   <StarIcon
                     key={star}

@@ -1,8 +1,8 @@
 "use client";
-
 import { StarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import HalfStar from "~/assets/svgs/half-star";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -63,8 +63,6 @@ export const StarRating = ({
 
   const displayRating = hoverRating ?? selectedRating;
   const dialogDisplayRating = dialogHoverRating ?? selectedRating;
-  const fullStars = Math.floor(displayRating);
-  const hasHalfStar = displayRating % 1 >= 0.5;
 
   const handleStarClick = (index: number) => {
     if (!isInteractive) return;
@@ -139,7 +137,7 @@ export const StarRating = ({
         <div
           key={i}
           className={cn(
-            "relative group",
+            "relative group flex items-center",
             isDialog && "transition-all duration-300 hover:scale-125",
             !isDialog &&
               isInteractive &&
@@ -163,25 +161,14 @@ export const StarRating = ({
               )}
             />
           ) : isHalf ? (
-            <div className={cn("relative", starSize)}>
-              <StarIcon
-                className={cn(
-                  "absolute size-full fill-yellow-400 text-yellow-400 transition-all duration-300",
-                  isHovered && "fill-yellow-500 text-yellow-500",
-                  "group-hover:fill-yellow-500 group-hover:text-yellow-500",
-                  isDialog && "group-hover:rotate-12"
-                )}
-              />
-              <div className="absolute right-0 top-0 h-full w-1/2 overflow-hidden">
-                <StarIcon
-                  className={cn(
-                    "size-full fill-white text-yellow-400 transition-all duration-300",
-                    isHovered && "text-yellow-500",
-                    "group-hover:text-yellow-500"
-                  )}
-                />
-              </div>
-            </div>
+            <HalfStar
+              className={cn(
+                "fill-yellow-400 text-yellow-400 transition-all duration-300",
+                isHovered && "fill-yellow-500 text-yellow-500",
+                "group-hover:fill-yellow-500 group-hover:text-yellow-500",
+                isDialog && "group-hover:rotate-12"
+              )}
+            />
           ) : (
             <StarIcon
               className={cn(

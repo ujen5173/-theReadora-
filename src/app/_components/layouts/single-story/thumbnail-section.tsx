@@ -81,7 +81,7 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
                     className="flex-shrink-0"
                   />
                   <span className="text-xs sm:text-sm text-muted-foreground">
-                    {`(${ratingCount})` || "..."}
+                    {`${averageRating} (${ratingCount})` || "..."}
                   </span>
                 </div>
               </Button>

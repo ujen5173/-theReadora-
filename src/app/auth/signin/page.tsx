@@ -19,17 +19,21 @@ export default function SignInPage() {
       <main className="flex flex-col items-center justify-center text-slate-900">
         <div className="border-b border-border container flex flex-col items-center justify-center gap-8 px-4 py-28">
           <div className="text-center">
+            {/* <div className="border border-primary/20 mb-6 mt-2 p-4 bg-primary/10 rounded-lg">
+              <p className="text-primary font-semibold">
+                Get 100 free coins when you sign up!
+              </p>
+            </div> */}
             <h1 className="text-4xl font-extrabold tracking-tight text-slate-700 sm:text-[3rem]">
               Welcome Back Chief
             </h1>
             <p className="mt-4 text-lg text-slate-600">
-              Sign in to continue to{" "}
+              Sign in/Sign up to continue to{" "}
               <span className="font-bold text-primary underline underline-offset-2">
                 Readora
               </span>
             </p>
           </div>
-
           <div className="w-full max-w-md space-y-2">
             <Button
               size="lg"
@@ -112,11 +116,17 @@ export default function SignInPage() {
 
             <div className="text-center text-sm text-slate-500">
               By signing in, you agree to our{" "}
-              <Link href="/terms" className="text-primary hover:underline">
+              <Link
+                href="/terms-of-service"
+                className="text-primary hover:underline"
+              >
                 Terms of Service
               </Link>{" "}
               and{" "}
-              <Link href="/privacy" className="text-primary hover:underline">
+              <Link
+                href="/privacy-policy"
+                className="text-primary hover:underline"
+              >
                 Privacy Policy
               </Link>
               .

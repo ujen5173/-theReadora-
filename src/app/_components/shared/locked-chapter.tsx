@@ -1,5 +1,4 @@
 "use client";
-
 import { Coins, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -15,6 +14,7 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { env } from "~/env";
+import { cn } from "~/lib/utils";
 import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
 import { CHAPTER_PRICE_POOL } from "~/utils/constants";
@@ -33,19 +33,16 @@ const LockedChapter = ({
   chapterNumber,
 }: LockedChapterProps) => {
   const { user } = useUserStore();
-  const router = useRouter();
 
   return (
     <div className="w-full min-h-[500px] flex items-center justify-center bg-slate-50 border border-border rounded-lg">
       <div className="max-w-md w-full p-8 text-center space-y-6">
-        {/* Lock Icon */}
         <div className="flex justify-center">
           <div className="p-4 rounded-full bg-primary/10">
             <Lock className="h-8 w-8 text-primary" />
           </div>
         </div>
 
-        {/* Chapter Info */}
         <div className="space-y-2">
           <h2 className="text-2xl font-semibold text-slate-800">
             Chapter {chapterNumber}
@@ -53,7 +50,6 @@ const LockedChapter = ({
           <p className="text-slate-600">{title}</p>
         </div>
 
-        {/* Price Info */}
         <div className="flex items-center justify-center gap-2 text-slate-700">
           <Coins className="h-5 w-5 text-primary" />
           <span className="font-medium">
@@ -61,7 +57,6 @@ const LockedChapter = ({
           </span>
         </div>
 
-        {/* Unlock Button */}
         <UnlockButton
           price={price as keyof typeof CHAPTER_PRICE_POOL}
           chapterId={chapterId}
@@ -72,7 +67,6 @@ const LockedChapter = ({
           </Button>
         </UnlockButton>
 
-        {/* Premium Info */}
         {user?.premium && (
           <p className="text-sm text-slate-500">
             Premium members get 20% off! (
@@ -83,7 +77,6 @@ const LockedChapter = ({
           </p>
         )}
 
-        {/* Additional Info */}
         <div className="text-sm text-slate-500 space-y-1">
           <p>
             You can unlock this chapter by paying{" "}
@@ -140,7 +133,6 @@ const UnlockButton = ({
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px] p-0 overflow-hidden rounded-xl">
-        {/* Header with gradient background */}
         <div className="bg-gradient-to-r from-primary/90 to-primary px-4 py-6 md:p-8 text-white">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold tracking-tight">
@@ -153,7 +145,6 @@ const UnlockButton = ({
         </div>
 
         <div className="p-4 md:p-8">
-          {/* Price Breakdown */}
           <div className="space-y-4 md:space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 md:pb-4">
               <div className="flex items-center gap-3">
@@ -217,7 +208,6 @@ const UnlockButton = ({
               </span>
             </div>
 
-            {/* Insufficient Balance Warning */}
             {user && (user.coins ?? 0) < discountedPrice && (
               <div className="mt-4 flex items-center gap-2 text-sm text-red-600">
                 <span>⚠️</span>
@@ -232,7 +222,9 @@ const UnlockButton = ({
 
         <DialogFooter className="p-3 md:p-6 bg-slate-50/50 border-t border-slate-100">
           <div className="flex gap-3">
-            <DialogClose className={buttonVariants({ variant: "outline" })}>
+            <DialogClose
+              className={cn(buttonVariants({ variant: "outline" }), "flex-1")}
+            >
               Cancel
             </DialogClose>
             <Button

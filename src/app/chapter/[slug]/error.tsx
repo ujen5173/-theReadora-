@@ -8,31 +8,33 @@ import { merriweatherFont, outfit } from "~/utils/font";
 const ChapterNotFound = ({ error }: { error: Error }) => {
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center text-slate-700">
-      <div className="container flex flex-col items-center justify-center gap-8 px-4 py-16 text-center">
+      <div className="container flex flex-col items-center justify-center gap-4 md:gap-8 px-4 py-16 text-center">
         <h1
-          className={`font-extrabold text-8xl tracking-tight text-primary/90 ${merriweatherFont.className}`}
+          className={`font-extrabold text-4xl md:text-5xl lg:text-8xl tracking-tight text-primary/90 ${merriweatherFont.className}`}
         >
           [Shit Error Occured]
         </h1>
 
-        <h2 className={`text-3xl font-bold ${outfit.className}`}>
+        <h2
+          className={`text-lg sm:text-xl md:text-3xl font-bold ${outfit.className}`}
+        >
           This Chapter Seems Lost...
         </h2>
 
-        <p className="text-lg text-slate-500 max-w-md">
+        <p className="text-base md:text-lg text-slate-500 max-w-md">
           We couldn't find the chapter you're looking for. Perhaps it's been
           moved or is still being written.
         </p>
 
         <div className="flex gap-4 mt-4">
           <Link href="/search">
-            <Button variant="default" size="lg" className="gap-2">
+            <Button variant="default" className="gap-2">
               <ArrowLeft className="size-5" />
               Back to Story
             </Button>
           </Link>
           <Link href="/search">
-            <Button variant="secondary" size="lg" className="gap-2">
+            <Button variant="secondary" className="gap-2">
               <BookOpen className="size-5" />
               Discover Stories
             </Button>

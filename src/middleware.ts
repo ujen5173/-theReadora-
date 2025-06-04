@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
   const authCookie =
     request.cookies.get("authjs.session-token") ||
-    request.cookies.get("_Secure-authjs.session-token");
+    request.cookies.get("__Secure-authjs.session-token");
 
   if (!authCookie) {
     const url = new URL("/auth/signin", request.url);

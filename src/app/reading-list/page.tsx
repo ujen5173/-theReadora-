@@ -39,14 +39,12 @@ const ReadingList = () => {
         list.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // Trigger API call when component mounts and listen for store changes
   useEffect(() => {
     if (!isLoading && !apiLoading && user?.id) {
       refetch();
     }
   }, [apiLoading, user?.id]);
 
-  // Update store when API data changes
   useEffect(() => {
     if (data) {
       setLists(data);
@@ -87,8 +85,7 @@ const ReadingList = () => {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {isLoading || apiLoading
-              ? // Loading skeletons
-                [...Array(6)].map((_, i) => (
+              ? [...Array(6)].map((_, i) => (
                   <div key={i} className="space-y-3">
                     <Skeleton className="h-[200px] w-full rounded-lg" />
                     <div className="space-y-2">
