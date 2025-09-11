@@ -10,3 +10,5 @@ const PopularCompleted = async () => {
 };
 
 export default PopularCompleted;
+
+export const revalidate = 60;

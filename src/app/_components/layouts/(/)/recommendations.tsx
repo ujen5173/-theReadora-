@@ -16,3 +16,5 @@ const Recommendations = async () => {
 };
 
 export default Recommendations;
+
+export const revalidate = 60;

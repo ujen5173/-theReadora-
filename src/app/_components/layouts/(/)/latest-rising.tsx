@@ -30,3 +30,5 @@ const LatestAndRising = async () => {
 };
 
 export default LatestAndRising;
+
+export const revalidate = 60;

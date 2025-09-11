@@ -3,12 +3,12 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { auth } from "~/server/auth";
-import { getMongoDB } from "~/server/mongodb";
 import { postgresDb } from "~/server/postgresql";
+import { getMongoDB } from "../mongodb";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await auth();
-  const mongoDb = await getMongoDB();
+  const mongoDb = { getDb: () => getMongoDB() };
   return {
     postgresDb,
     mongoDb,
@@ -16,7 +16,6 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     ...opts,
   };
 };
-
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
@@ -35,32 +34,18 @@ export const createCallerFactory = t.createCallerFactory;
 
 export const createTRPCRouter = t.router;
 
-const timingMiddleware = t.middleware(async ({ next, path }) => {
-  const start = Date.now();
+export const publicProcedure = t.procedure;
 
-  const result = await next();
-
-  const end = Date.now();
-  console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
-
-  return result;
-});
-
-export const publicProcedure = t.procedure.use(timingMiddleware);
-
-export const protectedProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(({ ctx, next }) => {
-    if (!ctx.session?.user) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Sign in to continue",
-      });
-    }
-    return next({
-      ctx: {
-        // infers the `session` as non-nullable
-        session: { ...ctx.session, user: ctx.session.user },
-      },
+export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+  if (!ctx.session?.user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Sign in to continue",
     });
+  }
+  return next({
+    ctx: {
+      session: { ...ctx.session, user: ctx.session.user },
+    },
   });
+});

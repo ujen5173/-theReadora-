@@ -87,7 +87,7 @@ export const chapterRouter = createTRPCRouter({
           const objectId = mongoObjectId();
 
           // Create new version in MongoDB
-          const mongoContentID = await ctx.mongoDb
+          const mongoContentID = await (await ctx.mongoDb.getDb())
             .collection(chapterCollectionName)
             .insertOne({
               id: objectId,
@@ -98,13 +98,15 @@ export const chapterRouter = createTRPCRouter({
             });
 
           // First insert new chunks
-          await ctx.mongoDb.collection(chunkCollectionName).insertMany(
-            chunks.map((chunk, index) => ({
-              chapterId: mongoContentID.insertedId.toString(),
-              content: chunk.content,
-              index: index,
-            }))
-          );
+          await (await ctx.mongoDb.getDb())
+            .collection(chunkCollectionName)
+            .insertMany(
+              chunks.map((chunk, index) => ({
+                chapterId: mongoContentID.insertedId.toString(),
+                content: chunk.content,
+                index: index,
+              }))
+            );
 
           // Then update PostgreSQL to point to new content
           await ctx.postgresDb.chapter.update({
@@ -126,9 +128,11 @@ export const chapterRouter = createTRPCRouter({
           });
 
           // Finally delete old chunks
-          await ctx.mongoDb.collection(chunkCollectionName).deleteMany({
-            chapterId: existingChapter.mongoContentID[0],
-          });
+          await (await ctx.mongoDb.getDb())
+            .collection(chunkCollectionName)
+            .deleteMany({
+              chapterId: existingChapter.mongoContentID[0],
+            });
 
           // Update story metadata
           await ctx.postgresDb.story.update({
@@ -150,7 +154,7 @@ export const chapterRouter = createTRPCRouter({
         const objectId = mongoObjectId();
 
         // Create new chapter in MongoDB
-        const mongoContentID = await ctx.mongoDb
+        const mongoContentID = await (await ctx.mongoDb.getDb())
           .collection(chapterCollectionName)
           .insertOne({
             id: objectId,
@@ -161,13 +165,15 @@ export const chapterRouter = createTRPCRouter({
           });
 
         // Insert chunks in a transaction
-        await ctx.mongoDb.collection(chunkCollectionName).insertMany(
-          chunks.map((chunk, index) => ({
-            chapterId: mongoContentID.insertedId.toString(),
-            content: chunk.content,
-            index: index,
-          }))
-        );
+        await (await ctx.mongoDb.getDb())
+          .collection(chunkCollectionName)
+          .insertMany(
+            chunks.map((chunk, index) => ({
+              chapterId: mongoContentID.insertedId.toString(),
+              content: chunk.content,
+              index: index,
+            }))
+          );
 
         // Create PostgreSQL chapter
         await ctx.postgresDb.chapter.create({
@@ -311,7 +317,7 @@ export const chapterRouter = createTRPCRouter({
         const { story, ...rest } = chapter;
 
         // Get the initial chunk with proper typing
-        const initialChunk = await ctx.mongoDb
+        const initialChunk = await (await ctx.mongoDb.getDb())
           .collection(chunkCollectionName)
           .findOne(
             { chapterId: chapter.mongoContentID[0], index: 0 },
@@ -353,7 +359,9 @@ export const chapterRouter = createTRPCRouter({
           index: { $gt: cursor ?? 0, $ne: 0 },
         };
 
-        const chunks = await ctx.mongoDb
+        const chunks = await (
+          await ctx.mongoDb.getDb()
+        )
           .collection(chunkCollectionName)
           .find(query)
           .sort({ index: 1 })
@@ -391,14 +399,16 @@ export const chapterRouter = createTRPCRouter({
       const { chapter_id } = input;
 
       try {
-        const chunk = await ctx.mongoDb.collection(chunkCollectionName).findOne(
-          {
-            chapterId: chapter_id,
-          },
-          {
-            sort: { index: 1 },
-          }
-        );
+        const chunk = await (await ctx.mongoDb.getDb())
+          .collection(chunkCollectionName)
+          .findOne(
+            {
+              chapterId: chapter_id,
+            },
+            {
+              sort: { index: 1 },
+            }
+          );
 
         return {
           chunk,
@@ -710,10 +720,12 @@ export const chapterRouter = createTRPCRouter({
           });
         }
 
+        const db = await ctx.mongoDb.getDb();
+
         // Get all chunks for the chapter
         const chunks = await Promise.all(
-          chapter.mongoContentID.map((contentId) =>
-            ctx.mongoDb
+          chapter.mongoContentID.map(async (contentId) =>
+            db
               .collection(chunkCollectionName)
               .find({ chapterId: contentId })
               .sort({ index: 1 }) // Ensure chunks are in order

@@ -10,3 +10,5 @@ const TrendingSection = async () => {
 };
 
 export default TrendingSection;
+
+export const revalidate = 60;

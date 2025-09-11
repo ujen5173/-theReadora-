@@ -235,9 +235,7 @@ export function generateSEOMetadata({
       googleBot: {
         index: !noIndex,
         follow: !noIndex,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
+        nosnippet: true,
       },
     },
     metadataBase: new URL(siteConfig.url),

@@ -106,7 +106,7 @@ export const userRouter = createTRPCRouter({
         });
 
         if (existingFollow) {
-          await Promise.all([
+          await ctx.postgresDb.$transaction([
             ctx.postgresDb.follow.delete({
               where: {
                 id: existingFollow.id,
@@ -133,6 +133,7 @@ export const userRouter = createTRPCRouter({
               },
             }),
           ]);
+
           return { success: true, isFollowing: false };
         } else {
           await ctx.postgresDb.follow.create({
@@ -141,7 +142,7 @@ export const userRouter = createTRPCRouter({
               followingId: input.followingId,
             },
           });
-          await Promise.all([
+          await ctx.postgresDb.$transaction([
             ctx.postgresDb.user.update({
               where: {
                 id: input.followingId,

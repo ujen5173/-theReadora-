@@ -1226,7 +1226,7 @@ export const storyRouter = createTRPCRouter({
       const chunks = processChapterContent(generatedContent.content);
       const objectId = mongoObjectId();
 
-      const mongoContentID = await ctx.mongoDb
+      const mongoContentID = await (await ctx.mongoDb.getDb())
         .collection(chapterCollectionName)
         .insertOne({
           id: objectId,
@@ -1235,10 +1235,11 @@ export const storyRouter = createTRPCRouter({
           version: 1,
           createdAt: new Date(),
         });
+      const db = await ctx.mongoDb.getDb();
 
       await Promise.all(
-        chunks.map((chunk, index) =>
-          ctx.mongoDb.collection(chunkCollectionName).insertOne({
+        chunks.map(async (chunk, index) =>
+          db.collection(chunkCollectionName).insertOne({
             chapterId: mongoContentID.insertedId.toString(),
             content: chunk.content,
             index: index,

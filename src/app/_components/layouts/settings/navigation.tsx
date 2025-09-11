@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList } from "@radix-ui/react-tabs";
 import { CoinsBitcoinIcon, FileSyncIcon } from "hugeicons-react";
-import { Bell, CreditCard, ShieldAlert, User } from "lucide-react";
-import BillingSection from "./billings/billing";
+import { Bell, ShieldAlert, User } from "lucide-react";
 import CoinsPackageSettings from "./coins";
 import DangerZone from "./danger";
 import Navigator from "./navigator";
@@ -27,14 +26,10 @@ const navItems = [
   },
   {
     value: "coins",
-    label: "Coins",
+    label: "Coins and Subscription",
     icon: <CoinsBitcoinIcon className="size-5 mr-2" />,
   },
-  {
-    value: "billing",
-    label: "Billing",
-    icon: <CreditCard className="size-5 mr-2" />,
-  },
+
   {
     value: "history",
     label: "Reading History",
@@ -68,9 +63,7 @@ const SettingsNavigation = ({ tab }: { tab: string }) => {
         <TabsContent value="coins">
           <CoinsPackageSettings />
         </TabsContent>
-        <TabsContent value="billing">
-          <BillingSection />
-        </TabsContent>
+
         <TabsContent value="history">
           <ReadingHistory />
         </TabsContent>

@@ -10,10 +10,12 @@ interface PageProps {
   }>;
 }
 
+export const revalidate = 60;
+
 export const generateMetadata = async ({ params }: PageProps) => {
-  const slug = await params;
+  const { slug } = await params;
   const story = await api.story.byID_or_slug({
-    query: slug.slug,
+    query: slug,
   });
 
   const storySchema = {

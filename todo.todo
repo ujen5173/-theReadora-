@@ -31,8 +31,6 @@
 | Engagement         | Paragraph-level comments                   | Low      | Inline comment                       | Extreme      |        |
 | Monetization       | Coin purchase flow                         | High     | Stripe, eSewa and Khalti integration | Medium       |        |
 | UI/UX Improvements | Improve chapter reading experience         | High     | Reading experience is not quite good | Medium       |        |
-| Notifications      | Email (digests, alerts)                    | Medium   |                                      | Low          |        |
-| Goodies on Signup  | Default Coins to 100                       | Medium   |                                      | Low          |        |
 ---
 
 2. FEATURE IDEAS (Unfiltered / Speculative)

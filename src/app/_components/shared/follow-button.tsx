@@ -60,7 +60,7 @@ const FollowButton = ({
     try {
       await mutateAsync({ followingId: followingTo.id });
     } catch (error) {
-      toast.error("Error following user");
+      console.log("Error following user");
     }
   };
 

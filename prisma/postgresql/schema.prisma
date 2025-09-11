@@ -136,8 +136,8 @@ model Transactions {
     user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
     type                   TransactionType @default(PURCHASE)
     amount                 Int
-    price                  String
-    time                   String
+    price                  Decimal         @db.Decimal(10, 2)
+    time                   DateTime
     status                 String
     pre_transaction_coins  Int
     post_transaction_coins Int
@@ -145,7 +145,7 @@ model Transactions {
     createdAt              DateTime        @default(now())
 
     @@index([userId, createdAt])
-    @@index([type, status])
+    @@index([type, status, createdAt])
 }
 
 model Follow {
@@ -159,6 +159,8 @@ model Follow {
     updatedAt DateTime @updatedAt
 
     @@unique([followerId, followingId])
+    @@index([followerId, createdAt])
+    @@index([followingId, createdAt])
 }
 
 model Rating {
@@ -180,6 +182,7 @@ model Rating {
 
     @@unique([userId, storyId])
     @@index([userId, storyId])
+    @@index([storyId, createdAt])
     @@index([storyId, rating])
     @@index([createdAt])
 }
@@ -192,7 +195,7 @@ model Replies {
     rating     Rating @relation(fields: [ratingId], references: [id], onDelete: Cascade)
     reply      String
     likesCount Int    @default(0)
-    likes      User[] @relation("ReplyLikes") // Fixed relation name
+    likes      User[] @relation("ReplyLikes")
 
     parentId String?
     parent   Replies? @relation("RepliesChildren", fields: [parentId], references: [id], onDelete: Cascade)
@@ -202,7 +205,7 @@ model Replies {
     createdAt DateTime @default(now())
 
     @@index([userId])
-    @@index([ratingId])
+    @@index([ratingId, createdAt])
     @@index([parentId])
     @@index([createdAt])
 }
@@ -218,7 +221,7 @@ model ChapterRead {
     createdAt DateTime @default(now())
 
     @@unique([chapterId, readerKey])
-    @@index([readerKey])
+    @@index([readerKey, createdAt])
     @@map("chapter_reads")
 }
 
@@ -258,9 +261,11 @@ model Story {
 
     @@index([title, slug, tags], name: "story_index")
     @@index([storyStatus, isCompleted])
-    @@index([authorId])
-    @@index([genreSlug])
+    @@index([authorId, createdAt])
+    @@index([genreSlug, isCompleted])
     @@index([createdAt])
+    @@index([averageRating])
+    @@index([readCount])
 }
 
 model Chapter {
@@ -291,6 +296,8 @@ model Chapter {
     updatedAt DateTime @updatedAt
 
     @@unique([storyId, chapterNumber])
+    @@unique([storyId, slug])
+    @@index([storyId, chapterNumber])
     @@index([title, storyId], name: "chapter_index")
     @@index([isLocked])
     @@index([scheduledFor])
@@ -363,6 +370,8 @@ model ReadinglistStory {
     readinglistId String
     story         Story       @relation(fields: [storyId], references: [id], onDelete: Cascade)
     storyId       String
+    createdAt     DateTime    @default(now())
 
     @@unique([readinglistId, storyId])
+    @@index([readinglistId, createdAt])
 }
