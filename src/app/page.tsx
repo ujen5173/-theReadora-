@@ -48,14 +48,14 @@ export default async function Home() {
   return (
     <Fragment>
       <Header />
-      {!user?.user.id ? (
-        <>
-          <HeroSection />
-          <Separator className="max-w-[1540px] mx-auto" />
-        </>
-      ) : (
-        <SimilarReadsNReadingList />
-      )}
+      {/* {!user?.user.id ? ( */}
+      <>
+        <HeroSection />
+        <Separator className="max-w-[1540px] mx-auto" />
+      </>
+      {/* // ) : ( */}
+      <SimilarReadsNReadingList />
+      {/* // )} */}
       <Recommendations />
       <Separator className="max-w-[1540px] mx-auto" />
       <TrendingSection />

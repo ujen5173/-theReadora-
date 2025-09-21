@@ -1,3 +1,5 @@
+// TODO: Structure the component
+
 "use client";
 
 import { Bookmark02Icon, BookmarkCheck01Icon } from "hugeicons-react";

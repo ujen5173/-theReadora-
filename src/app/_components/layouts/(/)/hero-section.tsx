@@ -1,9 +1,11 @@
 "use client";
-import { BookMarked, SquarePen } from "lucide-react";
+import { BookMarked, Loader2, SquarePen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 import { merriweatherFont } from "~/utils/font";
 
 const FEATURED_NOVELS = [
@@ -151,7 +153,7 @@ const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
 );
 
 const VerticalSlider = () => (
-  <div className="hidden relative -skew-x-3 h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
+  <div className="hidden relative h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
     <div className="flex-1">
       <div className="animate-slide-up">
         {FEATURED_NOVELS.slice(0, 4).map((novel) => (
@@ -199,14 +201,14 @@ const VerticalSlider = () => (
 );
 
 const HeroSection = () => {
-  // const { mutateAsync, status } = api.story.AIContentGeneration.useMutation({
-  //   onSuccess: () => {
-  //     toast.success("Content generated successfully");
-  //   },
-  //   onError: () => {
-  //     toast.error("Failed to generate content");
-  //   },
-  // });
+  const { mutateAsync, status } = api.story.AIContentGeneration.useMutation({
+    onSuccess: () => {
+      toast.success("Content generated successfully");
+    },
+    onError: () => {
+      toast.error("Failed to generate content");
+    },
+  });
 
   return (
     <section className="w-full">
@@ -263,7 +265,7 @@ const HeroSection = () => {
               </Button>
             </Link>
 
-            {/* <Button
+            <Button
               variant={"dark"}
               // disabled={status === "pending"}
               icon={status === "pending" ? Loader2 : undefined}
@@ -271,7 +273,7 @@ const HeroSection = () => {
               onClick={() => mutateAsync()}
             >
               Generate Content
-            </Button> */}
+            </Button>
           </div>
         </div>
 

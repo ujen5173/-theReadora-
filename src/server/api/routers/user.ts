@@ -26,6 +26,95 @@ export type StoryWithMetadata = TCard & {
 };
 
 export const userRouter = createTRPCRouter({
+  getProfileAnalytics: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      const userId = ctx.session.user.id;
+
+      // Fetch author profile + stories + chapters' metrics/analytics
+      const user = await ctx.postgresDb.user.findFirst({
+        where: { id: userId },
+        select: {
+          followersCount: true,
+          followingCount: true,
+          name: true,
+          image: true,
+          profileViews: true,
+          stories: {
+            select: {
+              ratingCount: true,
+              chapters: {
+                select: {
+                  readershipAnalytics: true,
+                  metrics: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!user)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+
+      // Aggregate totals from chapter JSON blobs (safe parse)
+      let totalViews = 0;
+      let totalUniqueViews = 0;
+      let totalLikes = 0;
+      let totalReviews = 0;
+
+      for (const story of user.stories) {
+        totalReviews += story.ratingCount || 0;
+
+        for (const chapter of story.chapters) {
+          try {
+            const ra =
+              typeof chapter.readershipAnalytics === "string"
+                ? JSON.parse(chapter.readershipAnalytics as unknown as string)
+                : (chapter.readershipAnalytics as Record<
+                    string,
+                    unknown
+                  > | null) || {};
+            totalViews += Number(ra?.total ?? 0);
+            totalUniqueViews += Number(ra?.unique ?? 0);
+          } catch {
+            // ignore malformed
+          }
+
+          try {
+            const m =
+              typeof chapter.metrics === "string"
+                ? JSON.parse(chapter.metrics as unknown as string)
+                : (chapter.metrics as Record<string, unknown> | null) || {};
+            totalLikes += Number(m?.likesCount ?? 0);
+          } catch {
+            // ignore malformed
+          }
+        }
+      }
+
+      return {
+        ...user,
+        analytics: {
+          workViews: totalViews,
+          profileViews: user.profileViews,
+          likes: totalLikes,
+          reviews: totalReviews,
+        },
+      };
+    } catch (err) {
+      console.log({ err });
+      if (err instanceof TRPCError) throw err;
+
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong!",
+      });
+    }
+  }),
+
   getUserDetails: publicProcedure
     .input(
       z.object({

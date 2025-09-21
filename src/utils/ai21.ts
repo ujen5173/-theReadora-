@@ -39,58 +39,94 @@ export const generateChapter = async (genre: string) => {
 
   while (retries < CONFIG.maxRetries) {
     try {
-      const prompt = `
-        You are a skilled fiction author specializing in ${genre} stories.
-        Create an engaging first chapter for a new story.
+      // Check if API key is available
+      if (!process.env.AI21_API_KEY) {
+        throw new AI21Error(
+          "AI21_API_KEY environment variable is not set",
+          "NO_API_KEY"
+        );
+      }
 
-        **Branching Output**  
-        The output will be a JSON object with the following fields:
+      const prompt = `You are a skilled fiction author specializing in ${genre} stories. Create an engaging first chapter for a new story.
+
+        **Output Format**
+        Return a valid JSON object with these exact fields:
         {
-          "title": "…",                   // ≤6 words
-          "storyTitle": "…",              // ≤6 words
-          "storySynopsis": "…",           // 2–3 paragraphs, ~150–200 words total
-          "storyTags": ["…","…","…","…","…"],
-          "content": "…",                 // ~2000 words, in Markdown; escape all internal quotes
+          "title": "Chapter title (max 6 words)",
+          "storyTitle": "Story title (max 6 words)", 
+          "storySynopsis": "2-3 paragraph synopsis (150-200 words total)",
+          "storyTags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+          "content": "Chapter content in Markdown format (approximately 2000 words)"
         }
 
-        **JSON Validity**  
-        - Single top‑level object, no extra text or formatting  
-        - Double‑quoted keys and string values  
-        - Booleans unquoted  
-        - Must parse with JSON.parse() without error
+        **Writing Guidelines**
+        - Write in third person perspective
+        - Use vivid, sensory descriptions
+        - Include natural dialogue
+        - Build tension and intrigue
+        - Maintain consistent tone throughout
+        - Keep content PG-13 appropriate
+        - Avoid AI-generated clichés
+        - Create compelling characters and plot
 
-        **Writing Guidelines**  
-        1. Vivid, sensory descriptions  
-        2. Natural, flowing dialogue  
-        3. Show emotions via actions/reactions  
-        4. Build tension and intrigue  
-        5. Engaging but unrushed pacing  
-        6. Consistent tone, PG‑13 appropriate  
-        7. Feels authentic—no "AI‑generated" clichés
+        **Content Requirements**
+        - The content field should contain the full chapter in Markdown
+        - Use proper paragraph breaks
+        - Include dialogue with proper formatting
+        - Build towards a compelling cliffhanger or hook
+        - Make it feel like a professional published work
 
-        Generate exactly the JSON object as specified.`;
+        **JSON Requirements**
+        - Must be valid JSON that parses without errors
+        - No extra text before or after the JSON
+        - All strings must be properly escaped
+        - Use double quotes for all keys and string values
 
-      const response = await ai21.chat.completions.create({
-        prompt,
-        temperature: 0.7,
-        max_tokens: 4096,
-        topP: 0.9,
-        stopSequences: ["}"],
-        model: "jamba-mini-1.6-2025-03",
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-      });
+        Generate the JSON object now:`;
 
-      const content = response.choices[0]?.message.content;
+      // Try different API endpoints and models
+      let response;
+      try {
+        // First try the chat completions endpoint with jamba-instruct
+        response = await ai21.chat.completions.create({
+          messages: [
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+          temperature: 0.8,
+          max_tokens: 4000,
+          model: "jamba-mini",
+        });
+      } catch (chatError) {
+        console.warn(
+          "Chat completions failed, trying completions endpoint:",
+          chatError
+        );
+
+        // Fallback to the completions endpoint
+        response = await ai21.chat.completions.create({
+          temperature: 0.8,
+          max_tokens: 4000,
+          model: "jamba-mini",
+          messages: [
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+        });
+      }
+
+      const content =
+        response.choices?.[0]?.message?.content || response.choices?.[0]?.text;
 
       if (!content) {
         throw new AI21Error("No content generated from AI", "NO_CONTENT");
       }
 
+      // Ensure output directory exists
       try {
         if (!fs.existsSync(CONFIG.outputDir)) {
           fs.mkdirSync(CONFIG.outputDir, { recursive: true });
@@ -99,6 +135,7 @@ export const generateChapter = async (genre: string) => {
         throw new AI21Error(`Failed to create output directory`, "FS_ERROR");
       }
 
+      // Clean up old files
       try {
         const files = fs.readdirSync(CONFIG.outputDir);
         const now = Date.now();
@@ -119,9 +156,10 @@ export const generateChapter = async (genre: string) => {
       }
 
       // Save raw response
+      const responseId = response.id || `response-${Date.now()}`;
       const rawOutputPath = path.join(
         CONFIG.outputDir,
-        `${response.id}-raw.json`
+        `${responseId}-raw.json`
       );
       try {
         fs.writeFileSync(
@@ -130,6 +168,7 @@ export const generateChapter = async (genre: string) => {
             {
               content: content,
               generatedAt: new Date().toISOString(),
+              responseId: responseId,
             },
             null,
             2
@@ -139,48 +178,33 @@ export const generateChapter = async (genre: string) => {
         console.warn("Failed to save raw response:", error);
       }
 
-      // Clean and validate content
+      // Clean and parse content
       const cleanedContent = content
         .replace(/```json\s*/g, "")
         .replace(/```\s*$/g, "")
         .trim();
 
-      // First, find the content field and properly escape its contents
-      const contentMatch = cleanedContent.match(
-        /"content":\s*"((?:[^"\\]|\\.)*)"/
-      );
-      if (!contentMatch) {
-        throw new AI21Error(
-          "Could not find content field in response",
-          "INVALID_CONTENT"
-        );
-      }
-
-      // Get the raw content and escape it properly
-      const rawContent = contentMatch[1];
-      const escapedContent = rawContent
-        ?.replace(/\\/g, "\\\\") // backslashes
-        .replace(/"/g, '\\"') // quotes
-        .replace(/\n/g, "\\n") // newlines
-        .replace(/\r/g, "\\r") // carriage returns
-        .replace(/\t/g, "\\t"); // tabs
-
-      const fixedContent = cleanedContent.replace(
-        /"content":\s*"((?:[^"\\]|\\.)*)"/,
-        `"content": "${escapedContent}"`
-      );
-
       let parsedContent;
       try {
-        parsedContent = JSON.parse(fixedContent);
+        parsedContent = JSON.parse(cleanedContent);
       } catch (error) {
+        console.error("JSON Parse Error:", error);
+        console.error("Cleaned Content:", cleanedContent);
         throw new AI21Error("Invalid JSON response from AI", "INVALID_JSON");
       }
 
-      const requiredFields = ["content"];
+      // Validate required fields
+      const requiredFields = [
+        "title",
+        "storyTitle",
+        "storySynopsis",
+        "storyTags",
+        "content",
+      ];
       const missingFields = requiredFields.filter(
-        (field) => !(field in parsedContent)
+        (field) => !(field in parsedContent) || !parsedContent[field]
       );
+
       if (missingFields.length > 0) {
         throw new AI21Error(
           `Missing required fields: ${missingFields.join(", ")}`,
@@ -188,12 +212,24 @@ export const generateChapter = async (genre: string) => {
         );
       }
 
+      // Validate content field
+      if (
+        typeof parsedContent.content !== "string" ||
+        parsedContent.content.trim().length < 100
+      ) {
+        throw new AI21Error(
+          "Content field is invalid or too short",
+          "INVALID_CONTENT"
+        );
+      }
+
+      // Convert content to HTML
       const htmlContent = converter.makeHtml(parsedContent.content);
 
       // Save processed response
       const processedOutputPath = path.join(
         CONFIG.outputDir,
-        `${response.id}.json`
+        `${responseId}.json`
       );
       try {
         fs.writeFileSync(
@@ -203,6 +239,7 @@ export const generateChapter = async (genre: string) => {
               ...parsedContent,
               content: htmlContent,
               generatedAt: new Date().toISOString(),
+              responseId: responseId,
             },
             null,
             2
@@ -218,13 +255,23 @@ export const generateChapter = async (genre: string) => {
       };
     } catch (error) {
       retries++;
+      console.error(`AI Generation attempt ${retries} failed:`, error);
+
       if (retries === CONFIG.maxRetries) {
         throw new AI21Error(
-          `Failed to generate chapter after ${CONFIG.maxRetries} attempts.`,
+          `Failed to generate chapter after ${
+            CONFIG.maxRetries
+          } attempts. Last error: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
           "MAX_RETRIES_EXCEEDED"
         );
       }
-      await new Promise((resolve) => setTimeout(resolve, 1000 * retries));
+
+      // Exponential backoff
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 * Math.pow(2, retries - 1))
+      );
     }
   }
 };

@@ -87,6 +87,8 @@ model User {
 
     usedForAIContentGeneration Boolean? @default(false)
 
+    profileViews Int? @default(0)
+
     followers Follow[] @relation("Follower")
     following Follow[] @relation("Following")
 

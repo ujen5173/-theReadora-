@@ -1,3 +1,4 @@
+"use client";
 import {
   DiscordIcon,
   Idea01Icon,
@@ -6,6 +7,7 @@ import {
   TwitterIcon,
 } from "hugeicons-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Tooltip,
@@ -18,6 +20,10 @@ import FeedbackDialog from "./feedback";
 import Logo from "./logo";
 
 const Footer = () => {
+  const path = usePathname();
+
+  if (path.includes("studio")) return;
+
   return (
     <footer className="w-full">
       <div className="mx-auto max-w-[1540px] border-t border-border">

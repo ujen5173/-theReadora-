@@ -1,4 +1,5 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
+import { format } from "date-fns";
 import numeral from "numeral";
 import type { ChapterMetrics, ReadershipAnalytics } from "prisma/types";
 import slugify from "slugify";
@@ -27,6 +28,19 @@ export const formatDate = (date: Date) => {
     month: "long",
     day: "2-digit",
   });
+};
+
+export const formatSmartDate = (date: Date) => {
+  const currentYear = new Date().getFullYear();
+  const targetYear = date.getFullYear();
+
+  if (targetYear === currentYear) {
+    // Format without the year if it's the current year
+    return format(date, "MMMM do, h:mm a"); // e.g., "September 17"
+  } else {
+    // Format with the year if it's a different year
+    return format(date, "MMMM do yyyy, h:mm a"); // e.g., "September 17, 2024"
+  }
 };
 
 export function formatBytes(

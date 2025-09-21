@@ -1,5 +1,4 @@
 "use client";
-
 import {
   AnalyticsUpIcon,
   Bookshelf01Icon,
@@ -11,7 +10,6 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -29,21 +27,9 @@ export default function UserHeader({
 }) {
   useAuthSync();
 
-  const { user, isLoading } = useUserStore();
+  const { user } = useUserStore();
 
   const router = useRouter();
-
-  // For hydration shit
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted || isLoading) {
-    return (
-      <div className="h-7 w-7 sm:h-10 sm:w-10 animate-pulse bg-gray-200 rounded-full" />
-    );
-  }
 
   if (!user) {
     return (
@@ -120,18 +106,19 @@ export default function UserHeader({
                   <span className="ml-2 text-sm">Profile</span>
                 </DropdownMenuItem>
               </Link>
+              <Link href="/studio">
+                <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
+                  <AnalyticsUpIcon className="w-4 h-4 text-slate-800" />
+                  <span className="ml-2 text-sm">Studio</span>
+                </DropdownMenuItem>
+              </Link>
               <Link href="/creations">
                 <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
                   <BookIcon className="w-4 h-4 text-slate-800" />
                   <span className="ml-2 text-sm">My Creations</span>
                 </DropdownMenuItem>
               </Link>
-              <Link href="/analytics">
-                <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
-                  <AnalyticsUpIcon className="w-4 h-4 text-slate-800" />
-                  <span className="ml-2 text-sm">Analytics</span>
-                </DropdownMenuItem>
-              </Link>
+
               <Link href={"/settings?tab=coins"}>
                 <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
                   <CoinsBitcoinIcon className="w-4 h-4 text-slate-800" />

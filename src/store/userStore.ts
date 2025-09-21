@@ -10,9 +10,18 @@ type User = {
   coins?: number;
 };
 
+type ProfileAnalytics = {
+  name: string;
+  image: string;
+  storiesCount: number;
+  followersCount: number;
+  followingCount: number;
+};
+
 type UserStore = {
   user: User | null;
   isLoading: boolean;
+  isAnalyticsLoading: boolean;
   setUser: (user: User | null) => void;
   clearUser: () => void;
 };
@@ -22,6 +31,7 @@ export const useUserStore = create<UserStore>()(
     (set) => ({
       user: null,
       isLoading: true,
+      isAnalyticsLoading: false,
       setUser: (user) => set({ user, isLoading: false }),
       clearUser: () => set({ user: null, isLoading: false }),
     }),

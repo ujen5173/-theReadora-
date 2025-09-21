@@ -1,4 +1,3 @@
-import type { JsonValue } from "@prisma/client/runtime/library";
 import { format } from "date-fns";
 import { CoinsBitcoinIcon } from "hugeicons-react";
 import { ArrowRight, Crown, Lock } from "lucide-react";
@@ -9,26 +8,6 @@ import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { api } from "~/trpc/server";
 import CoinsPackage from "../../shared/premium/coins-package";
-
-type TransactionType = {
-  type:
-    | "PURCHASE"
-    | "CHAPTER_UNLOCK"
-    | "MONTHLY_BONUS"
-    | "REFERRAL_BONUS"
-    | "SUBSCRIPTION"
-    | "SUBSCRIPTION_ENDED";
-  id: string;
-  createdAt: Date;
-  userId: string;
-  amount: number;
-  price: string;
-  time: string;
-  status: string;
-  pre_transaction_coins: number;
-  post_transaction_coins: number;
-  metadata: JsonValue | null;
-};
 
 const CoinsPackageSettings = async () => {
   const data = await api.user.getPurchasesDetails();
@@ -153,7 +132,7 @@ const CoinsPackageSettings = async () => {
                 </p>
               </div>
             )}
-            {data?.purchases.map((transaction: TransactionType, i: number) => (
+            {data?.purchases.map((transaction, i: number) => (
               <div
                 key={i}
                 className="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-muted/50 transition-colors"

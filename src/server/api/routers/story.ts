@@ -10,17 +10,10 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { generateChapter } from "~/utils/ai21";
-import {
-  LANGUAGES,
-  METRICS_DEFAULT_VALUES,
-  READERSHIP_ANALYTICS_DEFAULT_VALUES,
-  chapterCollectionName,
-  chunkCollectionName,
-  cuidRegex,
-} from "~/utils/constants";
+import { LANGUAGES, chunkCollectionName, cuidRegex } from "~/utils/constants";
 import { GENRES } from "~/utils/genre";
-import { makeSlug, mongoObjectId } from "~/utils/helpers";
+import { makeSlug } from "~/utils/helpers";
+import { generateStory, saveGeneratedStoryToDatabase } from "~/utils/openai";
 import { processChapterContent } from "./chapter";
 
 export const NCardEntity = {
@@ -1186,6 +1179,7 @@ export const storyRouter = createTRPCRouter({
 
   AIContentGeneration: publicProcedure.mutation(async ({ ctx }) => {
     try {
+      // Get users available for AI content generation
       const users = await ctx.postgresDb.user.findMany({
         where: {
           usedForAIContentGeneration: true,
@@ -1199,101 +1193,381 @@ export const storyRouter = createTRPCRouter({
         });
       }
 
-      const luckyUser = users[Math.floor(Math.random() * users.length)];
-
+      // Get available genres
       const genres = await ctx.postgresDb.genres.findMany();
+      if (genres.length === 0) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No genres available for content generation",
+        });
+      }
+
+      // Select random user and genre
+      const luckyUser = users[Math.floor(Math.random() * users.length)];
       const randomGenre = genres[Math.floor(Math.random() * genres.length)];
 
-      const generatedContent = await generateChapter(randomGenre!.name);
+      if (!luckyUser || !randomGenre) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to select user or genre for content generation",
+        });
+      }
 
-      const story = await ctx.postgresDb.story.create({
+      console.log(
+        `Generating AI story for genre: ${randomGenre.name} by user: ${luckyUser.id}`
+      );
+
+      // Generate complete story using AI (5 chapters by default)
+      const generatedStory = await generateStory(randomGenre.name, 5);
+
+      // Validate generated content
+      if (
+        !generatedStory ||
+        !generatedStory.title ||
+        !generatedStory.chapters ||
+        generatedStory.chapters.length === 0
+      ) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "AI generated invalid story content",
+        });
+      }
+
+      // Save the generated story to database
+      const savedStory = await saveGeneratedStoryToDatabase(
+        generatedStory,
+        luckyUser.id,
+        randomGenre.slug
+      );
+
+      // Process each chapter content into chunks for MongoDB
+      const processedChapters = await Promise.all(
+        savedStory.chapters.map(async (chapter, index) => {
+          const chunks = processChapterContent(
+            generatedStory.chapters[index].content
+          );
+
+          if (chunks.length === 0) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: `Failed to process content into chunks for chapter ${
+                index + 1
+              }`,
+            });
+          }
+
+          // Get the MongoDB content ID from the chapter
+          const mongoContentId = chapter.mongoContentID[0];
+
+          // Insert content chunks
+          const db = await ctx.mongoDb.getDb();
+          await db.collection(chunkCollectionName).insertMany(
+            chunks.map((chunk, chunkIndex) => ({
+              chapterId: mongoContentId,
+              content: chunk.content,
+              index: chunkIndex,
+            }))
+          );
+
+          // Determine if chapter should be locked (30% chance for non-first chapters)
+          const isLocked = index > 0 && Math.random() < 0.3;
+
+          // Update chapter with lock status and price
+          const updatedChapter = await ctx.postgresDb.chapter.update({
+            where: { id: chapter.id },
+            data: {
+              isLocked,
+              price: isLocked ? "POOL_50" : undefined,
+            },
+          });
+
+          return {
+            chapter: updatedChapter,
+            wordCount: chunks.reduce((acc, chunk) => acc + chunk.wordCount, 0),
+            isLocked,
+          };
+        })
+      );
+
+      // Calculate total word count and reading time
+      const totalWordCount = processedChapters.reduce(
+        (acc, chapter) => acc + chapter.wordCount,
+        0
+      );
+      const totalReadingTime = readingTime(
+        generatedStory.chapters.map((c: any) => c.content).join(" ")
+      ).time;
+
+      // Update story with final reading time and publish it
+      await ctx.postgresDb.story.update({
+        where: { id: savedStory.story.id },
         data: {
-          title: generatedContent.storyTitle,
-          slug: makeSlug(generatedContent.storyTitle),
-          synopsis: generatedContent.storySynopsis,
-          genreSlug: randomGenre!.slug,
-          authorId: luckyUser!.id,
-          hasAiContent: true,
-          language: "English",
-          thumbnail: getThumbnail(),
-          thumbnailId: "default-thumbnail-id",
-          readingTime: 0,
-          tags: [...generatedContent.storyTags, "AI Generated"],
+          readingTime: totalReadingTime,
           storyStatus: "PUBLISHED",
         },
       });
 
-      const chunks = processChapterContent(generatedContent.content);
-      const objectId = mongoObjectId();
-
-      const mongoContentID = await (await ctx.mongoDb.getDb())
-        .collection(chapterCollectionName)
-        .insertOne({
-          id: objectId,
-          storyId: story.id,
-          chapterNumber: 1,
-          version: 1,
-          createdAt: new Date(),
-        });
-      const db = await ctx.mongoDb.getDb();
-
-      await Promise.all(
-        chunks.map(async (chunk, index) =>
-          db.collection(chunkCollectionName).insertOne({
-            chapterId: mongoContentID.insertedId.toString(),
-            content: chunk.content,
-            index: index,
-          })
-        )
+      console.log(
+        `Successfully generated AI story: ${savedStory.story.id} with ${savedStory.chapters.length} chapters`
       );
-
-      const isLocked = Math.random() > 0.5;
-
-      const chapter = await ctx.postgresDb.chapter.create({
-        data: {
-          title: generatedContent.title,
-          slug: makeSlug(generatedContent.title),
-          chapterNumber: 1,
-          storyId: story.id,
-          isLocked,
-          price: isLocked ? "POOL_50" : undefined,
-          metrics: JSON.stringify({
-            ...METRICS_DEFAULT_VALUES,
-            wordCount: chunks.reduce((acc, chunk) => acc + chunk.wordCount, 0),
-            readingTime: readingTime(generatedContent.content).time,
-          }),
-          readershipAnalytics: JSON.stringify(
-            READERSHIP_ANALYTICS_DEFAULT_VALUES
-          ),
-          mongoContentID: [mongoContentID.insertedId.toString()],
-        },
-      });
-
-      await ctx.postgresDb.story.update({
-        where: { id: story.id },
-        data: {
-          chapterCount: 1,
-          readingTime: readingTime(generatedContent.content).time,
-        },
-      });
 
       return {
         success: true,
-        storyId: story.id,
-        chapterId: chapter.id,
+        storyId: savedStory.story.id,
+        chapterCount: savedStory.chapters.length,
+        totalWordCount,
+        totalReadingTime,
+        lockedChapters: processedChapters.filter((c) => c.isLocked).length,
+        unlockedChapters: processedChapters.filter((c) => !c.isLocked).length,
       };
     } catch (err) {
       console.error("Error in AI content generation:", err);
+
       if (err instanceof TRPCError) {
         throw err;
       }
 
+      // Provide more specific error messages
+      if (err instanceof Error) {
+        if (err.message.includes("API key")) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "AI service configuration error",
+          });
+        }
+        if (err.message.includes("rate limit")) {
+          throw new TRPCError({
+            code: "TOO_MANY_REQUESTS",
+            message: "AI service rate limit exceeded. Please try again later.",
+          });
+        }
+        if (err.message.includes("NO_API_KEY")) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "AI service API key not configured",
+          });
+        }
+      }
+
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
-        message: "Something went wrong while generating content using AI",
+        message: "Failed to generate AI content. Please try again later.",
       });
     }
   }),
+
+  generateStory: protectedProcedure
+    .input(
+      z.object({
+        genre: z.string(),
+        chapterCount: z.number().min(1).max(10).default(5),
+        title: z.string().optional(),
+        synopsis: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+        isMature: z.boolean().default(false),
+        isLGBTQContent: z.boolean().default(false),
+        language: z
+          .enum([
+            "English",
+            "Spanish",
+            "French",
+            "German",
+            "Italian",
+            "Portuguese",
+            "Russian",
+            "Chinese",
+            "Japanese",
+            "Korean",
+          ])
+          .default("English"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // Check if user has permission to generate AI content
+        const user = await ctx.postgresDb.user.findUnique({
+          where: { id: ctx.session.user.id },
+          select: { usedForAIContentGeneration: true },
+        });
+
+        if (!user?.usedForAIContentGeneration) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "You don't have permission to generate AI content",
+          });
+        }
+
+        // Verify genre exists
+        const genre = await ctx.postgresDb.genres.findUnique({
+          where: { slug: input.genre },
+        });
+
+        if (!genre) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Genre not found",
+          });
+        }
+
+        console.log(
+          `User ${ctx.session.user.id} generating AI story for genre: ${genre.name}`
+        );
+
+        // Generate complete story using AI
+        const generatedStory = await generateStory(
+          genre.name,
+          input.chapterCount
+        );
+
+        // Override with user-provided values if specified
+        const finalStory = {
+          ...generatedStory,
+          title: input.title || generatedStory.title,
+          synopsis: input.synopsis || generatedStory.synopsis,
+          tags: input.tags || generatedStory.tags,
+          isMature: input.isMature,
+          isLGBTQContent: input.isLGBTQContent,
+          language: input.language,
+        };
+
+        // Validate generated content
+        if (
+          !finalStory ||
+          !finalStory.title ||
+          !finalStory.chapters ||
+          finalStory.chapters.length === 0
+        ) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "AI generated invalid story content",
+          });
+        }
+
+        // Save the generated story to database
+        const savedStory = await saveGeneratedStoryToDatabase(
+          finalStory,
+          ctx.session.user.id,
+          genre.slug
+        );
+
+        // Process each chapter content into chunks for MongoDB
+        const processedChapters = await Promise.all(
+          savedStory.chapters.map(async (chapter, index) => {
+            const chunks = processChapterContent(
+              finalStory.chapters[index].content
+            );
+
+            if (chunks.length === 0) {
+              throw new TRPCError({
+                code: "INTERNAL_SERVER_ERROR",
+                message: `Failed to process content into chunks for chapter ${
+                  index + 1
+                }`,
+              });
+            }
+
+            // Get the MongoDB content ID from the chapter
+            const mongoContentId = chapter.mongoContentID[0];
+
+            // Insert content chunks
+            const db = await ctx.mongoDb.getDb();
+            await db.collection(chunkCollectionName).insertMany(
+              chunks.map((chunk, chunkIndex) => ({
+                chapterId: mongoContentId,
+                content: chunk.content,
+                index: chunkIndex,
+              }))
+            );
+
+            // Determine if chapter should be locked (30% chance for non-first chapters)
+            const isLocked = index > 0 && Math.random() < 0.3;
+
+            // Update chapter with lock status and price
+            const updatedChapter = await ctx.postgresDb.chapter.update({
+              where: { id: chapter.id },
+              data: {
+                isLocked,
+                price: isLocked ? "POOL_50" : undefined,
+              },
+            });
+
+            return {
+              chapter: updatedChapter,
+              wordCount: chunks.reduce(
+                (acc, chunk) => acc + chunk.wordCount,
+                0
+              ),
+              isLocked,
+            };
+          })
+        );
+
+        // Calculate total word count and reading time
+        const totalWordCount = processedChapters.reduce(
+          (acc, chapter) => acc + chapter.wordCount,
+          0
+        );
+        const totalReadingTime = readingTime(
+          finalStory.chapters.map((c: any) => c.content).join(" ")
+        ).time;
+
+        // Update story with final reading time
+        await ctx.postgresDb.story.update({
+          where: { id: savedStory.story.id },
+          data: {
+            readingTime: totalReadingTime,
+          },
+        });
+
+        console.log(
+          `Successfully generated AI story: ${savedStory.story.id} with ${savedStory.chapters.length} chapters`
+        );
+
+        return {
+          success: true,
+          story: savedStory.story,
+          chapters: savedStory.chapters,
+          totalWordCount,
+          totalReadingTime,
+          lockedChapters: processedChapters.filter((c) => c.isLocked).length,
+          unlockedChapters: processedChapters.filter((c) => !c.isLocked).length,
+        };
+      } catch (err) {
+        console.error("Error in AI story generation:", err);
+
+        if (err instanceof TRPCError) {
+          throw err;
+        }
+
+        // Provide more specific error messages
+        if (err instanceof Error) {
+          if (err.message.includes("API key")) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "AI service configuration error",
+            });
+          }
+          if (err.message.includes("rate limit")) {
+            throw new TRPCError({
+              code: "TOO_MANY_REQUESTS",
+              message:
+                "AI service rate limit exceeded. Please try again later.",
+            });
+          }
+          if (err.message.includes("NO_API_KEY")) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "AI service API key not configured",
+            });
+          }
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to generate AI story. Please try again later.",
+        });
+      }
+    }),
 
   getDataForEdit: protectedProcedure
     .input(
@@ -1347,6 +1621,149 @@ export const storyRouter = createTRPCRouter({
           message: "Something went wrong while generating content using AI",
         });
       }
+    }),
+
+  getAuthorWorks: protectedProcedure
+    .input(
+      z
+        .object({
+          query: z.string().optional(),
+          privacy: z
+            .enum(["DRAFT", "PUBLISHED", "PRIVATE", "SCHEDULED", "ALL"])
+            .optional(),
+          // Ranges (inclusive)
+          views: z
+            .object({
+              min: z.number().min(0).optional(),
+              max: z.number().min(0).optional(),
+            })
+            .optional(),
+          likes: z
+            .object({
+              min: z.number().min(0).optional(),
+              max: z.number().min(0).optional(),
+            })
+            .optional(),
+          reviews: z
+            .object({
+              min: z.number().min(0).optional(),
+              max: z.number().min(0).optional(),
+            })
+            .optional(),
+          sortBy: z.enum(["views", "likes", "reviews"]).optional(),
+          sortDir: z.enum(["asc", "desc"]).optional(),
+          limit: z.number().min(1).max(200).optional().default(100),
+        })
+        .optional()
+    )
+    .query(async ({ ctx, input }) => {
+      const whereBase = {
+        authorId: ctx.session.user.id,
+        ...(input?.privacy && input.privacy !== "ALL"
+          ? { storyStatus: input.privacy }
+          : {}),
+        ...(input?.query
+          ? {
+              OR: [
+                {
+                  title: {
+                    contains: input.query,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  slug: { contains: input.query, mode: "insensitive" as const },
+                },
+                {
+                  genreSlug: {
+                    contains: input.query,
+                    mode: "insensitive" as const,
+                  },
+                },
+              ],
+            }
+          : {}),
+      } as const;
+
+      // Pull chapters.metrics to compute likes
+      const stories = await ctx.postgresDb.story.findMany({
+        where: whereBase,
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          thumbnail: true,
+          storyStatus: true,
+          readCount: true, // views
+          ratingCount: true, // reviews
+          averageRating: true,
+          createdAt: true,
+          chapters: {
+            select: {
+              metrics: true, // JSON: { likesCount, ... }
+            },
+          },
+        },
+        take: input?.limit ?? 100,
+      });
+
+      // Compute likes from chapter metrics.likesCount
+      const rows = stories.map((s) => {
+        let likes = 0;
+        for (const ch of s.chapters) {
+          try {
+            const m =
+              typeof ch.metrics === "string"
+                ? JSON.parse(ch.metrics)
+                : ch.metrics;
+            likes += Number(m?.likesCount ?? 0);
+          } catch {
+            // ignore bad JSON
+          }
+        }
+        return {
+          id: s.id,
+          slug: s.slug,
+          title: s.title,
+          thumbnail: s.thumbnail,
+          privacy: s.storyStatus, // DRAFT | PUBLISHED | PRIVATE | SCHEDULED | DELETED
+          views: s.readCount,
+          likes,
+          reviews: s.ratingCount,
+          createdAt: s.createdAt,
+          averageRating: s.averageRating,
+        };
+      });
+
+      // Range filter client-like on the server for efficiency
+      const inRange = (v: number, r?: { min?: number; max?: number }) => {
+        if (!r) return true;
+        if (r.min != null && v < r.min) return false;
+        if (r.max != null && v > r.max) return false;
+        return true;
+      };
+      let filtered = rows.filter(
+        (r) =>
+          inRange(r.views, input?.views) &&
+          inRange(r.likes, input?.likes) &&
+          inRange(r.reviews, input?.reviews)
+      );
+
+      // Sorting
+      if (input?.sortBy) {
+        const key = input.sortBy;
+        const dir = input.sortDir === "asc" ? 1 : -1;
+        filtered = filtered.sort((a, b) => {
+          const av = a[key];
+          const bv = b[key];
+          return (av === bv ? 0 : av > bv ? 1 : -1) * dir;
+        });
+      } else {
+        // Default: most viewed
+        filtered = filtered.sort((a, b) => b.views - a.views);
+      }
+
+      return filtered;
     }),
 });
 
