@@ -12,6 +12,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "~/components/ui/chart";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import {
   Tooltip,
@@ -24,7 +25,7 @@ export const METRICS = [
   {
     label: "novel_views",
     title: "Novel Views",
-    data: 0,
+    data: 0 as number,
     per: 3,
     d: 4,
     tooltipDescription:
@@ -33,7 +34,7 @@ export const METRICS = [
   {
     label: "profile_views",
     title: "Profile Views",
-    data: 423,
+    data: 0 as number,
     per: 3,
     d: 4,
     tooltipDescription:
@@ -42,7 +43,7 @@ export const METRICS = [
   {
     label: "likes",
     title: "Likes",
-    data: 0,
+    data: 0 as number,
     per: 3,
     d: 4,
     tooltipDescription:
@@ -51,7 +52,7 @@ export const METRICS = [
   {
     label: "reviews",
     title: "Reviews",
-    data: 0,
+    data: 0 as number,
     per: 0,
     d: 0,
     tooltipDescription:
@@ -60,7 +61,7 @@ export const METRICS = [
   {
     label: "shares",
     title: "Shares",
-    data: 0,
+    data: 0 as number,
     per: 3,
     d: 4,
     tooltipDescription:
@@ -110,55 +111,63 @@ const Metrics = () => {
   );
 
   return (
-    <section className="space-y-4 py-8">
+    <section className="space-y-4 py-4 sm:py-8">
       <div>
         <Link
           className="inline-block"
           href="/studio/analytics?activeAnalyticsMetric=views"
         >
-          <h6 className="text-base font-bold flex items-center gap-1.5">
+          <h6 className="text-sm sm:text-base font-bold flex items-center gap-1.5">
             Key metrics <ArrowRight01Icon size="16" strokeWidth={2} />
           </h6>
         </Link>
       </div>
 
-      <div className="rounded-md overflow-x-auto border border-border shadow bg-white">
-        <div className="grid grid-cols-5 w-full min-w-max">
-          {METRICS.map((val, idx) => (
-            <TabTriggerButton
-              idx={idx}
-              key={val.label}
-              metrics={{
-                ...val,
-                data:
-                  val.label === "novel_views"
-                    ? data?.analytics?.totals?.views ?? 0
-                    : val.label === "profile_views"
-                    ? data?.followersCount ?? 0
-                    : val.label === "likes"
-                    ? data?.analytics?.totals?.likes ?? 0
-                    : val.label === "reviews"
-                    ? data?.analytics?.totals?.reviews ?? 0
-                    : 0,
-              }}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-            />
-          ))}
+      <div className="rounded-md border border-border shadow bg-white">
+        <div>
+          <ScrollArea className="h-[125px] w-full whitespace-nowrap">
+            <div className="flex w-full">
+              {METRICS.map((val, idx) => (
+                <TabTriggerButton
+                  idx={idx}
+                  key={val.label}
+                  metrics={{
+                    ...val,
+                    data: (() => {
+                      switch (val.label) {
+                        case "novel_views":
+                          return data?.analytics?.workViews ?? 0;
+                        case "profile_views":
+                          return data?.followersCount ?? 0;
+                        case "likes":
+                          return data?.analytics?.likes ?? 0;
+                        case "reviews":
+                          return data?.analytics?.reviews ?? 0;
+                        default:
+                          return 0;
+                      }
+                    })() as number,
+                  }}
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                />
+              ))}
+            </div>
+
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
-        <div className="h-80 w-full">
+
+        <div className="h-64 sm:h-80 w-full">
           <ChartContainer className="h-full w-full" config={chartConfig}>
             <AreaChart
               accessibilityLayer
-              data={
-                data?.analytics?.monthlyActiveReaders?.map((d) => ({
-                  month: d.month,
-                  desktop: d.value,
-                })) ?? chartData
-              }
+              data={chartData}
               margin={{
-                left: 12,
-                right: 12,
+                left: 8,
+                right: 8,
+                top: 8,
+                bottom: 8,
               }}
             >
               <CartesianGrid vertical={false} />
@@ -168,6 +177,7 @@ const Metrics = () => {
                 axisLine={false}
                 tickMargin={8}
                 tickFormatter={(value) => value.slice(0, 3)}
+                fontSize={12}
               />
               <ChartTooltip
                 cursor={false}
@@ -179,6 +189,7 @@ const Metrics = () => {
                 fill="var(--color-desktop)"
                 fillOpacity={0.1}
                 stroke="var(--color-desktop)"
+                strokeWidth={2}
               />
             </AreaChart>
           </ChartContainer>
@@ -203,12 +214,10 @@ const TabTriggerButton = ({
 }) => {
   const router = useRouter();
 
-  console.log({ activeTab, lb: metrics.label });
-
   return (
     <Tooltip>
-      <TooltipTrigger>
-        <div className="min-w-[15rem]">
+      <TooltipTrigger className="flex-1 min-w-[10rem] sm:min-w-[12rem] lg:min-w-[15rem]">
+        <div>
           <div className="flex w-full">
             <div
               role="button"
@@ -217,27 +226,27 @@ const TabTriggerButton = ({
                 router.push(`?activeAnalyticsMetric=${metrics.label}`);
               }}
               className={cn(
-                "w-full flex border-t-4 cursor-pointer border-transparent flex-col p-4 space-y-2 items-center",
+                "w-full flex border-t-4 cursor-pointer border-transparent flex-col p-2 sm:p-3 lg:p-4 space-y-1 sm:space-y-2 items-center transition-colors",
                 activeTab === metrics.label
-                  ? "border-t-blue-500"
-                  : "hover:border-t-slate-200",
-                "border-b border-b-slate-200 "
+                  ? "border-t-blue-500 bg-blue-50/30"
+                  : "hover:border-t-slate-200 hover:bg-slate-50/50",
+                "border-b border-b-slate-200"
               )}
             >
-              <h4 className="text-base font-bold text-slate-900">
+              <h4 className="text-xs sm:text-sm lg:text-base font-bold text-slate-900 text-center leading-tight">
                 {metrics.title}
               </h4>
-              <p className="text-blue-500 font-bold text-base">
+              <p className="text-blue-500 font-bold text-base sm:text-lg lg:text-xl">
                 {metrics.data || "-"}
               </p>
-              <p className="text-slate-600 font-bold text-base">
+              <p className="text-slate-600 font-bold text-xs sm:text-sm lg:text-base">
                 {metrics.per || "-"}({metrics.d || "-"})
               </p>
             </div>
             {idx !== METRICS.length - 1 && (
               <Separator
                 orientation="vertical"
-                className="h-[auto!important]"
+                className="h-[auto!important] hidden sm:block"
               />
             )}
           </div>
@@ -246,7 +255,7 @@ const TabTriggerButton = ({
       <TooltipContent
         side="bottom"
         variant="outline"
-        className="p-4 max-w-2xs font-medium text-slate-700 text-sm leading-snug text-center"
+        className="p-3 sm:p-4 max-w-2xs font-medium text-slate-700 text-xs sm:text-sm leading-snug text-center"
       >
         <p>{metrics.tooltipDescription}</p>
       </TooltipContent>

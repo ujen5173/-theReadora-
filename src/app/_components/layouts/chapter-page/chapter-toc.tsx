@@ -145,7 +145,7 @@ const ChapterTOC = () => {
           </DropdownMenu>
         </div>
         <div className="hidden md:flex items-center gap-2 w-full sm:w-auto">
-          {story && <AddToList storyId={story.id} />}
+          {story && <AddToList storyId={story.id} storyTitle={story.title} />}
           {story && (
             <TooltipProvider delayDuration={100}>
               <Tooltip>

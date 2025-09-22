@@ -51,16 +51,21 @@ const items = {
   ],
   // tools: [
   //   {
-  //     title: "Inspiration",
-  //     icon: Idea01Icon,
-  //     slug: "/studio/inspiration",
+  //     title: "Start Advertising",
+  //     icon: Target01Icon,
+  //     slug: "/studio/run-ad-campaign",
+  //   },
+  //   {
+  //     title: "Join Discord",
+  //     icon: DiscordIcon,
+  //     slug: "/studio/run-ad-campaign",
   //   },
   // ],
   others: [
     {
       title: "Feedback",
       icon: Mail02Icon,
-      slug: "/studio/feedback",
+      slug: "/feedback",
     },
   ],
 } as const;
@@ -82,7 +87,7 @@ const StudioSidebar = () => {
       collapsible="none"
       className="bg-slate-50 border-r border-border h-dvh"
     >
-      <SidebarHeader>
+      <SidebarHeader className="h-[64px]">
         <div className="p-2">
           <Logo />
         </div>
@@ -99,84 +104,41 @@ const StudioSidebar = () => {
         <div className="px-3">
           <Separator />
         </div>
-        <SidebarGroup>
-          <SidebarGroupLabel>Manage</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.manage.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={cn(
-                      currentPath === item.slug &&
-                        "border border-slate-300 bg-slate-200",
-                      "hover:bg-slate-200"
-                    )}
-                  >
-                    <Link href={item.slug}>
-                      <item.icon />
-                      <span className="font-medium">{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        {/* <div className="px-3">
-          <Separator />
-        </div>
-        <SidebarGroup>
-          <SidebarGroupLabel>Tools</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.tools.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={cn(
-                      currentPath === item.slug &&
-                        "border border-slate-300 bg-slate-200",
-                      "hover:bg-slate-200"
-                    )}
-                  >
-                    <a href={item.slug}>
-                      <item.icon />
-                      <span className="font-medium">{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup> */}
-        <div className="px-3">
-          <Separator />
-        </div>
-        <SidebarGroup>
-          <SidebarGroupLabel>Others</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.others.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={cn(
-                      currentPath === item.slug &&
-                        "border border-slate-300 bg-slate-200",
-                      "hover:bg-slate-200"
-                    )}
-                  >
-                    <a href={item.slug}>
-                      <item.icon />
-                      <span className="font-medium">{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {Object.entries(items).map(([key, value], index) => (
+          <div key={index}>
+            <SidebarGroup>
+              <SidebarGroupLabel>
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {value.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        className={cn(
+                          currentPath === item.slug &&
+                            "border border-slate-300 bg-slate-200",
+                          "hover:bg-slate-200"
+                        )}
+                      >
+                        <Link href={item.slug}>
+                          <item.icon />
+                          <span className="font-medium">{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            {index !== Object.entries(items).length - 1 && (
+              <div className="px-3">
+                <Separator />
+              </div>
+            )}
+          </div>
+        ))}
       </SidebarContent>
       <SidebarFooter className="mb-4">
         <Button variant={"ghost"} icon={ArrowLeft01Icon}>

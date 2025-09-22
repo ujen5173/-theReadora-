@@ -20,6 +20,6 @@ export const config = {
     "/write/:path*",
     "/creations/:path*",
     "/settings/:path*",
-    "/studio",
+    "/studio/:path*",
   ],
 };

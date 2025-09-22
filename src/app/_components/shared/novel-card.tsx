@@ -149,7 +149,7 @@ const NovelCard: FC<{
                 View Analytics
               </Button>
             ) : (
-              <AddToList storyId={details.id} />
+              <AddToList storyId={details.id} storyTitle={details.title} />
             )}
           </div>
         </div>

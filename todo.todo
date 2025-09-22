@@ -25,9 +25,9 @@
 | Content Mgmt       | Edit stories and chapters                  | Medium   |                                      | Medium       | ✅     |
 | Engagement         | Review panels                              | Medium   |                                      | Low          | ✅     |
 | Core Logic         | Different section data fetching            | Extreme  | Recom., history, top, rising, latest | Medium       | ✅     |
+| Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         | ⚒️      |
 
 | AI Integration     | AI assistance (summaries, suggestions)     | Low      | GPT-powered                          | Extreme      |        |
-| Dashboard          | User analytics & dashboard                 | Low      | Usage stats, reading habits          | High         |        |
 | Engagement         | Paragraph-level comments                   | Low      | Inline comment                       | Extreme      |        |
 | Monetization       | Coin purchase flow                         | High     | Stripe, eSewa and Khalti integration | Medium       |        |
 | UI/UX Improvements | Improve chapter reading experience         | High     | Reading experience is not quite good | Medium       |        |

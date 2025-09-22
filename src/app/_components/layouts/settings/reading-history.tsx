@@ -1,9 +1,9 @@
 "use client";
+
 import { FileSyncIcon } from "hugeicons-react";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
   Select,
@@ -79,9 +79,6 @@ const ReadingHistory = () => {
             Reading History
           </h3>
         </div>
-        <Button variant={"outline"} size="sm">
-          Clear History
-        </Button>
       </div>
 
       <div className="space-y-4 sm:space-y-6">

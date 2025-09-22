@@ -35,7 +35,7 @@ const ChapterFooter = () => {
           <div>
             <ShareDialog
               title={chapter?.title || ""}
-              url={`${process.env.NEXT_PUBLIC_APP_URL}/chapter/${chapter?.id}`}
+              url={`${process.env.NEXT_PUBLIC_APP_URL}chapter/${chapter?.id}`}
             />
           </div>
         </div>

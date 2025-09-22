@@ -120,11 +120,11 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
           </>
         )}
 
-        <AddToList storyId={story.id} />
+        <AddToList storyId={story.id} storyTitle={story.title} />
 
         <ShareDialog
           title={story.title}
-          url={`${env.NEXT_PUBLIC_APP_URL}/story/${story.slug}`}
+          url={`${env.NEXT_PUBLIC_APP_URL}story/${story.slug}`}
         />
       </div>
 

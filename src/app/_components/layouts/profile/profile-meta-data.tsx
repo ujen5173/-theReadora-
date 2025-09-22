@@ -1,4 +1,5 @@
 "use client";
+
 import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
 import { CalendarDays, Users } from "lucide-react";
 import Link from "next/link";
@@ -173,7 +174,7 @@ const ProfileMetaData = () => {
               <ShareDialog
                 title={user?.name ?? ""}
                 description="Share this profile"
-                url={`${env.NEXT_PUBLIC_APP_URL}/profile?user=${
+                url={`${env.NEXT_PUBLIC_APP_URL}profile?user=${
                   user?.username ?? ""
                 }`}
               />

@@ -57,6 +57,7 @@ export const columns: ColumnDef<WorkRow>[] = [
   {
     accessorKey: "title",
     header: "Work",
+    size: 300,
     cell: ({ row }) => {
       const data = row.original;
       return (
@@ -85,6 +86,7 @@ export const columns: ColumnDef<WorkRow>[] = [
   {
     accessorKey: "privacy",
     header: "Privacy",
+    size: 120,
     cell: ({ row }) => {
       const p = row.getValue("privacy") as WorkRow["privacy"];
       return (
@@ -96,6 +98,7 @@ export const columns: ColumnDef<WorkRow>[] = [
   },
   {
     accessorKey: "views",
+    size: 100,
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -116,6 +119,7 @@ export const columns: ColumnDef<WorkRow>[] = [
   },
   {
     accessorKey: "likes",
+    size: 100,
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -136,6 +140,7 @@ export const columns: ColumnDef<WorkRow>[] = [
   },
   {
     accessorKey: "reviews",
+    size: 100,
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -157,6 +162,7 @@ export const columns: ColumnDef<WorkRow>[] = [
   {
     id: "actions",
     header: "Actions",
+    size: 100,
     cell: ({ row }) => {
       const work = row.original;
       return (

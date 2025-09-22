@@ -35,16 +35,23 @@ type Story = {
 const ReadingListDialog = ({
   onSuccess,
   children,
+  selectedStory,
+  removeNewListCreation,
 }: {
   onSuccess?: () => void;
   children?: React.ReactNode;
+  selectedStory?: {
+    id: string;
+    title: string;
+  };
+  removeNewListCreation?: boolean;
 }) => {
-  const { open, setOpen, edit, edited, setEdited } = useReadinglistStore();
+  const { open, setOpen, edited, setEdited } = useReadinglistStore();
 
   const [data, setData] = useState({
     title: edited?.title ?? "Untitled",
     description: edited?.description ?? "",
-    stories: edited?.stories ?? [],
+    stories: selectedStory ? [selectedStory] : edited?.stories ?? [],
   });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,13 +75,13 @@ const ReadingListDialog = ({
       setData({
         title: edited.title,
         description: edited.description,
-        stories: edited.stories,
+        stories: edited.stories ?? [],
       });
     } else {
       setData({
         title: "Untitled",
         description: "",
-        stories: [],
+        stories: selectedStory ? [selectedStory] : [],
       });
     }
   }, [edited, open]);
@@ -231,104 +238,106 @@ const ReadingListDialog = ({
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="initial_stories" className="text-right">
-              Add Stories
-            </Label>
-            <Input
-              id="initial_stories"
-              icon={isSearching ? Loader2 : Search01Icon}
-              iconPlacement="right"
-              iconStyle={
-                isSearching
-                  ? "animate-spin size-4 text-slate-700"
-                  : "size-4 text-slate-700"
-              }
-              placeholder="Search stories..."
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="col-span-3"
-              disabled={isLoading}
-            />
+          {removeNewListCreation && (
+            <div className="space-y-2">
+              <Label htmlFor="initial_stories" className="text-right">
+                Add Stories
+              </Label>
+              <Input
+                id="initial_stories"
+                icon={isSearching ? Loader2 : Search01Icon}
+                iconPlacement="right"
+                iconStyle={
+                  isSearching
+                    ? "animate-spin size-4 text-slate-700"
+                    : "size-4 text-slate-700"
+                }
+                placeholder="Search stories..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="col-span-3"
+                disabled={isLoading}
+              />
 
-            {searchResults.length > 0 && (
-              <ScrollArea className="h-48 rounded-md border">
-                <div className="space-y-2">
-                  {searchResults.map((story) => (
-                    <div
-                      key={story.id}
-                      className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer"
-                      onClick={() => handleAddStory(story)}
-                    >
-                      <div className="h-12 w-12 relative rounded-sm overflow-hidden flex-shrink-0">
-                        <Image
-                          src={story.thumbnail || "/placeholder.png"}
-                          alt={story.title}
-                          fill
-                          sizes="48px"
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm text-slate-800 truncate">
-                          {story.title}
-                        </p>
-                        <p className="text-xs text-slate-500 truncate">
-                          by {story.author.name}
-                        </p>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="flex-shrink-0"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAddStory(story);
-                        }}
-                        disabled={isLoading}
+              {searchResults.length > 0 && (
+                <ScrollArea className="h-48 rounded-md border">
+                  <div className="space-y-2">
+                    {searchResults.map((story) => (
+                      <div
+                        key={story.id}
+                        className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer"
+                        onClick={() => handleAddStory(story)}
                       >
-                        <PlusSignIcon className="size-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            )}
+                        <div className="h-12 w-12 relative rounded-sm overflow-hidden flex-shrink-0">
+                          <Image
+                            src={story.thumbnail || "/placeholder.png"}
+                            alt={story.title}
+                            fill
+                            sizes="48px"
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm text-slate-800 truncate">
+                            {story.title}
+                          </p>
+                          <p className="text-xs text-slate-500 truncate">
+                            by {story.author.name}
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="flex-shrink-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddStory(story);
+                          }}
+                          disabled={isLoading}
+                        >
+                          <PlusSignIcon className="size-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              )}
 
-            {data.stories.length > 0 && (
-              <div className="mt-3">
-                <p className="text-sm font-medium text-slate-700 mb-2">
-                  Selected Stories ({data.stories.length})
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {data.stories.map((story) => (
-                    <Badge
-                      key={typeof story === "string" ? story : story.id}
-                      variant="secondary"
-                      className="flex items-center gap-1 py-1 px-2"
-                    >
-                      <span className="truncate max-w-[150px]">
-                        {typeof story === "string" ? story : story.title}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-4 w-4 p-0 hover:bg-slate-200 rounded-full"
-                        onClick={() =>
-                          handleRemoveStory(
-                            typeof story === "string" ? story : story.id
-                          )
-                        }
-                        disabled={isLoading}
+              {data.stories.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-sm font-medium text-slate-700 mb-2">
+                    Selected Stories ({data.stories.length})
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {data.stories.map((story) => (
+                      <Badge
+                        key={typeof story === "string" ? story : story.id}
+                        variant="secondary"
+                        className="flex items-center gap-1 py-1 px-2"
                       >
-                        <X className="size-3" />
-                      </Button>
-                    </Badge>
-                  ))}
+                        <span className="truncate max-w-[150px]">
+                          {typeof story === "string" ? story : story.title}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-4 w-4 p-0 hover:bg-slate-200 rounded-full"
+                          onClick={() =>
+                            handleRemoveStory(
+                              typeof story === "string" ? story : story.id
+                            )
+                          }
+                          disabled={isLoading}
+                        >
+                          <X className="size-3" />
+                        </Button>
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
         <DialogFooter>
           <Button

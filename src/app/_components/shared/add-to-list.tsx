@@ -1,5 +1,3 @@
-// TODO: Structure the component
-
 "use client";
 
 import { Bookmark02Icon, BookmarkCheck01Icon } from "hugeicons-react";
@@ -21,7 +19,13 @@ import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
 import ReadingListDialog from "./reading-list-dialog";
 
-const AddToList = ({ storyId }: { storyId: string }) => {
+const AddToList = ({
+  storyId,
+  storyTitle,
+}: {
+  storyId: string;
+  storyTitle: string;
+}) => {
   const { user } = useUserStore();
   const [open, setOpen] = useState(false);
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
@@ -36,7 +40,7 @@ const AddToList = ({ storyId }: { storyId: string }) => {
     enabled: !!user,
     retry: 0,
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity,
   });
 
   const { data: storyLists, isLoading: isLoadingStoryLists } =
@@ -54,6 +58,11 @@ const AddToList = ({ storyId }: { storyId: string }) => {
   }, [storyLists]);
 
   const handleSave = async () => {
+    if (selectedLists.length === 0) {
+      toast("Please select at least one list");
+      return;
+    }
+
     const res = await mutateAsync({
       id: storyId,
       listIds: selectedLists,
@@ -93,7 +102,7 @@ const AddToList = ({ storyId }: { storyId: string }) => {
             Save to your list for easy access later.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 mb-6">
+        <div className="space-y-2 mb-6">
           {isLoading || isLoadingStoryLists ? (
             <div className="space-y-3">
               <div className="h-12 bg-slate-100 rounded-lg animate-pulse" />
@@ -130,13 +139,20 @@ const AddToList = ({ storyId }: { storyId: string }) => {
             </Button>
           ) : (
             <>
-              <ReadingListDialog onSuccess={() => refetch()}>
+              <ReadingListDialog
+                selectedStory={{
+                  id: storyId,
+                  title: storyTitle,
+                }}
+                removeNewListCreation
+                onSuccess={() => refetch()}
+              >
                 <Button disabled={status === "pending"} variant={"outline"}>
                   Create New List
                 </Button>
               </ReadingListDialog>
               <Button
-                disabled={status === "pending"}
+                disabled={status === "pending" || selectedLists.length === 0}
                 icon={status === "pending" ? Loader2Icon : undefined}
                 iconStyle={status === "pending" ? "animate-spin" : ""}
                 onClick={handleSave}
