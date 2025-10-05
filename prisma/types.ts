@@ -15,15 +15,6 @@ export type ChapterMetrics = PrismaJson.ChapterMatrics;
 
 declare global {
   namespace PrismaJson {
-    type ReadershipAnalytics = {
-      total: number;
-      unique: number;
-    };
-  }
-}
-
-declare global {
-  namespace PrismaJson {
     type EmailNotifications = {
       chapterUpdates: boolean;
       storyCompletion: boolean;
@@ -37,5 +28,3 @@ declare global {
     };
   }
 }
-
-export type ReadershipAnalytics = PrismaJson.ReadershipAnalytics;

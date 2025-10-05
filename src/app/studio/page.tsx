@@ -11,7 +11,6 @@ const Studio = () => {
 
   return (
     <main className="p-6">
-      {/* Profile */}
       <div className="flex gap-4 items-center border border-border bg-white rounded-md p-4">
         {isLoading && data === undefined ? (
           <>
@@ -36,7 +35,7 @@ const Studio = () => {
                 <div className="text-sm font-semibold text-slate-700">
                   Stories:{" "}
                   <span className="text-slate-800">
-                    {Intl.NumberFormat().format(data?.stories.length || 0)}
+                    {Intl.NumberFormat().format(data?.totalStories || 0)}
                   </span>
                 </div>
                 <Dot />
@@ -59,7 +58,6 @@ const Studio = () => {
         )}
       </div>
 
-      {/* Metrics */}
       <Metrics />
     </main>
   );

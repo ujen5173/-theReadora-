@@ -36,10 +36,10 @@ export const MAX_COINS = 10000;
 
 export const COIN_PRICE = 0.0099;
 
-export const READERSHIP_ANALYTICS_DEFAULT_VALUES = {
-  total: 0,
-  unique: 0,
-};
+// export const READERSHIP_ANALYTICS_DEFAULT_VALUES = {
+//   total: 0,
+//   unique: 0,
+// };
 
 export const METRICS_DEFAULT_VALUES = {
   wordCount: 0,

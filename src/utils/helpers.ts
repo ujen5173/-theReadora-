@@ -1,12 +1,9 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { format } from "date-fns";
 import numeral from "numeral";
-import type { ChapterMetrics, ReadershipAnalytics } from "prisma/types";
+import type { ChapterMetrics } from "prisma/types";
 import slugify from "slugify";
-import {
-  METRICS_DEFAULT_VALUES,
-  READERSHIP_ANALYTICS_DEFAULT_VALUES,
-} from "./constants";
+import { METRICS_DEFAULT_VALUES } from "./constants";
 import { GENRES } from "./genre";
 
 export const makeSlug = (str: string) =>
@@ -104,22 +101,22 @@ export const parseMetrics = (
   }
 };
 
-export const parseReadershipAnalytics = (
-  analytics: JsonValue = READERSHIP_ANALYTICS_DEFAULT_VALUES
-): ReadershipAnalytics => {
-  try {
-    if (typeof analytics === "string") {
-      return JSON.parse(analytics);
-    }
-    if (typeof analytics === "object" && analytics !== null) {
-      return analytics as ReadershipAnalytics;
-    }
-    return READERSHIP_ANALYTICS_DEFAULT_VALUES;
-  } catch (error) {
-    console.error("Error parsing metrics:", error);
-    return READERSHIP_ANALYTICS_DEFAULT_VALUES;
-  }
-};
+// export const parseReadershipAnalytics = (
+//   analytics: JsonValue = READERSHIP_ANALYTICS_DEFAULT_VALUES
+// ): ReadershipAnalytics => {
+//   try {
+//     if (typeof analytics === "string") {
+//       return JSON.parse(analytics);
+//     }
+//     if (typeof analytics === "object" && analytics !== null) {
+//       return analytics as ReadershipAnalytics;
+//     }
+//     return READERSHIP_ANALYTICS_DEFAULT_VALUES;
+//   } catch (error) {
+//     console.error("Error parsing metrics:", error);
+//     return READERSHIP_ANALYTICS_DEFAULT_VALUES;
+//   }
+// };
 
 export const isChapterScheduled = (
   scheduledFor: Date | null | undefined

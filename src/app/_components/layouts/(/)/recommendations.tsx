@@ -10,6 +10,7 @@ const Recommendations = async () => {
     <BookSection
       title="Recommendations"
       novels={recommendations}
+      analyticsRef="feed:recommendation"
       multiple={false}
     />
   );

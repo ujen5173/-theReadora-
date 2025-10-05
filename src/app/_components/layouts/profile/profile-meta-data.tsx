@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { env } from "~/env";
 import { useUserProfileStore } from "~/store/userProfileStore";
 import { useUserStore } from "~/store/userStore";
+import { api } from "~/trpc/react";
 import { formatDate } from "~/utils/helpers";
 import BlurImage from "../../shared/blur-image";
 import FollowButton from "../../shared/follow-button";
@@ -21,6 +22,18 @@ const ProfileMetaData = () => {
   const { user: author } = useUserProfileStore();
   const [user, setUser] = useState(author);
   const { user: loggedInUser } = useUserStore();
+  const { mutateAsync } = api.user.profileView.useMutation();
+
+  useEffect(() => {
+    if (user && user.id) {
+      setTimeout(async () => {
+        const res = await mutateAsync({
+          user: user.id,
+        });
+        console.log({ res });
+      }, 5000);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (author) {

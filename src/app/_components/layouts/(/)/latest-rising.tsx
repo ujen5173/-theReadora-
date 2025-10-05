@@ -19,10 +19,16 @@ const LatestAndRising = async () => {
             title="Latest Releases"
             novels={latest}
             multiple={true}
+            analyticsRef="feed:latest"
           />
         </div>
         <div className="w-full xl:flex-1">
-          <BookSection title="Rising Stars" novels={rising} multiple={true} />
+          <BookSection
+            title="Rising Stars"
+            analyticsRef="feed:rising"
+            novels={rising}
+            multiple={true}
+          />
         </div>
       </div>
     </section>

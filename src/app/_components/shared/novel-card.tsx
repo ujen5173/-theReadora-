@@ -40,10 +40,21 @@ export type TCard = {
 const NovelCard: FC<{
   details: TCard;
   isAuthorViewer?: boolean;
-}> = ({ details, isAuthorViewer = false }) => {
+  referrer?: string;
+  searchQuery?: string;
+}> = ({ details, searchQuery, isAuthorViewer = false, referrer }) => {
+  const handleStorageForAnalytics = () => {
+    referrer && sessionStorage.setItem("ref", referrer);
+    searchQuery && sessionStorage.setItem("searchQuery", searchQuery);
+  };
+
   return (
     <div title={details.title} className="cover-card group relative">
-      <Link href={`/story/${details.slug}`} className="pb-2 relative block">
+      <Link
+        href={`/story/${details.slug}`}
+        onClick={handleStorageForAnalytics}
+        className="pb-2 relative block"
+      >
         {details.isMature && (
           <div className="absolute right-2 top-2 z-50">
             <Badge
@@ -94,6 +105,7 @@ const NovelCard: FC<{
           <div className="flex items-center justify-center py-4">
             <Link
               href={`/story/${details.slug}`}
+              onClick={handleStorageForAnalytics}
               className="flex items-center gap-2 text-sm font-semibold text-primary transition hover:text-primary/80 hover:underline"
             >
               <span>Full Story Info</span>
@@ -135,7 +147,10 @@ const NovelCard: FC<{
           </div>
           <div className="space-y-2">
             <Button asChild className="w-full gap-2">
-              <Link href={`/story/${details.slug}`}>
+              <Link
+                href={`/story/${details.slug}`}
+                onClick={handleStorageForAnalytics}
+              >
                 <LinkSquare02Icon size={16} className="stroke-2" />
                 <span>View Details</span>
               </Link>

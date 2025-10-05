@@ -17,6 +17,7 @@ const UserCreations = () => {
       title={`${user?.name}'s Creations`}
       novels={user?.stories || []}
       isAuthorViewer
+      analyticsRef="profile"
       customEmptyContainer={
         <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-12">
           <Book01Icon className="size-12 text-slate-400" />

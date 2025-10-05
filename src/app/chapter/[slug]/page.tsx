@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import ChapterContent from "~/app/_components/layouts/chapter-page/chapter-content";
 import ChapterTOC from "~/app/_components/layouts/chapter-page/chapter-toc";
 import ChapterWrapper from "~/app/_components/layouts/chapter-page/wrapper";
-import IncreaseReadCount from "~/app/_components/shared/increase-read-count";
 import { api } from "~/trpc/server";
 
 const SingleChapterPage = async ({
@@ -25,7 +24,6 @@ const SingleChapterPage = async ({
 
   return (
     <ChapterWrapper details={chapter}>
-      <IncreaseReadCount />
       <ChapterTOC />
       <ChapterContent userUnlockedChapter={userUnlockedChapter} />
       {/* <ChapterFooter />

@@ -62,6 +62,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "ai": "^4.3.9",
     "ai21": "^1.1.1",
+    "axios": "^1.12.2",
     "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.6.0",

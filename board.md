@@ -1,0 +1,4 @@
+- plan the overall schema
+- read update on the story and chapter
+- cron job for the daily stats
+- update the graph

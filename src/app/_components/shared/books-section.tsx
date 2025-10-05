@@ -17,6 +17,7 @@ const BookSection = ({
       </p>
     </div>
   ),
+  analyticsRef = undefined,
 }: {
   title: string;
   titleIcon?: React.ElementType;
@@ -26,6 +27,7 @@ const BookSection = ({
   multiple?: boolean;
   isAuthorViewer?: boolean;
   customEmptyContainer?: React.ReactNode;
+  analyticsRef?: string | undefined;
 }) => {
   return (
     <section className="w-full">
@@ -56,6 +58,7 @@ const BookSection = ({
                 isAuthorViewer={isAuthorViewer}
                 key={novel.slug}
                 details={novel}
+                referrer={analyticsRef}
               />
             ))}
           </div>

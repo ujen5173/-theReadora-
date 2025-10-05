@@ -81,7 +81,7 @@ export const generateStory = async (
           ]
         }
 
-        **Writing Guidelines**
+        **Writing Guidelines (Keep chapters concise)**
         - Write in third person perspective
         - Use vivid, sensory descriptions
         - Include natural dialogue
@@ -94,7 +94,7 @@ export const generateStory = async (
         - End with a satisfying conclusion
 
         **Content Requirements**
-        - Each chapter should be approximately 2000 words (minimum 1000 words per chapter)
+        - Each chapter should be approximately 600-800 words (minimum 300 words per chapter)
         - Use proper paragraph breaks and dialogue formatting
         - Include character development and plot progression
         - Create engaging cliffhangers between chapters
@@ -120,7 +120,7 @@ export const generateStory = async (
         - Use genre-appropriate pacing and structure
 
         **Critical Requirements**
-        - EVERY chapter must have substantial content (minimum 1000 words)
+        - EVERY chapter must have substantial content (minimum 300 words)
         - Do not use placeholder text like "Chapter content goes here" or "To be continued"
         - Each chapter should be a complete, meaningful part of the story
         - Ensure all chapters are properly numbered starting from 1
@@ -142,6 +142,10 @@ export const generateStory = async (
           },
         ],
         temperature: 0.7, // Slightly lower temperature for more consistent output
+        // Ensure the model returns strict JSON without markdown fences or extra text
+        response_format: { type: "json_object" } as any,
+        // Give the model enough room while avoiding excessive outputs that get truncated
+        max_tokens: 6000,
       });
 
       const content = response.choices?.[0]?.message?.content;
@@ -503,10 +507,6 @@ export const saveGeneratedStoryToDatabase = async (
               ratingCount: 0,
               ratingValue: 0,
               averageRating: 0,
-            },
-            readershipAnalytics: {
-              total: 0,
-              unique: 0,
             },
             mongoContentID: [mongoContent.insertedId.toString()],
             isLocked: false,

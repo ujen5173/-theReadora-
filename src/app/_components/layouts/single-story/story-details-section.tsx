@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { env } from "~/env";
 import { cn } from "~/lib/utils";
 import type { T_byID_or_slug } from "~/server/api/routers/story";
 import { useUserStore } from "~/store/userStore";
@@ -41,6 +42,12 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
 
     setRatingCount(ratingCount);
     setAverageRating(averageRating);
+
+    // store session for the author analytics
+    const referrer = document.referrer;
+
+    if (referrer && referrer !== "" && referrer !== env.NEXT_PUBLIC_APP_URL)
+      sessionStorage.setItem("ref", referrer);
   }, [story]);
 
   const handleReadMore = () => {

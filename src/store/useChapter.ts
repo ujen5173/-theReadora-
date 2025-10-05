@@ -14,7 +14,6 @@ export type useChapterChapter = {
   isLocked: boolean;
   chapterNumber: number;
   metrics: JsonValue;
-  readershipAnalytics: JsonValue;
   mongoContentID: string[];
   scheduledFor: Date | null;
 };

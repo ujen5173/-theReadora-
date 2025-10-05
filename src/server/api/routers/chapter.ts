@@ -16,7 +16,6 @@ import {
   chunkCollectionName,
   cuidRegex,
   METRICS_DEFAULT_VALUES,
-  READERSHIP_ANALYTICS_DEFAULT_VALUES,
 } from "~/utils/constants";
 import { makeSlug, mongoObjectId } from "~/utils/helpers";
 
@@ -669,125 +668,104 @@ export const chapterRouter = createTRPCRouter({
       z.object({
         chapterId: z.string(),
         anonymous: z.string().cuid2().optional(),
+        city: z.string().nullable(),
+        ip: z.string().nullable(),
+        ref: z.string().nullable(),
+        readTime: z.number().nullable(),
+        searchQuery: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session?.user.id ?? (input.anonymous as string); // Use anonymous ID if user is not logged in
+      const userId = ctx.session?.user.id ?? (input.anonymous as string);
 
       const chapterId = input.chapterId;
-
       try {
-        const [chapter, hasViewed] = await Promise.all([
+        const [chapter, hasViewed] = await ctx.postgresDb.$transaction([
           ctx.postgresDb.chapter.findUnique({
-            where: {
-              id: chapterId,
-            },
-            include: {
-              story: true,
-            },
+            where: { id: chapterId },
+            include: { story: true },
           }),
-          ctx.postgresDb.chapterRead.findFirst({
-            where: {
-              readerKey: userId,
-              chapterId,
-            },
+          ctx.postgresDb.readEvent.findFirst({
+            where: { readerKey: userId, chapterId },
           }),
         ]);
 
         if (!chapter) {
-          throw new Error("Chapter not found");
+          return { success: false };
         }
 
-        // Check if 24 hours have passed since last read
         const now = new Date();
-        const lastRead = hasViewed?.lastRead;
-        const hoursSinceLastRead = lastRead
-          ? (now.getTime() - lastRead.getTime()) / (1000 * 60 * 60)
+        const lastRead = hasViewed?.updatedAt
+          ? new Date(hasViewed.updatedAt)
+          : null;
+        const elapsedMs = lastRead
+          ? now.getTime() - lastRead.getTime()
+          : undefined;
+        const hoursSinceLastRead = elapsedMs
+          ? elapsedMs / (1000 * 60 * 60)
           : 24;
+        const minutesSinceLastRead = elapsedMs ? elapsedMs / (1000 * 60) : 5;
 
-        if (hoursSinceLastRead < 24) {
+        // First time: create event and increment story reads
+        if (!hasViewed) {
+          await ctx.postgresDb.$transaction([
+            ctx.postgresDb.readEvent.create({
+              data: {
+                readerKey: userId,
+                userId: ctx.session?.user.id ?? undefined,
+                chapterId: chapter.id,
+                ipAddress: input.ip ?? null,
+                readTime: input.readTime ?? 0,
+                trafficSource: input.ref?.startsWith("feed:")
+                  ? "FEED"
+                  : input.ref?.startsWith("search")
+                  ? "SEARCH"
+                  : input.ref === ""
+                  ? "DIRECT"
+                  : "REFERRAL",
+                searchQuery: input.searchQuery ?? "",
+                referrerUrl: input.ref ?? null,
+                city: input.city ?? null,
+                frequency: 1,
+              },
+            }),
+            ctx.postgresDb.story.update({
+              where: { id: chapter.storyId },
+              data: { readCount: { increment: 1 } },
+            }),
+          ]);
+
           return {
             success: true,
-            message:
-              "Read count not increased - 24 hour cooldown period not elapsed",
+            message: "Read count increased successfully",
           };
         }
 
-        // Safely parse metrics and readershipAnalytics
-        let metrics;
-        let readershipAnalytics;
-
-        try {
-          metrics =
-            typeof chapter.metrics === "string"
-              ? JSON.parse(chapter.metrics)
-              : chapter.metrics;
-
-          readershipAnalytics =
-            typeof chapter.readershipAnalytics === "string"
-              ? JSON.parse(chapter.readershipAnalytics)
-              : chapter.readershipAnalytics;
-        } catch (e) {
-          // If parsing fails, use default values
-          metrics = METRICS_DEFAULT_VALUES;
-          readershipAnalytics = READERSHIP_ANALYTICS_DEFAULT_VALUES;
-        }
-
-        // Update metrics and analytics
-        metrics.viewsCount = (metrics.viewsCount || 0) + 1;
-        readershipAnalytics.total = (readershipAnalytics.total || 0) + 1;
-
-        // Whether this is a new unique reader for this chapter
-        const isNewUniqueRead = !hasViewed;
-
-        if (isNewUniqueRead) {
-          readershipAnalytics.unique = (readershipAnalytics.unique || 0) + 1;
-        }
-
-        // Update chapter and read record
-        await Promise.all([
-          ctx.postgresDb.chapter.update({
+        // Throttle frequency to every 5 minutes
+        if (minutesSinceLastRead >= 5) {
+          await ctx.postgresDb.readEvent.update({
             where: {
-              id: chapterId,
-            },
-            data: {
-              metrics: metrics,
-              readershipAnalytics: readershipAnalytics,
-            },
-          }),
-          ctx.postgresDb.chapterRead.upsert({
-            where: {
-              chapterId_readerKey: {
-                chapterId,
+              readerKey_chapterId: {
                 readerKey: userId,
+                chapterId: chapter.id,
               },
-            },
-            create: {
-              chapterId,
-              readerKey: userId,
-              lastRead: new Date(),
-              frequency: 1,
-            },
-            update: {
-              lastRead: new Date(),
-              frequency: {
-                increment: 1,
-              },
-            },
-          }),
-        ]);
-
-        // If this is a new unique read, also update the story's readCount
-        if (isNewUniqueRead) {
-          await ctx.postgresDb.story.update({
-            where: {
-              id: chapter.storyId,
             },
             data: {
-              readCount: {
-                increment: 1,
-              },
+              updatedAt: new Date(),
+              frequency: { increment: 1 },
+              // Refresh mutable context fields when provided
+              ipAddress: input.ip ?? undefined,
+              city: input.city ?? undefined,
+              userId: ctx.session?.user.id ?? undefined,
             },
+          });
+        }
+
+        // Only increment story reads once per 24 hours per user
+        if (hoursSinceLastRead >= 24) {
+          await ctx.postgresDb.story.update({
+            where: { id: chapter.storyId },
+            data: { readCount: { increment: 1 } },
           });
         }
 
@@ -795,9 +773,12 @@ export const chapterRouter = createTRPCRouter({
           success: true,
           message: "Read count increased successfully",
         };
-      } catch (error) {
-        console.error(error);
-        throw new Error("Failed to increase read count");
+      } catch (err) {
+        console.error(err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to increase read count",
+        });
       }
     }),
 

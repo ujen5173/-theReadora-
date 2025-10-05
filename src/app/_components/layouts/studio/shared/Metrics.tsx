@@ -25,49 +25,50 @@ export const METRICS = [
   {
     label: "novel_views",
     title: "Novel Views",
-    data: 0 as number,
-    per: 3,
-    d: 4,
+    delta: 0,
+    data: 0,
+    value: 0,
     tooltipDescription:
       "The number of times viewers watched your videos in the selected date range.",
   },
   {
     label: "profile_views",
     title: "Profile Views",
-    data: 0 as number,
-    per: 3,
-    d: 4,
+    delta: 0,
+    data: 0,
+    value: 0,
     tooltipDescription:
       "The number of times your profile was viewed in the selected date range.",
   },
+
   {
-    label: "likes",
-    title: "Likes",
-    data: 0 as number,
-    per: 3,
-    d: 4,
+    label: "retention",
+    title: "Retention",
+    delta: 0,
+    data: 0,
+    value: 0,
     tooltipDescription:
-      "The number of likes your videos received in the selected date range.",
+      "The percentage of readers who continue reading your stories, indicating how well you retain your audience over time.",
   },
   {
-    label: "reviews",
-    title: "Reviews",
-    data: 0 as number,
-    per: 0,
-    d: 0,
+    label: "unique_readers",
+    title: "Unique Readers",
+    delta: 0,
+    data: 0,
+    value: 0,
     tooltipDescription:
-      "The number of comments your videos received in the selected date range.",
+      "Distinct readers that engaged with your stories in the selected period.",
   },
   {
-    label: "shares",
-    title: "Shares",
-    data: 0 as number,
-    per: 3,
-    d: 4,
+    label: "avg_read_time",
+    title: "Avg Read Time (s)",
+    delta: 0,
+    data: 0,
+    value: 0,
     tooltipDescription:
-      "The number of shares your videos reveived in the selected date range.",
+      "Average time readers spent per day across your stories in seconds.",
   },
-] as const;
+];
 
 const chartConfig = {
   desktop: {
@@ -76,21 +77,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const chartData = [
-  { month: "January", desktop: 86 },
-  { month: "February", desktop: 7 },
-  { month: "March", desktop: 37 },
-  { month: "April", desktop: 3 },
-  { month: "May", desktop: 9 },
-  { month: "June", desktop: 14 },
-  { month: "July", desktop: 14 },
-];
-
 export const m = METRICS.map((e) => e.label);
 export type TAB_ENUM = (typeof m)[number];
 
 const Metrics = () => {
-  const { isLoading, data } = useProfileAnalytics();
+  const [range, setRange] = useState<
+    "24h" | "7d" | "30d" | "3m" | "12m" | "24m"
+  >("7d");
+  const { isLoading, data } = useProfileAnalytics(range);
+  console.log({ data });
 
   const validateParams = (param: string): boolean => {
     return m.includes(param as TAB_ENUM);
@@ -110,6 +105,57 @@ const Metrics = () => {
         })() as TAB_ENUM)
   );
 
+  const getMetricPair = (
+    label: TAB_ENUM
+  ): { current: number; delta: number } => {
+    switch (label) {
+      case "novel_views":
+        return {
+          current: data?.metrics.novelViews.value ?? 0,
+          delta: data?.metrics.novelViews.delta ?? 0,
+        };
+      case "profile_views":
+        return {
+          current: data?.metrics.profileViews.value ?? 0,
+          delta: data?.metrics.profileViews.delta ?? 0,
+        };
+      case "retention":
+        return {
+          current: data?.metrics.retention.value ?? 0,
+          delta: data?.metrics.retention.delta ?? 0,
+        };
+      case "unique_readers":
+        return {
+          current: data?.metrics.uniqueReaders?.value ?? 0,
+          delta: data?.metrics.uniqueReaders?.delta ?? 0,
+        };
+      case "avg_read_time":
+        return {
+          current: data?.metrics.avgReadTimeSeconds?.value ?? 0,
+          delta: data?.metrics.avgReadTimeSeconds?.delta ?? 0,
+        };
+      default:
+        return { current: 0, delta: 0 };
+    }
+  };
+
+  const derivePrev = (current: number, delta: number): number => {
+    // delta = ((current - prev)/prev)*100 => prev = current / (1 + delta/100)
+    if (!isFinite(current) || !isFinite(delta)) return 0;
+    const denom = 1 + delta / 100;
+    if (denom === 0) return 0;
+    if (denom < 0) return 0;
+    const prev = current / denom;
+    return Number.isFinite(prev) ? Math.max(0, Math.round(prev)) : 0;
+  };
+
+  const { current, delta } = getMetricPair(activeTab);
+  const prev = derivePrev(current, delta);
+  const chartData = [
+    { period: "Prev 7d", desktop: prev },
+    { period: "Last 7d", desktop: current },
+  ];
+
   return (
     <section className="space-y-4 py-4 sm:py-8">
       <div>
@@ -124,6 +170,21 @@ const Metrics = () => {
       </div>
 
       <div className="rounded-md border border-border shadow bg-white">
+        <div className="flex items-center justify-between p-3 sm:p-4">
+          <div />
+          <select
+            className="text-sm border rounded px-2 py-1"
+            value={range}
+            onChange={(e) => setRange(e.target.value as typeof range)}
+          >
+            <option value="24h">Last 24 Hours</option>
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+            <option value="3m">Last 3 Months</option>
+            <option value="12m">Last 12 Months</option>
+            <option value="24m">Last 24 Months</option>
+          </select>
+        </div>
         <div>
           <ScrollArea className="h-[125px] w-full whitespace-nowrap">
             <div className="flex w-full">
@@ -136,13 +197,31 @@ const Metrics = () => {
                     data: (() => {
                       switch (val.label) {
                         case "novel_views":
-                          return data?.analytics?.workViews ?? 0;
+                          return data?.metrics.novelViews.value ?? 0;
                         case "profile_views":
-                          return data?.followersCount ?? 0;
-                        case "likes":
-                          return data?.analytics?.likes ?? 0;
-                        case "reviews":
-                          return data?.analytics?.reviews ?? 0;
+                          return data?.metrics.profileViews.value ?? 0;
+                        case "retention":
+                          return data?.metrics.retention.value ?? 0;
+                        case "unique_readers":
+                          return data?.metrics.uniqueReaders?.value ?? 0;
+                        case "avg_read_time":
+                          return data?.metrics.avgReadTimeSeconds?.value ?? 0;
+                        default:
+                          return 0;
+                      }
+                    })() as number,
+                    delta: (() => {
+                      switch (val.label) {
+                        case "novel_views":
+                          return data?.metrics.novelViews.delta ?? 0;
+                        case "profile_views":
+                          return data?.metrics.profileViews.delta ?? 0;
+                        case "retention":
+                          return data?.metrics.retention.delta ?? 0;
+                        case "unique_readers":
+                          return data?.metrics.uniqueReaders?.delta ?? 0;
+                        case "avg_read_time":
+                          return data?.metrics.avgReadTimeSeconds?.delta ?? 0;
                         default:
                           return 0;
                       }
@@ -172,11 +251,11 @@ const Metrics = () => {
             >
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="month"
+                dataKey="period"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                tickFormatter={(value) => value.slice(0, 3)}
+                tickFormatter={(value) => value}
                 fontSize={12}
               />
               <ChartTooltip
@@ -212,6 +291,7 @@ const TabTriggerButton = ({
   activeTab: TAB_ENUM;
   setActiveTab: React.Dispatch<React.SetStateAction<TAB_ENUM>>;
 }) => {
+  console.log({ metrics });
   const router = useRouter();
 
   return (
@@ -239,9 +319,19 @@ const TabTriggerButton = ({
               <p className="text-blue-500 font-bold text-base sm:text-lg lg:text-xl">
                 {metrics.data || "-"}
               </p>
-              <p className="text-slate-600 font-bold text-xs sm:text-sm lg:text-base">
-                {metrics.per || "-"}({metrics.d || "-"})
-              </p>
+              {typeof metrics.delta === "number" && (
+                <p
+                  className={cn(
+                    "font-bold text-xs sm:text-sm lg:text-base",
+                    (metrics.delta ?? 0) >= 0
+                      ? "text-emerald-600"
+                      : "text-rose-600"
+                  )}
+                >
+                  {(metrics.delta ?? 0) >= 0 ? "+" : ""}
+                  {metrics.delta}% vs prev 7d
+                </p>
+              )}
             </div>
             {idx !== METRICS.length - 1 && (
               <Separator

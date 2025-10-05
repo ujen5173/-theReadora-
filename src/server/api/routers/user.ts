@@ -26,94 +26,230 @@ export type StoryWithMetadata = TCard & {
 };
 
 export const userRouter = createTRPCRouter({
-  getProfileAnalytics: protectedProcedure.query(async ({ ctx }) => {
-    try {
-      const userId = ctx.session.user.id;
+  profileView: publicProcedure
+    .input(z.object({ user: z.string().cuid2() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        if (!ctx.session?.user.id)
+          return {
+            success: false,
+          };
 
-      // Fetch author profile + stories + chapters' metrics/analytics
-      const user = await ctx.postgresDb.user.findFirst({
-        where: { id: userId },
-        select: {
-          followersCount: true,
-          followingCount: true,
-          name: true,
-          image: true,
-          profileViews: true,
-          stories: {
-            select: {
-              ratingCount: true,
-              chapters: {
-                select: {
-                  readershipAnalytics: true,
-                  metrics: true,
-                },
-              },
-            },
+        const userId = ctx.session.user.id;
+
+        if (userId === input.user)
+          return {
+            success: false,
+          };
+
+        const prevViewed = await ctx.postgresDb.profileViews.findFirst({
+          where: {
+            viewedUserId: input.user,
+            userId: userId,
           },
-        },
-      });
-
-      if (!user)
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found",
         });
 
-      // Aggregate totals from chapter JSON blobs (safe parse)
-      let totalViews = 0;
-      let totalUniqueViews = 0;
-      let totalLikes = 0;
-      let totalReviews = 0;
+        const now = new Date();
 
-      for (const story of user.stories) {
-        totalReviews += story.ratingCount || 0;
+        const hoursSinceLastRead = prevViewed
+          ? (now.getTime() - prevViewed.createdAt.getTime()) / (1000 * 60 * 60)
+          : 25;
 
-        for (const chapter of story.chapters) {
-          try {
-            const ra =
-              typeof chapter.readershipAnalytics === "string"
-                ? JSON.parse(chapter.readershipAnalytics as unknown as string)
-                : (chapter.readershipAnalytics as Record<
-                    string,
-                    unknown
-                  > | null) || {};
-            totalViews += Number(ra?.total ?? 0);
-            totalUniqueViews += Number(ra?.unique ?? 0);
-          } catch {
-            // ignore malformed
-          }
+        // same views will be counted on a time difference of 24 hour.
+        await ctx.postgresDb.$transaction([
+          ...(hoursSinceLastRead > 24
+            ? [
+                ctx.postgresDb.profileViews.create({
+                  data: {
+                    viewedUserId: input.user,
+                    userId: userId,
+                  },
+                }),
+                ctx.postgresDb.user.update({
+                  where: {
+                    id: input.user,
+                  },
+                  data: {
+                    profileViews: {
+                      increment: 1,
+                    },
+                  },
+                }),
+              ]
+            : []),
+        ]);
 
-          try {
-            const m =
-              typeof chapter.metrics === "string"
-                ? JSON.parse(chapter.metrics as unknown as string)
-                : (chapter.metrics as Record<string, unknown> | null) || {};
-            totalLikes += Number(m?.likesCount ?? 0);
-          } catch {
-            // ignore malformed
-          }
+        return {
+          success: true,
+        };
+      } catch {}
+    }),
+
+  // TODO: fix the analytics, currently there is no raw array of data of each day.
+  getProfileAnalytics: protectedProcedure
+    .input(
+      z
+        .object({
+          range: z.enum(["24h", "7d", "30d", "3m", "12m", "24m"]),
+        })
+        .optional()
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const userId = ctx.session.user.id;
+
+        // Gather base info
+        const base = await ctx.postgresDb.user.findFirst({
+          where: { id: userId },
+          select: {
+            followersCount: true,
+            followingCount: true,
+            name: true,
+            image: true,
+            stories: { select: { id: true } },
+          },
+        });
+
+        if (!base) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
         }
+
+        const storyIds = base.stories.map((s) => s.id);
+
+        const now = new Date();
+        const selected = input?.range ?? "7d";
+        const rangeToMs = (range: typeof selected) => {
+          switch (range) {
+            case "24h":
+              return 24 * 60 * 60 * 1000;
+            case "7d":
+              return 7 * 24 * 60 * 60 * 1000;
+            case "30d":
+              return 30 * 24 * 60 * 60 * 1000;
+            case "3m":
+              return 90 * 24 * 60 * 60 * 1000; // approx
+            case "12m":
+              return 365 * 24 * 60 * 60 * 1000; // approx
+            case "24m":
+              return 730 * 24 * 60 * 60 * 1000; // approx
+          }
+        };
+        const span = rangeToMs(selected);
+        const start = new Date(now.getTime() - span);
+        const prevStart = new Date(now.getTime() - 2 * span);
+        const prevEnd = start;
+
+        // Story views (StoryDailyStats) - last n days vs previous n days
+        const [recentStats, prevStats] = await Promise.all([
+          ctx.postgresDb.storyDailyStats.findMany({
+            where: {
+              storyId: { in: storyIds },
+              date: { gte: start, lte: now },
+            },
+            select: {
+              totalViews: true,
+              uniqueReaders: true,
+              avgReadTime: true,
+            },
+          }),
+          ctx.postgresDb.storyDailyStats.findMany({
+            where: {
+              storyId: { in: storyIds },
+              date: { gte: prevStart, lte: prevEnd },
+            },
+            select: {
+              totalViews: true,
+              uniqueReaders: true,
+              avgReadTime: true,
+            },
+          }),
+        ]);
+
+        const sumViews = (arr: { totalViews: number }[]) =>
+          arr.reduce((s, x) => s + (x.totalViews || 0), 0);
+        const sumUnique = (arr: { uniqueReaders: number }[]) =>
+          arr.reduce((s, x) => s + (x.uniqueReaders || 0), 0);
+        const avgRead = (arr: { avgReadTime: number }[]) =>
+          arr.length === 0
+            ? 0
+            : Math.round(
+                arr.reduce((s, x) => s + (x.avgReadTime || 0), 0) / arr.length
+              );
+
+        const recentViews = sumViews(recentStats);
+        const prevViews = sumViews(prevStats);
+        const recentUnique = sumUnique(recentStats);
+        const prevUnique = sumUnique(prevStats);
+        const recentAvgRead = avgRead(recentStats);
+        const prevAvgRead = avgRead(prevStats);
+
+        // Profile views - last n vs previous n
+        const [recentProfileViews, prevProfileViews] = await Promise.all([
+          ctx.postgresDb.profileViews.count({
+            where: {
+              viewedUserId: userId,
+              createdAt: { gte: start, lte: now },
+            },
+          }),
+          ctx.postgresDb.profileViews.count({
+            where: {
+              viewedUserId: userId,
+              createdAt: { gte: prevStart, lte: prevEnd },
+            },
+          }),
+        ]);
+
+        const pct = (curr: number, prev: number) => {
+          if (prev === 0) return curr > 0 ? 100 : 0;
+          return Math.round(((curr - prev) / prev) * 100);
+        };
+
+        return {
+          followersCount: base.followersCount,
+          followingCount: base.followingCount,
+          name: base.name,
+          image: base.image,
+          totalStories: storyIds.length,
+          metrics: {
+            novelViews: {
+              value: recentViews,
+              delta: pct(recentViews, prevViews),
+              thisMonthRawData: recentViews,
+            },
+            profileViews: {
+              value: recentProfileViews,
+              delta: pct(recentProfileViews, prevProfileViews),
+              thisMonthRawData: recentProfileViews,
+            },
+            retention: {
+              value: recentAvgRead,
+              delta: pct(recentAvgRead, prevAvgRead),
+              thisMonthRawData: recentAvgRead,
+            },
+            uniqueReaders: {
+              value: recentUnique,
+              delta: pct(recentUnique, prevUnique),
+              thisMonthRawData: recentUnique,
+            },
+            avgReadTimeSeconds: {
+              value: recentAvgRead,
+              delta: pct(recentAvgRead, prevAvgRead),
+              thisMonthRawData: recentAvgRead,
+            },
+
+            _range: selected,
+          },
+        };
+      } catch (err) {
+        console.log({ err });
+        if (err instanceof TRPCError) throw err;
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong!",
+        });
       }
-
-      return {
-        ...user,
-        analytics: {
-          workViews: totalViews,
-          profileViews: user.profileViews,
-          likes: totalLikes,
-          reviews: totalReviews,
-        },
-      };
-    } catch (err) {
-      console.log({ err });
-      if (err instanceof TRPCError) throw err;
-
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Something went wrong!",
-      });
-    }
-  }),
+    }),
 
   getUserDetails: publicProcedure
     .input(
@@ -451,7 +587,7 @@ export const userRouter = createTRPCRouter({
 
   getHistory: protectedProcedure.query(async ({ ctx, input }) => {
     try {
-      const data = (await ctx.postgresDb.chapterRead.findMany({
+      const data = (await ctx.postgresDb.readEvent.findMany({
         where: {
           readerKey: ctx.session.user.id,
         },

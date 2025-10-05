@@ -1,4 +1,5 @@
 "use client";
+
 import { formatDate } from "date-fns";
 import { BookOpen01Icon, BubbleChatIcon, RecordIcon } from "hugeicons-react";
 import { ArrowLeftIcon, ArrowRightIcon, EyeIcon, PlusIcon } from "lucide-react";
@@ -13,11 +14,7 @@ import { useUserStore } from "~/store/userStore";
 import "~/styles/editor.css";
 import { api } from "~/trpc/react";
 import { contentFont } from "~/utils/font";
-import {
-  isChapterScheduled,
-  parseMetrics,
-  parseReadershipAnalytics,
-} from "~/utils/helpers";
+import { isChapterScheduled, parseMetrics } from "~/utils/helpers";
 
 const ChapterContent = ({
   userUnlockedChapter,
@@ -85,9 +82,6 @@ const ChapterMetaData = () => {
   const { user } = useUserStore();
 
   const metrics = parseMetrics(chapter?.metrics);
-  const readershipAnalytics = parseReadershipAnalytics(
-    chapter?.readershipAnalytics
-  );
 
   return (
     <div className="py-12 sm:py-20 space-y-6 sm:space-y-8 border-b border-border">
@@ -105,7 +99,8 @@ const ChapterMetaData = () => {
             <RecordIcon className="size-1 sm:size-1.5 fill-slate-600 text-slate-600" />
             <div className="flex items-center gap-1 sm:gap-2">
               <EyeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
-              <span>{readershipAnalytics.total.toLocaleString()} views</span>
+              {/* <span>{readershipAnalytics.total.toLocaleString()} views</span> */}
+              <span>0 views</span>
             </div>
             <RecordIcon className="size-1 sm:size-1.5 fill-slate-600 text-slate-600" />
             <div className="flex items-center gap-1 sm:gap-2">

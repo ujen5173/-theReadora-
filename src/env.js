@@ -32,6 +32,7 @@ export const env = createEnv({
     NEXT_PUBLIC_POSTHOG_KEY: z.string(),
     NEXT_PUBLIC_POSTHOG_HOST: z.string(),
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_IPGEOLOCATION_API_KEY: z.string(),
   },
 
   runtimeEnv: {
@@ -59,6 +60,8 @@ export const env = createEnv({
     AI21_API_KEY: process.env.AI21_API_KEY,
     RESEND_KEY: process.env.RESEND_KEY,
     OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+    NEXT_PUBLIC_IPGEOLOCATION_API_KEY:
+      process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

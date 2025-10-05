@@ -120,7 +120,7 @@ const SearchBooksSection = ({
         ) : (
           books?.stories.map((book: TCard) => (
             <div key={book.id}>
-              <NovelCard details={book} />
+              <NovelCard referrer="search" searchQuery={query} details={book} />
             </div>
           ))
         )}

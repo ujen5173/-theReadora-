@@ -6,7 +6,13 @@ const TrendingSection = async () => {
     limit: 8,
   });
 
-  return <BookSection title="Discover Trending Reads" novels={stories} />;
+  return (
+    <BookSection
+      title="Discover Trending Reads"
+      analyticsRef="feed:trending"
+      novels={stories}
+    />
+  );
 };
 
 export default TrendingSection;

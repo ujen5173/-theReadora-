@@ -223,7 +223,7 @@ export const storyRouter = createTRPCRouter({
       }
 
       // 1. Get user reading history with frequency and genres
-      const reads = await ctx.postgresDb.chapterRead.findMany({
+      const reads = await ctx.postgresDb.readEvent.findMany({
         where: { readerKey: user },
         select: {
           frequency: true,
@@ -327,7 +327,7 @@ export const storyRouter = createTRPCRouter({
       }
 
       // 1. Get user reading history with genres
-      const reads = await ctx.postgresDb.chapterRead.findMany({
+      const reads = await ctx.postgresDb.readEvent.findMany({
         where: { readerKey: user },
         select: {
           chapter: {
@@ -398,13 +398,13 @@ export const storyRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       try {
         // Get user's recent chapter reads with story details
-        const recentReads = await ctx.postgresDb.chapterRead.findMany({
+        const recentReads = await ctx.postgresDb.readEvent.findMany({
           where: {
             readerKey: ctx.session.user.id,
           },
           select: {
             frequency: true,
-            lastRead: true,
+            updatedAt: true,
             chapter: {
               select: {
                 chapterNumber: true,
@@ -427,7 +427,7 @@ export const storyRouter = createTRPCRouter({
             },
           },
           orderBy: {
-            lastRead: "desc",
+            updatedAt: "desc",
           },
           take: input.limit * 2, // Fetch more to dedupe
         });
@@ -448,7 +448,7 @@ export const storyRouter = createTRPCRouter({
 
           recentStories.push({
             ...story,
-            lastRead: read.lastRead,
+            lastRead: read.updatedAt,
             lastReadChapter,
             totalChapters,
             progress,
@@ -652,7 +652,6 @@ export const storyRouter = createTRPCRouter({
                 title: true,
                 chapterNumber: true,
                 metrics: true,
-                readershipAnalytics: true,
                 createdAt: true,
                 isLocked: true,
                 scheduledFor: true,
@@ -1065,7 +1064,7 @@ export const storyRouter = createTRPCRouter({
         const { storyId, rating, review } = input;
 
         // check if user has read the story or not.
-        const hasRead = await ctx.postgresDb.chapterRead.findFirst({
+        const hasRead = await ctx.postgresDb.readEvent.findFirst({
           where: {
             readerKey: ctx.session.user.id,
             chapter: {

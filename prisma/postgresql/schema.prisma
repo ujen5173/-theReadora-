@@ -57,6 +57,15 @@ enum ChapterPricePool {
     POOL_150
 }
 
+enum TrafficSource {
+    DIRECT
+    SEARCH
+    REFERRAL
+    NOTIFICATION
+    ADVERTISEMENT
+    FEED
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String
@@ -87,7 +96,11 @@ model User {
 
     usedForAIContentGeneration Boolean? @default(false)
 
-    profileViews Int? @default(0)
+    profileViews Int?           @default(0)
+    viewedUsers  ProfileViews[] @relation("viewedUser")
+    visitors     ProfileViews[] @relation("visitor")
+
+    readEvent ReadEvent[]
 
     followers Follow[] @relation("Follower")
     following Follow[] @relation("Following")
@@ -212,19 +225,151 @@ model Replies {
     @@index([createdAt])
 }
 
-model ChapterRead {
-    id        String   @id @default(cuid())
-    chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-    chapterId String
-    readerKey String
-    frequency Int      @default(1)
-    lastRead  DateTime @default(now())
-    readTime  Int      @default(0)
+model ProfileViews {
+    id           String @id @default(cuid())
+    viewedUserId String
+    viewedUser   User   @relation("viewedUser", fields: [viewedUserId], references: [id], onDelete: Cascade)
+
+    userId String
+    user   User   @relation("visitor", fields: [userId], references: [id], onDelete: Cascade)
+
     createdAt DateTime @default(now())
 
-    @@unique([chapterId, readerKey])
-    @@index([readerKey, createdAt])
-    @@map("chapter_reads")
+    @@index([userId, viewedUserId])
+    @@index(userId)
+    @@index(viewedUserId)
+}
+
+// Enhanced Analytics Models - every time a user reads
+model ReadEvent {
+    id String @id @default(cuid())
+
+    // Relations
+    userId String? // nullable for anonymous readers
+    user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+    chapterId String
+    chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+    // Session and tracking
+    readerKey String // fingerprint for anonymous users
+    ipAddress String? // for geo-location and fraud detection
+
+    // Reading metrics
+    readTime Int @default(0) // seconds spent reading
+
+    // Context
+    trafficSource TrafficSource
+    searchQuery   String?
+    referrerUrl   String?
+
+    // Geographic
+    city String?
+
+    // Timestamps
+    frequency Int      @default(0)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+
+    @@unique([readerKey, chapterId])
+    @@index([userId])
+    @@index([chapterId])
+    @@index([createdAt])
+    @@index([city])
+    @@index([readerKey])
+    @@index([readerKey, chapterId])
+    @@map("read_events")
+}
+
+// Daily aggregated stats for stories
+model StoryDailyStats {
+    id String @id @default(cuid())
+
+    storyId String
+    story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+    date DateTime @db.Date
+
+    // View metrics
+    totalViews       Int @default(0)
+    uniqueReaders    Int @default(0)
+    newReaders       Int @default(0)
+    returningReaders Int @default(0)
+
+    // Engagement metrics
+    avgReadTime   Int @default(0) // seconds
+    totalReadTime Int @default(0) // total seconds across all reads
+
+    // Chapter specific
+    chaptersRead         Int   @default(0)
+    avgChaptersPerReader Float @default(0)
+
+    // Geographic breakdown (top countries as JSON)
+    topCountries Json? // {"US": 45%, "UK": 23%, "CA": 12%}
+
+    // Traffic sources breakdown
+    directTraffic   Int @default(0)
+    searchTraffic   Int @default(0)
+    referralTraffic Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([storyId, date])
+    @@index([date])
+    @@map("story_daily_stats")
+}
+
+// Author-level daily aggregations - Populated using cron job
+model AuthorDailyStats {
+    id String @id @default(cuid())
+
+    authorId String
+    date     DateTime @db.Date
+
+    // Story performance
+    totalStoryViews   Int @default(0)
+    totalChapterViews Int @default(0)
+    uniqueReaders     Int @default(0)
+    newFollowers      Int @default(0)
+
+    // Engagement
+    avgReadTimeSeconds   Int   @default(0)
+    totalReadTimeSeconds Int   @default(0)
+    avgCompletionRate    Float @default(0)
+
+    // Growth metrics
+    storiesPublished  Int @default(0)
+    chaptersPublished Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([authorId, date])
+    @@index([authorId])
+    @@index([date])
+    @@map("author_daily_stats")
+}
+
+// Chapter-level analytics for detailed insights - daily using cron job
+model ChapterStats {
+    id String @id @default(cuid())
+
+    chapterId String
+    // date      DateTime @db.Date
+
+    views         Int @default(0)
+    uniqueReaders Int @default(0)
+    avgReadTime   Int @default(0)
+    // completionRate Float @default(0)
+
+    // Drop-off analysis
+    // dropOffPoints Json? // percentage of readers who stopped at various points
+
+    createdAt DateTime @default(now())
+
+    @@unique([chapterId, createdAt])
+    @@map("chapter_stats")
 }
 
 model Story {
@@ -250,6 +395,8 @@ model Story {
 
     ratings Rating[]
 
+    dailyStats StoryDailyStats[]
+
     genreSlug String
     genre     Genres @relation("StoryGenres", fields: [genreSlug], references: [slug], onDelete: Cascade)
 
@@ -261,7 +408,8 @@ model Story {
 
     readinglists ReadinglistStory[]
 
-    @@index([title, slug, tags], name: "story_index")
+    @@index([title, slug], name: "story_index")
+    @@index([tags], type: Gin, name: "story_tags_gin_index")
     @@index([storyStatus, isCompleted])
     @@index([authorId, createdAt])
     @@index([genreSlug, isCompleted])
@@ -278,14 +426,12 @@ model Chapter {
 
     metrics Json @default("{\"wordCount\": 0, \"readingTime\": 0, \"likesCount\": 0, \"commentsCount\": 0, \"ratingCount\": 0, \"ratingValue\": 0, \"averageRating\": 0}")
 
-    readershipAnalytics Json @default("{\"total\": 0, \"unique\": 0}")
-
     storyId String
     story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
 
     mongoContentID String[]
 
-    reader ChapterRead[]
+    readEvent ReadEvent[]
 
     isLocked Boolean           @default(false)
     price    ChapterPricePool?
@@ -304,6 +450,7 @@ model Chapter {
     @@index([isLocked])
     @@index([scheduledFor])
     @@index([createdAt])
+    @@index([mongoContentID], type: Gin)
 }
 
 model Genres {

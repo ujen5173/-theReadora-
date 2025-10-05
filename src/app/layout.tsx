@@ -15,6 +15,7 @@ import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
 import RootLayoutClient from "./_components/layouts/root-layout-client";
 import { RootContext } from "./_components/root";
 import Footer from "./_components/shared/footer";
+import ReadCounter from "./_components/shared/read-counter";
 import TailwindIndicator from "./_components/shared/tailwind-size-indicator";
 
 export const metadata: Metadata = generateSEOMetadata({});
@@ -40,6 +41,7 @@ export default function RootLayout({
                 <CSPostHogProvider>
                   <Analytics />
                   <SpeedInsights />
+                  <ReadCounter />
                   <Suspense>
                     <TailwindIndicator />
                     <HolyLoader height={4} color="#e11d48" />

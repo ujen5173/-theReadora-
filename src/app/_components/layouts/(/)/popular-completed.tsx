@@ -6,7 +6,13 @@ const PopularCompleted = async () => {
     limit: 8,
   });
 
-  return <BookSection title="Completed Novel" novels={completed} />;
+  return (
+    <BookSection
+      title="Completed Novel"
+      analyticsRef="feed:popular-completed"
+      novels={completed}
+    />
+  );
 };
 
 export default PopularCompleted;
