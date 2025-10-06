@@ -178,17 +178,17 @@ export const columns: ColumnDef<WorkRow>[] = [
             <DropdownMenuLabel>{work.title}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/write/story/${work.slug}`}>
+              <Link href={`/write?editId=${work.id}`}>
                 <Edit3 className="mr-2 size-4" /> Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/analytics?story=${work.id}`}>
+              <Link href={`/studio/analytics/story/${work.id}`}>
                 <BarChart3 className="mr-2 size-4" /> View insights
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/studio/comments?story=${work.id}`}>
+              <Link href={`/studio/reviews?story=${work.id}`}>
                 <Star className="mr-2 size-4" /> Reviews
               </Link>
             </DropdownMenuItem>

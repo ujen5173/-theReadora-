@@ -1,6 +1,7 @@
 "use client";
 
-import { BookOpenText, Loader2, PenLineIcon, Plus } from "lucide-react";
+import { QuillWrite01Icon, QuillWrite02Icon } from "hugeicons-react";
+import { BookOpenText, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
@@ -23,7 +24,7 @@ const MyCreations = () => {
             </h1>
             <Button
               asChild
-              icon={PenLineIcon}
+              icon={QuillWrite01Icon}
               className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
             >
               <Link href="/write/story/new">Start a new story</Link>
@@ -69,7 +70,7 @@ const NoNovelsWritten = () => {
       </div>
 
       <div className="flex items-center justify-center gap-4">
-        <Button icon={Plus} asChild>
+        <Button icon={QuillWrite02Icon} asChild>
           <Link href="/write/story/new">Create Your First Novel</Link>
         </Button>
 

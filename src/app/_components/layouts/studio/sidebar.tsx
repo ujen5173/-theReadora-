@@ -1,12 +1,17 @@
 "use client";
 
 import {
+  Agreement02Icon,
   Analytics01Icon,
   ArrowLeft01Icon,
+  DiscordIcon,
   LibraryIcon,
   Mail02Icon,
+  QuillWrite02Icon,
+  StarIcon,
+  Target01Icon,
 } from "hugeicons-react";
-import { Home, Plus } from "lucide-react";
+import { Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "~/components/ui/button";
@@ -31,41 +36,54 @@ const items = {
     {
       title: "Home",
       icon: Home,
-      slug: "/studio",
+      slug: "/studio/",
+      external: false,
     },
     {
       title: "Analytics",
       icon: Analytics01Icon,
       slug: "/studio/analytics",
+      external: false,
     },
     {
       title: "Works",
       icon: LibraryIcon,
       slug: "/studio/works",
+      external: false,
     },
-    // {
-    //   title: "Reviews",
-    //   icon: Comment01Icon,
-    //   slug: "/studio/reviews",
-    // },
+    {
+      title: "Reviews",
+      icon: StarIcon,
+      slug: "/studio/reviews",
+      external: false,
+    },
   ],
-  // tools: [
-  //   {
-  //     title: "Start Advertising",
-  //     icon: Target01Icon,
-  //     slug: "/studio/run-ad-campaign",
-  //   },
-  //   {
-  //     title: "Join Discord",
-  //     icon: DiscordIcon,
-  //     slug: "/studio/run-ad-campaign",
-  //   },
-  // ],
+  tools: [
+    {
+      title: "Start Advertising",
+      icon: Target01Icon,
+      slug: "/studio/run-ad-campaign",
+      external: false,
+    },
+    {
+      title: "Referral Program",
+      icon: Agreement02Icon,
+      slug: "/settings/referral",
+      external: false,
+    },
+    {
+      title: "Join Discord",
+      icon: DiscordIcon,
+      slug: "https://discord.gg/P2u8fKGVCj",
+      external: true,
+    },
+  ],
   others: [
     {
       title: "Feedback",
       icon: Mail02Icon,
       slug: "/feedback",
+      external: false,
     },
   ],
 } as const;
@@ -96,7 +114,11 @@ const StudioSidebar = () => {
       <SidebarContent>
         <div className="p-4">
           <Link href="/write">
-            <Button icon={Plus} effect="shineHover" className="w-full">
+            <Button
+              icon={QuillWrite02Icon}
+              effect="shineHover"
+              className="w-full"
+            >
               Upload
             </Button>
           </Link>
@@ -122,7 +144,10 @@ const StudioSidebar = () => {
                           "hover:bg-slate-200"
                         )}
                       >
-                        <Link href={item.slug}>
+                        <Link
+                          href={item.slug}
+                          target={item.external ? "_blank" : undefined}
+                        >
                           <item.icon />
                           <span className="font-medium">{item.title}</span>
                         </Link>

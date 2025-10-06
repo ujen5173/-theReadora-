@@ -29,6 +29,7 @@ const Studio = () => {
               <AvatarImage src={data?.image!} />
               <AvatarFallback>UB</AvatarFallback>
             </Avatar>
+
             <div className="flex-1">
               <h4 className="text-lg font-bold text-slate-800">{data?.name}</h4>
               <div className="flex items-center">

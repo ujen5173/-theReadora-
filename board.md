@@ -1,4 +1,4 @@
 - plan the overall schema
-- read update on the story and chapter
+- redesign the list.getStoryLists call
 - cron job for the daily stats
 - update the graph

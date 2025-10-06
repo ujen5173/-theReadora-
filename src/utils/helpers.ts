@@ -4,7 +4,6 @@ import numeral from "numeral";
 import type { ChapterMetrics } from "prisma/types";
 import slugify from "slugify";
 import { METRICS_DEFAULT_VALUES } from "./constants";
-import { GENRES } from "./genre";
 
 export const makeSlug = (str: string) =>
   slugify(str, {
@@ -81,9 +80,6 @@ export const getReadingTimeText = (readingTime: number) => {
   return `${hours ? `${hours}h` : ""} ${minutes ? `${minutes}m` : "1m"} read`;
 };
 
-export const getValidGenre = (genre: string) =>
-  GENRES.find((g) => makeSlug(g.name) === makeSlug(genre))?.name ?? "";
-
 export const parseMetrics = (
   metrics: JsonValue = METRICS_DEFAULT_VALUES
 ): ChapterMetrics => {
@@ -100,23 +96,6 @@ export const parseMetrics = (
     return METRICS_DEFAULT_VALUES;
   }
 };
-
-// export const parseReadershipAnalytics = (
-//   analytics: JsonValue = READERSHIP_ANALYTICS_DEFAULT_VALUES
-// ): ReadershipAnalytics => {
-//   try {
-//     if (typeof analytics === "string") {
-//       return JSON.parse(analytics);
-//     }
-//     if (typeof analytics === "object" && analytics !== null) {
-//       return analytics as ReadershipAnalytics;
-//     }
-//     return READERSHIP_ANALYTICS_DEFAULT_VALUES;
-//   } catch (error) {
-//     console.error("Error parsing metrics:", error);
-//     return READERSHIP_ANALYTICS_DEFAULT_VALUES;
-//   }
-// };
 
 export const isChapterScheduled = (
   scheduledFor: Date | null | undefined

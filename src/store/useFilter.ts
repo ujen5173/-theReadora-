@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { getValidGenre } from "~/utils/helpers";
 
 type FilterStore = {
   query: string;
@@ -75,7 +74,7 @@ export const useFilterStore = create<FilterStore>()((set, get) => ({
   ...initialState,
   setQuery: (query) => set({ query }),
   setGenre: (genre) => {
-    const validGenre = getValidGenre(genre);
+    const validGenre = genre;
     set({ genre: validGenre || "" });
   },
   setSortBy: (sortBy) => set({ sortBy }),

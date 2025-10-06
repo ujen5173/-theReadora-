@@ -8,7 +8,6 @@ import { z } from "zod";
 import { FileUploader } from "~/components/ui/file-upload";
 import { api } from "~/trpc/react";
 import { LANGUAGES } from "~/utils/constants";
-import { GENRES } from "~/utils/genre";
 import { uploadToCloudinary } from "~/utils/uploadToCloudinary";
 import Header from "../_components/layouts/header";
 import BookMetadata from "../_components/layouts/write/book-metadata";
@@ -17,19 +16,12 @@ export interface BookMetadataType {
   title: string;
   synopsis: string;
   tags: string[];
-  genre: (typeof GENRES)[number]["slug"];
+  genre: string;
   isMature: boolean;
   hasAiContent: boolean;
   language: (typeof LANGUAGES)[number]["name"];
   isLGBTQContent: boolean;
 }
-
-const zodGenre = z.enum(
-  GENRES.map((genre) => genre.slug) as [string, ...string[]],
-  {
-    message: "Please select a genre",
-  }
-);
 
 const Write = ({
   editData,
@@ -69,6 +61,7 @@ const Write = ({
   const handleUpload = async (file: File) => {
     try {
       setUploadProgress(0);
+
       const result = await uploadToCloudinary(file, (progress) => {
         setUploadProgress(progress);
       });
@@ -79,12 +72,14 @@ const Write = ({
       });
 
       setUploadProgress(100);
+
       toast.success("Book cover uploaded successfully!");
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to upload book cover"
       );
+
       setUploadProgress(-1);
     } finally {
       setPreparingUpload(false);
@@ -110,7 +105,7 @@ const Write = ({
         title: z.string().min(1, "Title is required"),
         synopsis: z.string().min(1, "Synopsis is required"),
         tags: z.array(z.string()).min(1, "At least one tag is required"),
-        genre: zodGenre.refine((val) => val !== undefined && val !== "", {
+        genre: z.string().min(1, {
           message: "Please select a genre for your story",
         }),
         isMature: z.boolean(),
@@ -131,7 +126,9 @@ const Write = ({
       const errorMessage =
         zodResponse.error.issues[0]?.message ||
         "Please check your story details";
+
       toast.error(errorMessage);
+
       return;
     }
 
@@ -143,9 +140,12 @@ const Write = ({
         edit: editId,
       });
 
-      if (result) {
+      if (result && !editId) {
         toast.success("Story uploaded successfully!");
         router.push(`/write/story-editor/${result.id}`);
+      } else {
+        toast.success("Story updated successfully!");
+        router.push(`/story/${result.id}`);
       }
     } catch (error) {
       console.error("Error updating story:", error);

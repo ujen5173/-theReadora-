@@ -13,6 +13,13 @@ import {
   type ChartConfig,
 } from "~/components/ui/chart";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
 import {
   Tooltip,
@@ -85,7 +92,6 @@ const Metrics = () => {
     "24h" | "7d" | "30d" | "3m" | "12m" | "24m"
   >("7d");
   const { isLoading, data } = useProfileAnalytics(range);
-  console.log({ data });
 
   const validateParams = (param: string): boolean => {
     return m.includes(param as TAB_ENUM);
@@ -105,56 +111,24 @@ const Metrics = () => {
         })() as TAB_ENUM)
   );
 
-  const getMetricPair = (
-    label: TAB_ENUM
-  ): { current: number; delta: number } => {
-    switch (label) {
+  // Helper to get the correct chartData for the active metric
+  const getActiveChartData = () => {
+    if (!data) return [];
+    switch (activeTab) {
       case "novel_views":
-        return {
-          current: data?.metrics.novelViews.value ?? 0,
-          delta: data?.metrics.novelViews.delta ?? 0,
-        };
+        return data.metrics.novelViews.chartData;
       case "profile_views":
-        return {
-          current: data?.metrics.profileViews.value ?? 0,
-          delta: data?.metrics.profileViews.delta ?? 0,
-        };
-      case "retention":
-        return {
-          current: data?.metrics.retention.value ?? 0,
-          delta: data?.metrics.retention.delta ?? 0,
-        };
+        return data.metrics.profileViews.chartData;
+      // case "retention":
+      //   return data.metrics.retention.chartData;
       case "unique_readers":
-        return {
-          current: data?.metrics.uniqueReaders?.value ?? 0,
-          delta: data?.metrics.uniqueReaders?.delta ?? 0,
-        };
+        return data.metrics.uniqueReaders?.chartData;
       case "avg_read_time":
-        return {
-          current: data?.metrics.avgReadTimeSeconds?.value ?? 0,
-          delta: data?.metrics.avgReadTimeSeconds?.delta ?? 0,
-        };
+        return data.metrics.avgReadTimeSeconds?.chartData;
       default:
-        return { current: 0, delta: 0 };
+        return [];
     }
   };
-
-  const derivePrev = (current: number, delta: number): number => {
-    // delta = ((current - prev)/prev)*100 => prev = current / (1 + delta/100)
-    if (!isFinite(current) || !isFinite(delta)) return 0;
-    const denom = 1 + delta / 100;
-    if (denom === 0) return 0;
-    if (denom < 0) return 0;
-    const prev = current / denom;
-    return Number.isFinite(prev) ? Math.max(0, Math.round(prev)) : 0;
-  };
-
-  const { current, delta } = getMetricPair(activeTab);
-  const prev = derivePrev(current, delta);
-  const chartData = [
-    { period: "Prev 7d", desktop: prev },
-    { period: "Last 7d", desktop: current },
-  ];
 
   return (
     <section className="space-y-4 py-4 sm:py-8">
@@ -172,18 +146,22 @@ const Metrics = () => {
       <div className="rounded-md border border-border shadow bg-white">
         <div className="flex items-center justify-between p-3 sm:p-4">
           <div />
-          <select
-            className="text-sm border rounded px-2 py-1"
+          <Select
             value={range}
-            onChange={(e) => setRange(e.target.value as typeof range)}
+            onValueChange={(value) => setRange(value as typeof range)}
           >
-            <option value="24h">Last 24 Hours</option>
-            <option value="7d">Last 7 Days</option>
-            <option value="30d">Last 30 Days</option>
-            <option value="3m">Last 3 Months</option>
-            <option value="12m">Last 12 Months</option>
-            <option value="24m">Last 24 Months</option>
-          </select>
+            <SelectTrigger className="text-sm border rounded px-2 py-1">
+              <SelectValue placeholder="Date Range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="24h">Last 24 Hours</SelectItem>
+              <SelectItem value="7d">Last 7 Days</SelectItem>
+              <SelectItem value="30d">Last 30 Days</SelectItem>
+              <SelectItem value="3m">Last 3 Months</SelectItem>
+              <SelectItem value="12m">Last 12 Months</SelectItem>
+              <SelectItem value="24m">Last 24 Months</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <ScrollArea className="h-[125px] w-full whitespace-nowrap">
@@ -200,8 +178,8 @@ const Metrics = () => {
                           return data?.metrics.novelViews.value ?? 0;
                         case "profile_views":
                           return data?.metrics.profileViews.value ?? 0;
-                        case "retention":
-                          return data?.metrics.retention.value ?? 0;
+                        // case "retention":
+                        // return data?.metrics.retention.value ?? 0;
                         case "unique_readers":
                           return data?.metrics.uniqueReaders?.value ?? 0;
                         case "avg_read_time":
@@ -216,8 +194,8 @@ const Metrics = () => {
                           return data?.metrics.novelViews.delta ?? 0;
                         case "profile_views":
                           return data?.metrics.profileViews.delta ?? 0;
-                        case "retention":
-                          return data?.metrics.retention.delta ?? 0;
+                        // case "retention":
+                        //   return data?.metrics.retention.delta ?? 0;
                         case "unique_readers":
                           return data?.metrics.uniqueReaders?.delta ?? 0;
                         case "avg_read_time":
@@ -238,10 +216,16 @@ const Metrics = () => {
         </div>
 
         <div className="h-64 sm:h-80 w-full">
+          {/* Chart for the active metric */}
           <ChartContainer className="h-full w-full" config={chartConfig}>
             <AreaChart
               accessibilityLayer
-              data={chartData}
+              data={
+                (getActiveChartData() ?? []).map((d: any) => ({
+                  period: d.date,
+                  desktop: d.value,
+                })) as any[]
+              }
               margin={{
                 left: 8,
                 right: 8,
@@ -291,7 +275,6 @@ const TabTriggerButton = ({
   activeTab: TAB_ENUM;
   setActiveTab: React.Dispatch<React.SetStateAction<TAB_ENUM>>;
 }) => {
-  console.log({ metrics });
   const router = useRouter();
 
   return (

@@ -9,6 +9,12 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-04-30.basil",
 });
 
+// export async function GET() {
+//   return NextResponse.json({
+//     success: true,
+//   });
+// }
+
 export async function POST(req: Request) {
   const body = await req.text();
   const headersList = await headers();
@@ -25,6 +31,8 @@ export async function POST(req: Request) {
       signature,
       env.STRIPE_WEBHOOK_SECRET
     );
+
+    console.info(`EVENT TYPE: ${event.type}`);
 
     switch (event.type) {
       case "customer.subscription.created":

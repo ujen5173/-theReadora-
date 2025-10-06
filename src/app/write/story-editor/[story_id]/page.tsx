@@ -1,3 +1,5 @@
+import { isCuid } from "@paralleldrive/cuid2";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { toast } from "sonner";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -15,6 +17,10 @@ const ChapterPage = async ({
 
   if (params.chapter_id) {
     try {
+      if (!isCuid(params.chapter_id)) {
+        return redirect("/");
+      }
+
       chapterDetail = await api.chapter.getDataForEdit({
         chapter_id: params.chapter_id,
       });

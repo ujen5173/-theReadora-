@@ -16,8 +16,8 @@ import {
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
+import { api } from "~/trpc/react";
 import { LANGUAGES } from "~/utils/constants";
-import { GENRES } from "~/utils/genre";
 
 const MAX_TAGS = 15;
 
@@ -30,6 +30,13 @@ const BookMetadata = ({
   status: "idle" | "success" | "error" | "pending";
   onSubmit: (metadata: BookMetadataType) => void;
 }) => {
+  const { data: geners, isLoading: genreLoading } = api.genres.all.useQuery(
+    undefined,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
   const [metadata, setMetadata] = useState<BookMetadataType>(
     editData || {
       title: "",
@@ -169,7 +176,7 @@ const BookMetadata = ({
             onValueChange={(value) =>
               setMetadata((prev) => ({
                 ...prev,
-                genre: value as (typeof GENRES)[number]["slug"],
+                genre: value,
               }))
             }
           >
@@ -177,7 +184,7 @@ const BookMetadata = ({
               <SelectValue placeholder="Select genre" />
             </SelectTrigger>
             <SelectContent className="max-h-[300px] sm:max-h-96 overflow-y-auto">
-              {GENRES.map((genre) => (
+              {(geners ?? []).map((genre) => (
                 <SelectItem key={genre.name} value={genre.slug}>
                   {genre.name}
                 </SelectItem>

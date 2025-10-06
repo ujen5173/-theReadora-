@@ -123,6 +123,11 @@ model User {
     likedReplies Replies[] @relation("ReplyLikes")
     likedRatings Rating[]  @relation("RatingLikes")
 
+    referredBy Affiliate?  @relation("parentUser")
+    referredTo Affiliate[] @relation("targetUser")
+
+    affiliationStatus AffiliateStats?
+
     @@index([username, email])
     @@index([accountStatus])
     @@index([premium])
@@ -392,6 +397,7 @@ model Story {
     isLGBTQContent Boolean     @default(false)
     ratingCount    Int         @default(0)
     averageRating  Float       @default(0.0)
+    pin            Boolean?    @default(false)
 
     ratings Rating[]
 
@@ -451,6 +457,28 @@ model Chapter {
     @@index([scheduledFor])
     @@index([createdAt])
     @@index([mongoContentID], type: Gin)
+}
+
+model Affiliate {
+    id           String   @id @default(cuid())
+    parentUserId String   @unique
+    parentUser   User     @relation("parentUser", fields: [parentUserId], references: [id])
+    targetUserId String
+    targetUser   User     @relation("targetUser", fields: [targetUserId], references: [id])
+    coinsEarned  Int?     @default(550)
+    createdAt    DateTime @default(now())
+
+    @@index([parentUserId])
+}
+
+model AffiliateStats {
+    userId         String   @id @db.VarChar(36)
+    user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    totalReferrals Int      @default(0)
+    totalCoins     Int      @default(0)
+    updatedAt      DateTime @default(now()) @updatedAt
+
+    @@map("affiliate_stats")
 }
 
 model Genres {

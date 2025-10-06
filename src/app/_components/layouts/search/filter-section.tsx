@@ -47,8 +47,7 @@ import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
 import { useFilterStore } from "~/store/useFilter";
-import { GENRES } from "~/utils/genre";
-import { getValidGenre } from "~/utils/helpers";
+import { api } from "~/trpc/react";
 
 const FilterSection = ({
   query,
@@ -82,6 +81,12 @@ const FilterSection = ({
     setGenre,
     genre: storeGenre,
   } = useFilterStore();
+  const { data: genres, isLoading: genreLoading } = api.genres.all.useQuery(
+    undefined,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const [chapterRange, setChapterRange] = useState([0, 100]);
   const [viewRange, setViewRange] = useState([0, 1000000]);
@@ -182,9 +187,9 @@ const FilterSection = ({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-full justify-between"
+                    className="w-full capitalize justify-between"
                   >
-                    {storeGenre ? getValidGenre(storeGenre) : "Select genre"}
+                    {storeGenre ? storeGenre : "Select genre"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -194,7 +199,7 @@ const FilterSection = ({
                     <CommandList>
                       <CommandEmpty>No genre found.</CommandEmpty>
                       <CommandGroup>
-                        {GENRES.map((g) => (
+                        {(genres ?? []).map((g) => (
                           <CommandItem
                             key={g.slug}
                             value={g.name}

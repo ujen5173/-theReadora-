@@ -15,7 +15,6 @@ import {
 } from "~/components/ui/sheet";
 import { useFilterStore } from "~/store/useFilter";
 import { api } from "~/trpc/react";
-import { getValidGenre } from "~/utils/helpers";
 import Header from "../_components/layouts/header";
 import FilterSection from "../_components/layouts/search/filter-section";
 import SearchBooksSection from "../_components/layouts/search/search-books-section";
@@ -39,7 +38,7 @@ const Search = () => {
   // Handle genre synchronization
   useEffect(() => {
     if (genre) {
-      const validGenre = getValidGenre(genre);
+      const validGenre = genre;
       if (validGenre) {
         setGenre(validGenre);
         setSearchParams((prev) => ({

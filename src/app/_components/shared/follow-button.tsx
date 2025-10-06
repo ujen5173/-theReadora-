@@ -59,9 +59,7 @@ const FollowButton = ({
 
     try {
       await mutateAsync({ followingId: followingTo.id });
-    } catch (error) {
-      console.log("Error following user");
-    }
+    } catch {}
   };
 
   return (

@@ -14,7 +14,6 @@ import {
 } from "~/components/ui/pagination";
 import { Skeleton } from "~/components/ui/skeleton";
 import type { SearchResponse } from "~/server/api/routers/story";
-import { getValidGenre } from "~/utils/helpers";
 import NovelCard, { type TCard } from "../../shared/novel-card";
 
 const SearchBooksSection = ({
@@ -65,14 +64,14 @@ const SearchBooksSection = ({
               {query ? (
                 <>
                   Results for "
-                  <span className="text-primary underline underline-offset-2">
+                  <span className="text-primary underline capitalize underline-offset-2">
                     {query}
                   </span>
                   "
                 </>
               ) : (
-                <span className="text-primary">
-                  {getValidGenre(genre) ?? "All"}
+                <span className="text-primary capitalize">
+                  {genre ?? "All"}
                 </span>
               )}{" "}
               Stories

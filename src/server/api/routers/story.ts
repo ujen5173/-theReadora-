@@ -11,7 +11,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { LANGUAGES, chunkCollectionName, cuidRegex } from "~/utils/constants";
-import { GENRES } from "~/utils/genre";
+
 import { makeSlug } from "~/utils/helpers";
 import { generateStory, saveGeneratedStoryToDatabase } from "~/utils/openai";
 import { processChapterContent } from "./chapter";
@@ -746,7 +746,6 @@ export const storyRouter = createTRPCRouter({
           skip = 0,
           limit = 10,
         } = input;
-        console.log({ query, genre });
 
         // Build where clause
         const where: any = {};
@@ -976,7 +975,9 @@ export const storyRouter = createTRPCRouter({
       z.object({
         title: z.string(),
         synopsis: z.string(),
-        genre: z.enum(GENRES.map((e) => e.slug) as [string, ...string[]]),
+        genre: z.string().min(1, {
+          message: "Please select a genre",
+        }),
         tags: z.array(z.string()),
         thumbnail: z.object({
           url: z.string(),

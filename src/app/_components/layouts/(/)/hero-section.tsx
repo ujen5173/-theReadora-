@@ -1,5 +1,7 @@
 "use client";
-import { BookMarked, Loader2, SquarePen } from "lucide-react";
+
+import { QuillWrite02Icon } from "hugeicons-react";
+import { BookMarked, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -152,53 +154,76 @@ const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
   </div>
 );
 
-const VerticalSlider = () => (
-  <div className="hidden relative h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
-    <div className="flex-1">
-      <div className="animate-slide-up">
-        {FEATURED_NOVELS.slice(0, 4).map((novel) => (
-          <NovelCard key={`original-${novel.id}`} novel={novel} />
-        ))}
-        {FEATURED_NOVELS.slice(0, 4).map((novel) => (
-          <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
-        ))}
-      </div>
-    </div>
+const VerticalSlider = () => {
+  // Generate random durations between 20-40 seconds for variety
+  const getRandomDuration = () => Math.floor(Math.random() * 20) + 20;
+  const getRandomDirections = () => [
+    Math.floor(Math.random() * 2) + 1,
+    Math.floor(Math.random() * 2) + 1,
+    Math.floor(Math.random() * 2) + 1,
+    Math.floor(Math.random() * 2) + 1,
+  ];
 
-    <div className="flex-1">
-      <div className="animate-slide-1">
-        {FEATURED_NOVELS.slice(4, 8).map((novel) => (
-          <NovelCard key={`original-${novel.id}`} novel={novel} />
-        ))}
-        {FEATURED_NOVELS.slice(4, 8).map((novel) => (
-          <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
-        ))}
+  return (
+    <div className="hidden relative h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
+      <div className="flex-1">
+        <div
+          className="animate-slide-up"
+          style={{ animationDuration: `${getRandomDuration()}s` }}
+        >
+          {FEATURED_NOVELS.slice(0, 4).map((novel) => (
+            <NovelCard key={`original-${novel.id}`} novel={novel} />
+          ))}
+          {FEATURED_NOVELS.slice(0, 4).map((novel) => (
+            <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
+          ))}
+        </div>
       </div>
-    </div>
 
-    <div className="flex-1">
-      <div className="animate-slide-2">
-        {FEATURED_NOVELS.slice(8, 12).map((novel) => (
-          <NovelCard key={`original-${novel.id}`} novel={novel} />
-        ))}
-        {FEATURED_NOVELS.slice(8, 12).map((novel) => (
-          <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
-        ))}
+      <div className="flex-1">
+        <div
+          className="animate-slide-1"
+          style={{ animationDuration: `${getRandomDuration()}s` }}
+        >
+          {FEATURED_NOVELS.slice(4, 8).map((novel) => (
+            <NovelCard key={`original-${novel.id}`} novel={novel} />
+          ))}
+          {FEATURED_NOVELS.slice(4, 8).map((novel) => (
+            <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
+          ))}
+        </div>
       </div>
-    </div>
 
-    <div className="flex-1">
-      <div className="animate-slide-3">
-        {FEATURED_NOVELS.slice(12, 16).map((novel) => (
-          <NovelCard key={`original-${novel.id}`} novel={novel} />
-        ))}
-        {FEATURED_NOVELS.slice(12, 16).map((novel) => (
-          <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
-        ))}
+      <div className="flex-1">
+        <div
+          className="animate-slide-2"
+          style={{ animationDuration: `${getRandomDuration()}s` }}
+        >
+          {FEATURED_NOVELS.slice(8, 12).map((novel) => (
+            <NovelCard key={`original-${novel.id}`} novel={novel} />
+          ))}
+          {FEATURED_NOVELS.slice(8, 12).map((novel) => (
+            <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1">
+        <div
+          className="animate-slide-3"
+          style={{ animationDuration: `${getRandomDuration()}s` }}
+        >
+          {FEATURED_NOVELS.slice(12, 16).map((novel) => (
+            <NovelCard key={`original-${novel.id}`} novel={novel} />
+          ))}
+          {FEATURED_NOVELS.slice(12, 16).map((novel) => (
+            <NovelCard key={`duplicate-${novel.id}`} novel={novel} />
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const HeroSection = () => {
   const { mutateAsync, status } = api.story.AIContentGeneration.useMutation({
@@ -260,7 +285,7 @@ const HeroSection = () => {
               </Button>
             </Link>
             <Link href="/write">
-              <Button variant={"secondary"} icon={SquarePen}>
+              <Button variant={"secondary"} icon={QuillWrite02Icon}>
                 Start Writing
               </Button>
             </Link>

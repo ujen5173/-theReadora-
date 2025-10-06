@@ -1,5 +1,5 @@
-import { Menu01Icon } from "hugeicons-react";
-import { Crown, Home, Plus } from "lucide-react";
+import { Menu01Icon, QuillWrite02Icon } from "hugeicons-react";
+import { Crown, Home } from "lucide-react";
 import Link from "next/link";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
@@ -136,7 +136,7 @@ const MobileMenu = () => {
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-sm"
-                  icon={Plus}
+                  icon={QuillWrite02Icon}
                   iconPlacement="left"
                 >
                   Write something
@@ -264,7 +264,7 @@ const Header = ({
                 <Link href="/write">
                   <Button
                     variant="link"
-                    icon={Plus}
+                    icon={QuillWrite02Icon}
                     iconPlacement="left"
                     className="text-sm sm:text-base"
                   >

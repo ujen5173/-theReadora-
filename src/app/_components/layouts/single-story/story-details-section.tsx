@@ -69,12 +69,14 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
               </span>
             </Link>
           </p>
-          <Badge
-            className="capitalize text-xs sm:text-sm px-2 sm:px-3 py-0.5 sm:py-1"
-            variant={"destructive"}
-          >
-            {story.genreSlug}
-          </Badge>
+          <Link href={`/search?genre=${story.genreSlug}`}>
+            <Badge
+              className="capitalize text-xs sm:text-sm px-2 sm:px-3 py-0.5 sm:py-1"
+              variant={"destructive"}
+            >
+              {story.genreSlug}
+            </Badge>
+          </Link>
         </div>
 
         {user?.user?.id !== story.author.id && (
