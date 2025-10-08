@@ -123,10 +123,11 @@ model User {
     likedReplies Replies[] @relation("ReplyLikes")
     likedRatings Rating[]  @relation("RatingLikes")
 
-    referredBy Affiliate?  @relation("parentUser")
-    referredTo Affiliate[] @relation("targetUser")
+    referredBy   Affiliate? @relation("AffiliateReferrals", fields: [referredById], references: [id])
+    referredById String?
 
-    affiliationStatus AffiliateStats?
+    // The affiliate link this user owns (if they’re an affiliate)
+    affiliate Affiliate? @relation("AffiliateCreator")
 
     @@index([username, email])
     @@index([accountStatus])
@@ -460,25 +461,17 @@ model Chapter {
 }
 
 model Affiliate {
-    id           String   @id @default(cuid())
-    parentUserId String   @unique
-    parentUser   User     @relation("parentUser", fields: [parentUserId], references: [id])
-    targetUserId String
-    targetUser   User     @relation("targetUser", fields: [targetUserId], references: [id])
-    coinsEarned  Int?     @default(550)
-    createdAt    DateTime @default(now())
+    id        String    @id @default(cuid())
+    code      String    @unique
+    creatorId String    @unique
+    creator   User      @relation("AffiliateCreator", fields: [creatorId], references: [id])
+    expire    DateTime?
+    clicks    Int       @default(0)
+    earnings  Int       @default(0)
 
-    @@index([parentUserId])
-}
-
-model AffiliateStats {
-    userId         String   @id @db.VarChar(36)
-    user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    totalReferrals Int      @default(0)
-    totalCoins     Int      @default(0)
-    updatedAt      DateTime @default(now()) @updatedAt
-
-    @@map("affiliate_stats")
+    referrals User[]   @relation("AffiliateReferrals")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Genres {

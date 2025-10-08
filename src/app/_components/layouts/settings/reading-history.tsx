@@ -20,11 +20,11 @@ import { api } from "~/trpc/react";
 import NovelCard from "../../shared/novel-card";
 
 const ReadingHistory = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
   const [sortBy, setSortBy] = useState<
     "LAST_READ" | "RECENTLY_UPDATED" | "FREQUENTLY_READ" | undefined
   >("LAST_READ");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
 
   const { data, isLoading } = api.user.getHistory.useQuery(undefined, {
     refetchOnWindowFocus: false,
@@ -123,7 +123,7 @@ const ReadingHistory = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4">
             {isLoading
               ? Array(6)
                   .fill("")

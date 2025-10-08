@@ -1,5 +1,7 @@
+// TODO: Redesign affiliate workflow
 "use client";
 
+import axios from "axios";
 import { Facebook01Icon, GoogleIcon, Mail01Icon } from "hugeicons-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
@@ -11,6 +13,7 @@ import { Label } from "~/components/ui/label";
 
 export default function SignInPage() {
   const callBackURL = useSearchParams().get("callbackUrl");
+  const ref = useSearchParams().get("ref");
 
   return (
     <>
@@ -38,11 +41,17 @@ export default function SignInPage() {
             <Button
               size="lg"
               variant="outline"
-              onClick={() =>
+              onClick={async () => {
+                if (!!ref) {
+                  await axios.post("/api/set-ref", {
+                    ref,
+                  });
+                }
+
                 signIn("google", {
                   redirectTo: callBackURL ?? "/",
-                })
-              }
+                });
+              }}
               className="w-full flex items-center justify-center bg-white hover:bg-slate-50 border-border"
               icon={GoogleIcon}
             >

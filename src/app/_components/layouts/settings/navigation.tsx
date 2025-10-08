@@ -74,7 +74,6 @@ const SettingsNavigation = ({ tab }: { tab: string }) => {
             <AffiliateProgram />
           </Suspense>
         </TabsContent>
-
         <TabsContent value="history">
           <ReadingHistory />
         </TabsContent>

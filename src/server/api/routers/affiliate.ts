@@ -1,13 +1,19 @@
 import { TRPCError } from "@trpc/server";
 
+import { customAlphabet } from "nanoid";
 import { protectedProcedure } from "../trpc";
+
+const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+const nanoid = customAlphabet(alphabet, 8);
+
+export const generateAffiliateCode = () => nanoid();
 
 export const affiliateRouter = {
   isUserEnrolled: protectedProcedure.query(async ({ ctx }) => {
     try {
-      const res = await ctx.postgresDb.affiliateStats.count({
+      const res = await ctx.postgresDb.affiliate.count({
         where: {
-          userId: ctx.session.user.id,
+          creatorId: ctx.session.user.id,
         },
       });
 
@@ -19,22 +25,37 @@ export const affiliateRouter = {
     }
   }),
 
+  getCode: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      const record = await ctx.postgresDb.affiliate.findFirst({
+        where: { creatorId: ctx.session.user.id },
+        select: { code: true },
+      });
+
+      return { code: record?.code ?? null };
+    } catch (err) {
+      if (err instanceof TRPCError) throw err;
+      return { code: null };
+    }
+  }),
+
   enroll: protectedProcedure.mutation(async ({ ctx }) => {
     try {
-      // Check if already enrolled
-      const exists = await ctx.postgresDb.affiliateStats.count({
-        where: { userId: ctx.session.user.id },
+      const exists = await ctx.postgresDb.affiliate.count({
+        where: {
+          creatorId: ctx.session.user.id,
+        },
       });
 
       if (exists) return { success: true, already: true };
 
-      await ctx.postgresDb.affiliateStats.create({
+      await ctx.postgresDb.affiliate.create({
         data: {
-          userId: ctx.session.user.id,
-          totalReferrals: 0,
-          totalCoins: 0,
+          creatorId: ctx.session.user.id,
+          code: generateAffiliateCode(),
         },
       });
+
       return { success: true, already: false };
     } catch (err) {
       if (err instanceof TRPCError) throw err;
@@ -44,38 +65,42 @@ export const affiliateRouter = {
   }),
 
   getStats: protectedProcedure.query(async ({ ctx }) => {
-    // Get stats for the current user
-    const stats = await ctx.postgresDb.affiliateStats.findUnique({
-      where: { userId: ctx.session.user.id },
-    });
-
-    // Count users and vendors referred
-    const referralsList = await ctx.postgresDb.affiliate.count({
-      where: { parentUserId: ctx.session.user.id },
+    const stats = await ctx.postgresDb.affiliate.findFirst({
+      where: { creatorId: ctx.session.user.id },
+      select: {
+        earnings: true,
+        clicks: true,
+        _count: { select: { referrals: true } },
+      },
     });
 
     return {
-      users: referralsList,
-      coins: stats?.totalCoins ?? 0,
-      totalReferrals: stats?.totalReferrals ?? 0,
+      coins: stats?.earnings ?? 0,
+      clicks: stats?.clicks ?? 0,
+      users: stats?._count.referrals ?? 0,
     };
   }),
 
   getHistory: protectedProcedure.query(async ({ ctx }) => {
-    // Get referral history for the current user
-    const history = await ctx.postgresDb.affiliate.findMany({
-      where: { parentUserId: ctx.session.user.id },
-      include: { targetUser: true }, // Include related user data
-      orderBy: { createdAt: "desc" },
+    const affiliate = await ctx.postgresDb.affiliate.findFirst({
+      where: { creatorId: ctx.session.user.id },
+      select: { id: true },
     });
 
-    // Map to frontend format
-    const result = history.map((ref) => ({
-      name: ref.targetUser?.name ?? "-",
-      date: ref.createdAt.toISOString().slice(0, 10),
-      reward: ref.coinsEarned,
-    }));
+    if (!affiliate)
+      return [] as { name: string; date: string; reward: string }[];
 
-    return result;
+    const referredUsers = await ctx.postgresDb.user.findMany({
+      where: { referredById: affiliate.id },
+      select: { name: true, createdAt: true },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+    });
+
+    return referredUsers.map((u) => ({
+      name: u.name,
+      date: u.createdAt.toISOString().slice(0, 10),
+      reward: "+50 coins",
+    }));
   }),
 };
