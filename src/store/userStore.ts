@@ -10,14 +10,6 @@ type User = {
   coins?: number;
 };
 
-type ProfileAnalytics = {
-  name: string;
-  image: string;
-  storiesCount: number;
-  followersCount: number;
-  followingCount: number;
-};
-
 type UserStore = {
   user: User | null;
   isLoading: boolean;

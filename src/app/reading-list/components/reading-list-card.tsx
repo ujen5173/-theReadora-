@@ -78,17 +78,20 @@ const ReadingListCard = ({
       style={{ maxWidth: cardWidth * 2 + "px", width: "100%" }}
     >
       <div className="flex items-center justify-between gap-4 px-6 py-4 bg-gradient-to-br from-slate-50 to-white">
-        <Link href={`/reading-list/${readingList.id}`} className="flex-1">
+        <Link
+          href={`/reading-list/${readingList.id}`}
+          className="flex flex-col justify  -center h-12 flex-1"
+        >
           <h2 className="line-clamp-1 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary">
             {readingList.title}
           </h2>
-          <div className="h-5 mt-1">
-            {readingList.description && (
-              <p className="line-clamp-2 text-sm text-gray-600">
+          {readingList.description && (
+            <div className="h-5 mt-1">
+              <p className="line-clamp-1 text-sm text-gray-600">
                 {readingList.description}
               </p>
-            )}
-          </div>
+            </div>
+          )}
         </Link>
         {showActions && (
           <Popover>
@@ -147,10 +150,10 @@ const ReadingListCard = ({
           className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-b-2xl border-t-2 border-slate-200 bg-slate-100 p-4"
         >
           {readingList.stories.length > 0 ? (
-            readingList.stories.map((story, index) => {
+            readingList.stories.slice(0, 4).map((story, index) => {
               // Centering calculation for the cards
               const length = readingList.stories.length;
-              const shiftX = 20 * length; // control horizontal shift
+              const shiftX = 10 * length; // control horizontal shift
               const shiftY = 12; // control vertical shift
               const initialX = (-(length - 1) * shiftX) / 2; // Centering calculation for X
               const initialY = (-(length - 1) * shiftY) / 2; // Centering calculation for Y

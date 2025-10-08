@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/dialog";
 import { useUserStore } from "~/store/userStore";
 import { api } from "~/trpc/react";
+import useGetUserReadingList from "../layouts/useGetUserReadingList";
 import ReadingListDialog from "./reading-list-dialog";
 
 const AddToList = ({
@@ -28,34 +29,23 @@ const AddToList = ({
 }) => {
   const { user } = useUserStore();
   const [open, setOpen] = useState(false);
+  const {
+    refetchAllList,
+    refetch,
+    checkInList,
+    lists,
+    storyLists,
+    isLoading,
+    isLoadingStoryLists,
+  } = useGetUserReadingList();
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
 
   const { mutateAsync, status } = api.list.addToList.useMutation();
 
-  const {
-    data: lists,
-    isLoading,
-    refetch,
-  } = api.list.getList.useQuery(undefined, {
-    enabled: !!user,
-    retry: 0,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
-
-  const { data: storyLists, isLoading: isLoadingStoryLists } =
-    api.list.getStoryLists.useQuery(
-      { storyId },
-      {
-        enabled: !!user && !!storyId,
-      }
-    );
-
   useEffect(() => {
-    if (storyLists) {
-      setSelectedLists(storyLists.map((list) => list.id));
-    }
-  }, [storyLists]);
+    const res = checkInList(storyId);
+    setSelectedLists((res ?? []).map((e) => e.readinglistId));
+  }, [storyId, storyLists]);
 
   const handleSave = async () => {
     if (selectedLists.length === 0) {
@@ -145,7 +135,10 @@ const AddToList = ({
                   title: storyTitle,
                 }}
                 removeNewListCreation
-                onSuccess={() => refetch()}
+                onSuccess={async () => {
+                  await refetchAllList();
+                  await refetch();
+                }}
               >
                 <Button disabled={status === "pending"} variant={"outline"}>
                   Create New List

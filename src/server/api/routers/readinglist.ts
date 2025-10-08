@@ -107,6 +107,37 @@ export const readinglistRouter = createTRPCRouter({
       }
     }),
 
+  getUserReadingTitles: publicProcedure.query(async ({ ctx, input }) => {
+    try {
+      if (!ctx.session?.user.id) return [];
+
+      const result = await ctx.postgresDb.readinglist.findMany({
+        where: {
+          userId: ctx.session?.user.id,
+        },
+
+        select: {
+          stories: {
+            select: {
+              storyId: true,
+              readinglistId: true,
+            },
+          },
+        },
+      });
+
+      return result.flatMap((e) => e.stories.map((s) => s));
+    } catch (err) {
+      if (err instanceof TRPCError) {
+        throw err;
+      }
+      throw new TRPCError({
+        message: "Something went wrong",
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
   getUserReadingList: publicProcedure
     .input(
       z.object({
@@ -128,6 +159,10 @@ export const readinglistRouter = createTRPCRouter({
 
           include: {
             stories: {
+              orderBy: {
+                createdAt: "desc",
+              },
+              take: 4,
               select: {
                 story: {
                   select: NCardEntity,
