@@ -1,13 +1,15 @@
-import { type Metadata } from "next";
 import { getMarkdownContent } from "~/lib/markdown";
 import "~/styles/markdown.css";
+import { generateSEOMetadata } from "~/utils/site";
 import Header from "../_components/layouts/header";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy - Readora",
-  description:
-    "Readora Privacy Policy - Learn how we collect, use, and protect your personal information.",
-};
+export const metadata = generateSEOMetadata({
+  title: "Privacy Policy",
+  description: "Readora’s privacy policy.",
+  pathname: "/privacy-policy",
+  noIndex: false,
+  type: "article",
+});
 
 export default async function PrivacyPolicy() {
   const content = await getMarkdownContent("privacy-policy.md");

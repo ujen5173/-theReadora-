@@ -6,9 +6,11 @@ import { generateSEOMetadata } from "~/utils/site";
 import Header from "../_components/layouts/header";
 
 export const metadata = generateSEOMetadata({
-  title: "About Us",
+  title: "About Readora",
   description:
-    "Learn about Readora's mission, values, and the story behind our storytelling platform.",
+    "Learn about Readora’s mission to connect readers and writers worldwide.",
+  pathname: "/about",
+  type: "article",
 });
 
 export default function AboutPage() {

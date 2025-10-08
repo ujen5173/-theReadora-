@@ -33,6 +33,7 @@ export const siteConfig = {
   },
   creator: {
     name: "Ujen Basi",
+    twitterHandle: "@readora", // used for Twitter Card
   },
 } as const;
 
@@ -166,6 +167,8 @@ export const storyStructuredData = {
   },
 };
 
+type OpenGraphType = "website" | "article" | "book";
+
 interface SEOMetadataProps {
   title?: string;
   description?: string;
@@ -173,10 +176,13 @@ interface SEOMetadataProps {
   noIndex?: boolean;
   pathname?: string;
   keywords?: string[];
-  type?: "website" | "article" | "book";
+  type?: OpenGraphType;
   author?: string;
   publishedTime?: string;
   genre?: string;
+  locale?: "en_US" | string;
+  hreflangAlternates?: Record<string, string>; // e.g., { en: "/", "en-GB": "/gb" }
+  twitterCreator?: string; // fallback to siteConfig.creator.twitterHandle
 }
 
 export function generateSEOMetadata({
@@ -190,6 +196,9 @@ export function generateSEOMetadata({
   author,
   publishedTime,
   genre,
+  locale = "en_US",
+  hreflangAlternates,
+  twitterCreator,
 }: SEOMetadataProps = {}): Metadata {
   const metaTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.title;
   const metaDescription = description ?? siteConfig.description;
@@ -215,9 +224,9 @@ export function generateSEOMetadata({
           alt: metaTitle,
         },
       ],
-      locale: "en_US",
-      type: type === "article" ? "article" : "website",
-      ...(type === "article" &&
+      locale,
+      type,
+      ...(type !== "website" &&
         publishedTime && {
           publishedTime,
           authors: author ? [author] : [siteConfig.creator.name],
@@ -228,6 +237,7 @@ export function generateSEOMetadata({
       title: metaTitle,
       description: metaDescription,
       images: [metaImage],
+      creator: twitterCreator ?? siteConfig.creator.twitterHandle,
     },
     robots: {
       index: !noIndex,
@@ -235,18 +245,32 @@ export function generateSEOMetadata({
       googleBot: {
         index: !noIndex,
         follow: !noIndex,
-        nosnippet: true,
+        // allow snippets for better CTR
+        nosnippet: false,
       },
     },
     metadataBase: new URL(siteConfig.url),
     alternates: {
       canonical: url,
+      ...(hreflangAlternates && { languages: hreflangAlternates }),
     },
     verification: {
       google: "vHvO1sl7U0_LurLmzNExXkguqkkHYyz5RLuhNSg3AwE",
       yandex: "d5290b42b4bef6ad",
     },
     ...(genre && { category: genre }),
+    icons: {
+      icon: [{ url: "/favicon.ico" }],
+      apple: [{ url: "/favicon.ico" }],
+      shortcut: ["/favicon.ico"],
+    },
+    themeColor: "#ec003f",
+    appLinks: {
+      web: {
+        url,
+        should_fallback: true,
+      },
+    },
   };
 
   return metadata;

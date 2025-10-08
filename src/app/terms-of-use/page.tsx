@@ -1,13 +1,15 @@
-import { type Metadata } from "next";
 import { getMarkdownContent } from "~/lib/markdown";
 import "~/styles/markdown.css";
+import { generateSEOMetadata } from "~/utils/site";
 import Header from "../_components/layouts/header";
 
-export const metadata: Metadata = {
-  title: "Terms Of Use - Readora",
-  description:
-    "Readora Terms Of Use - Learn how we collect, use, and protect your personal information.",
-};
+export const metadata = generateSEOMetadata({
+  title: "Terms of Use",
+  description: "Readora’s terms and conditions.",
+  pathname: "/terms-of-use",
+  noIndex: false,
+  type: "article",
+});
 
 export default async function TermsOfUse() {
   const content = await getMarkdownContent("terms-of-use.md");

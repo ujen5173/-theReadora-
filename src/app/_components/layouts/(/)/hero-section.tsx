@@ -1,7 +1,7 @@
 "use client";
 
 import { QuillWrite02Icon } from "hugeicons-react";
-import { BookMarked, Loader2 } from "lucide-react";
+import { BookMarked } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -289,16 +289,6 @@ const HeroSection = () => {
                 Start Writing
               </Button>
             </Link>
-
-            <Button
-              variant={"dark"}
-              // disabled={status === "pending"}
-              icon={status === "pending" ? Loader2 : undefined}
-              iconStyle={status === "pending" ? "animate-spin" : ""}
-              onClick={() => mutateAsync()}
-            >
-              Generate Content
-            </Button>
           </div>
         </div>
 

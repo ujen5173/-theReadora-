@@ -6,13 +6,8 @@ export const metadata = generateSEOMetadata({
   description:
     "Upgrade to Readora Premium for an ad-free experience, exclusive content, offline reading, and more. Start your premium journey today!",
   pathname: "/premium",
-  keywords: [
-    "premium",
-    "subscription",
-    "premium features",
-    "ad-free reading",
-    "exclusive content",
-  ],
+  keywords: ["premium", "subscription", "ad-free reading", "exclusive content"],
+  type: "website",
 });
 
 const PremiumLayout = ({ children }: { children: React.ReactNode }) => {

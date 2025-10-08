@@ -1765,6 +1765,22 @@ export const storyRouter = createTRPCRouter({
 
       return filtered;
     }),
+
+  sitemapList: publicProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.postgresDb.story.findMany({
+      where: {
+        storyStatus: "PUBLISHED",
+      },
+      select: {
+        slug: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 5000,
+    });
+
+    return rows;
+  }),
 });
 
 export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;

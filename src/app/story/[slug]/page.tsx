@@ -9,7 +9,6 @@ interface PageProps {
     slug: string;
   }>;
 }
-
 export const revalidate = 60;
 
 export const generateMetadata = async ({ params }: PageProps) => {
@@ -20,6 +19,7 @@ export const generateMetadata = async ({ params }: PageProps) => {
 
   const storySchema = {
     ...storyStructuredData,
+    "@type": "Book",
     name: story.title,
     description: story.synopsis,
     author: {
@@ -39,6 +39,11 @@ export const generateMetadata = async ({ params }: PageProps) => {
       description: story.synopsis,
       image: story.thumbnail as string,
       pathname: `/story/${story.slug}`,
+      type: "book",
+      author: story.author.name,
+      publishedTime: new Date(story.createdAt).toISOString(),
+      genre: story.genreSlug,
+      hreflangAlternates: { en: `/story/${story.slug}` },
     }),
     other: {
       "application/ld+json": JSON.stringify(storySchema),

@@ -1,10 +1,8 @@
 User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: https://thereadora.vercel.app/sitemap.xml
-
-# Disallow admin and private routes
+# Disallow low-value internal pages
 Disallow: /api/
-Disallow: /admin/
-Disallow: /settings/ 
+Disallow: /studio/
+
+Sitemap: https://thereadora.vercel.app/sitemap.xml

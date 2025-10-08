@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { auth } from "~/server/auth";
 import { outfit } from "~/utils/font";
+import { generateSEOMetadata } from "~/utils/site";
 import HeroSection from "./_components/layouts/(/)/hero-section";
 import LatestAndRising from "./_components/layouts/(/)/latest-rising";
 import PopularCompleted from "./_components/layouts/(/)/popular-completed";
@@ -14,6 +15,20 @@ import SimilarReadsNReadingList from "./_components/layouts/(/)/recent-reads-leg
 import Recommendations from "./_components/layouts/(/)/recommendations";
 import TrendingSection from "./_components/layouts/(/)/trending";
 import Header from "./_components/layouts/header";
+
+export const metadata = generateSEOMetadata({
+  title: "Where Stories Come Alive",
+  description:
+    "Discover, write, and share stories across every genre. Join Readora’s community of readers and writers.",
+  pathname: "/",
+  keywords: [
+    "read stories",
+    "write stories",
+    "online novels",
+    "writing community",
+  ],
+  type: "website",
+});
 
 export default async function Home() {
   const user = await auth();

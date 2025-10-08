@@ -3,7 +3,7 @@ import React from "react";
 import { generateSEOMetadata } from "~/utils/site";
 
 export const metadata: Metadata = generateSEOMetadata({
-  title: "Write Your Story | Readora",
+  title: "Write Your Story",
   description:
     "Start writing your story on Readora. Share your creativity with our community of readers and writers. Get feedback, build your audience, and grow as a writer.",
   pathname: "/write",
@@ -15,6 +15,7 @@ export const metadata: Metadata = generateSEOMetadata({
     "author tools",
     "story creation",
   ],
+  type: "article",
 });
 
 const WritingLayout = async ({ children }: { children: React.ReactNode }) => {

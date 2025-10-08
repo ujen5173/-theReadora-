@@ -18,7 +18,12 @@ import Footer from "./_components/shared/footer";
 import ReadCounter from "./_components/shared/read-counter";
 import TailwindIndicator from "./_components/shared/tailwind-size-indicator";
 
-export const metadata: Metadata = generateSEOMetadata({});
+export const metadata: Metadata = generateSEOMetadata({
+  pathname: "/",
+  hreflangAlternates: {
+    en: "/",
+  },
+});
 
 export default function RootLayout({
   children,

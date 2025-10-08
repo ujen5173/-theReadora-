@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { api } from "~/trpc/server";
+import { generateSEOMetadata } from "~/utils/site";
 import Header from "../_components/layouts/header";
 import ProfileMetaData from "../_components/layouts/profile/profile-meta-data";
 import ProfileWrapper from "../_components/layouts/profile/wrapper";
@@ -14,10 +15,13 @@ export async function generateMetadata({
     usernameOrId: user,
   });
 
-  return {
-    title: `${userdata.name} (@${userdata.username}) | Readora`,
-    description: `Check out ${userdata.name}'s profile on Readora`,
-  };
+  return generateSEOMetadata({
+    title: `${userdata.name} (@${userdata.username})`,
+    description: `Explore ${userdata.name}'s profile, works, and activity on Readora.`,
+    pathname: `/profile?user=${userdata.username}`,
+    type: "profile" as any,
+    author: userdata.name ?? userdata.username,
+  });
 }
 
 const UserProfile = async ({
