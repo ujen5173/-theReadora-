@@ -181,7 +181,7 @@ const ReadingListCard = ({
                       className="relative rounded-md border border-border object-cover shadow"
                       alt={story.title}
                       style={{
-                        zIndex: readingList.stories.length - index,
+                        zIndex: (readingList.stories.length - index).toString(),
                       }}
                       sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, 200px"
                       priority={index === 0}

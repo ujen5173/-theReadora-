@@ -11,12 +11,14 @@ const BlurImage = ({
   className,
   style,
   sizes,
+  priority,
 }: {
   alt: string;
   src: string;
   style?: Record<string, string>;
   className?: string;
   sizes?: string;
+  priority?: boolean;
 }) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,7 +32,9 @@ const BlurImage = ({
         src={src}
         alt={alt}
         sizes={sizes}
+        draggable={false}
         {...style}
+        priority={!!priority}
         className={cn(
           "transition-opacity duration-100 rounded-lg",
           isLoading ? "opacity-0" : "opacity-100",

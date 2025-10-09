@@ -1,4 +1,5 @@
 "use client";
+
 import { Search01Icon } from "hugeicons-react";
 import { ArrowLeftIcon, BookOpenIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";

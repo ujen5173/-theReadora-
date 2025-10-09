@@ -1,4 +1,5 @@
 "use client";
+
 import { Coins, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

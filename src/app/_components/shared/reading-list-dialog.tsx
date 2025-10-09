@@ -1,4 +1,5 @@
 "use client";
+
 import { PlusSignIcon, Search01Icon } from "hugeicons-react";
 import { Edit3Icon, Loader2, X } from "lucide-react";
 import Image from "next/image";

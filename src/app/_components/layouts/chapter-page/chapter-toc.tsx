@@ -1,4 +1,5 @@
 "use client";
+
 import { BookOpenIcon, ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
@@ -51,9 +52,7 @@ const ChapterTOC = () => {
                       <BlurImage
                         src={story?.thumbnail}
                         alt={story?.title}
-                        width={40}
-                        height={36}
-                        size="w-10"
+                        sizes="w-10"
                         className="aspect-[1/1.6] rounded-sm border border-gray-200 flex-shrink-0"
                       />
                     </div>

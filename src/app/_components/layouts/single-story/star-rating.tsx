@@ -1,4 +1,5 @@
 "use client";
+
 import { StarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";

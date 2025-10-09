@@ -1,4 +1,5 @@
 "use client";
+
 import { ChevronDown, ChevronUp, Goal, PenLine, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect, useParams, useSearchParams } from "next/navigation";
@@ -75,9 +76,6 @@ const StoryEditorSidebar = () => {
                   <BlurImage
                     src={story?.thumbnail as string}
                     alt={story?.title || "Story Thumbnail"}
-                    width={80}
-                    height={120}
-                    // className="aspect-[1/1.6] rounded-md w-16 sm:w-20"
                   />
                 </div>
                 <div className="flex flex-col gap-1 sm:gap-2">

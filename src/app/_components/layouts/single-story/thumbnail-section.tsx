@@ -1,4 +1,5 @@
 "use client";
+
 import { Analytics01Icon, BookOpen01Icon, Edit01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -50,9 +51,6 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
       <div className="w-8/12 xs:w-3/6 md:w-full mx-auto max-w-[288px] h-auto shadow-lg rounded-md">
         <BlurImage
           src={story.thumbnail as string}
-          width={600}
-          height={1440}
-          draggable={false}
           className="rounded-md w-full select-none object-cover aspect-[1/1.6]"
           alt={story.title}
         />

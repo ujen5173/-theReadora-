@@ -1,4 +1,5 @@
 "use client";
+
 import { RecordIcon, StarIcon } from "hugeicons-react";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";

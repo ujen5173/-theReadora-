@@ -97,7 +97,6 @@ const FEATURED_NOVELS = [
 const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
   <div className="flex items-center gap-4 py-1 rounded-lg hover:bg-white/5 transition-colors group">
     <BlurImage
-      draggable={false}
       src={novel.cover}
       alt={"COVER NOT FOUND"}
       sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 15vw"

@@ -9,6 +9,7 @@
 // - add search and find and replace feature.
 
 "use client";
+
 import { Editor } from "~/app/_components/layouts/editor";
 import { Tabs, TabsContent } from "~/components/ui/tabs";
 import "~/styles/editor.css";

@@ -65,11 +65,8 @@ const ProfileMetaData = () => {
                   <BlurImage
                     src={user?.image ?? "/default-profile.png"}
                     alt={user?.name ?? "User Profile Image"}
-                    width={160}
-                    height={160}
                     className="size-36 rounded-full"
-                    size="size-36"
-                    draggable={false}
+                    sizes="size-36"
                   />
                 </div>
               </div>
