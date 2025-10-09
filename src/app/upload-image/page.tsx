@@ -52,10 +52,10 @@ const UploadImage = () => {
       const idx = prev.findIndex((x) => x.id === id);
       if (idx === -1) return prev;
       const it = prev[idx];
-      if (it.status === "uploading" || it.status === "done") return prev;
+      if (it?.status === "uploading" || it?.status === "done") return prev;
       const next = [...prev];
       next[idx] = {
-        ...it,
+        ...it!,
         status: "uploading",
         progress: 0,
         error: undefined,
@@ -69,7 +69,7 @@ const UploadImage = () => {
         if (idx === -1) return prev;
         const it = prev[idx];
         const next = [...prev];
-        next[idx] = { ...it, progress };
+        next[idx] = { ...it!, progress };
         return next;
       });
     })
@@ -80,7 +80,7 @@ const UploadImage = () => {
           const it = prev[idx];
           const next = [...prev];
           next[idx] = {
-            ...it,
+            ...it!,
             status: "done",
             progress: 100,
             uploaded: { url: res.secure_url, public_id: res.public_id },
@@ -97,7 +97,7 @@ const UploadImage = () => {
           const it = prev[idx];
           const next = [...prev];
           next[idx] = {
-            ...it,
+            ...it!,
             status: "error",
             progress: -1,
             error: message,
@@ -228,7 +228,7 @@ const UploadImage = () => {
                           if (idx === -1) return prev;
                           const cur = prev[idx];
                           const next = [...prev];
-                          next[idx] = { ...cur, imageLoad: false };
+                          next[idx] = { ...cur!, imageLoad: false };
                           return next;
                         });
                       }}
