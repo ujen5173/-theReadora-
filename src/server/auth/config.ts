@@ -1,8 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type DefaultSession, type NextAuthConfig, type User } from "next-auth";
-import type { Adapter } from "next-auth/adapters";
+import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
+import Nodemailer from "next-auth/providers/nodemailer";
 
+import { sendMagicLinkEmail } from "~/lib/email/sendEmail";
 import { postgresDb } from "~/server/postgresql";
 import { makeSlug } from "~/utils/helpers";
 
@@ -20,7 +21,7 @@ declare module "next-auth" {
   }
 
   interface User {
-    username: string;
+    username?: string;
   }
 }
 
@@ -31,7 +32,7 @@ export const authConfig = {
   trustHost: true,
   providers: [
     GoogleProvider({
-      async profile(profile: GoogleProfile): Promise<User> {
+      async profile(profile: GoogleProfile) {
         const usernameOccurance = await postgresDb.user.findMany({
           where: {
             username: {
@@ -73,13 +74,76 @@ export const authConfig = {
         };
       },
     }),
+    // Resend provider for magic link authentication with custom template
+    Nodemailer({
+      server: {
+        host: "smtp.resend.com",
+        port: 587,
+        auth: {
+          user: "resend",
+          pass: process.env.RESEND_KEY, // Your Resend API key
+        },
+      },
+      from: process.env.EMAIL_FROM || "Readora <onboarding@resend.dev>",
+      async sendVerificationRequest({ identifier: email, url, provider }) {
+        await sendMagicLinkEmail({
+          email,
+          magicLink: url,
+        });
+      },
+    }),
   ],
-  adapter: PrismaAdapter(postgresDb) as Adapter,
+  adapter: PrismaAdapter(postgresDb),
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // For email provider, we need to create a username
+      if (account?.provider === "nodemailer" && user.email) {
+        const existingUser = await postgresDb.user.findUnique({
+          where: { email: user.email },
+        });
+
+        if (!existingUser) {
+          // Generate a unique username for email users
+          const baseUsername = user.email.split("@")[0] || "user";
+          const usernameOccurance = await postgresDb.user.findMany({
+            where: {
+              username: {
+                startsWith: makeSlug(baseUsername),
+              },
+            },
+          });
+
+          const isUsernameExists = (username: string): boolean => {
+            return usernameOccurance.some((u) => u.username === username);
+          };
+
+          const generateUniqueUsername = (desiredUsername: string): string => {
+            let username = desiredUsername;
+            let suffix = 1;
+            const maxAttempts = 10;
+            let attempts = 0;
+            while (isUsernameExists(username) && attempts < maxAttempts) {
+              username = `${desiredUsername}${Math.floor(
+                Math.random() * 10
+              )}${suffix}`;
+              suffix++;
+              attempts++;
+            }
+            if (attempts === maxAttempts) {
+              username = `${desiredUsername}_${Date.now()}`;
+            }
+            return username;
+          };
+
+          user.username = generateUniqueUsername(makeSlug(baseUsername));
+          user.name = user.name || user.email.split("@")[0];
+        }
+      }
+      return true;
+    },
     session: ({ session, user }) => ({
       ...session,
       user: {
-        // ...session.user,
         id: user.id,
         name: session.user.name,
         username: session.user.username,

@@ -2,6 +2,7 @@ import { Menu01Icon, QuillWrite02Icon } from "hugeicons-react";
 import { Crown, Home } from "lucide-react";
 import Link from "next/link";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { Kbd } from "~/components/ui/kbd";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -27,37 +28,26 @@ const GENRES = {
     { name: "Romance", href: "/search?genre=romance" },
     { name: "Fantasy", href: "/search?genre=fantasy" },
     { name: "Science Fiction", href: "/search?genre=science-fiction" },
-    { name: "Mystery / Thriller", href: "/search?genre=mystery-thriller" },
-    { name: "Adventure", href: "/search?genre=adventure" },
+    { name: "Mystery Thriller", href: "/search?genre=mystery-thriller" },
+    { name: "Young Adult", href: "/search?genre=young-adult" },
   ],
   column2: [
-    {
-      name: "Drama Fiction",
-      href: "/search?genre=drama-realistic-fiction",
-    },
-    {
-      name: "Epic Fantasy",
-      href: "/search?genre=high-fantasy-epic-fantasy",
-    },
-    { name: "LitRPG", href: "/search?genre=litrpg" },
-    { name: "Isekai", href: "/search?genre=isekai" },
-    {
-      name: "Contemporary Romance",
-      href: "/search?genre=contemporary-romance",
-    },
+    { name: "Historical Fiction", href: "/search?genre=historical-fiction" },
+    { name: "Action Adventure", href: "/search?genre=action-adventure" },
+    { name: "Urban Fiction", href: "/search?genre=urban-fiction" },
+    { name: "Horror Paranormal", href: "/search?genre=horror-paranormal" },
+    { name: "Fanfiction", href: "/search?genre=fanfiction" },
   ],
   column3: [
-    { name: "Enemies to Lovers", href: "/search?genre=enemies-to-lovers" },
-    {
-      name: "Teen Adult Romance",
-      href: "/search?genre=teen-young-adult-romance",
-    },
-    {
-      name: "Anti-Hero Stories",
-      href: "/search?genre=villainess-anti-hero-stories",
-    },
-    { name: "Horror", href: "/search?genre=horror" },
     { name: "Slice of Life", href: "/search?genre=slice-of-life" },
+    { name: "Drama", href: "/search?genre=drama" },
+    { name: "Comedy", href: "/search?genre=comedy" },
+    { name: "Wuxia Xianxia", href: "/search?genre=wuxia-xianxia" },
+    { name: "LGBTQ Fiction", href: "/search?genre=lgbtq-fiction" },
+  ],
+  column4: [
+    { name: "Reincarnation", href: "/search?genre=reincarnation" },
+    { name: "Supernatural", href: "/search?genre=supernatural" },
   ],
 };
 
@@ -213,7 +203,10 @@ const Header = ({
           <div className="flex items-center gap-4 sm:gap-10">
             <div className="flex items-center gap-2">
               <MobileMenu />
-              <Logo />
+              <div className="flex items-start gap-2">
+                <Logo />
+                <Kbd variant="beta-label">Beta</Kbd>
+              </div>
             </div>
 
             <ul className="hidden lg:flex items-center gap-1 sm:gap-2">

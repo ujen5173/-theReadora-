@@ -5,6 +5,7 @@ import { BookMarked } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import BlurImage from "~/app/_components/shared/blur-image";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
@@ -13,143 +14,93 @@ import { merriweatherFont } from "~/utils/font";
 const FEATURED_NOVELS = [
   {
     id: 1,
-    title: "The Silent Echo",
-    author: "Elena Rivers",
-    cover: "/hero-stories/1.jpg",
-    genre: "Mystery",
-    rating: 4.5,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002940/10_b7hb92.jpg",
   },
   {
     id: 2,
-    title: "Midnight's Crown",
-    author: "Marcus Chen",
-    cover: "/hero-stories/2.jpg",
-    genre: "Fantasy",
-    rating: 4.8,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002940/11_zysxvf.jpg",
   },
   {
     id: 3,
-    title: "Love in Paris",
-    author: "Sophie Laurent",
-    cover: "/hero-stories/3.jpg",
-    genre: "Romance",
-    rating: 4.3,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002940/12_sgeasy.jpg",
   },
   {
     id: 4,
-    title: "The Last Guardian",
-    author: "James Mitchell",
-    cover: "/hero-stories/4.jpg",
-    genre: "Sci-Fi",
-    rating: 4.6,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002940/13_zboina.jpg",
   },
   {
     id: 5,
-    title: "Sweet Deception",
-    author: "Maria Garcia",
-    cover: "/hero-stories/5.jpg",
-    genre: "Thriller",
-    rating: 4.7,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002940/14_elhz9e.jpg",
   },
   {
     id: 6,
-    title: "Dragon's Heir",
-    author: "Ryan Black",
-    cover: "/hero-stories/6.jpg",
-    genre: "Fantasy",
-    rating: 4.9,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002943/19_b4iqta.jpg",
   },
   {
     id: 7,
-    title: "Urban Magic",
-    author: "Zara Williams",
-    cover: "/hero-stories/7.jpg",
-    genre: "Urban Fantasy",
-    rating: 4.4,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002943/9_o8hfiu.jpg",
   },
   {
     id: 8,
-    title: "The Art of Us",
-    author: "David Cooper",
-    cover: "/hero-stories/8.jpg",
-    genre: "Contemporary",
-    rating: 4.2,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002941/15_wus6xg.jpg",
   },
   {
     id: 9,
-    title: "Sweet Deception",
-    author: "Maria Garcia",
-    cover: "/hero-stories/9.jpg",
-    genre: "Thriller",
-    rating: 4.7,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002941/16_ypnbkn.jpg",
   },
   {
     id: 10,
-    title: "Dragon's Heir",
-    author: "Ryan Black",
-    cover: "/hero-stories/10.jpg",
-    genre: "Fantasy",
-    rating: 4.9,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002941/17_clhujy.jpg",
   },
   {
     id: 11,
-    title: "Urban Magic",
-    author: "Zara Williams",
-    cover: "/hero-stories/11.jpg",
-    genre: "Urban Fantasy",
-    rating: 4.4,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002941/18_wfmfzf.jpg",
   },
   {
     id: 12,
-    title: "The Art of Us",
-    author: "David Cooper",
-    cover: "/hero-stories/12.jpg",
-    genre: "Contemporary",
-    rating: 4.2,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002942/6_g7bjxl.jpg",
   },
   {
     id: 13,
-    title: "Sweet Deception",
-    author: "Maria Garcia",
-    cover: "/hero-stories/13.jpg",
-    genre: "Thriller",
-    rating: 4.7,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002943/7_zyotzc.jpg",
   },
   {
     id: 14,
-    title: "Dragon's Heir",
-    author: "Ryan Black",
-    cover: "/hero-stories/14.jpg",
-    genre: "Fantasy",
-    rating: 4.9,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002943/8_jig8yn.jpg",
   },
   {
     id: 15,
-    title: "Urban Magic",
-    author: "Zara Williams",
-    cover: "/hero-stories/15.jpg",
-    genre: "Urban Fantasy",
-    rating: 4.4,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002941/2_djbaef.jpg",
   },
   {
     id: 16,
-    title: "The Art of Us",
-    author: "David Cooper",
-    cover: "/hero-stories/16.jpg",
-    genre: "Contemporary",
-    rating: 4.2,
+    cover:
+      "https://res.cloudinary.com/duig8qiu4/image/upload/v1760002942/20_hbprjo.jpg",
   },
 ];
 
 const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
   <div className="flex items-center gap-4 py-1 rounded-lg hover:bg-white/5 transition-colors group">
-    <Image
-      width={800}
-      height={400}
+    <BlurImage
       draggable={false}
       src={novel.cover}
-      alt={novel.title}
-      className="border/40 h-full w-full rounded-lg border object-cover transition-all duration-500 ease-in-out"
+      alt={"COVER NOT FOUND"}
+      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 15vw"
     />
   </div>
 );
@@ -255,22 +206,23 @@ const HeroSection = () => {
               merriweatherFont.className
             )}
           >
-            Discover and share your favorite reads!
+            Write stories that actually get noticed!
           </h1>
           <p className="text-base md:text-lg text-slate-500 font-medium">
-            Readora is the ultimate alternative to{" "}
+            A clean,{" "}
             <span className="text-primary/70 underline font-semibold">
-              Wattpad
-            </span>
-            ,{" "}
-            <span className="text-primary/70 underline font-semibold">
-              Webnovels
+              creator-first
             </span>{" "}
-            and other platforms, read and write without any hassels.{" "}
-            <span className="underline text-primary">
-              Built for readers and writers
+            platform for{" "}
+            <span className="underline text-primary font-semibold">
+              readers
+            </span>{" "}
+            and{" "}
+            <span className="underline text-primary font-semibold">
+              writers
             </span>
-            .
+            . Share stories, grow your audience, and enjoy storytelling without
+            the hassles with Readora.
           </p>
 
           <div className="flex items-center gap-2 mt-10">
@@ -284,9 +236,9 @@ const HeroSection = () => {
                 Start Reading
               </Button>
             </Link>
-            <Link href="/write">
+            <Link href="/auth/signin?redirect=/write">
               <Button variant={"secondary"} icon={QuillWrite02Icon}>
-                Start Writing
+                Start Publishing
               </Button>
             </Link>
           </div>

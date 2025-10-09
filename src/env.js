@@ -22,6 +22,7 @@ export const env = createEnv({
     AI21_API_KEY: z.string(),
     RESEND_KEY: z.string(),
     OPENROUTER_API_KEY: z.string(),
+    EMAIL_FROM: z.string().optional(),
   },
 
   client: {
@@ -60,6 +61,7 @@ export const env = createEnv({
     AI21_API_KEY: process.env.AI21_API_KEY,
     RESEND_KEY: process.env.RESEND_KEY,
     OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+    EMAIL_FROM: process.env.EMAIL_FROM,
     NEXT_PUBLIC_IPGEOLOCATION_API_KEY:
       process.env.NEXT_PUBLIC_IPGEOLOCATION_API_KEY,
   },

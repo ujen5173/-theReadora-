@@ -2,7 +2,6 @@ import type { Language } from "@prisma/client";
 import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import readingTime from "reading-time";
 import { z } from "zod";
-import { THUMBNAILS } from "~/data/thumbnails";
 import { env } from "~/env";
 import { EmailQueue } from "~/lib/email/queue";
 import {
@@ -1787,7 +1786,3 @@ export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;
 export type T_byID_or_slug = inferProcedureOutput<
   typeof storyRouter.byID_or_slug
 >;
-
-const getThumbnail = (): string => {
-  return THUMBNAILS[Math.floor(Math.random() * THUMBNAILS.length)]!;
-};

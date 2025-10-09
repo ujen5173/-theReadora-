@@ -7,11 +7,11 @@
 
 FIXES:
 
+- ✅ get bookmark status
+- ✅ more signin options and good flow
+- fix search
+- fix refetch of the few endpoints
 - premium bug
-- get bookmark status
+- affiliate program
 - build a good AI to add more novels and users
 - AI integration in writing
-- more signin options and good flow
-- affiliate program
-- fix refetch of the few endpoints
-- fix search

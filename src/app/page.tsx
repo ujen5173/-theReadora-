@@ -1,5 +1,5 @@
-import { WebDesign01Icon } from "hugeicons-react";
-import { Coins, PenLine, Sparkles } from "lucide-react";
+import { QuillWrite02Icon, WebDesign01Icon } from "hugeicons-react";
+import { Coins, PenLine, Search, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 import { Badge } from "~/components/ui/badge";
@@ -81,16 +81,48 @@ export default async function Home() {
 
       {!user?.user.id && (
         <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
-          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-24">
+          <div className="container flex flex-col items-center justify-center gap-6 px-4 py-24">
             <div className="mt-10">
               <h1 className="text-center font-extrabold text-5xl tracking-tight sm:text-[5rem]">
                 Hello Writers, <br /> Welcome to{" "}
                 <span
-                  className={`underline ${outfit.className} text-primary/80`}
+                  className={`bg-gradient-to-r from-primary/90 to-pink-400/80 bg-clip-text text-transparent ${outfit.className}`}
                 >
                   Readora
                 </span>
               </h1>
+            </div>
+            <p className="mx-auto mt-4 text-center max-w-2xl text-pretty text-lg text-slate-300 sm:text-xl">
+              Write boldly. Grow your audience. Earn from day one with a modern,
+              distraction‑free experience.
+            </p>
+            <div className="mb-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Link href="/auth/signin" aria-label="Start writing on Readora">
+                <Button
+                  size="lg"
+                  variant="default"
+                  effect="shineHover"
+                  icon={QuillWrite02Icon}
+                  className="group px-7 font-semibold"
+                >
+                  Start Writing Today
+                </Button>
+              </Link>
+
+              <Link
+                href="/search"
+                aria-label="Browse trending stories on Readora"
+              >
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  iconPlacement="left"
+                  icon={Search}
+                  className="px-7"
+                >
+                  Browse Stories
+                </Button>
+              </Link>
             </div>
 
             <section className="pt-4 px-4">
@@ -124,68 +156,8 @@ export default async function Home() {
                     </div>
                   ))}
                 </div>
-
-                <div className="text-center">
-                  <Link href="/auth/signin">
-                    <Button
-                      size="lg"
-                      variant="default"
-                      effect={"shineHover"}
-                      className="font-semibold px-8"
-                    >
-                      Start Writing Today
-                    </Button>
-                  </Link>
-                </div>
               </div>
             </section>
-
-            {/* {session?.user ? (
-            <div className="flex flex-col items-center space-y-6">
-              <div className="flex items-center gap-4 rounded-full min-w-80 bg-slate-700/50 p-4 backdrop-blur-sm">
-                {session.user.image && (
-                  <Image
-                    src={session.user.image}
-                    alt={`@${session.user.name}`}
-                    width={600}
-                    height={600}
-                    className="size-14 rounded-full object-cover"
-                  />
-                )}
-                <div className="flex flex-col">
-                  <span className="text-xl font-medium text-rose-400">
-                    {session.user.name}
-                  </span>
-                  <span className="text-sm text-slate-300">
-                    {session.user.email}
-                  </span>
-                </div>
-              </div>
-              <Link href="/api/auth/signout">
-                <Button iconPlacement="right" icon={LogOut}>
-                  Sign Out
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center space-y-6">
-              <div className="rounded-xl bg-slate-700/30 p-8 backdrop-blur-sm">
-                <div className="flex flex-col items-center space-y-4">
-                  <h2 className="text-2xl font-semibold text-white">
-                    Welcome!
-                  </h2>
-                  <p className="text-center text-slate-300">
-                    Sign in to access your account and start exploring
-                  </p>
-                </div>
-              </div>
-              <Link href="/api/auth/signin">
-                <Button iconPlacement="right" icon={MoveRight}>
-                  Sign In
-                </Button>
-              </Link>
-            </div>
-          )} */}
           </div>
         </main>
       )}

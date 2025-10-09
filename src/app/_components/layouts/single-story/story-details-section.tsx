@@ -2,7 +2,6 @@
 
 import {
   BookOpen01Icon,
-  BotIcon,
   CopyrightIcon,
   EyeIcon,
   LeftToRightListNumberIcon,
@@ -245,15 +244,6 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
           ))}
         </div>
       </div>
-
-      {story.hasAiContent && (
-        <div className="p-3 sm:p-4 flex items-center gap-2 rounded-md bg-orange-100 border border-orange-300">
-          <BotIcon className="size-4 sm:size-5 text-orange-600" />
-          <p className="text-sm sm:text-base text-orange-600 font-bold">
-            This story is generated using AI.
-          </p>
-        </div>
-      )}
 
       <TableOfContent
         storyId={story.id}
