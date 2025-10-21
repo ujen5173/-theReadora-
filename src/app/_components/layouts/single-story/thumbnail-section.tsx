@@ -104,8 +104,11 @@ const ThumbnailSection = ({ story }: ThumbnailSectionProps) => {
               variant={"outline"}
               icon={Analytics01Icon}
               className="w-full bg-white"
+              asChild
             >
-              View Analytics
+              <Link href={`/studio/analytics?story=${story.id}`}>
+                View Analytics
+              </Link>
             </Button>
             <Button
               variant={"outline"}

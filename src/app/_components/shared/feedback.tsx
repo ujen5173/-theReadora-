@@ -70,36 +70,43 @@ const FeedbackDialog = ({ children }: { children: ReactNode }) => {
         <DialogHeader>
           <DialogTitle>Give Feedback</DialogTitle>
           <DialogDescription>
-            What do you think of our website? Let us know your thoughts.
+            What do you think of our platform? Let us know your thoughts.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <Select
-            onValueChange={(value) =>
-              setFrom(
-                value as
-                  | "github"
-                  | "twitter"
-                  | "none"
-                  | "google"
-                  | "friends"
-                  | undefined
-              )
-            }
-          >
-            <SelectTrigger className="bg-white w-full">
-              <SelectValue placeholder="Where did you hear us?" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              <SelectGroup>
-                {["github", "twitter", "none", "google", "friends"].map((f) => (
-                  <SelectItem key={f} value={f}>
-                    {f.charAt(0).toUpperCase() + f.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <div className="">
+            <Label htmlFor="email" className="mb-2 block">
+              Heard us from?
+            </Label>
+            <Select
+              onValueChange={(value) =>
+                setFrom(
+                  value as
+                    | "github"
+                    | "twitter"
+                    | "none"
+                    | "google"
+                    | "friends"
+                    | undefined
+                )
+              }
+            >
+              <SelectTrigger className="bg-white w-full">
+                <SelectValue placeholder="Where did you hear us?" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectGroup>
+                  {["github", "twitter", "none", "google", "friends"].map(
+                    (f) => (
+                      <SelectItem key={f} value={f}>
+                        {f.charAt(0).toUpperCase() + f.slice(1)}
+                      </SelectItem>
+                    )
+                  )}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
 
           <div className="">
             <Label htmlFor="email" className="mb-2 block">

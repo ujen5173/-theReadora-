@@ -194,6 +194,7 @@ model Rating {
     review    String?  @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    pin       Boolean? @default(false)
 
     replies      Replies[]
     repliesCount Int       @default(0)

@@ -1,4 +1,4 @@
-import { TrafficSource } from "@prisma/client";
+import { TrafficSource, type StoryStatus } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import {
   addDays,
@@ -316,22 +316,77 @@ export const analyticsRouter = createTRPCRouter({
       }
     }),
 
-  getTrafficSourcesAndSearchQueries: protectedProcedure
+  getOverallAnalytics: protectedProcedure
     .input(
       z.object({
         days: z.number().default(30), // Number of days to analyze
+        specific: z.string().cuid().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       try {
-        const { days } = input;
+        const { days, specific } = input;
         const dateRange = getDateRange(days);
+
+        let story: {
+          id: string;
+          thumbnail: string;
+          title: string;
+          slug: string;
+          createdAt: Date;
+          updatedAt: Date;
+          genreSlug: string;
+          storyStatus: StoryStatus;
+          readingTime: number;
+          readCount: number;
+          isCompleted: boolean;
+          ratingCount: number;
+          averageRating: number;
+          chapterCount: number;
+        } | null = null;
+
+        if (specific) {
+          story =
+            (await ctx.postgresDb.story.findUnique({
+              where: {
+                id: specific,
+              },
+              select: {
+                id: true,
+                thumbnail: true,
+                title: true,
+                slug: true,
+                createdAt: true,
+                updatedAt: true,
+                genreSlug: true,
+                storyStatus: true,
+                readingTime: true,
+                readCount: true,
+                isCompleted: true,
+                ratingCount: true,
+                averageRating: true,
+                chapterCount: true,
+              },
+            })) ?? null;
+
+          if (!story) {
+            throw new TRPCError({
+              message: "Story not found",
+              code: "NOT_FOUND",
+            });
+          }
+        }
 
         // Build base where clause
         const baseWhere = {
           chapter: {
             story: {
               authorId: ctx.session.user.id,
+              ...(specific
+                ? {
+                    id: specific,
+                  }
+                : {}),
             },
           },
           trafficSource: { not: undefined },
@@ -438,6 +493,11 @@ export const analyticsRouter = createTRPCRouter({
             chapter: {
               story: {
                 authorId: ctx.session.user.id,
+                ...(specific
+                  ? {
+                      id: specific,
+                    }
+                  : {}),
               },
             },
             OR: [
@@ -467,6 +527,11 @@ export const analyticsRouter = createTRPCRouter({
             chapter: {
               story: {
                 authorId: ctx.session.user.id,
+                ...(specific
+                  ? {
+                      id: specific,
+                    }
+                  : {}),
               },
             },
             OR: [
@@ -534,6 +599,7 @@ export const analyticsRouter = createTRPCRouter({
           totalTraffic: totalCurrentVisits,
           searchQueries: topSearchQueries,
           totalSearches,
+          storyInfo: story,
           period: {
             days,
             startDate: dateRange.current.start,

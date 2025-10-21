@@ -7,10 +7,10 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
 import Header from "~/app/_components/layouts/header";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Kbd } from "~/components/ui/kbd";
 import { Label } from "~/components/ui/label";
 
 export default function SignInPage() {
@@ -22,30 +22,32 @@ export default function SignInPage() {
 
   const handleMagicLinkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      toast.error("Please enter your email address");
-      return;
-    }
+    return;
 
-    setIsLoading(true);
-    try {
-      const result = await signIn("nodemailer", {
-        email,
-        redirect: false,
-        callbackUrl: callBackURL ?? "/",
-      });
+    // if (!email) {
+    //   toast.error("Please enter your email address");
+    //   return;
+    // }
 
-      if (result?.error) {
-        toast.error("Failed to send magic link. Please try again.");
-      } else {
-        setMagicLinkSent(true);
-        toast.success("Magic link sent! Check your email.");
-      }
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    // setIsLoading(true);
+    // try {
+    //   const result = await signIn("nodemailer", {
+    //     email,
+    //     redirect: false,
+    //     callbackUrl: callBackURL ?? "/",
+    //   });
+
+    //   if (result?.error) {
+    //     toast.error("Failed to send magic link. Please try again.");
+    //   } else {
+    //     setMagicLinkSent(true);
+    //     toast.success("Magic link sent! Check your email.");
+    //   }
+    // } catch (error) {
+    //   toast.error("Something went wrong. Please try again.");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (
@@ -86,14 +88,24 @@ export default function SignInPage() {
               Continue with Google
             </Button>
 
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full flex items-center justify-center bg-white hover:bg-slate-50 border-border shadow-sm transition-all duration-200 hover:shadow-md"
-              icon={Facebook01Icon}
-            >
-              Continue with Facebook
-            </Button>
+            <div className="relative">
+              <Button
+                size="lg"
+                variant="outline"
+                disabled
+                className="w-full flex items-center justify-center bg-white hover:bg-slate-50 border-border shadow-sm transition-all duration-200 hover:shadow-md"
+                icon={Facebook01Icon}
+              >
+                Continue with Facebook
+              </Button>
+
+              <Kbd
+                variant="beta-label"
+                className="z-50 text-white bg-primary/80 border-primary absolute -top-2 -right-2"
+              >
+                Comming soon
+              </Kbd>
+            </div>
 
             <div className="relative">
               <div className="absolute h-0.5 w-1/2 top-1/2 -translate-y-1/2 bg-slate-200 left-0"></div>
@@ -122,11 +134,11 @@ export default function SignInPage() {
                 </div>
                 <Button
                   variant="outline"
+                  className="w-full"
                   onClick={() => {
                     setMagicLinkSent(false);
                     setEmail("");
                   }}
-                  className="w-full"
                 >
                   Use a different email
                 </Button>
@@ -155,15 +167,24 @@ export default function SignInPage() {
                   />
                 </div>
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white shadow-sm transition-all duration-200 hover:shadow-md"
-                  icon={Mail01Icon}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Sending..." : "Sign in with magic link"}
-                </Button>
+                <div className="relative">
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white shadow-sm transition-all duration-200 hover:shadow-md"
+                    icon={Mail01Icon}
+                    disabled={true}
+                  >
+                    {isLoading ? "Sending..." : "Sign in with magic link"}
+                  </Button>
+
+                  <Kbd
+                    variant="beta-label"
+                    className="z-50 text-white bg-primary/80 border-primary absolute -top-2 -right-2"
+                  >
+                    Comming soon
+                  </Kbd>
+                </div>
               </form>
             )}
 

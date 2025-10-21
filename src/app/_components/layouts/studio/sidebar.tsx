@@ -5,11 +5,10 @@ import {
   Analytics01Icon,
   ArrowLeft01Icon,
   DiscordIcon,
+  Idea01Icon,
   LibraryIcon,
-  Mail02Icon,
   QuillWrite02Icon,
   StarIcon,
-  Target01Icon,
 } from "hugeicons-react";
 import { Home } from "lucide-react";
 import Link from "next/link";
@@ -29,6 +28,7 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { cn } from "~/lib/utils";
+import FeedbackDialog from "../../shared/feedback";
 import Logo from "../../shared/logo";
 
 const items = {
@@ -36,7 +36,7 @@ const items = {
     {
       title: "Home",
       icon: Home,
-      slug: "/studio/",
+      slug: "/studio",
       external: false,
     },
     {
@@ -59,16 +59,16 @@ const items = {
     },
   ],
   tools: [
-    {
-      title: "Start Advertising",
-      icon: Target01Icon,
-      slug: "/studio/run-ad-campaign",
-      external: false,
-    },
+    // {
+    //   title: "Start Advertising",
+    //   icon: Target01Icon,
+    //   slug: "/studio/run-ad-campaign",
+    //   external: false,
+    // },
     {
       title: "Referral Program",
       icon: Agreement02Icon,
-      slug: "/settings/referral",
+      slug: "/settings?tab=affiliate",
       external: false,
     },
     {
@@ -76,14 +76,6 @@ const items = {
       icon: DiscordIcon,
       slug: "https://discord.gg/P2u8fKGVCj",
       external: true,
-    },
-  ],
-  others: [
-    {
-      title: "Feedback",
-      icon: Mail02Icon,
-      slug: "/feedback",
-      external: false,
     },
   ],
 } as const;
@@ -149,6 +141,7 @@ const StudioSidebar = () => {
                           target={item.external ? "_blank" : undefined}
                         >
                           <item.icon />
+
                           <span className="font-medium">{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
@@ -157,13 +150,28 @@ const StudioSidebar = () => {
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-            {index !== Object.entries(items).length - 1 && (
-              <div className="px-3">
-                <Separator />
-              </div>
-            )}
+            <div className="px-3">
+              <Separator />
+            </div>
           </div>
         ))}
+        <SidebarGroup>
+          <SidebarGroupLabel>Others</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <FeedbackDialog>
+                  <SidebarMenuButton
+                    className={cn("cursor-pointer hover:bg-slate-200")}
+                  >
+                    <Idea01Icon />
+                    <span className="font-medium">Feedback</span>
+                  </SidebarMenuButton>
+                </FeedbackDialog>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="mb-4">
         <Button variant={"ghost"} icon={ArrowLeft01Icon}>

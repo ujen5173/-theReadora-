@@ -1,5 +1,6 @@
 "use client";
 
+import { isCuid } from "@paralleldrive/cuid2";
 import { TrafficSource } from "@prisma/client";
 import {
   Cursor02Icon,
@@ -10,17 +11,29 @@ import {
   SearchAreaIcon,
 } from "hugeicons-react";
 import { Search, TrendingDown, TrendingUp } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Metrics from "~/app/_components/layouts/studio/shared/Metrics";
 import { Badge } from "~/components/ui/badge";
 import { Progress } from "~/components/ui/progress";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { api } from "~/trpc/react";
+import StoryAnalyticsInfo from "./StoryAnalyticsInfo";
 
 const Analytics = () => {
-  const { data, isLoading, error } =
-    api.analytics.getTrafficSourcesAndSearchQueries.useQuery({
+  const p = useSearchParams().get("story") ?? "";
+  const router = useRouter();
+
+  const { data, isLoading, error } = api.analytics.getOverallAnalytics.useQuery(
+    {
       days: 30,
-    });
+      specific: !!p ? (isCuid(p) ? p : undefined) : undefined,
+    },
+    {
+      enabled: p === undefined ? false : true,
+      refetchOnWindowFocus: false,
+      retry: false,
+    }
+  );
 
   // Traffic source icon and color mapping
   const trafficSourceConfig = {
@@ -114,6 +127,10 @@ const Analytics = () => {
   }
 
   if (error || !data) {
+    if (error?.message === "Story not found") {
+      router.push("/studio/analytics");
+    }
+
     return (
       <main className="px-4 sm:px-6 pb-6">
         <Metrics />
@@ -126,6 +143,7 @@ const Analytics = () => {
 
   return (
     <main className="px-4 sm:px-6 pb-6">
+      {p && <StoryAnalyticsInfo info={data.storyInfo!} />}
       <Metrics />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">

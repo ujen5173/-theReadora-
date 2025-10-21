@@ -183,7 +183,7 @@ export const columns: ColumnDef<WorkRow>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/studio/analytics/story/${work.id}`}>
+              <Link href={`/studio/analytics?story=${work.id}`}>
                 <BarChart3 className="mr-2 size-4" /> View insights
               </Link>
             </DropdownMenuItem>

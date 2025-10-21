@@ -15,3 +15,10 @@ FIXES:
 - affiliate program
 - build a good AI to add more novels and users
 - AI integration in writing
+- advance rating system
+  - partition of rating around
+    - storytelling
+    - character refinment and defination
+    - ending
+    - flow
+    - story length

@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowRight01Icon } from "hugeicons-react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
@@ -91,6 +90,7 @@ const Metrics = () => {
   const [range, setRange] = useState<
     "24h" | "7d" | "30d" | "3m" | "12m" | "24m"
   >("7d");
+
   const { isLoading, data } = useProfileAnalytics(range);
 
   const validateParams = (param: string): boolean => {
@@ -131,16 +131,11 @@ const Metrics = () => {
   };
 
   return (
-    <section className="space-y-4 py-4 sm:py-8">
+    <section className="space-y-4 py-4 sm:py-6">
       <div>
-        <Link
-          className="inline-block"
-          href="/studio/analytics?activeAnalyticsMetric=views"
-        >
-          <h6 className="text-sm sm:text-base font-bold flex items-center gap-1.5">
-            Key metrics <ArrowRight01Icon size="16" strokeWidth={2} />
-          </h6>
-        </Link>
+        <h6 className="text-sm sm:text-base font-bold flex items-center gap-1.5">
+          Key metrics <ArrowRight01Icon size="16" strokeWidth={2} />
+        </h6>
       </div>
 
       <div className="rounded-md border border-border shadow bg-white">
@@ -170,6 +165,7 @@ const Metrics = () => {
                 <TabTriggerButton
                   idx={idx}
                   key={val.label}
+                  range={range}
                   metrics={{
                     ...val,
                     data: (() => {
@@ -267,15 +263,31 @@ export default Metrics;
 const TabTriggerButton = ({
   metrics,
   idx,
+  range = "7d",
   activeTab,
   setActiveTab,
 }: {
   metrics: (typeof METRICS)[number];
   idx: number;
+  range: "24h" | "7d" | "30d" | "3m" | "12m" | "24m";
   activeTab: TAB_ENUM;
   setActiveTab: React.Dispatch<React.SetStateAction<TAB_ENUM>>;
 }) => {
   const router = useRouter();
+
+  const refactorRange = (r: "24h" | "7d" | "30d" | "3m" | "12m" | "24m") => {
+    const data = {
+      h: "hour",
+      d: "days",
+      m: "months",
+    };
+
+    const match = r.match(/(\d+)([hdm])/);
+    if (!match) return r;
+
+    const [, value, unit] = match;
+    return `${value} ${data[unit as keyof typeof data]}`;
+  };
 
   return (
     <Tooltip>
@@ -312,7 +324,7 @@ const TabTriggerButton = ({
                   )}
                 >
                   {(metrics.delta ?? 0) >= 0 ? "+" : ""}
-                  {metrics.delta}% vs prev 7d
+                  {metrics.delta}% vs prev {refactorRange(range)}
                 </p>
               )}
             </div>

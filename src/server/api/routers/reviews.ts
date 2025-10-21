@@ -381,6 +381,29 @@ export const reviewsRouter = createTRPCRouter({
         });
       }
     }),
+
+  pinReview: protectedProcedure
+    .input(
+      z.object({
+        reviewId: z.string().cuid(),
+        status: z.boolean().default(true),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.postgresDb.rating.update({
+          where: {
+            story: {
+              authorId: ctx.session.user.id,
+            },
+            id: input.reviewId,
+          },
+          data: {
+            pin: input.status,
+          },
+        });
+      } catch {}
+    }),
 });
 
 export type TgetReplies = inferProcedureOutput<typeof reviewsRouter.getReplies>;

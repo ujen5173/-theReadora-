@@ -1047,10 +1047,6 @@ export const storyRouter = createTRPCRouter({
       }
     }),
 
-  getAuthorReadingList: publicProcedure.query(() => {
-    return [];
-  }),
-
   rate: protectedProcedure
     .input(
       z.object({
@@ -1780,6 +1776,97 @@ export const storyRouter = createTRPCRouter({
 
     return rows;
   }),
+
+  getAuthorReviews: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().optional(),
+        rating: z.number().optional(),
+        limit: z.number().min(1).max(50).optional().default(20),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const { query, limit, rating } = input;
+        const reviews = await ctx.postgresDb.rating.findMany({
+          where: {
+            AND: [
+              // Apply rating filter only if provided
+              ...(rating != null ? [{ rating }] : []),
+              // Text search across review text and story fields if query provided
+              ...(query
+                ? [
+                    {
+                      OR: [
+                        { review: { contains: query, mode: "insensitive" } },
+                        {
+                          story: {
+                            OR: [
+                              {
+                                title: {
+                                  contains: query,
+                                  mode: "insensitive",
+                                },
+                              },
+                              {
+                                slug: {
+                                  contains: query,
+                                  mode: "insensitive",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  ]
+                : []),
+              // Only reviews on stories authored by the current user
+              {
+                story: {
+                  authorId: ctx.session.user.id,
+                },
+              },
+            ],
+          },
+          select: {
+            id: true,
+            rating: true,
+            review: true,
+            createdAt: true,
+            repliesCount: true,
+            likesCount: true,
+            userId: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
+            story: {
+              select: {
+                id: true,
+                title: true,
+                slug: true,
+                thumbnail: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+          take: limit,
+        });
+
+        return reviews;
+      } catch (err) {
+        if (err instanceof TRPCError) throw err;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to fetch author reviews",
+        });
+      }
+    }),
 });
 
 export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;
