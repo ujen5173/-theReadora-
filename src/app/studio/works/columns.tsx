@@ -1,6 +1,7 @@
 "use client";
 
 import { type ColumnDef } from "@tanstack/react-table";
+import { PinIcon } from "hugeicons-react";
 import {
   ArrowUpDown,
   BarChart3,
@@ -8,7 +9,6 @@ import {
   MoreHorizontal,
   Pin,
   Star,
-  Trash2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,6 +22,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Spinner } from "~/components/ui/spinner";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 import { formatSmartDate } from "~/utils/helpers";
 
 export type WorkRow = {
@@ -29,15 +32,16 @@ export type WorkRow = {
   slug: string;
   title: string;
   thumbnail: string;
-  privacy: "DRAFT" | "PUBLISHED" | "PRIVATE" | "SCHEDULED" | "DELETED";
+  storyStatus: "DRAFT" | "PUBLISHED" | "PRIVATE" | "SCHEDULED" | "DELETED";
   views: number;
   likes: number;
   reviews: number;
   averageRating: number;
+  pin: boolean;
   createdAt: Date;
 };
 
-const privacyVariant = (p: WorkRow["privacy"]) => {
+const storyStatusVariant = (p: WorkRow["storyStatus"]) => {
   switch (p) {
     case "PUBLISHED":
       return "default";
@@ -56,14 +60,35 @@ const privacyVariant = (p: WorkRow["privacy"]) => {
 
 export const columns: ColumnDef<WorkRow>[] = [
   {
+    header: "SN",
+    size: 150,
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+
+      return row.original.pin ? (
+        <div className="">
+          <PinIcon className="mr-2 size-4 text-slate-700" />
+        </div>
+      ) : (
+        <span>{pageIndex * pageSize + row.index + 1}</span>
+      );
+    },
+  },
+  {
     accessorKey: "title",
     header: "Work",
     size: 300,
     cell: ({ row }) => {
       const data = row.original;
+
       return (
-        <div className="flex items-center gap-3">
-          <div className="relative aspect-[1.04/1.7] w-14 overflow-hidden rounded-sm ring-1 ring-border bg-muted">
+        <div className={cn("flex items-center gap-3")}>
+          <div className="relative aspect-[1.04/1.7] z-0 w-14 rounded-sm ring-1 ring-border bg-muted">
+            {data.pin && (
+              <div className="absolute -top-2 -right-4 z-10">
+                <PinIcon className="mr-2 size-4 text-red-500" />
+              </div>
+            )}
             <Image
               src={data.thumbnail || "/default-profile.png"}
               alt={data.title}
@@ -85,13 +110,13 @@ export const columns: ColumnDef<WorkRow>[] = [
     },
   },
   {
-    accessorKey: "privacy",
-    header: "Privacy",
+    accessorKey: "storyStatus",
+    header: "Status",
     size: 120,
     cell: ({ row }) => {
-      const p = row.getValue("privacy") as WorkRow["privacy"];
+      const p = row.getValue("storyStatus") as WorkRow["storyStatus"];
       return (
-        <Badge variant={privacyVariant(p)} className="uppercase">
+        <Badge variant={storyStatusVariant(p)} className="uppercase">
           {p.toLowerCase()}
         </Badge>
       );
@@ -165,9 +190,12 @@ export const columns: ColumnDef<WorkRow>[] = [
     header: "Actions",
     size: 100,
     cell: ({ row }) => {
+      const { mutateAsync, status } = api.story.pinToTop.useMutation();
+
       const work = row.original;
+
       return (
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -194,20 +222,28 @@ export const columns: ColumnDef<WorkRow>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => {
-                /* TODO: pin handler */
+              onClick={async () => {
+                await mutateAsync({
+                  storyId: work.id,
+                  status: !work.pin,
+                });
               }}
             >
-              <Pin className="mr-2 size-4" /> Pin to top
+              {status === "pending" ? (
+                <Spinner />
+              ) : (
+                <Pin className="mr-2 size-4" />
+              )}{" "}
+              {work.pin ? "Unpin from top" : "Pin to top"}
             </DropdownMenuItem>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               className="text-destructive focus:text-destructive"
               onClick={() => {
-                /* TODO: delete handler */
+                //  TODO: delete handler 
               }}
             >
               <Trash2 className="mr-2 size-4" /> Delete
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

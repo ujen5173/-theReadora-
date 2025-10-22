@@ -82,14 +82,14 @@ export function DataTable<TData, TValue>({
       <div className="bg-white rounded-md overflow-hidden border">
         <ScrollArea className="h-[600px] min-w-[800px]">
           <Table className="w-full h-full">
-            <TableHeader className="sticky top-0 bg-accent">
+            <TableHeader className="sticky z-50 top-0 bg-accent">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow className="w-full" key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
                         key={header.id}
-                        className="py-2 text-slate-700 font-semibold px-4"
+                        className="py-2  text-slate-700 font-semibold px-4"
                       >
                         {header.isPlaceholder
                           ? null

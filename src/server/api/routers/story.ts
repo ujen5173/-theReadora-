@@ -27,6 +27,7 @@ export const NCardEntity = {
   chapterCount: true,
   readCount: true,
   averageRating: true,
+  pin: true,
   ratingCount: true,
   author: {
     select: {
@@ -1693,6 +1694,7 @@ export const storyRouter = createTRPCRouter({
           ratingCount: true, // reviews
           averageRating: true,
           createdAt: true,
+          pin: true,
           chapters: {
             select: {
               metrics: true, // JSON: { likesCount, ... }
@@ -1721,9 +1723,10 @@ export const storyRouter = createTRPCRouter({
           slug: s.slug,
           title: s.title,
           thumbnail: s.thumbnail,
-          privacy: s.storyStatus, // DRAFT | PUBLISHED | PRIVATE | SCHEDULED | DELETED
+          storyStatus: s.storyStatus,
           views: s.readCount,
           likes,
+          pin: !!s.pin,
           reviews: s.ratingCount,
           createdAt: s.createdAt,
           averageRating: s.averageRating,
@@ -1759,6 +1762,27 @@ export const storyRouter = createTRPCRouter({
       }
 
       return filtered;
+    }),
+
+  pinToTop: protectedProcedure
+    .input(
+      z.object({
+        storyId: z.string().cuid(),
+        status: z.boolean().default(true),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.postgresDb.story.update({
+          where: {
+            id: input.storyId,
+            authorId: ctx.session.user.id,
+          },
+          data: {
+            pin: input.status,
+          },
+        });
+      } catch {}
     }),
 
   sitemapList: publicProcedure.query(async ({ ctx }) => {
@@ -1798,20 +1822,18 @@ export const storyRouter = createTRPCRouter({
                 ? [
                     {
                       OR: [
-                        { review: { contains: query, mode: "insensitive" } },
+                        { review: { contains: query } },
                         {
                           story: {
                             OR: [
                               {
                                 title: {
                                   contains: query,
-                                  mode: "insensitive",
                                 },
                               },
                               {
                                 slug: {
                                   contains: query,
-                                  mode: "insensitive",
                                 },
                               },
                             ],

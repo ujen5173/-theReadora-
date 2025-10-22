@@ -1,4 +1,7 @@
+import { TRPCError } from "@trpc/server";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import type { TGetUserDetails } from "~/server/api/routers/user";
 import { api } from "~/trpc/server";
 import { generateSEOMetadata } from "~/utils/site";
 import Header from "../_components/layouts/header";
@@ -31,9 +34,22 @@ const UserProfile = async ({
 }) => {
   const { user } = await searchParams;
 
-  const userDetails = await api.user.getUserDetails({
-    usernameOrId: user,
-  });
+  let userDetails: TGetUserDetails | null = null;
+
+  try {
+    userDetails = await api.user.getUserDetails({
+      usernameOrId: user,
+    });
+  } catch (err) {
+    if (
+      err instanceof TRPCError &&
+      err.message === "Username or ID is required"
+    ) {
+      redirect("/");
+    }
+  }
+
+  if (!userDetails) redirect("/");
 
   return (
     <>

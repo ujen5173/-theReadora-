@@ -132,7 +132,14 @@ export const userRouter = createTRPCRouter({
           throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
         }
 
-        return user;
+        return {
+          ...user,
+          stories: user.stories.sort((a, b) => {
+            if (a.pin && !b.pin) return -1;
+            if (!a.pin && b.pin) return 1;
+            return 0;
+          }),
+        };
       } catch (error) {
         if (error instanceof TRPCError) {
           throw error; // Re-throw known TRPC errors
@@ -540,3 +547,6 @@ export const userRouter = createTRPCRouter({
 });
 
 export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;
+export type TGetUserDetails = inferProcedureOutput<
+  typeof userRouter.getUserDetails
+>;
