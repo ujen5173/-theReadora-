@@ -1,10 +1,9 @@
-# 📖 Readora - Modern Storytelling Platform
+# 📖 Readora – Feature-Rich Storytelling Platofmr
 
 Readora is a storytelling platform where users can read, write, and share stories across various genres. It offers a clean writing experience for authors and an immersive reading interface for users.
 
-All the recommendations and ranking algorithm are powered by CursorAI.
+<img width="1429" height="942" alt="image" src="https://github.com/user-attachments/assets/2967805e-bcaf-4a8a-a2f1-dffbebf197ff" />
 
-![Readora Homepage](/public/readora-landing-page.png)
 
 Build as a passion project.
 
