@@ -1,8 +1,8 @@
-import type { JsonValue } from "@prisma/client/runtime/library";
-import { format } from "date-fns";
+ import { format } from "date-fns";
 import numeral from "numeral";
 import type { ChapterMetrics } from "prisma/types";
 import slugify from "slugify";
+import type { JsonValue } from "~/generated/internal/prismaNamespace";
 import { METRICS_DEFAULT_VALUES } from "./constants";
 
 export const makeSlug = (str: string) =>

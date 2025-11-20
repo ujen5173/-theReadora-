@@ -1,9 +1,9 @@
 import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
 } from "~/server/api/trpc";
 
 export const reviewsRouter = createTRPCRouter({
@@ -32,6 +32,176 @@ export const reviewsRouter = createTRPCRouter({
         throw new TRPCError({
           message: "Something went wrong",
           code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  getAuthorReviews: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().optional(),
+        rating: z.number().optional(),
+        selectedWork: z.string().optional(),
+        sorting: z.enum(["ALL", "MOST_LIKED", "LATEST", "OLDEST"]).optional(),
+        limit: z.number().min(1).max(50).optional().default(20),
+        skip: z.number().min(0).optional().default(0),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const { query, limit, rating, selectedWork, sorting, skip } = input;
+        const reviews = await ctx.postgresDb.rating.findMany({
+          where: {
+            AND: [
+              // Apply rating filter only if provided
+              ...(rating != null ? [{ rating }] : []),
+              // Filter by selected work (storyId) if provided
+              ...(selectedWork
+                ? [
+                    {
+                      storyId: selectedWork,
+                    },
+                  ]
+                : []),
+              // Text search across review text and story fields if query provided
+              ...(query
+                ? [
+                    {
+                      OR: [
+                        { review: { contains: query, mode: "insensitive" as const } },
+                        {
+                          story: {
+                            OR: [
+                              {
+                                title: {
+                                  contains: query,
+                                  mode: "insensitive" as const,
+                                },
+                              },
+                              {
+                                slug: {
+                                  contains: query,
+                                  mode: "insensitive" as const,
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  ]
+                : []),
+              // Only reviews on stories authored by the current user
+              {
+                story: {
+                  authorId: ctx.session.user.id,
+                },
+              },
+            ],
+          },
+          select: {
+            id: true,
+            rating: true,
+            review: true,
+            createdAt: true,
+            repliesCount: true,
+            likesCount: true,
+            userId: true,
+            likes: {
+              where: {
+                id: ctx.session.user.id,
+              },
+              select: {
+                _count: true,
+              },
+            },
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
+            story: {
+              select: {
+                id: true,
+                title: true,
+                slug: true,
+                thumbnail: true,
+              },
+            },
+          },
+          orderBy:
+            sorting === "MOST_LIKED"
+              ? { likesCount: "desc" }
+              : sorting === "OLDEST"
+              ? { createdAt: "asc" }
+              : { createdAt: "desc" }, // Default to LATEST or ALL
+          take: limit,
+          skip,
+        });
+
+        // Get total count for pagination
+        const totalCount = await ctx.postgresDb.rating.count({
+          where: {
+            AND: [
+              ...(rating != null ? [{ rating }] : []),
+              ...(selectedWork
+                ? [
+                    {
+                      storyId: selectedWork,
+                    },
+                  ]
+                : []),
+              ...(query
+                ? [
+                    {
+                      OR: [
+                        { review: { contains: query, mode: "insensitive" as const } },
+                        {
+                          story: {
+                            OR: [
+                              {
+                                title: {
+                                  contains: query,
+                                  mode: "insensitive" as const,
+                                },
+                              },
+                              {
+                                slug: {
+                                  contains: query,
+                                  mode: "insensitive" as const,
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  ]
+                : []),
+              {
+                story: {
+                  authorId: ctx.session.user.id,
+                },
+              },
+            ],
+          },
+        });
+
+        return {
+          reviews: reviews.map(({ likes, ...rest }) => ({
+            ...rest,
+            hasAuthorLike: !!likes,
+          })),
+          totalCount,
+        };
+      } catch (err) {
+        if (err instanceof TRPCError) throw err;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to fetch author reviews",
         });
       }
     }),

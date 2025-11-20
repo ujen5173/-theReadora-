@@ -1,6 +1,5 @@
 "use client";
 
-import type { StoryStatus } from "@prisma/client";
 import {
   BookOpen01Icon,
   EyeIcon,
@@ -41,6 +40,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { env } from "~/env";
+import type { StoryStatus } from "~/generated/enums";
 import { useStoryRating } from "~/store/useStoryRating";
 import { getReadingTimeText } from "~/utils/helpers";
 
@@ -228,11 +228,9 @@ const StoryAnalyticsInfo = ({
             </Link>
 
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button icon={Settings2} variant="outline">
-                  Take Actions
-                </Button>
-              </DropdownMenuTrigger>
+              <Button asChild icon={Settings2} variant="outline">
+                <DropdownMenuTrigger>Take Actions</DropdownMenuTrigger>
+              </Button>
               <DropdownMenuContent className="w-[190px]" align="start">
                 <DropdownMenuGroup>
                   <DropdownMenuSub>

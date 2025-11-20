@@ -1,10 +1,11 @@
-import { ChapterPricePool, StoryStatus } from "@prisma/client";
+ 
 import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { AI21 } from "ai21";
 import fs from "fs";
 import path from "path";
 import showdown from "showdown";
 import { z } from "zod";
+import { ChapterPricePool, StoryStatus } from "~/generated/enums";
 import {
   createTRPCRouter,
   protectedProcedure,

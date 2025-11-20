@@ -1,35 +1,31 @@
 "use client";
 
-import { api } from "~/trpc/react";
+import useReview from "../hooks/useReview";
 import ReviewsStack from "./ReviewsStack";
 
 const Reviews = () => {
-  const { data, isLoading } = api.story.getAuthorReviews.useQuery(
-    {},
-    {
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-    }
-  );
+  const reviewData = useReview();
+  const { isLoading, r, loadMore, hasMore, totalCount, currentCount, resetFilters } = reviewData;
 
-  const reviews = (data ?? []).map((r: any) => ({
-    id: r.id,
-    rating: r.rating,
-    review: r.review,
-    createdAt: r.createdAt,
-    repliesCount: r.repliesCount,
-    likesCount: r.likesCount,
-    user: r.user ?? { id: r.userId, name: null, username: null, image: null },
-    story: r.story ?? { id: r.storyId, title: "", slug: "", thumbnail: null },
-  }));
+   const isLoadingFilters = isLoading && r.length === 0;
+  const isLoadingMore = isLoading && r.length > 0;
 
   return (
     <main className="p-6">
-      {isLoading ? (
-        <div className="h-40 rounded-md border border-border bg-white/60 animate-pulse" />
-      ) : (
-        <ReviewsStack reviews={reviews} />
-      )}
+      <ReviewsStack
+        reviews={r}
+        authorWorkTitle={reviewData.authorWorkTitle}
+        setMetrics={reviewData.setMetrics}
+        applyMetrics={reviewData.applyMetrics}
+        metrics={reviewData.metrics}
+        loadMore={loadMore}
+        hasMore={hasMore}
+        isLoading={isLoadingMore}
+        isLoadingFilters={isLoadingFilters}
+        totalCount={totalCount}
+        currentCount={currentCount}
+        resetFilters={resetFilters}
+      />
     </main>
   );
 };

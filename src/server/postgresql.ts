@@ -1,12 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from '@prisma/adapter-pg';
 import { env } from "~/env";
+import { PrismaClient } from "~/generated/client";
+
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
 
 const createPostgresClient = () =>
   new PrismaClient({
-    datasourceUrl: env.DATABASE_URL,
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
+    adapter:adapter
+   });
 
 const globalForPostgres = globalThis as unknown as {
   postgresDb: ReturnType<typeof createPostgresClient> | undefined;

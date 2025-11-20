@@ -1,0 +1,9 @@
+{
+  "$schema": "https://thereadora.vercel.app/vercel.json",
+  "crons": [
+    {
+      "path": "/api/daily-task/update-metrics",
+      "schedule": "0 12 * * *"
+    }
+  ]
+}

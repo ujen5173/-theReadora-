@@ -46,6 +46,6 @@ yarn-error.log*
 .idea
 
 # generated files
-/generated/
+/src/generated/
 /ai-generated/
 /notes.md

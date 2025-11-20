@@ -1,7 +1,6 @@
 "use client";
 
 import { isCuid } from "@paralleldrive/cuid2";
-import { TrafficSource } from "@prisma/client";
 import {
   Cursor02Icon,
   LicenseIcon,
@@ -16,6 +15,7 @@ import Metrics from "~/app/_components/layouts/studio/shared/Metrics";
 import { Badge } from "~/components/ui/badge";
 import { Progress } from "~/components/ui/progress";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { TrafficSource } from "~/generated/enums";
 import { api } from "~/trpc/react";
 import StoryAnalyticsInfo from "./StoryAnalyticsInfo";
 
@@ -128,7 +128,7 @@ const Analytics = () => {
 
   if (error || !data) {
     if (error?.message === "Story not found") {
-      router.push("/studio/analytics");
+      return router.push("/studio/analytics");
     }
 
     return (

@@ -1,4 +1,3 @@
-import { TrafficSource, type StoryStatus } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import {
   addDays,
@@ -9,6 +8,7 @@ import {
   startOfMonth,
 } from "date-fns";
 import { z } from "zod";
+import { TrafficSource, type StoryStatus } from "~/generated/enums";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 function generateDateBuckets(start: Date, end: Date, type: "day" | "month") {

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight01Icon } from "hugeicons-react";
+import { ArrowRight01Icon, LockPasswordIcon } from "hugeicons-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
@@ -145,16 +145,25 @@ const Metrics = () => {
             value={range}
             onValueChange={(value) => setRange(value as typeof range)}
           >
-            <SelectTrigger className="text-sm border rounded px-2 py-1">
+            <SelectTrigger className="text-sm border w-[180px] rounded px-2 py-1">
               <SelectValue placeholder="Date Range" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent align="end" className="w-[180px]">
               <SelectItem value="24h">Last 24 Hours</SelectItem>
               <SelectItem value="7d">Last 7 Days</SelectItem>
               <SelectItem value="30d">Last 30 Days</SelectItem>
-              <SelectItem value="3m">Last 3 Months</SelectItem>
-              <SelectItem value="12m">Last 12 Months</SelectItem>
-              <SelectItem value="24m">Last 24 Months</SelectItem>
+              <SelectItem className="flex" value="3m">
+                <span className="flex-1">Last 3 Months</span>
+                <LockPasswordIcon className="size-4 text-slate-700" />
+              </SelectItem>
+              <SelectItem className="flex" value="12m">
+                <span className="flex-1">Last 12 Months</span>
+                <LockPasswordIcon className="size-4 text-slate-700" />
+              </SelectItem>
+              <SelectItem className="flex" value="24m">
+                <span className="flex-1">Last 24 Months</span>
+                <LockPasswordIcon className="size-4 text-slate-700" />
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

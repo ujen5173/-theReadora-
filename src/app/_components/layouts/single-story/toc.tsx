@@ -16,8 +16,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import type { ChapterPricePool } from "@prisma/client";
-import type { JsonValue } from "@prisma/client/runtime/library";
 import { LeftToRightListNumberIcon, RecordIcon } from "hugeicons-react";
 import {
   ChevronRight,
@@ -42,6 +40,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import type { ChapterPricePool } from "~/generated/enums";
+import type { JsonValue } from "~/generated/internal/prismaNamespace";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { CHAPTER_PRICE_POOL } from "~/utils/constants";
@@ -60,7 +60,7 @@ interface Chapter {
   metrics: JsonValue;
   isLocked: boolean;
   scheduledFor: Date | null;
-  price: ChapterPricePool | null;
+  price: ChapterPricePool  | null;
 }
 
 interface TableOfContentProps {

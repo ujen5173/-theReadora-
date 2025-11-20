@@ -1,6 +1,5 @@
 "use client";
 
-import { StoryStatus } from "@prisma/client";
 import { format } from "date-fns";
 import {
   Calendar,
@@ -30,6 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { StoryStatus } from "~/generated/enums";
 import { useNewChapterStore } from "~/store/useNewChapter";
 import { api } from "~/trpc/react";
 

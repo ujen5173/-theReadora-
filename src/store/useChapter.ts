@@ -1,6 +1,6 @@
-import type { JsonValue } from "@prisma/client/runtime/library";
-import { create } from "zustand";
+ import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { JsonValue } from "~/generated/internal/prismaNamespace";
 import type { CHAPTER_PRICE_POOL } from "~/utils/constants";
 
 export type useChapterChapter = {
