@@ -7,8 +7,8 @@ Readora is a storytelling platform where users can read, write, and share storie
 
 Build as a passion project.
 
-> **Warning**
-> This is a work-in-progress and not the finished product.
+> **Note**
+> This project has reached a feature-complete stage where all core functionalities are implemented. Active development is currently paused, but future updates may be released as needed.
 
 ## 🧰 Tech Stack
 
