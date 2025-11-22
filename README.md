@@ -1,4 +1,7 @@
-# 📖 Readora – Feature-Rich Storytelling Platofmr
+> **Note:**
+> This project has reached a feature-complete stage where all core functionalities are implemented. Active development is currently paused, but future updates may be released as needed.
+
+# 📖 Readora – Feature-Rich Storytelling Platform
 
 Readora is a storytelling platform where users can read, write, and share stories across various genres. It offers a clean writing experience for authors and an immersive reading interface for users.
 
@@ -6,9 +9,6 @@ Readora is a storytelling platform where users can read, write, and share storie
 
 
 Build as a passion project.
-
-> **Note**
-> This project has reached a feature-complete stage where all core functionalities are implemented. Active development is currently paused, but future updates may be released as needed.
 
 ## 🧰 Tech Stack
 
