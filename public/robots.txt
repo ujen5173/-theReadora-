@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Disallow low-value internal pages
-Disallow: /api/
-Disallow: /studio/
-
-Sitemap: https://thereadora.vercel.app/sitemap.xml

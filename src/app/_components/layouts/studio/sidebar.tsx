@@ -3,12 +3,10 @@
 import {
   Agreement02Icon,
   Analytics01Icon,
-  ArrowLeft01Icon,
-  DiscordIcon,
-  Idea01Icon,
+  ArrowLeft01Icon, Idea01Icon,
   LibraryIcon,
   QuillWrite02Icon,
-  StarIcon,
+  StarIcon
 } from "hugeicons-react";
 import { Home } from "lucide-react";
 import Link from "next/link";
@@ -71,12 +69,7 @@ const items = {
       slug: "/settings?tab=affiliate",
       external: false,
     },
-    {
-      title: "Join Discord",
-      icon: DiscordIcon,
-      slug: "https://discord.gg/P2u8fKGVCj",
-      external: true,
-    },
+  
   ],
 } as const;
 

@@ -42,7 +42,7 @@ const filterSchema = z.object({
   genre: z.string().optional(),
   sortBy: z.string().optional(),
   status: z.array(z.enum(["COMPLETED", "MATURE"])).optional(),
-  contentType: z.array(z.enum(["AI_GENREATED", "ORIGINAL"])).optional(),
+  contentType: z.array(z.enum(["AI_GENERATED", "ORIGINAL"])).optional(),
   minChapterCount: z.number().optional(),
   maxChapterCount: z.number().optional(),
   minViewsCount: z.number().optional(),
@@ -783,7 +783,7 @@ export const storyRouter = createTRPCRouter({
         // Content type filters
         if (contentType) {
           const contentFilters: any = {};
-          if (contentType.includes("AI_GENREATED")) {
+          if (contentType.includes("AI_GENERATED")) {
             contentFilters.hasAiContent = true;
           }
           if (contentType.includes("ORIGINAL")) {

@@ -15,6 +15,7 @@ const PayloadSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("Read Event Called...")
     const text = await req.text();
     const json = text ? JSON.parse(text) : {};
     const input = PayloadSchema.parse(json);

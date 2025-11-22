@@ -1,3 +1,4 @@
+import { cache } from "react";
 import StoryDetailsSection from "~/app/_components/layouts/single-story/story-details-section";
 import ThumbnailSection from "~/app/_components/layouts/single-story/thumbnail-section";
 import StoryNotFound from "~/app/_components/shared/story-not-found";
@@ -11,11 +12,16 @@ interface PageProps {
 }
 export const revalidate = 60;
 
-export const generateMetadata = async ({ params }: PageProps) => {
-  const { slug } = await params;
-  const story = await api.story.byID_or_slug({
+// Cache the story fetch to dedupe requests between generateMetadata and the page component
+const getStory = cache(async (slug: string) => {
+  return await api.story.byID_or_slug({
     query: slug,
   });
+});
+
+export const generateMetadata = async ({ params }: PageProps) => {
+  const { slug } = await params;
+  const story = await getStory(slug);
 
   const storySchema = {
     ...storyStructuredData,
@@ -54,9 +60,7 @@ export const generateMetadata = async ({ params }: PageProps) => {
 const SingleStory = async ({ params }: PageProps) => {
   const slug = await params;
 
-  const story = await api.story.byID_or_slug({
-    query: slug.slug,
-  });
+  const story = await getStory(slug.slug);
 
   if (!story) {
     return <StoryNotFound />;

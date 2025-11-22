@@ -26,6 +26,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
+import { useUserStore } from "~/store/userStore";
 
 export const METRICS = [
   {
@@ -76,22 +77,15 @@ export const METRICS = [
   },
 ];
 
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
-
+// Types
 export const m = METRICS.map((e) => e.label);
 export type TAB_ENUM = (typeof m)[number];
-
+export type DateRangeType = "24h" | "7d" | "30d" | "3m" | "12m" | "24m";
+ 
 const Metrics = () => {
-  const [range, setRange] = useState<
-    "24h" | "7d" | "30d" | "3m" | "12m" | "24m"
-  >("7d");
-
-  const { isLoading, data } = useProfileAnalytics(range);
+  const [range, setRange] = useState<DateRangeType>("30d");
+  const { data } = useProfileAnalytics(range);
+  const {user} = useUserStore();
 
   const validateParams = (param: string): boolean => {
     return m.includes(param as TAB_ENUM);
@@ -143,7 +137,7 @@ const Metrics = () => {
           <div />
           <Select
             value={range}
-            onValueChange={(value) => setRange(value as typeof range)}
+            onValueChange={(value) => setRange(value as DateRangeType)}
           >
             <SelectTrigger className="text-sm border w-[180px] rounded px-2 py-1">
               <SelectValue placeholder="Date Range" />
@@ -152,17 +146,23 @@ const Metrics = () => {
               <SelectItem value="24h">Last 24 Hours</SelectItem>
               <SelectItem value="7d">Last 7 Days</SelectItem>
               <SelectItem value="30d">Last 30 Days</SelectItem>
-              <SelectItem className="flex" value="3m">
-                <span className="flex-1">Last 3 Months</span>
-                <LockPasswordIcon className="size-4 text-slate-700" />
+              <SelectItem value="3m" disabled={!user?.premium}>
+                <div className="flex justify-between items-center w-full">
+                  <span>Last 3 Months</span>
+                  <LockPasswordIcon className="size-4 text-slate-700" />
+                </div>
               </SelectItem>
-              <SelectItem className="flex" value="12m">
-                <span className="flex-1">Last 12 Months</span>
-                <LockPasswordIcon className="size-4 text-slate-700" />
+              <SelectItem value="12m" disabled={!user?.premium}>
+                <div className="flex justify-between items-center w-full">
+                  <span>Last 12 Months</span>
+                  <LockPasswordIcon className="size-4 text-slate-700" />
+                </div>
               </SelectItem>
-              <SelectItem className="flex" value="24m">
-                <span className="flex-1">Last 24 Months</span>
-                <LockPasswordIcon className="size-4 text-slate-700" />
+              <SelectItem value="24m" disabled={!user?.premium}>
+                <div className="flex justify-between items-center w-full">
+                  <span>Last 24 Months</span>
+                  <LockPasswordIcon className="size-4 text-slate-700" />
+                </div>
               </SelectItem>
             </SelectContent>
           </Select>
@@ -222,13 +222,21 @@ const Metrics = () => {
 
         <div className="h-64 sm:h-80 w-full">
           {/* Chart for the active metric */}
-          <ChartContainer className="h-full w-full" config={chartConfig}>
+          <ChartContainer 
+            className="h-full w-full" 
+            config={{
+              [activeTab]: {
+                label: METRICS.find(m => m.label === activeTab)?.title ?? activeTab,
+                color: "var(--chart-1)",
+              }
+            } satisfies ChartConfig}
+          >
             <AreaChart
               accessibilityLayer
               data={
                 (getActiveChartData() ?? []).map((d: any) => ({
                   period: d.date,
-                  desktop: d.value,
+                  [activeTab]: d.value,
                 })) as any[]
               }
               margin={{
@@ -252,11 +260,11 @@ const Metrics = () => {
                 content={<ChartTooltipContent indicator="dot" hideLabel />}
               />
               <Area
-                dataKey="desktop"
+                dataKey={activeTab}
                 type="linear"
-                fill="var(--color-desktop)"
+                fill={`var(--color-${activeTab})`}
                 fillOpacity={0.1}
-                stroke="var(--color-desktop)"
+                stroke={`var(--color-${activeTab})`}
                 strokeWidth={2}
               />
             </AreaChart>
@@ -269,22 +277,25 @@ const Metrics = () => {
 
 export default Metrics;
 
+// Helper component for metric tabs
+interface TabTriggerButtonProps {
+  metrics: (typeof METRICS)[number];
+  idx: number;
+  range: DateRangeType;
+  activeTab: TAB_ENUM;
+  setActiveTab: React.Dispatch<React.SetStateAction<TAB_ENUM>>;
+}
+
 const TabTriggerButton = ({
   metrics,
   idx,
-  range = "7d",
+  range,
   activeTab,
   setActiveTab,
-}: {
-  metrics: (typeof METRICS)[number];
-  idx: number;
-  range: "24h" | "7d" | "30d" | "3m" | "12m" | "24m";
-  activeTab: TAB_ENUM;
-  setActiveTab: React.Dispatch<React.SetStateAction<TAB_ENUM>>;
-}) => {
+}: TabTriggerButtonProps) => {
   const router = useRouter();
 
-  const refactorRange = (r: "24h" | "7d" | "30d" | "3m" | "12m" | "24m") => {
+  const refactorRange = (r: DateRangeType) => {
     const data = {
       h: "hour",
       d: "days",

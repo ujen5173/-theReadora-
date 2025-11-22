@@ -1,10 +1,8 @@
-// app/api/cron/daily-stats/route.ts
 import { type NextRequest } from "next/server";
 import { postgresDb } from "~/server/postgresql";
 
 export async function PUT(request: NextRequest) {
   try {
-    // Optional: Verify cron secret for security
     const authHeader = request.headers.get("authorization");
     if (
       process.env.CRON_SECRET &&
