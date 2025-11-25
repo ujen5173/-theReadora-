@@ -310,12 +310,12 @@ const FilterSection = ({
                 </div>
                 <Switch
                   id="ai"
-                  checked={contentType.includes("AI_GENREATED")}
+                  checked={contentType.includes("AI_GENERATED")}
                   onCheckedChange={(checked) => {
                     setContentType(
                       checked
-                        ? [...contentType, "AI_GENREATED"]
-                        : contentType.filter((type) => type !== "AI_GENREATED")
+                        ? [...contentType, "AI_GENERATED"]
+                        : contentType.filter((type) => type !== "AI_GENERATED")
                     );
                   }}
                 />

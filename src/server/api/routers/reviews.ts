@@ -1,9 +1,9 @@
 import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 import {
-    createTRPCRouter,
-    protectedProcedure,
-    publicProcedure,
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
 
 export const reviewsRouter = createTRPCRouter({
@@ -68,7 +68,12 @@ export const reviewsRouter = createTRPCRouter({
                 ? [
                     {
                       OR: [
-                        { review: { contains: query, mode: "insensitive" as const } },
+                        {
+                          review: {
+                            contains: query,
+                            mode: "insensitive" as const,
+                          },
+                        },
                         {
                           story: {
                             OR: [
@@ -158,7 +163,12 @@ export const reviewsRouter = createTRPCRouter({
                 ? [
                     {
                       OR: [
-                        { review: { contains: query, mode: "insensitive" as const } },
+                        {
+                          review: {
+                            contains: query,
+                            mode: "insensitive" as const,
+                          },
+                        },
                         {
                           story: {
                             OR: [

@@ -5,9 +5,17 @@ import ReviewsStack from "./ReviewsStack";
 
 const Reviews = () => {
   const reviewData = useReview();
-  const { isLoading, r, loadMore, hasMore, totalCount, currentCount, resetFilters } = reviewData;
+  const {
+    isLoading,
+    r,
+    loadMore,
+    hasMore,
+    totalCount,
+    currentCount,
+    resetFilters,
+  } = reviewData;
 
-   const isLoadingFilters = isLoading && r.length === 0;
+  const isLoadingFilters = isLoading && r.length === 0;
   const isLoadingMore = isLoading && r.length > 0;
 
   return (

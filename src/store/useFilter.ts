@@ -5,7 +5,7 @@ type FilterStore = {
   genre: string;
   sortBy: string;
   status: ("COMPLETED" | "MATURE")[];
-  contentType: ("AI_GENREATED" | "ORIGINAL")[];
+  contentType: ("AI_GENERATED" | "ORIGINAL")[];
   minChapterCount: number;
   maxChapterCount: number;
   minViewsCount: number;
@@ -16,7 +16,7 @@ type FilterStore = {
   setGenre: (genre: string) => void;
   setSortBy: (sortBy: string) => void;
   setStatus: (status: ("COMPLETED" | "MATURE")[]) => void;
-  setContentType: (contentType: ("AI_GENREATED" | "ORIGINAL")[]) => void;
+  setContentType: (contentType: ("AI_GENERATED" | "ORIGINAL")[]) => void;
   setChapterCount: (minChapterCount: number, maxChapterCount: number) => void;
   setViewsCount: (minViewsCount: number, maxViewsCount: number) => void;
   setPublishedAt: (
@@ -32,7 +32,7 @@ type FilterParams = {
   genre?: string;
   sortBy?: string;
   status?: ("COMPLETED" | "MATURE")[];
-  contentType?: ("AI_GENREATED" | "ORIGINAL")[];
+  contentType?: ("AI_GENERATED" | "ORIGINAL")[];
   minChapterCount?: number;
   maxChapterCount?: number;
   minViewsCount?: number;
