@@ -5,7 +5,7 @@ import {
   Prompt,
 } from "next/font/google";
 
-export const outfit = Manrope({
+export const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   display: "swap",

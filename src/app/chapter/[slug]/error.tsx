@@ -3,7 +3,7 @@
 import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
-import { merriweatherFont, outfit } from "~/utils/font";
+import { manrope, merriweatherFont } from "~/utils/font";
 
 const ChapterNotFound = ({ error }: { error: Error }) => {
   return (
@@ -16,7 +16,7 @@ const ChapterNotFound = ({ error }: { error: Error }) => {
         </h1>
 
         <h2
-          className={`text-lg sm:text-xl md:text-3xl font-bold ${outfit.className}`}
+          className={`text-lg sm:text-xl md:text-3xl font-bold ${manrope.className}`}
         >
           This Chapter Seems Lost...
         </h2>

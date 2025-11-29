@@ -8,8 +8,9 @@ import HolyLoader from "holy-loader";
 import { SessionProvider } from "next-auth/react";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
+import { BetaOnboardingModal } from "~/components/shared/beta-onboarding-modal";
 import { TRPCReactProvider } from "~/trpc/react";
-import { outfit } from "~/utils/font";
+import { manrope } from "~/utils/font";
 import { generateSEOMetadata, structuredData } from "~/utils/site";
 import { CSPostHogProvider } from "./_components/layouts/analytics/posthog";
 import RootLayoutClient from "./_components/layouts/root-layout-client";
@@ -29,7 +30,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${outfit.className}`}>
+    <html lang="en" className={`${manrope.className}`}>
       <head>
         <script
           type="application/ld+json"
@@ -55,6 +56,7 @@ export default function RootLayout({
                     {children}
 
                     <Footer />
+                    <BetaOnboardingModal />
                   </Suspense>
                 </CSPostHogProvider>
               </RootLayoutClient>

@@ -116,11 +116,10 @@ export const navigationLinks = {
       { name: "Careers", href: "/careers" },
     ],
     support: [
-      { name: "Help Center", href: "/help" },
-      { name: "Safety", href: "/safety" },
-      { name: "Join Affiliate Program", href: "/affiliate" },
+       { name: "Join Affiliate Program", href: "/affiliate" },
       { name: "Terms", href: "/terms-of-use" },
       { name: "Privacy", href: "/privacy-policy" },
+      { name: "Comparison", href: "/comparision" },
     ],
     community: [
       { name: "Guidelines", href: "/guidelines" },

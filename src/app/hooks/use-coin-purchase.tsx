@@ -23,7 +23,11 @@ export const useCoinPurchase = () => {
       return;
     }
     if (amount > MAX_COINS) {
-      toast.error("Maximum purchase amount is 70000 coins");
+      toast.error(
+        `Maximum purchase amount is ${Intl.NumberFormat().format(
+          MAX_COINS
+        )} coins`
+      );
       return;
     }
     setSelectedAmount(amount);

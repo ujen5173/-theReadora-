@@ -6,7 +6,7 @@ import { Coins, PenLine, Search, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { outfit } from "~/utils/font";
+import { manrope } from "~/utils/font";
 
 export default function HelloWriters() {
   const features = [
@@ -61,7 +61,6 @@ export default function HelloWriters() {
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-slate-950 text-white">
-      {/* Ambient Background Elements */}
       <div className="absolute inset-0 w-full h-full bg-slate-950">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[120px]" />
@@ -85,7 +84,7 @@ export default function HelloWriters() {
           <h1 className="text-center font-extrabold text-4xl tracking-tight sm:text-6xl md:text-7xl text-slate-100">
             Hello Writers, <br /> Welcome to{" "}
             <span
-              className={`bg-gradient-to-r from-primary to-red-400 bg-clip-text text-transparent ${outfit.className}`}
+              className={`bg-gradient-to-r from-primary to-red-400 bg-clip-text text-transparent ${manrope.className}`}
             >
               Readora
             </span>
@@ -122,7 +121,7 @@ export default function HelloWriters() {
               variant="ghost"
               iconPlacement="left"
               icon={Search}
-              className="px-8 py-6 text-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 transition-colors backdrop-blur-sm"
+              className="px-8 py-6 text-lg bg-white/5 border border-white/10 text-slate-200 transition-colors backdrop-blur-sm"
             >
               Browse Stories
             </Button>

@@ -1,5 +1,4 @@
 // TODO: Pagination does not work properly, need to fix it
-// TODO: Need some UI improvements in the filter section
 
 "use client";
 

@@ -5,7 +5,7 @@ type FilterStore = {
   genre: string;
   sortBy: string;
   status: ("COMPLETED" | "MATURE")[];
-  contentType: ("AI_GENERATED" | "ORIGINAL")[];
+  contentType: ("AI_GENERATED" | "ORIGINAL" | "GRAPHICS")[];
   minChapterCount: number;
   maxChapterCount: number;
   minViewsCount: number;
@@ -16,7 +16,9 @@ type FilterStore = {
   setGenre: (genre: string) => void;
   setSortBy: (sortBy: string) => void;
   setStatus: (status: ("COMPLETED" | "MATURE")[]) => void;
-  setContentType: (contentType: ("AI_GENERATED" | "ORIGINAL")[]) => void;
+  setContentType: (
+    contentType: ("AI_GENERATED" | "ORIGINAL" | "GRAPHICS")[]
+  ) => void;
   setChapterCount: (minChapterCount: number, maxChapterCount: number) => void;
   setViewsCount: (minViewsCount: number, maxViewsCount: number) => void;
   setPublishedAt: (
@@ -32,7 +34,7 @@ type FilterParams = {
   genre?: string;
   sortBy?: string;
   status?: ("COMPLETED" | "MATURE")[];
-  contentType?: ("AI_GENERATED" | "ORIGINAL")[];
+  contentType?: ("AI_GENERATED" | "ORIGINAL" | "GRAPHICS")[];
   minChapterCount?: number;
   maxChapterCount?: number;
   minViewsCount?: number;
@@ -118,3 +120,77 @@ export const useFilterStore = create<FilterStore>()((set, get) => ({
     return filters;
   },
 }));
+
+/**
+ * Parse URLSearchParams into a FilterParams object.
+ * Arrays are comma-separated in params, e.g., status=COMPLETED,MATURE
+ */
+export function parseFilterParamsFromURL(
+  urlParams: URLSearchParams
+): FilterParams {
+  const getString = (key: string) => {
+    const v = urlParams.get(key);
+    return v && v.length > 0 ? v : undefined;
+  };
+
+  const getArray = (key: string): string[] | undefined => {
+    const v = urlParams.get(key);
+    if (!v) return undefined;
+    return v
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean);
+  };
+
+  const fp: FilterParams = {};
+
+  fp.query = getString("query");
+  fp.genre = getString("genre");
+  fp.sortBy = getString("sortBy");
+  fp.status = getArray("status") as ("COMPLETED" | "MATURE")[] | undefined;
+  fp.contentType = getArray("contentType") as
+    | ("AI_GENERATED" | "ORIGINAL" | "GRAPHICS")[]
+    | undefined;
+  if (getString("minChapterCount"))
+    fp.minChapterCount = Number(urlParams.get("minChapterCount"));
+  if (getString("maxChapterCount"))
+    fp.maxChapterCount = Number(urlParams.get("maxChapterCount"));
+  if (getString("minViewsCount"))
+    fp.minViewsCount = Number(urlParams.get("minViewsCount"));
+  if (getString("maxViewsCount"))
+    fp.maxViewsCount = Number(urlParams.get("maxViewsCount"));
+  fp.publishedAt = getString("publishedAt") as FilterParams["publishedAt"];
+  fp.tags = getArray("tags");
+
+  return fp;
+}
+
+/**
+ * Convert a FilterParams object to URLSearchParams. Arrays -> comma-separated.
+ */
+export function stringifyFilterParamsToURL(
+  params: FilterParams
+): URLSearchParams {
+  const searchParams = new URLSearchParams();
+
+  if (params.query) searchParams.set("query", params.query);
+  if (params.genre) searchParams.set("genre", params.genre);
+  if (params.sortBy) searchParams.set("sortBy", params.sortBy);
+  if (params.status && params.status.length > 0)
+    searchParams.set("status", params.status.join(","));
+  if (params.contentType && params.contentType.length > 0)
+    searchParams.set("contentType", params.contentType.join(","));
+  if (params.minChapterCount !== undefined)
+    searchParams.set("minChapterCount", String(params.minChapterCount));
+  if (params.maxChapterCount !== undefined)
+    searchParams.set("maxChapterCount", String(params.maxChapterCount));
+  if (params.minViewsCount !== undefined)
+    searchParams.set("minViewsCount", String(params.minViewsCount));
+  if (params.maxViewsCount !== undefined)
+    searchParams.set("maxViewsCount", String(params.maxViewsCount));
+  if (params.publishedAt) searchParams.set("publishedAt", params.publishedAt);
+  if (params.tags && params.tags.length > 0)
+    searchParams.set("tags", params.tags.join(","));
+
+  return searchParams;
+}

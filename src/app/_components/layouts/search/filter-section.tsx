@@ -18,7 +18,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -46,7 +46,11 @@ import {
 import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
-import { useFilterStore } from "~/store/useFilter";
+import {
+  parseFilterParamsFromURL,
+  stringifyFilterParamsToURL,
+  useFilterStore,
+} from "~/store/useFilter";
 import { api } from "~/trpc/react";
 
 const FilterSection = ({
@@ -79,14 +83,12 @@ const FilterSection = ({
     setTags,
     resetAll,
     setGenre,
+    setQuery,
     genre: storeGenre,
   } = useFilterStore();
-  const { data: genres, isLoading: genreLoading } = api.genres.all.useQuery(
-    undefined,
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data: genres } = api.genres.all.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
 
   const [chapterRange, setChapterRange] = useState([0, 100]);
   const [viewRange, setViewRange] = useState([0, 1000000]);
@@ -122,25 +124,61 @@ const FilterSection = ({
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
+  // Added refs to avoid repeat set on first mount:
+  const didInit = useRef(false);
+
+  // Effect: Sync Zustand store from URL params (on mount, and param change)
+  useEffect(() => {
+    const parsed = parseFilterParamsFromURL(searchParams);
+    // Only set store for filters present in params
+    if (!didInit.current) {
+      // Query fix: also set query if present
+      if (parsed.query) setQuery(parsed.query);
+      if (parsed.genre) setGenre(parsed.genre);
+      if (parsed.sortBy) setSortBy(parsed.sortBy);
+      if (parsed.status) setStatus(parsed.status as any);
+      if (parsed.contentType) setContentType(parsed.contentType as any);
+      if (
+        parsed.minChapterCount !== undefined &&
+        parsed.maxChapterCount !== undefined
+      ) {
+        setChapterCount(parsed.minChapterCount, parsed.maxChapterCount);
+        setChapterRange([
+          parsed.minChapterCount ?? 0,
+          parsed.maxChapterCount ?? 100,
+        ]);
+      }
+      if (
+        parsed.minViewsCount !== undefined &&
+        parsed.maxViewsCount !== undefined
+      ) {
+        setViewsCount(parsed.minViewsCount, parsed.maxViewsCount);
+        setViewRange([
+          parsed.minViewsCount ?? 0,
+          parsed.maxViewsCount ?? 1000000,
+        ]);
+      }
+      if (parsed.publishedAt) setPublishedAt(parsed.publishedAt as any);
+      if (parsed.tags) setTags(parsed.tags);
+      didInit.current = true;
+    }
+    // Optionally: uncomment below if you want resync store on every param change (eg, browser navigation)
+    // else if (didInit.current) {
+    //   ... same as above, but allow rerun on param change
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const handleGenreSelect = (selectedGenre: string) => {
     setGenre(selectedGenre);
     setOpen(false);
   };
 
+  // Overwrite handleApply:
   const handleApply = async () => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (storeGenre) {
-      params.set("genre", storeGenre);
-    } else {
-      params.delete("genre");
-    }
-
-    if (query) {
-      params.set("query", query);
-    }
-
+    // Build params directly from store (applyFilters)
+    const filters = useFilterStore.getState().applyFilters();
+    const params = stringifyFilterParamsToURL(filters);
     await router.push(`/search?${params.toString()}`);
     handleRefetch();
   };
@@ -153,7 +191,6 @@ const FilterSection = ({
           !isMobile && "border border-border"
         )}
       >
-        {/* Header - Only show on desktop */}
         {!isMobile && (
           <div className="border-b border-border p-4">
             <div className="flex items-center justify-between">
@@ -224,7 +261,6 @@ const FilterSection = ({
             </div>
           </div>
 
-          {/* Sort Options */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-slate-700">
               Sort By
@@ -297,7 +333,6 @@ const FilterSection = ({
             </div>
           </div>
 
-          {/* Content Type Section */}
           <div className="border border-border space-y-4 p-4 bg-slate-50 rounded-lg">
             <h4 className="font-medium text-sm text-slate-700">Content Type</h4>
             <div className="space-y-3">
@@ -323,6 +358,26 @@ const FilterSection = ({
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
+                  <BookOpen className="size-4 text-slate-600" />
+                  <Label htmlFor="originals" className="text-sm">
+                    Originals
+                  </Label>
+                </div>
+                <Switch
+                  id="originals"
+                  checked={contentType.includes("ORIGINAL")}
+                  onCheckedChange={(checked) => {
+                    setContentType(
+                      checked
+                        ? [...contentType, "ORIGINAL"]
+                        : contentType.filter((type) => type !== "ORIGINAL")
+                    );
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
                   <Image className="size-4 text-slate-600" />
                   <Label htmlFor="graphics" className="text-sm">
                     With Graphics
@@ -330,12 +385,12 @@ const FilterSection = ({
                 </div>
                 <Switch
                   id="graphics"
-                  checked={contentType.includes("ORIGINAL")}
+                  checked={contentType.includes("GRAPHICS")}
                   onCheckedChange={(checked) => {
                     setContentType(
                       checked
-                        ? [...contentType, "ORIGINAL"]
-                        : contentType.filter((type) => type !== "ORIGINAL")
+                        ? [...contentType, "GRAPHICS"]
+                        : contentType.filter((type) => type !== "GRAPHICS")
                     );
                   }}
                 />

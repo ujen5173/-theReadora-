@@ -15,8 +15,6 @@ const useReadCount = () => {
   const startTimeRef = useRef<number | null>(null);
   const previousPath = useRef(pathname);
 
-  const shouldStartCount = () => CHAPTER_ROUTE_REGEX.test(pathname);
-
   // Generation of cuid for Anonymous users (not loggedin users)
   const getAnonymousId = (): string => {
     let cuid = localStorage.getItem("cuid");
