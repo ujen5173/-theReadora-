@@ -49,9 +49,8 @@ export function BetaOnboardingModal() {
             This is an early release of{" "}
             <span className="text-primary font-semibold">TheReadora</span>. Most
             stories you see are demo content. If you want real exposure as a new
-            or rising author, head to the <Link href="/write">Originals</Link>{" "}
-            page. Our platform is here to promote new authors and push their
-            content to the world.
+            or rising author, head to the Originals page. Our platform is here
+            to promote new authors and push their content to the world.
             <br />
             <br />
             View comparison of{" "}
@@ -82,7 +81,7 @@ export function BetaOnboardingModal() {
             className="border-primary/20 hover:bg-primary/5 hover:text-primary"
             onClick={handleAction}
           >
-            <Link href="/search?contentType=original">View originals</Link>
+            <Link href="/search?contentType=ORIGINAL">View originals</Link>
           </Button>
         </div>
 
