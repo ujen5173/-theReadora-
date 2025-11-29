@@ -1,4 +1,4 @@
- import { TRPCError, type inferProcedureOutput } from "@trpc/server";
+import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import readingTime from "reading-time";
 import { z } from "zod";
 import { env } from "~/env";
@@ -42,7 +42,9 @@ const filterSchema = z.object({
   genre: z.string().optional(),
   sortBy: z.string().optional(),
   status: z.array(z.enum(["COMPLETED", "MATURE"])).optional(),
-  contentType: z.array(z.enum(["AI_GENERATED", "ORIGINAL"])).optional(),
+  contentType: z
+    .array(z.enum(["AI_GENERATED", "ORIGINAL", "GRAPHICS"]))
+    .optional(),
   minChapterCount: z.number().optional(),
   maxChapterCount: z.number().optional(),
   minViewsCount: z.number().optional(),
@@ -788,6 +790,9 @@ export const storyRouter = createTRPCRouter({
           }
           if (contentType.includes("ORIGINAL")) {
             contentFilters.hasAiContent = false;
+          }
+          if (contentType.includes("GRAPHICS")) {
+            contentFilters.isMature = true;
           }
           Object.assign(where, contentFilters);
         }

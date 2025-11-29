@@ -82,7 +82,7 @@ export function BetaOnboardingModal() {
             className="border-primary/20 hover:bg-primary/5 hover:text-primary"
             onClick={handleAction}
           >
-            <Link href="/search?content-type=original">View originals</Link>
+            <Link href="/search?contentType=original">View originals</Link>
           </Button>
         </div>
 
