@@ -298,9 +298,9 @@ const BookMetadata = ({
               <span>Processing...</span>
             </>
           ) : !!editData ? (
-            "Update the story Information"
+            "Save Story Info"
           ) : (
-            "Continue to Story Editor"
+            "Let’s Begin Writing"
           )}
         </Button>
       </div>

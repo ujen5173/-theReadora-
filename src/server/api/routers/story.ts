@@ -62,6 +62,12 @@ export const storyRouter = createTRPCRouter({
     };
   }),
 
+  random: protectedProcedure.query(async ({ ctx }) => {
+    const rand: { slug: string }[] = await ctx.postgresDb
+      .$queryRaw`SELECT "Story".slug FROM "Story" ORDER BY RANDOM() LIMIT 1`;
+    return rand[0]!.slug;
+  }),
+
   getNovels: protectedProcedure.query(async ({ ctx }) => {
     const novels = await ctx.postgresDb.story.findMany({
       where: {

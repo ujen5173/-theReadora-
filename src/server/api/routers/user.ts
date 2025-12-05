@@ -120,6 +120,9 @@ export const userRouter = createTRPCRouter({
             followersCount: true,
             followingCount: true,
             stories: {
+              where: {
+                storyStatus: "PUBLISHED",
+              },
               orderBy: {
                 createdAt: "desc",
               },

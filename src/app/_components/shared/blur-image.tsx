@@ -34,7 +34,7 @@ const BlurImage = ({
         sizes={sizes}
         draggable={false}
         {...style}
-        priority={!!priority}
+        preload={!!priority}
         className={cn(
           "transition-opacity duration-100 rounded-lg",
           isLoading ? "opacity-0" : "opacity-100",

@@ -30,7 +30,6 @@ const ProfileMetaData = () => {
         const res = await mutateAsync({
           user: user.id,
         });
-        console.log({ res });
       }, 5000);
     }
   }, [user]);
@@ -54,8 +53,8 @@ const ProfileMetaData = () => {
 
   return (
     <div className="w-full bg-white">
-      <div className="mx-auto max-w-[1540px] pb-16 sm:px-4">
-        <div className="relative pt-16 pb-8">
+      <div className="mx-auto max-w-[1540px] pb-16">
+        <div className="relative pt-8 md:pt-16 pb-4 md:pb-8 sm:px-4">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
             <div className="flex justify-center sm:justify-start">
               <div className="relative p-1 rounded-full bg-gradient-to-r from-primary to-primary/80 overflow-hidden">
@@ -143,7 +142,7 @@ const ProfileMetaData = () => {
           </div>
 
           {/* Action Buttons - Mobile */}
-          <div className="flex mt-8 gap-3 md:hidden justify-center">
+          <div className="flex mt-4 md:mt-8 gap-3 md:hidden justify-center">
             {author?.id === loggedInUser?.id ? (
               <Button variant={"outline"} asChild>
                 <Link href="/settings">Edit Profile</Link>
@@ -165,7 +164,7 @@ const ProfileMetaData = () => {
           </div>
 
           {/* Secondary Action Bar */}
-          <div className="mt-8 flex flex-wrap gap-3 justify-center sm:justify-start">
+          <div className="mt-4 md:mt-8 flex flex-wrap gap-3 justify-center sm:justify-start">
             {socialLinks.map(
               (social) =>
                 social.url && (

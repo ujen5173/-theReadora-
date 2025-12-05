@@ -3,12 +3,14 @@ import { Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import BookSection from "~/app/_components/shared/books-section";
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
 
 const RecentReadsAndLegendsShelf = async () => {
-  const [recentReads, legendsShelf] = await Promise.all([
+  const [recentReads, legendsShelf, randomNovel] = await Promise.all([
     api.story.recentReads({ limit: 4 }),
     api.story.theLegendsSelf({ limit: 4 }),
+    api.story.random(),
   ]);
 
   return (
@@ -31,14 +33,19 @@ const RecentReadsAndLegendsShelf = async () => {
                   asChild
                   icon={Sparkles}
                 >
-                  <Link href="/story/secret-of-wyrith">Suprise me</Link>
+                  <Link href={`/story/${randomNovel}`}>Suprise me</Link>
                 </Button>
               </div>
             }
             multiple={true}
           />
         </div>
-        <div className="w-full xl:flex-1">
+        <div
+          className={cn(
+            "w-full xl:flex-1",
+            legendsShelf.length > 0 ? "" : "hidden lg:block"
+          )}
+        >
           <BookSection
             title="The Legends Shelf"
             titleIcon={Crown}

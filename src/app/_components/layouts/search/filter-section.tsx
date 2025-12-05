@@ -16,6 +16,7 @@ import {
   Star,
   Tags,
   TrendingUp,
+  X,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -541,7 +542,7 @@ const FilterSection = ({
         >
           <Button
             variant="outline"
-            className="flex-1"
+            className="flex-1 bg-slate-50"
             onClick={() => {
               resetAll(genre);
               handleRefetch();
@@ -552,6 +553,16 @@ const FilterSection = ({
           <Button className="flex-1" onClick={handleApply}>
             Apply
           </Button>
+          <div className="block md:hidden">
+            <Button
+              variant="outline"
+              className="w-min"
+              onClick={() => {
+                setOpen(false);
+              }}
+              icon={X}
+            />
+          </div>
         </div>
       </div>
     </section>

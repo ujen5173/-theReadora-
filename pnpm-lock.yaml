@@ -227,6 +227,9 @@ importers:
       posthog-js:
         specifier: ^1.236.5
         version: 1.236.5
+      prisma-extension-random:
+        specifier: ^0.2.2
+        version: 0.2.2(@prisma/client@7.0.0(prisma@7.0.0(@types/react@19.1.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.8.3))(typescript@5.8.3))
       qrcode.react:
         specifier: ^4.2.0
         version: 4.2.0(react@19.2.1)
@@ -4265,6 +4268,11 @@ packages:
 
   pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
+
+  prisma-extension-random@0.2.2:
+    resolution: {integrity: sha512-tjY5w2pSIgwQh0tDT98KTTYJ0uadUwfbTH+6QbPCfLg+gesgeLZNO4oKv8O6/udx54QvEbyXgNC1LUcjtoypcg==}
+    peerDependencies:
+      '@prisma/client': '*'
 
   prisma@7.0.0:
     resolution: {integrity: sha512-VZObZ1pQV/OScarYg68RYUx61GpFLH2mJGf9fUX4XxQxTst/6ZK7nkY86CSZ3zBW6U9lKRTsBrZWVz20X5G/KQ==}
@@ -9350,6 +9358,10 @@ snapshots:
   prettier@3.5.3: {}
 
   pretty-format@3.8.0: {}
+
+  prisma-extension-random@0.2.2(@prisma/client@7.0.0(prisma@7.0.0(@types/react@19.1.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.8.3))(typescript@5.8.3)):
+    dependencies:
+      '@prisma/client': 7.0.0(prisma@7.0.0(@types/react@19.1.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.8.3))(typescript@5.8.3)
 
   prisma@7.0.0(@types/react@19.1.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.8.3):
     dependencies:
