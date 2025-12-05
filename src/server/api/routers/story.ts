@@ -82,6 +82,9 @@ export const storyRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       try {
         const stories = await ctx.postgresDb.story.findMany({
+          where: {
+            storyStatus: "PUBLISHED",
+          },
           orderBy: [
             {
               createdAt: "desc",
@@ -142,7 +145,10 @@ export const storyRouter = createTRPCRouter({
             createdAt: true,
             updatedAt: true,
           },
-          take: input.limit * 2, // Fetch more stories to apply ranking algorithm
+          where: {
+            storyStatus: "PUBLISHED",
+          },
+          take: input.limit * 2,
         });
 
         const now = new Date();
@@ -206,12 +212,18 @@ export const storyRouter = createTRPCRouter({
           ctx.postgresDb.story.findMany({
             orderBy: { averageRating: "desc" },
             select: NCardEntity,
+            where: {
+              storyStatus: "PUBLISHED",
+            },
             take: 4,
           }),
           ctx.postgresDb.story.findMany({
             orderBy: { readCount: "desc" },
             select: NCardEntity,
             take: 4,
+            where: {
+              storyStatus: "PUBLISHED",
+            },
           }),
         ]);
         const seen = new Set();
@@ -274,6 +286,7 @@ export const storyRouter = createTRPCRouter({
       const familiarStories = await ctx.postgresDb.story.findMany({
         where: {
           id: { in: topStoryIds },
+          storyStatus: "PUBLISHED",
         },
         select: NCardEntity,
         take: 4,
@@ -305,13 +318,13 @@ export const storyRouter = createTRPCRouter({
         // Not logged in: return a mix of top-rated and diverse completed stories
         const [topRated, diverse] = await Promise.all([
           ctx.postgresDb.story.findMany({
-            where: { isCompleted: true },
+            where: { isCompleted: true, storyStatus: "PUBLISHED" },
             orderBy: { averageRating: "desc" },
             select: NCardEntity,
             take: 4,
           }),
           ctx.postgresDb.story.findMany({
-            where: { isCompleted: true },
+            where: { isCompleted: true, storyStatus: "PUBLISHED" },
             orderBy: { readCount: "desc" },
             select: NCardEntity,
             take: 4,
@@ -482,6 +495,9 @@ export const storyRouter = createTRPCRouter({
       try {
         // Get a larger pool of stories to apply the sophisticated ranking
         const stories = await ctx.postgresDb.story.findMany({
+          where: {
+            storyStatus: "PUBLISHED",
+          },
           select: {
             ...NCardEntity,
             createdAt: true,
@@ -591,6 +607,7 @@ export const storyRouter = createTRPCRouter({
         const story = await ctx.postgresDb.story.findUnique({
           where: {
             id: input.storyId,
+            storyStatus: "PUBLISHED",
           },
         });
 
@@ -600,6 +617,7 @@ export const storyRouter = createTRPCRouter({
 
         const stories = await ctx.postgresDb.story.findMany({
           where: {
+            storyStatus: "PUBLISHED",
             tags: {
               hasSome: story.tags,
             },
@@ -631,6 +649,7 @@ export const storyRouter = createTRPCRouter({
       try {
         const story = await ctx.postgresDb.story.findFirst({
           where: {
+            storyStatus: "PUBLISHED",
             OR: [
               {
                 id: cuidRegex.test(input.query) ? input.query : undefined,
@@ -688,6 +707,7 @@ export const storyRouter = createTRPCRouter({
       try {
         const stories = await ctx.postgresDb.story.findMany({
           where: {
+            storyStatus: "PUBLISHED",
             OR: [
               { title: { contains: query, mode: "insensitive" } },
               { synopsis: { contains: query, mode: "insensitive" } },
@@ -750,7 +770,9 @@ export const storyRouter = createTRPCRouter({
         } = input;
 
         // Build where clause
-        const where: any = {};
+        const where: any = {
+          storyStatus: "PUBLISHED",
+        };
 
         // Text search across multiple fields
         if (query) {
@@ -886,6 +908,7 @@ export const storyRouter = createTRPCRouter({
         const story = await ctx.postgresDb.story.findUnique({
           where: {
             id: input.storyId,
+            storyStatus: "PUBLISHED",
           },
           select: {
             title: true,
@@ -925,6 +948,7 @@ export const storyRouter = createTRPCRouter({
       try {
         const stories = await ctx.postgresDb.story.findMany({
           where: {
+            storyStatus: "PUBLISHED",
             genreSlug: {
               contains: input.genre,
               mode: "insensitive",
