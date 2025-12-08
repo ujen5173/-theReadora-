@@ -36,13 +36,26 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
   const { averageRating, ratingCount, setRatingCount, setAverageRating } =
     useStoryRating();
 
+  const showStatus =
+    (user?.user?.id === story.author.id && story.storyStatus !== "PUBLISHED") ||
+    story.storyStatus === "SCHEDULED";
+  let statusLabel = "";
+  if (showStatus) {
+    if (story.storyStatus === "DRAFT") statusLabel = "Draft";
+    else if (story.storyStatus === "PRIVATE") statusLabel = "Private";
+    else if (story.storyStatus === "SCHEDULED") {
+      statusLabel = "Scheduled";
+      // if (story.publishAt)
+      //   statusLabel += `: ${new Date(story.publishAt).toLocaleString()}`;
+    }
+  }
+
   useEffect(() => {
     const { ratingCount, averageRating } = story;
 
     setRatingCount(ratingCount);
     setAverageRating(averageRating);
 
-    // store session for the author analytics
     const referrer = document.referrer;
 
     if (referrer && referrer !== "" && referrer !== env.NEXT_PUBLIC_APP_URL)
@@ -57,9 +70,19 @@ const StoryDetailsSection = ({ story }: StoryDetailsSectionProps) => {
     <main className="w-full py-2 relative">
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
         <div className="flex-1">
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black mb-2 sm:mb-4 text-slate-700 leading-tight">
-            {story.title}
-          </h1>
+          <div className="flex items-center gap-5 mb-1">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-slate-700 leading-tight">
+              {story.title}
+            </h1>
+            {showStatus && statusLabel && (
+              <Badge
+                variant="outline"
+                className="bg-slate-700 text-slate-200 border-slate-950 uppercase text-xs px-2 py-1"
+              >
+                {statusLabel}
+              </Badge>
+            )}
+          </div>
           <p className="mb-3 sm:mb-4 text-sm sm:text-base text-slate-700">
             By{" "}
             <Link href={`/profile?user=${story.author.username}`}>

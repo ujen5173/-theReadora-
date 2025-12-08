@@ -62,15 +62,13 @@ export const columns: ColumnDef<WorkRow>[] = [
   {
     header: "SN",
     size: 150,
-    cell: ({ row, table }) => {
-      const { pageIndex, pageSize } = table.getState().pagination;
-
+    cell: ({ row }) => {
       return row.original.pin ? (
         <div className="">
           <PinIcon className="mr-2 size-4 text-slate-700" />
         </div>
       ) : (
-        <span>{pageIndex * pageSize + row.index + 1}</span>
+        <span>{row.index + 1}</span>
       );
     },
   },

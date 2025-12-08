@@ -1,8 +1,13 @@
-import { LibraryIcon } from "hugeicons-react";
+import { BubbleChatQuestionIcon, LibraryIcon } from "hugeicons-react";
 import { Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import BookSection from "~/app/_components/shared/books-section";
 import { Button } from "~/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/server";
 
@@ -51,6 +56,28 @@ const RecentReadsAndLegendsShelf = async () => {
             titleIcon={Crown}
             iconStyle="text-primary"
             novels={legendsShelf}
+            headerAddon={
+              <Tooltip>
+                <TooltipTrigger className="absolute -top-5 left-0 w-full h-14 pb-10 px-[15rem] flex justify-start">
+                  <BubbleChatQuestionIcon className="size-6 text-slate-800" />
+                </TooltipTrigger>
+                <TooltipContent
+                  variant="outline"
+                  sideOffset={8}
+                  className="max-w-[27rem] p-4 w-full"
+                  side="bottom"
+                >
+                  <p className="w-full font-bold underline mb-3 text-lg text-slate-800">
+                    What is Legends Shelf?
+                  </p>
+                  <p className="w-full text-lg text-slate-700">
+                    Top novels of the month, handpicked for their excellence and
+                    impact. Only the best stories make it to the Legends Shelf.
+                    Updates monthly
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            }
             customEmptyContainer={
               <div className="flex items-center flex-col min-h-[22rem] space-y-4 justify-center w-full h-full">
                 <p className="text-gray-600 text-lg font-semibold">

@@ -11,13 +11,16 @@ import {
   ToggleOnIcon,
 } from "hugeicons-react";
 import {
+  ExternalLink,
   EyeOffIcon,
   FileCheck2Icon,
   Settings2,
   Trash2Icon,
+  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import BlurImage from "~/app/_components/shared/blur-image";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -216,61 +219,85 @@ const StoryAnalyticsInfo = ({
             </TooltipProvider>
           </div>
 
-          <div className="flex gap-2 mt-8 items-center">
-            <Link href={`/write?editId=${info.id}`}>
-              <Button
-                icon={PencilEdit01Icon}
-                className="bg-blue-500 text-blue-50 hover:bg-blue-600 transition duration-200 hover:text-blue-50"
-                variant={"secondary"}
-              >
-                Edit Story
-              </Button>
-            </Link>
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2 mt-8 items-center">
+              <Link href={`/write?editId=${info.id}`}>
+                <Button
+                  icon={PencilEdit01Icon}
+                  className="bg-blue-500 text-blue-50 hover:bg-blue-600 transition duration-200 hover:text-blue-50"
+                  variant={"secondary"}
+                >
+                  Edit Story
+                </Button>
+              </Link>
 
-            <DropdownMenu>
-              <Button asChild icon={Settings2} variant="outline">
-                <DropdownMenuTrigger>Take Actions</DropdownMenuTrigger>
-              </Button>
-              <DropdownMenuContent className="w-[190px]" align="start">
-                <DropdownMenuGroup>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      <ToggleOnIcon className="mr-4 h-4 w-4" />
-                      Change Status
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                          disabled={info.storyStatus === "DRAFT"}
-                        >
-                          <FileEditIcon className="mr-2 h-4 w-4" /> DRAFT
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          disabled={info.storyStatus === "PUBLISHED"}
-                        >
-                          <FileCheck2Icon className="mr-2 h-4 w-4" /> PUBLISH
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          disabled={info.storyStatus === "PRIVATE"}
-                        >
-                          <EyeOffIcon className="mr-2 h-4 w-4" /> PRIVATE
-                        </DropdownMenuItem>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </DropdownMenuGroup>
+              <Tooltip>
+                <TooltipProvider>
+                  <TooltipTrigger>
+                    <Button disabled icon={TrendingUp}>
+                      Boost Work
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" variant="outline">
+                    Comming soon
+                  </TooltipContent>
+                </TooltipProvider>
+              </Tooltip>
+              <DropdownMenu>
+                <Button asChild icon={Settings2} variant="outline">
+                  <DropdownMenuTrigger>Take Actions</DropdownMenuTrigger>
+                </Button>
+                <DropdownMenuContent className="w-[190px]" align="start">
+                  <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <ToggleOnIcon className="mr-4 h-4 w-4" />
+                        Change Status
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuItem
+                            disabled={info.storyStatus === "DRAFT"}
+                          >
+                            <FileEditIcon className="mr-2 h-4 w-4" /> DRAFT
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            disabled={info.storyStatus === "PUBLISHED"}
+                          >
+                            <FileCheck2Icon className="mr-2 h-4 w-4" /> PUBLISH
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            disabled={info.storyStatus === "PRIVATE"}
+                          >
+                            <EyeOffIcon className="mr-2 h-4 w-4" /> PRIVATE
+                          </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
 
-                <DropdownMenuItem>
-                  <Megaphone01Icon className="mr-2 h-4 w-4" /> Run Ads
-                </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Megaphone01Icon className="mr-2 h-4 w-4" /> Run Ads
+                  </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem className="text-red-600">
-                  <Trash2Icon className="mr-2 h-4 w-4 text-red-600" /> Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem className="text-red-600">
+                    <Trash2Icon className="mr-2 h-4 w-4 text-red-600" /> Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <Button
+              variant={"outline"}
+              icon={ExternalLink}
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                toast.info("URL Copied");
+              }}
+            >
+              Share
+            </Button>
           </div>
         </div>
       </div>

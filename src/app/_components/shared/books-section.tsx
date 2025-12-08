@@ -18,6 +18,7 @@ const BookSection = ({
     </div>
   ),
   analyticsRef = undefined,
+  headerAddon = undefined,
 }: {
   title: string;
   titleIcon?: React.ElementType;
@@ -28,16 +29,18 @@ const BookSection = ({
   isAuthorViewer?: boolean;
   customEmptyContainer?: React.ReactNode;
   analyticsRef?: string | undefined;
+  headerAddon?: React.ReactNode;
 }) => {
   return (
     <section className="w-full">
       <div className={cn(!multiple ? "max-w-[1540px] mx-auto px-4 py-8" : "")}>
         {!removeHeader && (
-          <div className="flex mb-4 items-center gap-2">
+          <div className="flex mb-4 items-center gap-2 relative">
             {TitleIcon && <TitleIcon className={iconStyle} />}
             <h2 className="text-xl sm:text-2xl font-semibold text-primary">
               {title}
             </h2>
+            {headerAddon}
             <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           </div>
         )}

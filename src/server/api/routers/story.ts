@@ -73,6 +73,9 @@ export const storyRouter = createTRPCRouter({
       where: {
         authorId: ctx.session?.user.id,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       select: NCardEntity,
     });
 
@@ -655,13 +658,37 @@ export const storyRouter = createTRPCRouter({
       try {
         const story = await ctx.postgresDb.story.findFirst({
           where: {
-            storyStatus: "PUBLISHED",
-            OR: [
+            AND: [
               {
-                id: cuidRegex.test(input.query) ? input.query : undefined,
+                OR: [
+                  ctx.session?.user.id
+                    ? {
+                        AND: [
+                          {
+                            storyStatus: {
+                              not: "PUBLISHED",
+                            },
+                            authorId: ctx.session?.user.id,
+                          },
+                        ],
+                      }
+                    : {},
+                  {
+                    storyStatus: "PUBLISHED",
+                  },
+                ],
               },
               {
-                slug: !cuidRegex.test(input.query) ? input.query : undefined,
+                OR: [
+                  {
+                    id: cuidRegex.test(input.query) ? input.query : undefined,
+                  },
+                  {
+                    slug: !cuidRegex.test(input.query)
+                      ? input.query
+                      : undefined,
+                  },
+                ],
               },
             ],
           },
@@ -914,7 +941,6 @@ export const storyRouter = createTRPCRouter({
         const story = await ctx.postgresDb.story.findUnique({
           where: {
             id: input.storyId,
-            storyStatus: "PUBLISHED",
           },
           select: {
             title: true,
@@ -1749,6 +1775,9 @@ export const storyRouter = createTRPCRouter({
               metrics: true, // JSON: { likesCount, ... }
             },
           },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
         take: input?.limit ?? 100,
       });

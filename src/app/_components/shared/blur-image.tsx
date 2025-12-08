@@ -36,7 +36,7 @@ const BlurImage = ({
         {...style}
         preload={!!priority}
         className={cn(
-          "transition-opacity duration-100 rounded-lg",
+          "w-full h-full object-cover transition-opacity duration-100 rounded-lg",
           isLoading ? "opacity-0" : "opacity-100",
           className
         )}

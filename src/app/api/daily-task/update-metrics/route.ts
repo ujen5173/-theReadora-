@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { postgresDb } from "~/server/postgresql";
 
-export async function PUT(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
     if (

@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql" 
+    provider = "postgresql"
 }
 
 enum StoryStatus {
@@ -422,8 +422,8 @@ model Story {
     @@index([authorId, createdAt])
     @@index([genreSlug, isCompleted])
     @@index([createdAt])
-    @@index([averageRating])
     @@index([readCount])
+    @@index([averageRating])
 }
 
 model Chapter {
