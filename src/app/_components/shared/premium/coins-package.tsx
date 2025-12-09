@@ -6,6 +6,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { useUserStore } from "~/store/userStore";
 import {
   COIN_PRICE,
   DEFAULT_COIN_AMOUNTS,
@@ -15,6 +16,7 @@ import {
 
 const CoinsPackage = () => {
   const [coinAmount, setCoinAmount] = useState<number>(DEFAULT_COIN_AMOUNTS[2]);
+  const { user } = useUserStore();
   const { handleCoinsPurchase, PurchaseDialog } = useCoinPurchase();
 
   const calculatePrice = (amount: number) => {
@@ -69,6 +71,7 @@ const CoinsPackage = () => {
                 (Max: {new Intl.NumberFormat().format(MAX_COINS)} Coins)
               </span>
             </div>
+
             <Input
               id="custom-amount"
               value={coinAmount}
@@ -85,6 +88,7 @@ const CoinsPackage = () => {
 
           <Button
             className="w-full"
+            disabled={!user}
             size="lg"
             onClick={() => handleCoinsPurchase(coinAmount)}
           >

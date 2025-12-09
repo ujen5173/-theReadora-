@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "Readora",
   title: "Readora - Where Stories Come Alive",
   description:
-    "Readora connects a global community of millions of readers and writers through the power of story. Discover romance, fanfiction, teen fiction, and more.",
+    "Readora connects a global community of readers and writers through the power of story. Discover romance, fanfiction, teen fiction, and more.",
   url: "https://thereadora.vercel.app",
   ogImage: "https://thereadora.vercel.app/og-image.jpg",
   keywords: [
@@ -314,7 +314,7 @@ export const premiumFeatures = {
   benefits: [
     "Ad-free reading experience",
     "Discounts on premium chapters",
-    "Get 100 monthly coins",
+    "Get free 1,500 monthly coins",
     "Unlimited Chapters",
     "Unlimited AI Credits",
     "Advanced Writing Tools",

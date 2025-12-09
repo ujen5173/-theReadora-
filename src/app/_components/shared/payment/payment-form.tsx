@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Elements,
   PaymentElement,
@@ -20,6 +22,7 @@ interface PaymentFormProps {
   isYearly?: boolean;
   amount?: number;
   onSuccess?: () => void;
+  onErrorFunc?: () => void;
   clientSecret?: string;
 }
 
@@ -109,6 +112,7 @@ export const PaymentForm = ({
   type,
   amount,
   onSuccess,
+  onErrorFunc,
   clientSecret: initialClientSecret,
 }: PaymentFormProps) => {
   const [clientSecret, setClientSecret] = useState<string | undefined>(
@@ -121,10 +125,12 @@ export const PaymentForm = ({
         setClientSecret(data.clientSecret);
       } else {
         toast.error("Failed to get payment details");
+        onErrorFunc?.();
       }
     },
     onError: (error) => {
       toast.error(error.message);
+      onErrorFunc?.();
     },
   });
 

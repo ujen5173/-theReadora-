@@ -10,12 +10,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
+import { useUserStore } from "~/store/userStore";
 import { MAX_COINS, MIN_COINS } from "~/utils/constants";
 
 export const useCoinPurchase = () => {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number>();
   const router = useRouter();
+
+  const user = useUserStore();
 
   const handleCoinsPurchase = (amount: number) => {
     if (amount < MIN_COINS) {
@@ -28,6 +31,10 @@ export const useCoinPurchase = () => {
           MAX_COINS
         )} coins`
       );
+      return;
+    }
+    if (!user.user) {
+      toast.error("Sign in to continue");
       return;
     }
     setSelectedAmount(amount);
@@ -50,6 +57,10 @@ export const useCoinPurchase = () => {
           onSuccess={() => {
             setShowPaymentDialog(false);
             router.refresh();
+          }}
+          onErrorFunc={() => {
+            setShowPaymentDialog(false);
+            router.push("/auth/signin");
           }}
         />
       </DialogContent>

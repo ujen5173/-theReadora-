@@ -19,11 +19,6 @@ import { premiumFeatures } from "~/utils/site";
 import Header from "../_components/layouts/header";
 import CoinsPackage from "../_components/shared/premium/coins-package";
 
-const faqs = [
-  { q: "What is Readora Premium?", a: "Premium unlocks ad-free reading..." },
-  { q: "How much does it cost?", a: "Monthly $4.99, yearly $49.99." },
-];
-
 const Premium = () => {
   const uniquePremiumFeatures = [...new Set(premiumFeatures.benefits)];
   const [isYearly, setIsYearly] = useState(false);
@@ -56,21 +51,6 @@ const Premium = () => {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqs.map((f) => ({
-              "@type": "Question",
-              name: f.q,
-              acceptedAnswer: { "@type": "Answer", text: f.a },
-            })),
-          }),
-        }}
-      />
-
       <Header
         background={false}
         removeBackground
