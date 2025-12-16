@@ -39,7 +39,7 @@ const StoryEditorHeader = () => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-end">
-          <span className="text-xs sm:text-sm text-muted-foreground px-2 sm:px-3 py-1 sm:py-1.5 border border-border rounded-md bg-slate-100 dark:bg-slate-800 whitespace-nowrap">
+          <span className="hidden md:block text-xs sm:text-sm text-muted-foreground px-2 sm:px-3 py-1 sm:py-1.5 border border-border rounded-md bg-slate-100 dark:bg-slate-800 whitespace-nowrap">
             {isAutoSaving ? "Saving..." : "Saved"} · {wordCount} words
           </span>
 

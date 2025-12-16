@@ -93,11 +93,11 @@ const BookMetadata = ({
           htmlFor="title"
           className="text-sm sm:text-base text-slate-700 font-semibold inline-block"
         >
-          Book Title
+          Story Title
         </Label>
         <Input
           id="title"
-          placeholder="Enter your book title"
+          placeholder="Enter your story title"
           value={metadata.title}
           onChange={(e) =>
             setMetadata((prev) => ({ ...prev, title: e.target.value }))
@@ -115,7 +115,7 @@ const BookMetadata = ({
         </Label>
         <Textarea
           id="synopsis"
-          placeholder="Write a compelling synopsis for your book..."
+          placeholder="Write a compelling synopsis for your story..."
           value={metadata.synopsis}
           onChange={(e) =>
             setMetadata((prev) => ({ ...prev, synopsis: e.target.value }))
@@ -132,7 +132,7 @@ const BookMetadata = ({
           Tags
         </Label>
         <p className="text-xs sm:text-sm text-muted-foreground">
-          Add up to {MAX_TAGS} tags to help readers find your book
+          Add up to {MAX_TAGS} tags to help readers find your story
         </p>
         <div className="space-y-1.5 sm:space-y-2">
           <Input
@@ -235,7 +235,7 @@ const BookMetadata = ({
                 Mature Content
               </Label>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                This book contains mature themes or content
+                This story contains mature themes or content
               </p>
             </div>
             <Switch
@@ -251,7 +251,7 @@ const BookMetadata = ({
                 LGBTQ+ Content
               </Label>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                This book contains LGBTQ+ themes or characters
+                This story contains LGBTQ+ themes or characters
               </p>
             </div>
             <Switch
@@ -267,7 +267,7 @@ const BookMetadata = ({
                 AI-Generated Content
               </Label>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                This book contains AI-generated content
+                This story contains AI-generated content
               </p>
             </div>
             <Switch

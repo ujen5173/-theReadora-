@@ -77,7 +77,7 @@ const Write = ({
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to upload book cover"
+        error instanceof Error ? error.message : "Failed to upload story cover"
       );
 
       setUploadProgress(-1);
@@ -95,7 +95,7 @@ const Write = ({
 
   const handleSubmit = async (storyDetails: BookMetadataType) => {
     if (!uploadedFile) {
-      toast.error("Please upload a book cover");
+      toast.error("Please upload a story cover");
       return;
     }
 
@@ -163,11 +163,10 @@ const Write = ({
         </h1>
 
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
-          {/* Thumbnail Uploader */}
           <div className="w-full lg:max-w-xs">
             <div className="space-y-1.5 sm:space-y-2">
               <Label className="text-sm sm:text-base text-slate-700 font-semibold inline-block">
-                Book Cover
+                story Cover
               </Label>
               <p className="text-xs sm:text-sm text-muted-foreground">
                 Upload a high-quality cover image for your book. Recommended
@@ -201,7 +200,6 @@ const Write = ({
             )}
           </div>
 
-          {/* Book Metadata */}
           <BookMetadata
             editData={
               editData

@@ -194,7 +194,9 @@ const StoryEditorSidebar = () => {
           </CollapsibleContent>
         </Collapsible>
 
-        <PremiumBanner />
+        <div className="hidden md:block">
+          <PremiumBanner />
+        </div>
         <PremiumChapter />
       </div>
     </>

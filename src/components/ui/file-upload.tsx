@@ -222,7 +222,7 @@ const FileUploaded = ({
       <Image
         onLoadingComplete={() => setImageLoad(false)}
         src={uploadedFile.url}
-        alt="Uploaded book cover"
+        alt="Uploaded story cover"
         draggable={false}
         fill
         className={cn(

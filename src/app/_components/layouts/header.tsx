@@ -1,3 +1,5 @@
+"use client";
+
 import { Menu01Icon, QuillWrite02Icon } from "hugeicons-react";
 import { Crown, Home } from "lucide-react";
 import Link from "next/link";
@@ -19,6 +21,7 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { cn } from "~/lib/utils";
+import { useUserStore } from "~/store/userStore";
 import Logo from "../shared/logo";
 import UserHeader from "../user/user-header";
 import SearchBar from "./search-bar";
@@ -78,7 +81,7 @@ const MobileMenu = () => {
       <SheetTrigger asChild>
         <Button
           icon={Menu01Icon}
-          variant="secondary"
+          variant="ghost"
           size="icon"
           className="lg:hidden"
         />
@@ -175,6 +178,7 @@ const Header = ({
   removeBackground?: boolean;
   headerExtraStyle?: string;
 }) => {
+  const { user } = useUserStore();
   return (
     <>
       {!removeBackground && (
@@ -269,10 +273,12 @@ const Header = ({
           </div>
 
           <div className="flex items-center flex-1 justify-end gap-2">
+            <div className="block md:hidden">
+              <Button size="xs">Studio</Button>
+            </div>
             <div className="flex-1 lg:flex justify-end hidden">
               <SearchBar size="md" />
             </div>
-
             <UserHeader />
           </div>
         </div>

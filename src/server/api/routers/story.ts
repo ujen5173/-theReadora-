@@ -20,6 +20,7 @@ export const NCardEntity = {
   slug: true,
   title: true,
   readingTime: true,
+  storyStatus: true,
   isMature: true,
   thumbnail: true,
   isCompleted: true,
@@ -421,7 +422,6 @@ export const storyRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        // Get user's recent chapter reads with story details
         const recentReads = await ctx.postgresDb.readEvent.findMany({
           where: {
             readerKey: ctx.session.user.id,
@@ -453,15 +453,15 @@ export const storyRouter = createTRPCRouter({
           orderBy: {
             updatedAt: "desc",
           },
-          take: input.limit * 2, // Fetch more to dedupe
+          take: input.limit * 2,
         });
 
-        // Dedupe by story, keep only the most recent read per story
         const seen = new Set();
         const recentStories = [];
         for (const read of recentReads) {
           const story = read.chapter.story;
-          if (!story || seen.has(story.id)) continue;
+          if (!story || seen.has(story.id) || story.storyStatus !== "PUBLISHED")
+            continue;
           seen.add(story.id);
 
           // Progress calculation

@@ -29,7 +29,7 @@ const StoryEditorTabs = () => {
         </TabsTrigger> */}
       </TabsList>
 
-      <div className="flex gap-2">
+      <div className="md:flex hidden gap-2">
         <Button
           variant="outline"
           onClick={() => setFocusMode(!focusMode)}
