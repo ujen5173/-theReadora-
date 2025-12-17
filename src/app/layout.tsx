@@ -9,6 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
 import { BetaOnboardingModal } from "~/components/shared/beta-onboarding-modal";
+import { UserActivityTracker } from "~/components/shared/user-activity-tracker";
 import { TRPCReactProvider } from "~/trpc/react";
 import { manrope } from "~/utils/font";
 import { generateSEOMetadata, structuredData } from "~/utils/site";
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <SessionProvider>
+            <UserActivityTracker />
             <RootContext>
               <RootLayoutClient>
                 <CSPostHogProvider>

@@ -62,6 +62,7 @@ export type UserMinAggregateOutputType = {
   profileViews: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  lastActive: Date | null
   accountStatus: $Enums.AccountStatus | null
   referredById: string | null
 }
@@ -88,6 +89,7 @@ export type UserMaxAggregateOutputType = {
   profileViews: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  lastActive: Date | null
   accountStatus: $Enums.AccountStatus | null
   referredById: string | null
 }
@@ -114,6 +116,7 @@ export type UserCountAggregateOutputType = {
   profileViews: number
   createdAt: number
   updatedAt: number
+  lastActive: number
   accountStatus: number
   emailPreferences: number
   referredById: number
@@ -157,6 +160,7 @@ export type UserMinAggregateInputType = {
   profileViews?: true
   createdAt?: true
   updatedAt?: true
+  lastActive?: true
   accountStatus?: true
   referredById?: true
 }
@@ -183,6 +187,7 @@ export type UserMaxAggregateInputType = {
   profileViews?: true
   createdAt?: true
   updatedAt?: true
+  lastActive?: true
   accountStatus?: true
   referredById?: true
 }
@@ -209,6 +214,7 @@ export type UserCountAggregateInputType = {
   profileViews?: true
   createdAt?: true
   updatedAt?: true
+  lastActive?: true
   accountStatus?: true
   emailPreferences?: true
   referredById?: true
@@ -323,6 +329,7 @@ export type UserGroupByOutputType = {
   profileViews: number | null
   createdAt: Date
   updatedAt: Date
+  lastActive: Date | null
   accountStatus: $Enums.AccountStatus
   emailPreferences: runtime.JsonValue
   referredById: string | null
@@ -373,6 +380,7 @@ export type UserWhereInput = {
   profileViews?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  lastActive?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonFilter<"User">
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
@@ -417,6 +425,7 @@ export type UserOrderByWithRelationInput = {
   profileViews?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastActive?: Prisma.SortOrderInput | Prisma.SortOrder
   accountStatus?: Prisma.SortOrder
   emailPreferences?: Prisma.SortOrder
   referredById?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -464,6 +473,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   profileViews?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  lastActive?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonFilter<"User">
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
@@ -508,6 +518,7 @@ export type UserOrderByWithAggregationInput = {
   profileViews?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastActive?: Prisma.SortOrderInput | Prisma.SortOrder
   accountStatus?: Prisma.SortOrder
   emailPreferences?: Prisma.SortOrder
   referredById?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -543,6 +554,7 @@ export type UserScalarWhereWithAggregatesInput = {
   profileViews?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  lastActive?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusWithAggregatesFilter<"User"> | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonWithAggregatesFilter<"User">
   referredById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -570,6 +582,7 @@ export type UserCreateInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -613,6 +626,7 @@ export type UserUncheckedCreateInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -656,6 +670,7 @@ export type UserUpdateInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -699,6 +714,7 @@ export type UserUncheckedUpdateInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -742,6 +758,7 @@ export type UserCreateManyInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -769,6 +786,7 @@ export type UserUpdateManyMutationInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
@@ -795,6 +813,7 @@ export type UserUncheckedUpdateManyInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -822,6 +841,7 @@ export type UserCountOrderByAggregateInput = {
   profileViews?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastActive?: Prisma.SortOrder
   accountStatus?: Prisma.SortOrder
   emailPreferences?: Prisma.SortOrder
   referredById?: Prisma.SortOrder
@@ -856,6 +876,7 @@ export type UserMaxOrderByAggregateInput = {
   profileViews?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastActive?: Prisma.SortOrder
   accountStatus?: Prisma.SortOrder
   referredById?: Prisma.SortOrder
 }
@@ -882,6 +903,7 @@ export type UserMinOrderByAggregateInput = {
   profileViews?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastActive?: Prisma.SortOrder
   accountStatus?: Prisma.SortOrder
   referredById?: Prisma.SortOrder
 }
@@ -1299,6 +1321,7 @@ export type UserCreateWithoutUnlockedChaptersInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -1341,6 +1364,7 @@ export type UserUncheckedCreateWithoutUnlockedChaptersInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -1399,6 +1423,7 @@ export type UserUpdateWithoutUnlockedChaptersInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -1441,6 +1466,7 @@ export type UserUncheckedUpdateWithoutUnlockedChaptersInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1483,6 +1509,7 @@ export type UserCreateWithoutTransactionHistoryInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1525,6 +1552,7 @@ export type UserUncheckedCreateWithoutTransactionHistoryInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -1583,6 +1611,7 @@ export type UserUpdateWithoutTransactionHistoryInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1625,6 +1654,7 @@ export type UserUncheckedUpdateWithoutTransactionHistoryInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1667,6 +1697,7 @@ export type UserCreateWithoutFollowersInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -1709,6 +1740,7 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -1756,6 +1788,7 @@ export type UserCreateWithoutFollowingInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -1798,6 +1831,7 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -1856,6 +1890,7 @@ export type UserUpdateWithoutFollowersInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -1898,6 +1933,7 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1951,6 +1987,7 @@ export type UserUpdateWithoutFollowingInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -1993,6 +2030,7 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2035,6 +2073,7 @@ export type UserCreateWithoutStoryRatingsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -2077,6 +2116,7 @@ export type UserUncheckedCreateWithoutStoryRatingsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -2124,6 +2164,7 @@ export type UserCreateWithoutLikedRatingsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -2166,6 +2207,7 @@ export type UserUncheckedCreateWithoutLikedRatingsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -2224,6 +2266,7 @@ export type UserUpdateWithoutStoryRatingsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -2266,6 +2309,7 @@ export type UserUncheckedUpdateWithoutStoryRatingsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2327,6 +2371,7 @@ export type UserScalarWhereInput = {
   profileViews?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  lastActive?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonFilter<"User">
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
@@ -2354,6 +2399,7 @@ export type UserCreateWithoutRepliesInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -2396,6 +2442,7 @@ export type UserUncheckedCreateWithoutRepliesInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -2443,6 +2490,7 @@ export type UserCreateWithoutLikedRepliesInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -2485,6 +2533,7 @@ export type UserUncheckedCreateWithoutLikedRepliesInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -2543,6 +2592,7 @@ export type UserUpdateWithoutRepliesInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -2585,6 +2635,7 @@ export type UserUncheckedUpdateWithoutRepliesInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2643,6 +2694,7 @@ export type UserCreateWithoutViewedUsersInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -2685,6 +2737,7 @@ export type UserUncheckedCreateWithoutViewedUsersInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -2732,6 +2785,7 @@ export type UserCreateWithoutVisitorsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -2774,6 +2828,7 @@ export type UserUncheckedCreateWithoutVisitorsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -2832,6 +2887,7 @@ export type UserUpdateWithoutViewedUsersInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -2874,6 +2930,7 @@ export type UserUncheckedUpdateWithoutViewedUsersInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2927,6 +2984,7 @@ export type UserUpdateWithoutVisitorsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -2969,6 +3027,7 @@ export type UserUncheckedUpdateWithoutVisitorsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3011,6 +3070,7 @@ export type UserCreateWithoutReadEventInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -3053,6 +3113,7 @@ export type UserUncheckedCreateWithoutReadEventInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -3111,6 +3172,7 @@ export type UserUpdateWithoutReadEventInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -3153,6 +3215,7 @@ export type UserUncheckedUpdateWithoutReadEventInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3195,6 +3258,7 @@ export type UserCreateWithoutStoriesInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -3237,6 +3301,7 @@ export type UserUncheckedCreateWithoutStoriesInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -3295,6 +3360,7 @@ export type UserUpdateWithoutStoriesInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -3337,6 +3403,7 @@ export type UserUncheckedUpdateWithoutStoriesInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3379,6 +3446,7 @@ export type UserCreateWithoutAffiliateInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -3421,6 +3489,7 @@ export type UserUncheckedCreateWithoutAffiliateInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -3468,6 +3537,7 @@ export type UserCreateWithoutReferredByInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -3510,6 +3580,7 @@ export type UserUncheckedCreateWithoutReferredByInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUncheckedCreateNestedManyWithoutUserInput
@@ -3573,6 +3644,7 @@ export type UserUpdateWithoutAffiliateInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -3615,6 +3687,7 @@ export type UserUncheckedUpdateWithoutAffiliateInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3673,6 +3746,7 @@ export type UserCreateWithoutAccountsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -3715,6 +3789,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -3773,6 +3848,7 @@ export type UserUpdateWithoutAccountsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -3815,6 +3891,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3857,6 +3934,7 @@ export type UserCreateWithoutSessionsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -3899,6 +3977,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -3957,6 +4036,7 @@ export type UserUpdateWithoutSessionsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -3999,6 +4079,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4041,6 +4122,7 @@ export type UserCreateWithoutReadinglistInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsCreateNestedManyWithoutUserInput
@@ -4083,6 +4165,7 @@ export type UserUncheckedCreateWithoutReadinglistInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: string | null
@@ -4141,6 +4224,7 @@ export type UserUpdateWithoutReadinglistInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -4183,6 +4267,7 @@ export type UserUncheckedUpdateWithoutReadinglistInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4225,6 +4310,7 @@ export type UserUpdateWithoutLikedRatingsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -4267,6 +4353,7 @@ export type UserUncheckedUpdateWithoutLikedRatingsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4309,6 +4396,7 @@ export type UserUncheckedUpdateManyWithoutLikedRatingsInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4336,6 +4424,7 @@ export type UserUpdateWithoutLikedRepliesInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -4378,6 +4467,7 @@ export type UserUncheckedUpdateWithoutLikedRepliesInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4420,6 +4510,7 @@ export type UserUncheckedUpdateManyWithoutLikedRepliesInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4447,6 +4538,7 @@ export type UserCreateManyReferredByInput = {
   profileViews?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastActive?: Date | string | null
   accountStatus?: $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
@@ -4473,6 +4565,7 @@ export type UserUpdateWithoutReferredByInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUpdateManyWithoutUserNestedInput
@@ -4515,6 +4608,7 @@ export type UserUncheckedUpdateWithoutReferredByInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   transactionHistory?: Prisma.TransactionsUncheckedUpdateManyWithoutUserNestedInput
@@ -4557,6 +4651,7 @@ export type UserUncheckedUpdateManyWithoutReferredByInput = {
   profileViews?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastActive?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailPreferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
@@ -4740,6 +4835,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   profileViews?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastActive?: boolean
   accountStatus?: boolean
   emailPreferences?: boolean
   referredById?: boolean
@@ -4785,6 +4881,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   profileViews?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastActive?: boolean
   accountStatus?: boolean
   emailPreferences?: boolean
   referredById?: boolean
@@ -4813,6 +4910,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   profileViews?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastActive?: boolean
   accountStatus?: boolean
   emailPreferences?: boolean
   referredById?: boolean
@@ -4841,12 +4939,13 @@ export type UserSelectScalar = {
   profileViews?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastActive?: boolean
   accountStatus?: boolean
   emailPreferences?: boolean
   referredById?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "bio" | "emailVerified" | "image" | "coins" | "coinsLastUpdated" | "premium" | "premiumUntil" | "premiumSince" | "premiumPurchasedAt" | "purchaseMedium" | "purchaseId" | "followingCount" | "followersCount" | "usedForAIContentGeneration" | "profileViews" | "createdAt" | "updatedAt" | "accountStatus" | "emailPreferences" | "referredById", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "bio" | "emailVerified" | "image" | "coins" | "coinsLastUpdated" | "premium" | "premiumUntil" | "premiumSince" | "premiumPurchasedAt" | "purchaseMedium" | "purchaseId" | "followingCount" | "followersCount" | "usedForAIContentGeneration" | "profileViews" | "createdAt" | "updatedAt" | "lastActive" | "accountStatus" | "emailPreferences" | "referredById", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transactionHistory?: boolean | Prisma.User$transactionHistoryArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -4917,6 +5016,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     profileViews: number | null
     createdAt: Date
     updatedAt: Date
+    lastActive: Date | null
     accountStatus: $Enums.AccountStatus
     emailPreferences: runtime.JsonValue
     referredById: string | null
@@ -5381,6 +5481,7 @@ export interface UserFieldRefs {
   readonly profileViews: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly lastActive: Prisma.FieldRef<"User", 'DateTime'>
   readonly accountStatus: Prisma.FieldRef<"User", 'AccountStatus'>
   readonly emailPreferences: Prisma.FieldRef<"User", 'Json'>
   readonly referredById: Prisma.FieldRef<"User", 'String'>

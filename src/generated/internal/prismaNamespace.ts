@@ -1964,6 +1964,7 @@ export const UserScalarFieldEnum = {
   profileViews: 'profileViews',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  lastActive: 'lastActive',
   accountStatus: 'accountStatus',
   emailPreferences: 'emailPreferences',
   referredById: 'referredById'

@@ -547,6 +547,24 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
+
+  updateLastActive: protectedProcedure.mutation(async ({ ctx }) => {
+    try {
+      await ctx.postgresDb.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          lastActive: new Date(),
+        },
+      });
+      return true;
+    } catch (error) {
+      console.error("Failed to update last active status", error);
+      // We don't want to throw an error to the client for this background task
+      return false;
+    }
+  }),
 });
 
 export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;
