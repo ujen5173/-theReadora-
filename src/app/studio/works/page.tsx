@@ -18,8 +18,6 @@ const Works = () => {
 
   const works: WorkRow[] = useMemo(() => data ?? [], [data]);
 
-  console.log({ works });
-
   return (
     <main className="p-6">
       {isLoading ? (

@@ -11,7 +11,6 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "~/components/ui/chart";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -81,11 +80,11 @@ export const METRICS = [
 export const m = METRICS.map((e) => e.label);
 export type TAB_ENUM = (typeof m)[number];
 export type DateRangeType = "24h" | "7d" | "30d" | "3m" | "12m" | "24m";
- 
+
 const Metrics = () => {
   const [range, setRange] = useState<DateRangeType>("30d");
   const { data } = useProfileAnalytics(range);
-  const {user} = useUserStore();
+  const { user } = useUserStore();
 
   const validateParams = (param: string): boolean => {
     return m.includes(param as TAB_ENUM);
@@ -133,13 +132,13 @@ const Metrics = () => {
       </div>
 
       <div className="rounded-md border border-border shadow bg-white">
-        <div className="flex items-center justify-between p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 gap-3 sm:gap-0">
           <div />
           <Select
             value={range}
             onValueChange={(value) => setRange(value as DateRangeType)}
           >
-            <SelectTrigger className="text-sm border w-[180px] rounded px-2 py-1">
+            <SelectTrigger className="text-sm border w-full sm:w-[180px] rounded px-2 py-1">
               <SelectValue placeholder="Date Range" />
             </SelectTrigger>
             <SelectContent align="end" className="w-[180px]">
@@ -167,13 +166,12 @@ const Metrics = () => {
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <ScrollArea className="h-[125px] w-full whitespace-nowrap">
-            <div className="flex w-full">
-              {METRICS.map((val, idx) => (
+        <div className="w-full">
+          <div className="overflow-x-auto overflow-y-hidden flex custom-scroll max-h-[125px] w-full">
+            {METRICS.map((val, idx) => (
+              <div key={val.label} className="flex-shrink-0">
                 <TabTriggerButton
                   idx={idx}
-                  key={val.label}
                   range={range}
                   metrics={{
                     ...val,
@@ -183,8 +181,6 @@ const Metrics = () => {
                           return data?.metrics.novelViews.value ?? 0;
                         case "profile_views":
                           return data?.metrics.profileViews.value ?? 0;
-                        // case "retention":
-                        // return data?.metrics.retention.value ?? 0;
                         case "unique_readers":
                           return data?.metrics.uniqueReaders?.value ?? 0;
                         case "avg_read_time":
@@ -193,14 +189,13 @@ const Metrics = () => {
                           return 0;
                       }
                     })() as number,
+
                     delta: (() => {
                       switch (val.label) {
                         case "novel_views":
                           return data?.metrics.novelViews.delta ?? 0;
                         case "profile_views":
                           return data?.metrics.profileViews.delta ?? 0;
-                        // case "retention":
-                        //   return data?.metrics.retention.delta ?? 0;
                         case "unique_readers":
                           return data?.metrics.uniqueReaders?.delta ?? 0;
                         case "avg_read_time":
@@ -213,23 +208,24 @@ const Metrics = () => {
                   activeTab={activeTab}
                   setActiveTab={setActiveTab}
                 />
-              ))}
-            </div>
-
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="h-64 sm:h-80 w-full">
-          {/* Chart for the active metric */}
-          <ChartContainer 
-            className="h-full w-full" 
-            config={{
-              [activeTab]: {
-                label: METRICS.find(m => m.label === activeTab)?.title ?? activeTab,
-                color: "var(--chart-1)",
-              }
-            } satisfies ChartConfig}
+          <ChartContainer
+            className="h-full w-full aspect-auto"
+            config={
+              {
+                [activeTab]: {
+                  label:
+                    METRICS.find((m) => m.label === activeTab)?.title ??
+                    activeTab,
+                  color: "var(--chart-1)",
+                },
+              } satisfies ChartConfig
+            }
           >
             <AreaChart
               accessibilityLayer
@@ -311,7 +307,7 @@ const TabTriggerButton = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger className="flex-1 min-w-[10rem] sm:min-w-[12rem] lg:min-w-[15rem]">
+      <TooltipTrigger className="block w-[10rem] sm:w-[12rem] lg:w-[15rem]">
         <div>
           <div className="flex w-full">
             <div

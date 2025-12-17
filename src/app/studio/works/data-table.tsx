@@ -23,7 +23,6 @@ import {
   EmptyTitle,
 } from "~/components/ui/empty";
 import { Input } from "~/components/ui/input";
-import { ScrollArea } from "~/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -78,80 +77,84 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className="bg-white rounded-md overflow-hidden border">
-        <ScrollArea className="h-[600px] min-w-[800px]">
-          <Table className="w-full h-full">
-            <TableHeader className="sticky z-50 top-0 bg-accent">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow className="w-full" key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        className="py-2  text-slate-700 font-semibold px-4"
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody className="h-full">
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className="hover:bg-muted/20"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="p-4 align-middle">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow className="h-full">
-                  <TableCell className="h-full" colSpan={columns.length}>
-                    <Empty>
-                      <EmptyHeader>
-                        <EmptyMedia
-                          className="border border-border"
-                          variant="icon"
+      <div className="bg-white rounded-md border">
+        <div className="w-full">
+          <div className="overflow-x-auto overflow-y-hidden flex custom-scroll max-h-[80vh] w-full">
+            <Table className="w-full h-full">
+              <TableHeader className="sticky z-50 top-0 bg-accent">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow className="w-full" key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          className="py-2  text-slate-700 font-semibold px-4"
                         >
-                          <Book02Icon />
-                        </EmptyMedia>
-                      </EmptyHeader>
-                      <EmptyTitle>No Works Yet</EmptyTitle>
-                      <EmptyDescription>
-                        You haven't written anything yet. Get started by writing
-                        your first work.
-                      </EmptyDescription>
-                      <EmptyContent>
-                        <div className="flex gap-2">
-                          <Button icon={QuillWrite02Icon}>Start Writing</Button>
-                          <Button icon={Upload05Icon} variant="outline">
-                            Import Work
-                          </Button>
-                        </div>
-                      </EmptyContent>
-                    </Empty>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </ScrollArea>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody className="h-full">
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className="hover:bg-muted/20"
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="p-4 align-middle">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow className="h-full">
+                    <TableCell className="h-full" colSpan={columns.length}>
+                      <Empty>
+                        <EmptyHeader>
+                          <EmptyMedia
+                            className="border border-border"
+                            variant="icon"
+                          >
+                            <Book02Icon />
+                          </EmptyMedia>
+                        </EmptyHeader>
+                        <EmptyTitle>No Works Yet</EmptyTitle>
+                        <EmptyDescription>
+                          You haven't written anything yet. Get started by
+                          writing your first work.
+                        </EmptyDescription>
+                        <EmptyContent>
+                          <div className="flex gap-2">
+                            <Button icon={QuillWrite02Icon}>
+                              Start Writing
+                            </Button>
+                            <Button icon={Upload05Icon} variant="outline">
+                              Import Work
+                            </Button>
+                          </div>
+                        </EmptyContent>
+                      </Empty>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
       </div>
     </div>
   );

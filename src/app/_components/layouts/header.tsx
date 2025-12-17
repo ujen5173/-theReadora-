@@ -273,9 +273,13 @@ const Header = ({
           </div>
 
           <div className="flex items-center flex-1 justify-end gap-2">
-            <div className="block md:hidden">
-              <Button size="xs">Studio</Button>
-            </div>
+            {user && (
+              <div className="block md:hidden">
+                <Button size="xs" asChild>
+                  <Link href="/studio">Studio</Link>
+                </Button>
+              </div>
+            )}
             <div className="flex-1 lg:flex justify-end hidden">
               <SearchBar size="md" />
             </div>

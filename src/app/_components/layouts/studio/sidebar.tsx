@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  Agreement02Icon,
-  Analytics01Icon,
-  ArrowLeft01Icon, Idea01Icon,
-  LibraryIcon,
-  QuillWrite02Icon,
-  StarIcon
+    Agreement02Icon,
+    Analytics01Icon,
+    ArrowLeft01Icon, Idea01Icon,
+    LibraryIcon,
+    QuillWrite02Icon,
+    StarIcon
 } from "hugeicons-react";
 import { Home } from "lucide-react";
 import Link from "next/link";
@@ -14,20 +14,21 @@ import { usePathname } from "next/navigation";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { cn } from "~/lib/utils";
 import FeedbackDialog from "../../shared/feedback";
 import Logo from "../../shared/logo";
+import { useState } from "react";
 
 const items = {
   manage: [
@@ -79,17 +80,14 @@ const validPaths = Object.values(items)
 
 const StudioSidebar = () => {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
-  // Get the current active path, defaulting to home if invalid
-  const currentPath = validPaths.includes(pathname as any)
+   const currentPath = validPaths.includes(pathname as any)
     ? pathname
     : "/studio";
 
   return (
-    <Sidebar
-      collapsible="none"
-      className="bg-slate-50 border-r border-border h-dvh"
-    >
+    <Sidebar className="bg-slate-50 border-r border-border h-dvh">
       <SidebarHeader className="h-[64px]">
         <div className="p-2">
           <Logo />

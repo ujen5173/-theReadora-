@@ -130,3 +130,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+.scroll-vertical::-webkit-scrollbar {
+  width: 7px;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: oklch(98.4% 0.003 247.858);
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: oklch(92.9% 0.013 255.508);
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: oklch(92.9% 0.013 255.508);
+}

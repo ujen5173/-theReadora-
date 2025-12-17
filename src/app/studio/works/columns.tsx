@@ -23,7 +23,6 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Spinner } from "~/components/ui/spinner";
-import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import { formatSmartDate } from "~/utils/helpers";
 
@@ -80,7 +79,7 @@ export const columns: ColumnDef<WorkRow>[] = [
       const data = row.original;
 
       return (
-        <div className={cn("flex items-center gap-3")}>
+        <div className="flex items-center gap-3">
           <div className="relative aspect-[1.04/1.7] z-0 w-14 rounded-sm ring-1 ring-border bg-muted">
             {data.pin && (
               <div className="absolute -top-2 -right-4 z-10">
@@ -96,7 +95,7 @@ export const columns: ColumnDef<WorkRow>[] = [
             />
           </div>
           <div className="min-w-0 space-y-1">
-            <div className="truncate text-base font-semibold text-slate-800">
+            <div className="truncate text-base font-semibold text-slate-700">
               {data.title}
             </div>
             <div className="text-xs text-slate-600 font-medium">
