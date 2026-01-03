@@ -4,9 +4,9 @@ import { z } from "zod";
 import { env } from "~/env";
 import { EmailQueue } from "~/lib/email/queue";
 import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
 } from "~/server/api/trpc";
 import { LANGUAGES, chunkCollectionName, cuidRegex } from "~/utils/constants";
 
@@ -1654,6 +1654,7 @@ export const storyRouter = createTRPCRouter({
             authorId: ctx.session.user.id,
           },
           select: {
+            id: true,
             title: true,
             synopsis: true,
             tags: true,
@@ -1665,6 +1666,18 @@ export const storyRouter = createTRPCRouter({
             thumbnail: true,
             thumbnailId: true,
             storyStatus: true,
+            chapters: {
+              select: {
+                id: true,
+                title: true,
+                chapterNumber: true,
+                isLocked: true,
+                createdAt: true,
+              },
+              orderBy: {
+                chapterNumber: "asc",
+              },
+            },
           },
         });
 

@@ -179,6 +179,7 @@ const Header = ({
   headerExtraStyle?: string;
 }) => {
   const { user } = useUserStore();
+
   return (
     <>
       {!removeBackground && (

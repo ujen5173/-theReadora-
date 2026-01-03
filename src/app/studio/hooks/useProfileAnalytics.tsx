@@ -1,10 +1,11 @@
 import { api } from "~/trpc/react";
 
 const useProfileAnalytics = (
-  range?: "24h" | "7d" | "30d" | "3m" | "12m" | "24m"
+  range?: "24h" | "7d" | "30d" | "3m" | "12m" | "24m",
+  singleStory?: string
 ) => {
   const { data, isLoading } = api.analytics.getProfileAnalytics.useQuery(
-    range ? { range } : undefined,
+    range ? { range, selectedStory: singleStory } : undefined,
     {
       refetchOnWindowFocus: false,
       staleTime: Infinity,

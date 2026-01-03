@@ -21,6 +21,14 @@ export interface BookMetadataType {
   hasAiContent: boolean;
   language: (typeof LANGUAGES)[number]["name"];
   isLGBTQContent: boolean;
+  id?: string;
+  chapters?: {
+    id: string;
+    title: string;
+    chapterNumber: number;
+    isLocked: boolean;
+    createdAt: Date;
+  }[];
 }
 
 const Write = ({
@@ -165,10 +173,10 @@ const Write = ({
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
           <div className="w-full lg:max-w-xs">
             <div className="space-y-1.5 sm:space-y-2">
-              <Label className="text-sm sm:text-base text-slate-700 font-semibold inline-block">
-                story Cover
+              <Label className="text-base text-slate-700 font-semibold inline-block">
+                Story Cover
               </Label>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-sm sm:text-sm text-muted-foreground">
                 Upload a high-quality cover image for your book. Recommended
                 size: <span className="font-semibold">800x1200 pixels.</span>
               </p>
@@ -212,6 +220,8 @@ const Write = ({
                     hasAiContent: editData.hasAiContent,
                     language: editData.language,
                     isLGBTQContent: editData.isLGBTQContent,
+                    chapters: editData.chapters,
+                    id: editId ?? undefined,
                   }
                 : null
             }

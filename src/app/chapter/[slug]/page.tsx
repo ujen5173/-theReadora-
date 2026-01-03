@@ -26,8 +26,6 @@ const SingleChapterPage = async ({
     <ChapterWrapper details={chapter}>
       <ChapterTOC />
       <ChapterContent userUnlockedChapter={userUnlockedChapter} />
-      {/* <ChapterFooter />
-        <RecommendedStories /> */}
     </ChapterWrapper>
   );
 };

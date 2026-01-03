@@ -81,9 +81,9 @@ export const m = METRICS.map((e) => e.label);
 export type TAB_ENUM = (typeof m)[number];
 export type DateRangeType = "24h" | "7d" | "30d" | "3m" | "12m" | "24m";
 
-const Metrics = () => {
+const Metrics = ({ singleStory }: { singleStory?: string }) => {
   const [range, setRange] = useState<DateRangeType>("30d");
-  const { data } = useProfileAnalytics(range);
+  const { data } = useProfileAnalytics(range, singleStory);
   const { user } = useUserStore();
 
   const validateParams = (param: string): boolean => {
@@ -213,7 +213,12 @@ const Metrics = () => {
           </div>
         </div>
 
-        <div className="h-64 sm:h-80 w-full">
+        <div className="h-64 relative sm:h-80 w-full">
+          {getActiveChartData().length === 0 && (
+            <div className="flex items-center justify-center absolute inset-0">
+              <p className="text-slate-600 font-medium">No data to show</p>
+            </div>
+          )}
           <ChartContainer
             className="h-full w-full aspect-auto"
             config={

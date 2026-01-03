@@ -99,6 +99,7 @@ export const analyticsRouter = createTRPCRouter({
       z
         .object({
           range: z.enum(["24h", "7d", "30d", "3m", "12m", "24m"]),
+          selectedStory: z.string().cuid().optional(),
         })
         .optional()
     )
@@ -106,7 +107,6 @@ export const analyticsRouter = createTRPCRouter({
       try {
         const userId = ctx.session.user.id;
 
-        // Gather base info
         const base = await ctx.postgresDb.user.findFirst({
           where: { id: userId },
           select: {
@@ -114,7 +114,14 @@ export const analyticsRouter = createTRPCRouter({
             followingCount: true,
             name: true,
             image: true,
-            stories: { select: { id: true } },
+            stories: {
+              select: { id: true },
+              ...(input?.selectedStory
+                ? {
+                    id: input.selectedStory,
+                  }
+                : {}),
+            },
           },
         });
 

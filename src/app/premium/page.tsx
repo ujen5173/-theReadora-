@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { ZapIcon } from "hugeicons-react";
 import { CheckIcon, Crown, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { SubscriptionManagementDialog } from "~/app/_components/shared/premium/subscription-management-dialog";
 import { useCoinPurchase } from "~/app/hooks/use-coin-purchase";
 import { Badge } from "~/components/ui/badge";
@@ -41,12 +42,16 @@ const Premium = () => {
     });
 
   const handleSubscribe = () => {
-    createSubscription({
-      priceId: isYearly
-        ? "price_1RMoywL5ATfigxyFKcLRvctl"
-        : "price_1RMYWtL5ATfigxyFpgyaO8or",
-      isYearly,
-    });
+    if (userData) {
+      createSubscription({
+        priceId: isYearly
+          ? "price_1RMoywL5ATfigxyFKcLRvctl"
+          : "price_1RMYWtL5ATfigxyFpgyaO8or",
+        isYearly,
+      });
+    } else {
+      toast.error("Login to subscribe and enjoy perks");
+    }
   };
 
   return (

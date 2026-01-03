@@ -27,9 +27,11 @@ export const metadata: Metadata = generateSEOMetadata({
   },
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en" className={`${manrope.className}`}>
       <head>

@@ -1,6 +1,8 @@
 "use client";
 
+import { Edit02Icon } from "hugeicons-react";
 import { ArrowRight, Loader2, X } from "lucide-react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import type { BookMetadataType } from "~/app/write/wrapper";
@@ -283,26 +285,53 @@ const BookMetadata = ({
         </div>
       </div>
 
-      <div className="pt-3 sm:pt-4">
-        <Button
-          onClick={() => onSubmit(metadata)}
-          icon={ArrowRight}
-          effect={status === "pending" ? undefined : "expandIcon"}
-          iconPlacement="right"
-          disabled={status === "pending"}
-          className="w-full sm:w-auto"
-        >
-          {status === "pending" ? (
-            <>
-              <Loader2 className="size-3.5 sm:size-4 animate-spin" />
-              <span>Processing...</span>
-            </>
-          ) : !!editData ? (
-            "Save Story Info"
-          ) : (
-            "Let’s Begin Writing"
-          )}
-        </Button>
+      <div className="pt-3 sm:pt-4 space-y-6">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button
+            onClick={() => onSubmit(metadata)}
+            icon={ArrowRight}
+            effect={status === "pending" ? undefined : "expandIcon"}
+            iconPlacement="right"
+            disabled={status === "pending"}
+            className="w-full sm:w-auto"
+          >
+            {status === "pending" ? (
+              <>
+                <Loader2 className="size-3.5 sm:size-4 animate-spin" />
+                <span>Processing...</span>
+              </>
+            ) : !!editData ? (
+              "Save Story Info"
+            ) : (
+              "Let’s Begin Writing"
+            )}
+          </Button>
+        </div>
+
+        {!!editData?.chapters?.length && !!editData.id && (
+          <div className="space-y-4 pt-4 border-t">
+            <h3 className="text-base font-semibold text-slate-700">Chapters</h3>
+            <div className="grid gap-2">
+              {editData.chapters.map((chapter) => (
+                <div
+                  key={chapter.id}
+                  className="flex items-center justify-between p-3 border rounded-lg bg-white"
+                >
+                  <span className="text-sm font-medium">
+                    Chapter {chapter.chapterNumber}: {chapter.title}
+                  </span>
+                  <Link
+                    href={`/write/story-editor/${editData.id}?chapter_id=${chapter.id}`}
+                  >
+                    <Button icon={Edit02Icon} variant="ghost" size="sm" className="h-8">
+                      Edit
+                    </Button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

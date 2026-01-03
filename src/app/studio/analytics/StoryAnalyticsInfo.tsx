@@ -219,8 +219,8 @@ const StoryAnalyticsInfo = ({
             </TooltipProvider>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex gap-2 mt-8 items-center">
+          <div className="flex items-center mt-8 justify-between">
+            <div className="flex gap-2 items-center">
               <Link href={`/write?editId=${info.id}`}>
                 <Button
                   icon={PencilEdit01Icon}
