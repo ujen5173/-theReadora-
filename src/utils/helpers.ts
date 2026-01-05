@@ -1,4 +1,4 @@
- import { format } from "date-fns";
+import { format } from "date-fns";
 import numeral from "numeral";
 import type { ChapterMetrics } from "prisma/types";
 import slugify from "slugify";
@@ -11,7 +11,6 @@ export const makeSlug = (str: string) =>
     strict: true,
     replacement: "-",
     trim: true,
-    locale: "en",
     remove: /[*+~.()'"!:@]/g, // removes special characters
   });
 
