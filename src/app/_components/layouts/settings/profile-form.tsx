@@ -92,7 +92,7 @@ const ProfileForm = () => {
       },
       {
         enabled: false,
-      }
+      },
     );
 
   const { mutateAsync, status } = api.user.updateUser.useMutation();
@@ -182,8 +182,8 @@ const ProfileForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="rounded-lg border border-primary/20 bg-white p-6">
-          <h4 className="font-semibold mb-4">Personal Information</h4>
+        <div className="bg-white p-4 sm:p-6 border border-primary/20 rounded-lg">
+          <h4 className="mb-4 font-semibold">Personal Information</h4>
           <div className="space-y-6">
             <FormField
               control={form.control}
@@ -198,7 +198,7 @@ const ProfileForm = () => {
                       onChange={(e) => {
                         const value = e.target.value.replace(
                           /[^a-zA-Z0-9\s]/g,
-                          ""
+                          "",
                         );
                         field.onChange(value);
                       }}
@@ -232,7 +232,7 @@ const ProfileForm = () => {
                             usernameStatus &&
                               (usernameStatus.available
                                 ? "border-green-500 focus-visible:ring-green-500"
-                                : "border-red-500 focus-visible:ring-red-500")
+                                : "border-red-500 focus-visible:ring-red-500"),
                           )}
                         />
                       </FormControl>
@@ -258,7 +258,7 @@ const ProfileForm = () => {
                           "flex items-center gap-2 text-sm",
                           usernameStatus.available
                             ? "text-green-600"
-                            : "text-red-600"
+                            : "text-red-600",
                         )}
                       >
                         {usernameStatus.available ? (
@@ -312,14 +312,14 @@ const ProfileForm = () => {
           </div>
         </div>
 
-        <div className="rounded-lg border border-primary/20 bg-white p-6">
-          <h4 className="font-semibold mb-4">Account Details</h4>
+        <div className="bg-white p-4 sm:p-6 border border-primary/20 rounded-lg">
+          <h4 className="mb-4 font-semibold">Account Details</h4>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium mb-1.5 block">
+              <label className="block mb-1.5 font-medium text-sm">
                 Account Created
               </label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {new Date(createdAt).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -328,10 +328,10 @@ const ProfileForm = () => {
               </p>
             </div>
             <div>
-              <label className="text-sm font-medium mb-1.5 block">
+              <label className="block mb-1.5 font-medium text-sm">
                 Last Updated
               </label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {new Date(updatedAt).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -340,7 +340,7 @@ const ProfileForm = () => {
               </p>
             </div>
             <div>
-              <label className="text-sm font-medium mb-1.5 block">
+              <label className="block mb-1.5 font-medium text-sm">
                 Premium Status
               </label>
               <div className="flex items-center gap-2">
@@ -349,7 +349,7 @@ const ProfileForm = () => {
                     premium ? "bg-green-500" : "bg-muted"
                   }`}
                 />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {premium ? (
                     <span className="flex items-center gap-1.5">
                       <Crown className="size-4 text-primary" />
@@ -364,7 +364,7 @@ const ProfileForm = () => {
                 </p>
               </div>
               {premium && premiumUntil && (
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="mt-1 text-muted-foreground text-xs">
                   Until {format(premiumUntil, "MMM d, yyyy")}
                 </p>
               )}

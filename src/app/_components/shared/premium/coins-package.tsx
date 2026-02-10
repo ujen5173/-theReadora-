@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { useCoinPurchase } from "~/app/hooks/use-coin-purchase";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -32,21 +33,21 @@ const CoinsPackage = () => {
 
   return (
     <>
-      <div className="flex-1 border border-border bg-white rounded-lg md:rounded-2xl p-4 md:p-8 hover:shadow-lg transition-shadow">
-        <h2 className="mb-2 text-2xl font-bold text-slate-800 flex items-center">
+      <div className="flex-1 bg-white hover:shadow-lg p-4 md:p-8 border border-border rounded-lg md:rounded-2xl transition-shadow">
+        <h2 className="flex items-center mb-2 font-bold text-slate-800 text-2xl">
           Coins Package
           <Badge variant="outline" className="ml-2">
             Flexible
           </Badge>
         </h2>
 
-        <p className="text-slate-600 text-base mb-6">
+        <p className="mb-6 text-slate-600 text-base">
           Purchase coins to unlock premium chapters and support your favorite
           authors.
         </p>
 
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="gap-4 grid grid-cols-2">
             {DEFAULT_COIN_AMOUNTS.map((amount) => (
               <Button
                 key={amount}
@@ -60,10 +61,10 @@ const CoinsPackage = () => {
           </div>
 
           <div>
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center">
               <Label
                 htmlFor="custom-amount"
-                className="text-sm font-medium text-slate-600"
+                className="font-medium text-slate-600 text-sm"
               >
                 Custom Amount:
               </Label>
@@ -86,17 +87,30 @@ const CoinsPackage = () => {
             />
           </div>
 
-          <Button
-            className="w-full"
-            disabled={!user}
-            size="lg"
-            onClick={() => handleCoinsPurchase(coinAmount)}
-          >
-            Buy {coinAmount.toLocaleString()} Coins for $
-            {calculatePrice(coinAmount)}/-
-          </Button>
+          <div className="relative">
+            <Button
+              className="relative w-full"
+              // disabled={!user}
+              disabled={true}
+              size="lg"
+              onClick={() => {
+                toast.info("Purchasing coins will be rolling out soon.");
+                return;
+                // handleCoinsPurchase(coinAmount)
+              }}
+            >
+              Buy {coinAmount.toLocaleString()} Coins for $
+              {calculatePrice(coinAmount)}/-
+            </Button>
+            <Badge
+              variant={"secondary"}
+              className="-top-3 right-2 absolute border border-destructive"
+            >
+              coming soon
+            </Badge>
+          </div>
 
-          <p className="text-xs text-slate-500 text-center">
+          <p className="text-slate-500 text-xs text-center">
             1 Coin ≈ ${COIN_PRICE}/- • Minimum purchase:{" "}
             {MIN_COINS.toLocaleString()} coins
           </p>

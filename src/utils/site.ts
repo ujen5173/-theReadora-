@@ -25,11 +25,11 @@ export const siteConfig = {
     "story community",
   ],
   links: {
-    twitter: "https://twitter.com/readora",
-    github: "https://github.com/readora",
-    discord: "https://discord.gg/readora",
-    pinterest: "https://www.pinterest.com/readora",
-    instagram: "https://www.instagram.com/readora",
+    twitter: "#",
+    github: "#",
+    discord: "#",
+    pinterest: "#",
+    instagram: "#",
   },
   creator: {
     name: "Ujen Basi",

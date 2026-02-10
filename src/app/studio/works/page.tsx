@@ -13,15 +13,15 @@ const Works = () => {
     {
       refetchOnWindowFocus: false,
       staleTime: Infinity,
-    }
+    },
   );
 
   const works: WorkRow[] = useMemo(() => data ?? [], [data]);
 
   return (
-    <main className="p-6">
+    <main className="p-4 sm:p-6">
       {isLoading ? (
-        <div className="h-40 rounded-md border border-border bg-white/60 animate-pulse" />
+        <div className="bg-white/60 border border-border rounded-md h-40 animate-pulse" />
       ) : (
         <DataTable columns={columns} data={works} />
       )}

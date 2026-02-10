@@ -10,16 +10,16 @@ const Studio = () => {
   const { isLoading, data } = useProfileAnalytics();
 
   return (
-    <main className="p-6">
-      <div className="flex flex-col sm:flex-row gap-4 items-center border border-border bg-white rounded-md p-4">
+    <main className="p-4 sm:p-6">
+      <div className="flex sm:flex-row flex-col items-center gap-4 bg-white p-4 border border-border rounded-md">
         {isLoading && data === undefined ? (
           <>
-            <Skeleton className="size-13 rounded-full" />
-            <div className="space-y-2 w-full sm:w-auto text-center sm:text-left">
-              <Skeleton className="w-32 h-4 mx-auto sm:mx-0" />
-              <div className="flex gap-2 justify-center sm:justify-start">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-4 w-24" />
+            <Skeleton className="rounded-full size-13" />
+            <div className="space-y-2 w-full sm:w-auto sm:text-left text-center">
+              <Skeleton className="mx-auto sm:mx-0 w-32 h-4" />
+              <div className="flex justify-center sm:justify-start gap-2">
+                <Skeleton className="w-24 h-4" />
+                <Skeleton className="w-24 h-4" />
               </div>
             </div>
           </>
@@ -32,24 +32,24 @@ const Studio = () => {
               </AvatarFallback>
             </Avatar>
 
-            <div className="flex-1 text-center sm:text-left space-y-2 sm:space-y-0">
-              <h4 className="text-lg font-bold text-slate-800">{data?.name}</h4>
+            <div className="flex-1 space-y-2 sm:space-y-0 sm:text-left text-center">
+              <h4 className="font-bold text-slate-800 text-lg">{data?.name}</h4>
               <div className="flex flex-wrap justify-center sm:justify-start items-center gap-x-2">
-                <div className="text-sm font-semibold text-slate-700">
+                <div className="font-semibold text-slate-700 text-sm">
                   Stories:{" "}
                   <span className="text-slate-800">
                     {Intl.NumberFormat().format(data?.totalStories || 0)}
                   </span>
                 </div>
                 <Dot className="hidden sm:block" />
-                <div className="text-sm font-semibold text-slate-700">
+                <div className="font-semibold text-slate-700 text-sm">
                   Following:{" "}
                   <span className="text-slate-800">
                     {Intl.NumberFormat().format(data?.followingCount! || 0)}
                   </span>
                 </div>
                 <Dot className="hidden sm:block" />
-                <div className="text-sm font-semibold text-slate-700">
+                <div className="font-semibold text-slate-700 text-sm">
                   Followers:{" "}
                   <span className="text-slate-800">
                     {Intl.NumberFormat().format(data?.followersCount! || 0)}

@@ -34,7 +34,7 @@ const ProfileFormImage = () => {
         toast.error(
           error instanceof Error
             ? error.message
-            : "Failed to update profile image"
+            : "Failed to update profile image",
         );
       } finally {
         setPreparingUpload(false);
@@ -45,9 +45,9 @@ const ProfileFormImage = () => {
 
   return (
     <div className="md:col-span-1">
-      <div className="rounded-lg border border-primary/20 bg-white p-6">
+      <div className="bg-white p-4 sm:p-6 border border-primary/20 rounded-lg">
         <div className="relative mb-4">
-          <div className="size-32 mx-auto rounded-full bg-muted overflow-hidden">
+          <div className="bg-muted mx-auto rounded-full size-32 overflow-hidden">
             <Image
               src={image ?? "/default-profile.avif"}
               alt="Profile"
@@ -67,15 +67,15 @@ const ProfileFormImage = () => {
             </Label>
           </div>
         </div>
-        <h4 className="text-lg text-center font-semibold mb-1">{name}</h4>
-        <p className="text-sm text-center text-muted-foreground mb-4">
+        <h4 className="mb-1 font-semibold text-lg text-center">{name}</h4>
+        <p className="mb-4 text-muted-foreground text-sm text-center">
           @{username}
         </p>
         <Label
           htmlFor="profile-image"
           className={cn(
             buttonVariants({ variant: "outline", size: "sm" }),
-            "w-full cursor-pointer"
+            "w-full cursor-pointer",
           )}
         >
           {preparingUpload || uploadProgress > -1 ? (

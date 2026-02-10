@@ -239,7 +239,7 @@ const StoryAnalyticsInfo = ({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" variant="outline">
-                    Comming soon
+                    coming soon
                   </TooltipContent>
                 </TooltipProvider>
               </Tooltip>

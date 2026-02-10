@@ -42,7 +42,7 @@ export default function UserHeader({
         >
           <Link href="/auth/signin">Sign In</Link>
         </Button>
-        <Button size="sm" asChild className="sm:hidden text-xs w-full">
+        <Button size="sm" asChild className="sm:hidden w-full text-xs">
           <Link href="/auth/signin" className="w-full">
             Sign In
           </Link>
@@ -56,7 +56,7 @@ export default function UserHeader({
       <div className="flex items-center gap-3">
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center gap-2 rounded-full">
-            <div className="cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20">
+            <div className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
               {user.image ? (
                 <Image
                   src={user.image}
@@ -65,10 +65,10 @@ export default function UserHeader({
                   height={40}
                   priority
                   sizes="(max-width: 640px) 28px, 40px"
-                  className="rounded-full object-cover size-7 sm:size-10"
+                  className="rounded-full size-7 sm:size-10 object-cover"
                 />
               ) : (
-                <div className="size-7 sm:h-10 sm:w-10 bg-primary/10 text-primary rounded-full flex items-center justify-center font-medium text-xs sm:text-base">
+                <div className="flex justify-center items-center bg-primary/10 rounded-full sm:w-10 sm:h-10 size-7 font-medium text-primary text-xs sm:text-base">
                   {user.name?.[0] || "U"}
                 </div>
               )}
@@ -76,10 +76,10 @@ export default function UserHeader({
             {fromMobileMenu && (
               <div className="flex items-center gap-2">
                 <div className="flex flex-col text-left">
-                  <span className="text-sm font-semibold text-slate-700 truncate">
+                  <span className="font-semibold text-slate-700 text-sm truncate">
                     {user.name}
                   </span>
-                  <span className="text-xs text-slate-500 truncate">
+                  <span className="text-slate-500 text-xs truncate">
                     {user.email}
                   </span>
                 </div>
@@ -88,53 +88,52 @@ export default function UserHeader({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            className="w-[280px] sm:w-64 p-0"
+            className="p-0 w-[280px] sm:w-64"
             align="end"
             sideOffset={8}
           >
-            <div className="p-3 space-y-1 border-b">
-              <h2 className="text-sm font-bold text-slate-700 truncate">
+            <div className="space-y-1 p-3 border-b">
+              <h2 className="font-bold text-slate-700 text-sm truncate">
                 {user.name}
               </h2>
-              <p className="text-xs font-medium text-slate-600 truncate">
+              <p className="font-medium text-slate-600 text-xs truncate">
                 {user.email}
               </p>
             </div>
             <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
               <div className="p-1">
-                <Link href="/profile">
-                  <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
-                    <UserCircle02Icon className="w-4 h-4 sm:w-5 sm:h-5 stroke-2 text-slate-800" />
-                    <span className="ml-2 text-sm">Profile</span>
-                  </DropdownMenuItem>
-                </Link>
                 <Link href="/studio">
-                  <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
+                  <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
                     <AnalyticsUpIcon className="w-4 h-4 text-slate-800" />
                     <span className="ml-2 text-sm">Studio</span>
                   </DropdownMenuItem>
                 </Link>
+                <Link href="/profile">
+                  <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
+                    <UserCircle02Icon className="stroke-2 w-4 sm:w-5 h-4 sm:h-5 text-slate-800" />
+                    <span className="ml-2 text-sm">Profile</span>
+                  </DropdownMenuItem>
+                </Link>
                 <Link href="/creations">
-                  <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
+                  <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
                     <BookIcon className="w-4 h-4 text-slate-800" />
                     <span className="ml-2 text-sm">My Creations</span>
                   </DropdownMenuItem>
                 </Link>
-
                 <Link href={"/settings?tab=coins"}>
-                  <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
+                  <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
                     <CoinsBitcoinIcon className="w-4 h-4 text-slate-800" />
                     <span className="ml-2 text-sm">My Wallet</span>
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/reading-list">
-                  <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
+                  <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
                     <Bookshelf01Icon className="w-4 h-4 text-slate-800" />
                     <span className="ml-2 text-sm">Reading List</span>
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/settings">
-                  <DropdownMenuItem className="cursor-pointer px-2 sm:px-3 py-2 rounded-md">
+                  <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
                     <SettingsIcon className="w-4 h-4 text-slate-800" />
                     <span className="ml-2 text-sm">Settings</span>
                   </DropdownMenuItem>
@@ -147,7 +146,7 @@ export default function UserHeader({
                   await signOut();
                   router.push("/");
                 }}
-                className="cursor-pointer px-2 sm:px-3 py-2 rounded-md text-red-500 hover:bg-destructive/10 hover:text-red-600"
+                className="hover:bg-destructive/10 px-2 sm:px-3 py-2 rounded-md text-red-500 hover:text-red-600 cursor-pointer"
               >
                 <LogOut className="w-4 h-4 text-red-500" />
                 <span className="ml-2 text-sm">Sign Out</span>

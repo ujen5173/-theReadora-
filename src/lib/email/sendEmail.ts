@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 import { env } from "~/env";
+import { postgresDb } from "~/server/postgresql";
 import FeedbackEmail from "./templates/FeedbackEmail";
 import MagicLinkEmail from "./templates/MagicLinkEmail";
+import NewContent from "./templates/NewContent";
 import NewContentEmail from "./templates/NewContentEmail";
 
 const resend = new Resend(env.RESEND_KEY);
@@ -97,6 +99,46 @@ export async function sendMagicLinkEmail({
     return { success: true, data };
   } catch (error) {
     console.error("Error sending magic link email:", error);
+    return { success: false, error };
+  }
+}
+export async function sendBulkEmailToAll() {
+  try {
+    const users = await postgresDb.user.findMany({
+      // remove this filter when you actually want ALL users
+      where: {
+        email: "ujenbasi12@gmail.com",
+      },
+      select: {
+        email: true,
+      },
+    });
+
+    if (users.length === 0) {
+      return { success: true, data: [] };
+    }
+
+    const emailPromises = users.map((user) =>
+      resend.emails.send({
+        from: "Readora <onboarding@resend.dev>",
+        to: [user.email],
+        subject: "New content alert",
+        react: NewContent(),
+      }),
+    );
+
+    const results = await Promise.all(emailPromises);
+
+    console.log({ results });
+
+    console.log({ error: results[0]?.error });
+
+    return {
+      success: true,
+      data: results,
+    };
+  } catch (error) {
+    console.error("Error sending bulk email:", error);
     return { success: false, error };
   }
 }

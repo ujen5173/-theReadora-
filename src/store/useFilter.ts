@@ -17,12 +17,12 @@ type FilterStore = {
   setSortBy: (sortBy: string) => void;
   setStatus: (status: ("COMPLETED" | "MATURE")[]) => void;
   setContentType: (
-    contentType: ("AI_GENERATED" | "ORIGINAL" | "GRAPHICS")[]
+    contentType: ("AI_GENERATED" | "ORIGINAL" | "GRAPHICS")[],
   ) => void;
   setChapterCount: (minChapterCount: number, maxChapterCount: number) => void;
   setViewsCount: (minViewsCount: number, maxViewsCount: number) => void;
   setPublishedAt: (
-    publishedAt: "LAST_WEEK" | "LAST_MONTH" | "LAST_YEAR" | "ALL_TIME"
+    publishedAt: "LAST_WEEK" | "LAST_MONTH" | "LAST_YEAR" | "ALL_TIME",
   ) => void;
   setTags: (tags: string[]) => void;
   resetAll: (preserveGenre?: string) => void;
@@ -63,7 +63,7 @@ const initialState: FilterState = {
   genre: "",
   sortBy: "",
   status: [],
-  contentType: [],
+  contentType: ["AI_GENERATED", "ORIGINAL"],
   minChapterCount: 0,
   maxChapterCount: 0,
   minViewsCount: 0,
@@ -126,7 +126,7 @@ export const useFilterStore = create<FilterStore>()((set, get) => ({
  * Arrays are comma-separated in params, e.g., status=COMPLETED,MATURE
  */
 export function parseFilterParamsFromURL(
-  urlParams: URLSearchParams
+  urlParams: URLSearchParams,
 ): FilterParams {
   const getString = (key: string) => {
     const v = urlParams.get(key);
@@ -169,7 +169,7 @@ export function parseFilterParamsFromURL(
  * Convert a FilterParams object to URLSearchParams. Arrays -> comma-separated.
  */
 export function stringifyFilterParamsToURL(
-  params: FilterParams
+  params: FilterParams,
 ): URLSearchParams {
   const searchParams = new URLSearchParams();
 

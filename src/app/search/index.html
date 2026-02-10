@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Story Alert - theReadora</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          sans-serif;
+        background: #fff0f3;
+        padding: 0;
+        min-height: 100vh;
+      }
+
+      .email-container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: #ffffff;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        padding: 35px 45px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(216, 27, 96, 0.1));
+      }
+
+      .brand {
+        position: relative;
+        z-index: 2;
+      }
+
+      .logo {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin-bottom: 8px;
+      }
+
+      .beta {
+        display: inline-block;
+        background: linear-gradient(135deg, #ec003f 0%, #ad1457 100%);
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 4px;
+        margin-left: 10px;
+        letter-spacing: 1px;
+      }
+
+      .tagline {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      .content {
+        padding: 30px 25px;
+        background: #ffffff;
+      }
+
+      .announcement {
+        background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%);
+        border-left: 4px solid #ec003f;
+        padding: 20px 25px;
+        margin-bottom: 20px;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .announcement-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #ec003f;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+
+      .announcement-text {
+        font-size: 15px;
+        color: #2d3748;
+        line-height: 1.6;
+      }
+
+      .story-card {
+        background: #ffffff;
+        border-radius: 7px;
+        overflow: hidden;
+        box-shadow:
+          0 4px 6px rgba(0, 0, 0, 0.05),
+          0 10px 30px rgba(216, 27, 96, 0.1);
+        margin: 20px 0;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .story-card:hover {
+        transform: translateY(-4px);
+        box-shadow:
+          0 8px 12px rgba(0, 0, 0, 0.08),
+          0 20px 20px rgba(216, 27, 96, 0.15);
+      }
+
+      .cover-container {
+        position: relative;
+        flex: 1;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        overflow: hidden;
+      }
+
+      .cover-info {
+        flex: 3;
+      }
+
+      .cover-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 17px;
+      }
+
+      .story-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      .story-info {
+        padding: 20px;
+        background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
+      }
+
+      .genre-tags {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: linear-gradient(135deg, #ffe8ed 0%, #ffd6e0 100%);
+        color: #ad1457;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .tag.adult {
+        background: #ec003f;
+        color: white;
+      }
+
+      .story-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 42px;
+        font-weight: 700;
+        color: #1a202c;
+        line-height: 1.15;
+        margin: 20px 0;
+        letter-spacing: -0.5px;
+      }
+
+      .author-line {
+        font-size: 16px;
+        color: #718096;
+        margin-bottom: 30px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .author-name {
+        color: #ec003f;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 30px 0;
+      }
+
+      .stat-box {
+        background: linear-gradient(135deg, #fff9fa 0%, #fff5f7 100%);
+        border: 1px solid #ffe5e9;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .stat-number {
+        display: block;
+        font-size: 28px;
+        font-weight: 700;
+        color: #ec003f;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+      }
+
+      .description {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #4a5568;
+        margin: 30px 0;
+      }
+
+      .description strong {
+        color: #2d3748;
+        font-weight: 600;
+      }
+
+      .cta-section {
+        margin-top: 35px;
+        text-align: center;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background: #ec003f;
+        color: white;
+        text-decoration: none;
+        padding: 18px 50px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 10px 30px rgba(216, 27, 96, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 20px rgba(216, 27, 96, 0.4);
+        background: linear-gradient(135deg, #c2185b 0%, #ad1457 100%);
+      }
+
+      .divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          #e2e8f0 50%,
+          transparent 100%
+        );
+        margin: 50px 0;
+      }
+
+      .closing-message {
+        text-align: center;
+        font-size: 16px;
+        color: #4a5568;
+        line-height: 1.7;
+        padding: 0 20px;
+      }
+
+      .explore-section {
+        background: linear-gradient(135deg, #fff9fa 0%, #fff5f7 100%);
+        padding: 45px;
+        text-align: center;
+        border-top: 1px solid #ffe5e9;
+      }
+
+      .explore-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 15px;
+      }
+
+      .explore-subtitle {
+        font-size: 15px;
+        color: #718096;
+        margin-bottom: 25px;
+      }
+
+      .explore-link {
+        display: inline-block;
+        color: #ec003f;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 12px 30px;
+        border: 2px solid #ec003f;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .explore-link:hover {
+        background: #ec003f;
+        color: white;
+      }
+
+      .footer {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        color: white;
+        padding: 30px 25px;
+      }
+
+      .footer-brand {
+        text-align: center;
+        margin-bottom: 35px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .footer-logo {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: white;
+      }
+
+      .footer-description {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 35px;
+        margin-bottom: 35px;
+        flex-wrap: wrap;
+      }
+
+      .footer-link {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .footer-link:hover {
+        color: #ec003f;
+      }
+
+      .footer-legal {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 600px) {
+        .header,
+        .content,
+        .explore-section,
+        .footer {
+          padding-left: 25px;
+          padding-right: 25px;
+        }
+
+        .story-info {
+          padding: 30px 25px;
+        }
+
+        .story-title {
+          font-size: 32px;
+        }
+
+        .cover-container {
+          height: 320px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-links {
+          flex-direction: column;
+          gap: 15px;
+          align-items: center;
+        }
+
+        .cta-button {
+          padding: 16px 20px;
+          font-size: 15px;
+        }
+      }
+
+      .story-header {
+        display: flex;
+        gap: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <div class="brand">
+          <div class="logo">[theReadora]<span class="beta">BETA</span></div>
+          <div class="tagline">Where stories come alive</div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="announcement">
+          <div class="announcement-title">Fresh Release</div>
+          <div class="announcement-text">
+            A brand new story just dropped on theReadora. We think you'll love
+            this one.
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-info">
+            <div class="story-header">
+              <div class="cover-container">
+                <img
+                  src="https://res.cloudinary.com/duig8qiu4/image/upload/c_limit,w_1200/f_auto/q_auto/v1770309315/ChatGPT_Image_Jan_31_2026_11_14_50_PM_ot3wok?_a=BAVMn6AQ0"
+                  alt="The Man Who Loved Like a Crime - Book Cover"
+                  class="cover-image"
+                />
+                <div class="story-badge">New Release</div>
+              </div>
+              <div class="cover-info">
+                <div class="genre-tags">
+                  <span class="tag">Romance</span>
+                  <span class="tag adult">18+</span>
+                </div>
+
+                <h1 class="story-title">The Man Who Loved Like a Crime</h1>
+
+                <div class="author-line">
+                  By
+                  <a
+                    href="https://thereadora.vercel.app/profile?user=novel-godddess"
+                    target="_blank"
+                    class="author-name"
+                    >Novel Goddess</a
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-box">
+                <span class="stat-number">1</span>
+                <span class="stat-label">Chapter</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number">3 min</span>
+                <span class="stat-label">Read Time</span>
+              </div>
+            </div>
+
+            <div class="description">
+              <strong>Nyra Cole</strong> never thought a single glance could
+              upend her carefully controlled life—until she meets
+              <strong>Lucien Black</strong>, a man whose presence commands a
+              room and whose eyes hide dangerous secrets. <br /><br />
+              Drawn to him despite every warning, Nyra quickly discovers that
+              Lucien isn't just a mysterious stranger—he's a powerful mafia boss
+              whose world is ruled by loyalty, fear, and violence. As desire
+              ignites between them, Nyra must navigate a web of secrets, lies,
+              and forbidden passion.
+            </div>
+
+            <div class="cta-section">
+              <a
+                href="https://thereadora.vercel.app/story/the-man-who-loved-like-a-crime"
+                class="cta-button"
+                >Start Reading Now</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="explore-section">
+        <h2 class="explore-title">Discover More Stories</h2>
+        <p class="explore-subtitle">
+          Browse our growing collection of captivating tales
+        </p>
+        <a href="https://thereadora.vercel.app/search" class="explore-link"
+          >Explore Stories</a
+        >
+      </div>
+
+      <div class="footer">
+        <div class="footer-brand">
+          <div class="footer-logo">[theReadora]</div>
+          <div class="footer-description">
+            A creator-first platform for readers and writers. Share stories,
+            grow your audience, and enjoy storytelling without the hassles.
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <a href="https://thereadora.vercel.app/search" class="footer-link"
+            >Explore Stories</a
+          >
+          <a href="https://thereadora.vercel.app/write" class="footer-link"
+            >Start Writing</a
+          >
+        </div>
+
+        <div class="footer-legal">
+          You're receiving this because you signed up for new story
+          notifications
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

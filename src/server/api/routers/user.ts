@@ -565,6 +565,26 @@ export const userRouter = createTRPCRouter({
       return false;
     }
   }),
+
+  deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    try {
+      await ctx.postgresDb.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          accountStatus: "DELETED",
+        },
+      });
+      return true;
+    } catch (error) {
+      console.error("Failed to delete account", error);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to delete account",
+      });
+    }
+  }),
 });
 
 export type TGetProfile = inferProcedureOutput<typeof userRouter.getProfile>;

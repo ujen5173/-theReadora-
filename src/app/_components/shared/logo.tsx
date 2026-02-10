@@ -10,8 +10,8 @@ const Logo = () => {
       <Link href="/">
         <span
           className={cn(
-            "cursor-pointer select-none text-2xl font-black text-primary/90",
-            kanit.className
+            "font-black text-primary/90 text-xl sm:text-2xl cursor-pointer select-none",
+            kanit.className,
           )}
         >
           [theReadora]

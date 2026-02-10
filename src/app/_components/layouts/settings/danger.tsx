@@ -1,7 +1,44 @@
+'use client';
+
 import { ShieldAlert } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { api } from "~/trpc/react";
 
 const DangerZone = () => {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteAccountMutation = api.user.deleteAccount.useMutation({
+    onSuccess: async () => {
+      toast.success("Account deleted successfully");
+      await signOut();
+      router.push("/");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to delete account");
+      setIsDeleting(false);
+    },
+  });
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    deleteAccountMutation.mutate();
+  };
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 sm:p-6">
@@ -21,12 +58,41 @@ const DangerZone = () => {
           <div className="rounded-lg border border-destructive/20 bg-white p-3 sm:p-4">
             <h4 className="font-semibold mb-2">Delete Account</h4>
             <p className="text-sm text-muted-foreground mb-3 sm:mb-4">
-              Permanently delete your account and all associated data. This
-              action cannot be undone.
+              Permanently delete your account and all associated data. This action
+              cannot be undone.
             </p>
-            <Button variant="destructive" className="w-full sm:w-auto">
-              Delete Account
-            </Button>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              <DialogTrigger asChild>
+                <Button variant="destructive" className="w-full sm:w-auto">
+                  Delete Account
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure?</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete your
+                    account and remove your data from our servers.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsOpen(false)}
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDeleteAccount}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Delete Account"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <div className="rounded-lg border border-destructive/20 bg-white p-4">

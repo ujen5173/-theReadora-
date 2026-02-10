@@ -4,9 +4,9 @@ import { z } from "zod";
 import { env } from "~/env";
 import { EmailQueue } from "~/lib/email/queue";
 import {
-    createTRPCRouter,
-    protectedProcedure,
-    publicProcedure,
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
 import { LANGUAGES, chunkCollectionName, cuidRegex } from "~/utils/constants";
 
@@ -87,7 +87,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().optional().default(8),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -145,7 +145,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().optional().default(8),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -211,7 +211,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().optional().default(8),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const user = ctx.session?.user.id;
@@ -320,7 +320,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().optional().default(8),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const user = ctx.session?.user.id;
@@ -418,7 +418,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().optional().default(8),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -484,7 +484,7 @@ export const storyRouter = createTRPCRouter({
         // Sort by lastRead (most recent first)
         recentStories.sort(
           (a, b) =>
-            (b.lastRead?.getTime?.() || 0) - (a.lastRead?.getTime?.() || 0)
+            (b.lastRead?.getTime?.() || 0) - (a.lastRead?.getTime?.() || 0),
         );
 
         return recentStories;
@@ -498,7 +498,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().optional().default(8),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -609,7 +609,7 @@ export const storyRouter = createTRPCRouter({
       z.object({
         storyId: z.string(),
         limit: z.number().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -652,7 +652,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         query: z.string(), // this can be either ID or slug
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -733,7 +733,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         query: z.string(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const { query } = input;
@@ -782,7 +782,7 @@ export const storyRouter = createTRPCRouter({
         ...filterSchema.shape,
         skip: z.number().optional(),
         limit: z.number().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -974,7 +974,7 @@ export const storyRouter = createTRPCRouter({
         genre: z.string(),
         limit: z.number().optional(),
         skip: z.number().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -1005,7 +1005,7 @@ export const storyRouter = createTRPCRouter({
       z.object({
         author: z.string(), // can be id or username
         limit: z.number().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -1062,11 +1062,11 @@ export const storyRouter = createTRPCRouter({
         isMature: z.boolean().default(false),
         hasAiContent: z.boolean().default(false),
         language: z.enum(
-          LANGUAGES.map((lang) => lang.name) as [string, ...string[]]
+          LANGUAGES.map((lang) => lang.name) as [string, ...string[]],
         ),
         isLGBTQContent: z.boolean().default(false),
         edit: z.string().cuid().nullable(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
@@ -1129,7 +1129,7 @@ export const storyRouter = createTRPCRouter({
         storyId: z.string().cuid(),
         rating: z.number().min(0).max(5),
         review: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
@@ -1285,7 +1285,7 @@ export const storyRouter = createTRPCRouter({
       }
 
       console.log(
-        `Generating AI story for genre: ${randomGenre.name} by user: ${luckyUser.id}`
+        `Generating AI story for genre: ${randomGenre.name} by user: ${luckyUser.id}`,
       );
 
       // Generate complete story using AI (5 chapters by default)
@@ -1308,14 +1308,14 @@ export const storyRouter = createTRPCRouter({
       const savedStory = await saveGeneratedStoryToDatabase(
         generatedStory,
         luckyUser.id,
-        randomGenre.slug
+        randomGenre.slug,
       );
 
       // Process each chapter content into chunks for MongoDB
       const processedChapters = await Promise.all(
         savedStory.chapters.map(async (chapter, index) => {
           const chunks = processChapterContent(
-            generatedStory.chapters[index].content
+            generatedStory.chapters[index].content,
           );
 
           if (chunks.length === 0) {
@@ -1337,7 +1337,7 @@ export const storyRouter = createTRPCRouter({
               chapterId: mongoContentId,
               content: chunk.content,
               index: chunkIndex,
-            }))
+            })),
           );
 
           // Determine if chapter should be locked (30% chance for non-first chapters)
@@ -1357,16 +1357,16 @@ export const storyRouter = createTRPCRouter({
             wordCount: chunks.reduce((acc, chunk) => acc + chunk.wordCount, 0),
             isLocked,
           };
-        })
+        }),
       );
 
       // Calculate total word count and reading time
       const totalWordCount = processedChapters.reduce(
         (acc, chapter) => acc + chapter.wordCount,
-        0
+        0,
       );
       const totalReadingTime = readingTime(
-        generatedStory.chapters.map((c: any) => c.content).join(" ")
+        generatedStory.chapters.map((c: any) => c.content).join(" "),
       ).time;
 
       // Update story with final reading time and publish it
@@ -1379,7 +1379,7 @@ export const storyRouter = createTRPCRouter({
       });
 
       console.log(
-        `Successfully generated AI story: ${savedStory.story.id} with ${savedStory.chapters.length} chapters`
+        `Successfully generated AI story: ${savedStory.story.id} with ${savedStory.chapters.length} chapters`,
       );
 
       return {
@@ -1451,7 +1451,7 @@ export const storyRouter = createTRPCRouter({
             "Korean",
           ])
           .default("English"),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
@@ -1481,13 +1481,13 @@ export const storyRouter = createTRPCRouter({
         }
 
         console.log(
-          `User ${ctx.session.user.id} generating AI story for genre: ${genre.name}`
+          `User ${ctx.session.user.id} generating AI story for genre: ${genre.name}`,
         );
 
         // Generate complete story using AI
         const generatedStory = await generateStory(
           genre.name,
-          input.chapterCount
+          input.chapterCount,
         );
 
         // Override with user-provided values if specified
@@ -1518,14 +1518,14 @@ export const storyRouter = createTRPCRouter({
         const savedStory = await saveGeneratedStoryToDatabase(
           finalStory,
           ctx.session.user.id,
-          genre.slug
+          genre.slug,
         );
 
         // Process each chapter content into chunks for MongoDB
         const processedChapters = await Promise.all(
           savedStory.chapters.map(async (chapter, index) => {
             const chunks = processChapterContent(
-              finalStory.chapters[index].content
+              finalStory.chapters[index].content,
             );
 
             if (chunks.length === 0) {
@@ -1547,7 +1547,7 @@ export const storyRouter = createTRPCRouter({
                 chapterId: mongoContentId,
                 content: chunk.content,
                 index: chunkIndex,
-              }))
+              })),
             );
 
             // Determine if chapter should be locked (30% chance for non-first chapters)
@@ -1566,20 +1566,20 @@ export const storyRouter = createTRPCRouter({
               chapter: updatedChapter,
               wordCount: chunks.reduce(
                 (acc, chunk) => acc + chunk.wordCount,
-                0
+                0,
               ),
               isLocked,
             };
-          })
+          }),
         );
 
         // Calculate total word count and reading time
         const totalWordCount = processedChapters.reduce(
           (acc, chapter) => acc + chapter.wordCount,
-          0
+          0,
         );
         const totalReadingTime = readingTime(
-          finalStory.chapters.map((c: any) => c.content).join(" ")
+          finalStory.chapters.map((c: any) => c.content).join(" "),
         ).time;
 
         // Update story with final reading time
@@ -1591,7 +1591,7 @@ export const storyRouter = createTRPCRouter({
         });
 
         console.log(
-          `Successfully generated AI story: ${savedStory.story.id} with ${savedStory.chapters.length} chapters`
+          `Successfully generated AI story: ${savedStory.story.id} with ${savedStory.chapters.length} chapters`,
         );
 
         return {
@@ -1644,7 +1644,7 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string().cuid(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -1738,7 +1738,7 @@ export const storyRouter = createTRPCRouter({
           sortDir: z.enum(["asc", "desc"]).optional(),
           limit: z.number().min(1).max(200).optional().default(100),
         })
-        .optional()
+        .optional(),
     )
     .query(async ({ ctx, input }) => {
       const whereBase = {
@@ -1835,7 +1835,7 @@ export const storyRouter = createTRPCRouter({
         (r) =>
           inRange(r.views, input?.views) &&
           inRange(r.likes, input?.likes) &&
-          inRange(r.reviews, input?.reviews)
+          inRange(r.reviews, input?.reviews),
       );
 
       // Sorting
@@ -1860,7 +1860,7 @@ export const storyRouter = createTRPCRouter({
       z.object({
         storyId: z.string().cuid(),
         status: z.boolean().default(true),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       try {

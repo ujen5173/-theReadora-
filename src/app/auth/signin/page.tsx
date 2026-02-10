@@ -103,7 +103,7 @@ export default function SignInPage() {
                 variant="beta-label"
                 className="z-50 text-white bg-primary/80 border-primary absolute -top-2 -right-2"
               >
-                Comming soon
+                coming soon
               </Kbd>
             </div>
 
@@ -182,7 +182,7 @@ export default function SignInPage() {
                     variant="beta-label"
                     className="z-50 text-white bg-primary/80 border-primary absolute -top-2 -right-2"
                   >
-                    Comming soon
+                    coming soon
                   </Kbd>
                 </div>
               </form>

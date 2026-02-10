@@ -15,19 +15,19 @@ const ProfileSettings = ({ user }: { user: TGetProfile }) => {
   }, [user, setProfile]);
 
   return (
-    <div className="rounded-lg border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6">
+    <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-4 sm:p-6 border border-primary/20 rounded-lg">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-full bg-primary/10 border border-primary/20">
+        <div className="bg-primary/10 p-2 border border-primary/20 rounded-full">
           <User className="size-5 text-primary" />
         </div>
-        <h3 className="text-lg font-bold text-primary">Profile Settings</h3>
+        <h3 className="font-bold text-primary text-lg">Profile Settings</h3>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="gap-4 sm:gap-6 grid md:grid-cols-3">
         <ProfileFormImage />
 
         {/* Profile Information */}
-        <div className="md:col-span-2 space-y-6">
+        <div className="space-y-6 md:col-span-2">
           <ProfileForm />
         </div>
       </div>
