@@ -73,8 +73,7 @@ const RecentReadsAndLegendsShelf = async () => {
                       What is Legends Shelf?
                     </p>
                     <p className="w-full text-lg text-slate-700">
-                      Top novels of the month, handpicked for their excellence
-                      and impact. Only the best stories make it to the Legends
+                      Best performer of the month. Only the best stories make it to the Legends
                       Shelf. Updates monthly
                     </p>
                   </TooltipContent>

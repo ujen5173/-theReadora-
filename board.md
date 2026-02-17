@@ -1,45 +1,31 @@
-Things i need to do for this to make authors post in my platform:
+# VISION BOARD
 
-- Run a contest for authors to submit their work with a prize for the best submission.
-- Reach out to authors directly via email or social media to invite them to contribute.
-- Debug the site to ensure that there is no technical issue preventing authors from posting.
-- ✅ Add subscriptions to coming soon...
-- Post daily stories to make the site feel alive.
-- Site Performance and Optimization for mobile devices.
+# UX Board: Navigation & Operation
 
----
+**Focus:** Make the board and application very easy to navigate and operate.
 
-Contest:
-Recommended Prize Structure (Balanced & Realistic)
-🥇 Grand Prize (1 winner)
-Core prizes (high impact, low cost):
-🏆 Featured Story on Readora (30–60 days)
-👑 “Contest Winner” badge on profile (permanent)
-📣 Homepage + email + socials shoutout
-🔓 Free Premium for 1 year
-✍️ Guaranteed placement in a “Readora Originals / Editor’s Pick” section
+## 🧭 Navigation & Information Architecture
+- [ ] **Add Static Pages:** Create clear destinations for 'About', 'Careers', and 'Guidelines' to improve site trust and wayfinding.
+- [ ] **Mobile Optimization:** Ensure all navigation elements and pages are fully responsive and easy to use on mobile devices.
 
-🥈 2nd–3rd Place
-⭐ Featured story (14–30 days)
-🏅 “Contest Finalist” badge
-🔓 Free Premium for 6 months
+## ✍️ Writer Experience (Operation)
+- [ ] **Editor Improvements:**
+  - Migrate from `novel.sh` to `tiptap.dev` for a more robust editing experience.
+  - Add custom collaborative features.
+  - Expand formatting options.
+- [ ] **Fix "Save to Draft":** Ensure saving is reliable and gives clear feedback to the user.
+- [ ] **Import/Export Integration:** Streamline the process of moving content in and out (Google Docs).
 
-Homepage carousel placement (shorter duration)
+## 📖 Reader Experience
+- [ ] **Chapter Reading Indicator:** Implement a progress bar (like YouTube) to show reading progress visually.
+  - *Context:* Design a reading tracking engine to providing insights on engagement.
+- [ ] **Comment System:** Enable paragraph-specific comments (Wattpad style) to increase interaction depth.
+- [ ] **Feedback Popup:** Improve the design and usability of the feedback mechanism.
 
-🎖️ Top 10 / Shortlisted
-🧷 “Top 10” badge
-🔓 Free Premium for 1–3 months
+## ⚡ Performance & Reliability
+- [ ] **Database Optimization:** Optimize queries for faster page loads and smoother interactions.
+- [ ] **General Site Debugging:** Eliminate technical issues preventing posting or reading.
+- [ ] **Notifications:** Implement email notifications for comments, followers, and updates to keep users in the loop.
 
-Added to a Contest Collection (permanent discoverability)
-
-This is crucial: most people won’t win first place — give them a reason to care.
-Smart Add-On Prizes (Very High ROI)
-These cost almost nothing but matter a lot to writers:
-
-✨ Community-Driven Rewards
-Reader’s Choice Award (highest engagement)
-Most Original Plot
-Best First Chapter
-Each gets:
-Badge + featured placement
-1–3 months premium
+## 🔍 Discovery & Algorithm
+- [ ] **Fix Algorithm:** Ensure content surfacing is relevant and fair.

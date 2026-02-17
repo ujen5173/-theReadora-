@@ -116,6 +116,7 @@ export const navigationLinks = {
       { name: "Careers", href: "/careers" },
     ],
     support: [
+      // { name: "Future Plans", href: "/future-logs" },
       { name: "Join Affiliate Program", href: "/affiliate" },
       { name: "Terms", href: "/terms-of-use" },
       { name: "Privacy", href: "/privacy-policy" },

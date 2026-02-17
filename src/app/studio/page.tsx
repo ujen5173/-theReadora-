@@ -34,7 +34,7 @@ const Studio = () => {
 
             <div className="flex-1 space-y-2 sm:space-y-0 sm:text-left text-center">
               <h4 className="font-bold text-slate-800 text-lg">{data?.name}</h4>
-              <div className="flex flex-wrap justify-center sm:justify-start items-center gap-x-2">
+              <div className="flex flex-wrap justify-center sm:justify-start items-center">
                 <div className="font-semibold text-slate-700 text-sm">
                   Stories:{" "}
                   <span className="text-slate-800">

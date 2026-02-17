@@ -217,8 +217,16 @@ export const storyRouter = createTRPCRouter({
       const user = ctx.session?.user.id;
 
       if (!user) {
-        // Not logged in: return a mix of top-rated and diverse genres
-        const [topRated, diverse] = await Promise.all([
+        // Not logged in: prioritize fresh content, then top-rated and diverse genres
+        const [latest, topRated, diverse] = await Promise.all([
+          ctx.postgresDb.story.findMany({
+            orderBy: { createdAt: "desc" },
+            select: NCardEntity,
+            where: {
+              storyStatus: "PUBLISHED",
+            },
+            take: 4,
+          }),
           ctx.postgresDb.story.findMany({
             orderBy: { averageRating: "desc" },
             select: NCardEntity,
@@ -237,7 +245,7 @@ export const storyRouter = createTRPCRouter({
           }),
         ]);
         const seen = new Set();
-        return [...topRated, ...diverse]
+        return [...latest, ...topRated, ...diverse]
           .filter((s) => {
             if (seen.has(s.id)) return false;
             seen.add(s.id);
@@ -267,6 +275,7 @@ export const storyRouter = createTRPCRouter({
       // 2. Count genre frequencies
       const genreFreq: Record<string, number> = {};
       const storyFreq: Record<string, number> = {};
+      
       for (const read of reads) {
         const genre = read.chapter.story.genreSlug;
         genreFreq[genre] = (genreFreq[genre] || 0) + read.frequency;
@@ -278,16 +287,28 @@ export const storyRouter = createTRPCRouter({
         .map(([g]) => g)
         .slice(0, 3);
 
-      // 3. 4 from different genres (not in top genres)
-      const diverseGenreStories = await ctx.postgresDb.story.findMany({
+      // 3. Get latest creations (Fresh Content) - High Priority
+      const latestStories = await ctx.postgresDb.story.findMany({
+        orderBy: { createdAt: "desc" },
         where: {
-          genreSlug: { notIn: topGenres },
+          storyStatus: "PUBLISHED",
         },
         select: NCardEntity,
         take: 4,
       });
 
-      // 4. 4 from genres/titles user interacted with most
+      // 4. 4 from different genres (not in top genres) - Discovery
+      const diverseGenreStories = await ctx.postgresDb.story.findMany({
+        where: {
+          genreSlug: { notIn: topGenres },
+          storyStatus: "PUBLISHED",
+        },
+        orderBy: { readCount: "desc" },
+        select: NCardEntity,
+        take: 4,
+      });
+
+      // 5. 4 from genres/titles user interacted with most - Familiarity
       const topStoryIds = Object.entries(storyFreq)
         .sort((a, b) => b[1] - a[1])
         .map(([id]) => id)
@@ -302,8 +323,8 @@ export const storyRouter = createTRPCRouter({
         take: 4,
       });
 
-      // 5. Merge and dedupe
-      const all = [...diverseGenreStories, ...familiarStories];
+      // 6. Merge and dedupe: Priority -> Latest > Familiar > Diverse
+      const all = [...latestStories, ...familiarStories, ...diverseGenreStories];
       const seen = new Set();
       const recommendations = all
         .filter((s) => {

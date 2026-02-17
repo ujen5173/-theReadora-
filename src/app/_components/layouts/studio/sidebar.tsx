@@ -1,34 +1,36 @@
 "use client";
 
 import {
-    Agreement02Icon,
-    Analytics01Icon,
-    ArrowLeft01Icon, Idea01Icon,
-    LibraryIcon,
-    QuillWrite02Icon,
-    StarIcon
+  Agreement02Icon,
+  AiImageIcon,
+  AiVideoIcon,
+  Analytics01Icon,
+  ArrowLeft01Icon, Idea01Icon,
+  LibraryIcon,
+  QuillWrite02Icon,
+  StarIcon
 } from "hugeicons-react";
 import { Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { cn } from "~/lib/utils";
 import FeedbackDialog from "../../shared/feedback";
 import Logo from "../../shared/logo";
-import { useState } from "react";
 
 const items = {
   manage: [
@@ -37,24 +39,28 @@ const items = {
       icon: Home,
       slug: "/studio",
       external: false,
+      new: false,
     },
     {
       title: "Analytics",
       icon: Analytics01Icon,
       slug: "/studio/analytics",
       external: false,
+      new: false,
     },
     {
       title: "Works",
       icon: LibraryIcon,
       slug: "/studio/works",
       external: false,
+      new: false,
     },
     {
       title: "Reviews",
       icon: StarIcon,
       slug: "/studio/reviews",
       external: false,
+      new: false,
     },
   ],
   tools: [
@@ -69,8 +75,24 @@ const items = {
       icon: Agreement02Icon,
       slug: "/settings?tab=affiliate",
       external: false,
+      new: false,
     },
-  
+  ],
+  'Work with AI': [
+    {
+      title: "Cover Image",
+      icon: AiImageIcon,
+      slug: "/studio/run-ad-campaign",
+      external: false,
+      new: true,
+    },
+    {
+      title: "Short Video",
+      icon: AiVideoIcon,
+      slug: "/settings?tab=affiliate",
+      external: false,
+      new: true,
+    },
   ],
 } as const;
 
@@ -82,7 +104,7 @@ const StudioSidebar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-   const currentPath = validPaths.includes(pathname as any)
+  const currentPath = validPaths.includes(pathname as any)
     ? pathname
     : "/studio";
 
@@ -123,17 +145,24 @@ const StudioSidebar = () => {
                         asChild
                         className={cn(
                           currentPath === item.slug &&
-                            "border border-slate-300 bg-slate-200",
-                          "hover:bg-slate-200"
+                          "border border-slate-300 bg-slate-200",
+                          "hover:bg-slate-200",
+
                         )}
                       >
                         <Link
                           href={item.slug}
                           target={item.external ? "_blank" : undefined}
+                          className="relative"
                         >
                           <item.icon />
 
                           <span className="font-medium">{item.title}</span>
+                          {/* {
+                            item.new && (
+                              <Badge variant="destructive" className="float-right px-1 rounded-xs py-0">New</Badge>
+                            )
+                          } */}
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

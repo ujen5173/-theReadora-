@@ -1,4 +1,4 @@
-import { Focus, Sparkles } from "lucide-react";
+import { Focus } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useNewChapterStore } from "~/store/useNewChapter";
@@ -47,13 +47,13 @@ const StoryEditorTabs = () => {
         >
           Set Goal
         </Button> */}
-        <Button
+        {/* <Button
           size="sm"
           className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
           icon={Sparkles}
         >
           AI Assistant
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

@@ -49,14 +49,14 @@ const NovelCard: FC<{
   };
 
   return (
-    <div title={details.title} className="cover-card group relative">
+    <div title={details.title} className="group relative cover-card">
       <Link
         href={`/story/${details.slug}`}
         onClick={handleStorageForAnalytics}
-        className="pb-2 relative block"
+        className="block relative pb-2"
       >
         {details.isMature && (
-          <div className="absolute right-2 top-2 z-50">
+          <div className="top-2 right-2 z-20 absolute">
             <Badge
               className={cn(`bg-primary text-xs`, merriweatherFont.className)}
             >
@@ -71,26 +71,26 @@ const NovelCard: FC<{
           sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 15vw"
         />
 
-        <div className="w-full mt-2">
-          <h3 className="line-clamp-1 text-sm font-semibold text-slate-800">
+        <div className="mt-2 w-full">
+          <h3 className="font-semibold text-slate-800 text-sm line-clamp-1">
             {details.title}
           </h3>
 
           {!isAuthorViewer && (
-            <p className="line-clamp-1 text-sm text-gray-600">
+            <p className="text-gray-600 text-sm line-clamp-1">
               {details.author.name}
             </p>
           )}
         </div>
       </Link>
 
-      <div className="absolute inset-0 hidden flex-col sm:flex">
-        <div className="mb-2 flex flex-1 flex-col justify-between rounded-md border border-border/70 bg-white p-2 opacity-0 transition duration-300 hover:shadow-md group-hover:opacity-100">
+      <div className="hidden absolute inset-0 sm:flex flex-col">
+        <div className="flex flex-col flex-1 justify-between bg-white opacity-0 group-hover:opacity-100 hover:shadow-md mb-2 p-2 border border-border/70 rounded-md transition duration-300">
           <div className="h-6">
             {details.genreSlug && (
               <Link href={`/search?genre=${details.genreSlug}`} passHref>
                 <Badge
-                  className="capitalize text-xs border border-border"
+                  className="border border-border text-xs capitalize"
                   variant="secondary"
                   title={
                     details.genreSlug.charAt(0).toUpperCase() +
@@ -102,32 +102,32 @@ const NovelCard: FC<{
               </Link>
             )}
           </div>
-          <div className="flex items-center justify-center py-4">
+          <div className="flex justify-center items-center py-4">
             <Link
               href={`/story/${details.slug}`}
               onClick={handleStorageForAnalytics}
-              className="flex items-center gap-2 text-sm font-semibold text-primary transition hover:text-primary/80 hover:underline"
+              className="flex items-center gap-2 font-semibold text-primary hover:text-primary/80 text-sm hover:underline transition"
             >
               <span>Full Story Info</span>
               <ArrowRight02Icon size={16} />
             </Link>
           </div>
 
-          <div className="flex items-center justify-between pb-4">
+          <div className="flex justify-between items-center pb-4">
             <div className="flex flex-col items-center px-2">
               <div className="flex gap-2">
-                <ViewIcon size={16} className="mt-1 stroke-2" />
+                <ViewIcon size={16} className="stroke-2 mt-1" />
               </div>
-              <p className="text-sm font-semibold">
+              <p className="font-semibold text-sm">
                 {formatNumber(details.readCount)}
               </p>
             </div>
             <Separator orientation="vertical" className="h-8" />
             <div className="flex flex-col items-center px-2">
               <div className="flex gap-2">
-                <StarIcon size={16} className="mt-1 stroke-2" />
+                <StarIcon size={16} className="stroke-2 mt-1" />
               </div>
-              <p className="text-sm font-semibold">
+              <p className="font-semibold text-sm">
                 {details.averageRating}{" "}
                 <span className="text-slate-500">
                   ({Intl.NumberFormat().format(details.ratingCount)})
@@ -139,14 +139,14 @@ const NovelCard: FC<{
               <div className="flex gap-2">
                 <LeftToRightListNumberIcon
                   size={16}
-                  className="mt-1 stroke-2"
+                  className="stroke-2 mt-1"
                 />
               </div>
-              <p className="text-sm font-semibold">{details.chapterCount}</p>
+              <p className="font-semibold text-sm">{details.chapterCount}</p>
             </div>
           </div>
           <div className="space-y-2">
-            <Button asChild className="w-full gap-2">
+            <Button asChild className="gap-2 w-full">
               <Link
                 href={`/story/${details.slug}`}
                 onClick={handleStorageForAnalytics}
@@ -159,7 +159,7 @@ const NovelCard: FC<{
               <Button
                 variant="outline"
                 icon={AnalyticsUpIcon}
-                className="w-full gap-2"
+                className="gap-2 w-full"
               >
                 View Analytics
               </Button>
@@ -169,13 +169,13 @@ const NovelCard: FC<{
           </div>
         </div>
 
-        <div className="invisible w-full mt-2">
-          <h1 className="line-clamp-1 text-sm font-semibold text-slate-800">
+        <div className="invisible mt-2 w-full">
+          <h1 className="font-semibold text-slate-800 text-sm line-clamp-1">
             {details.title}
           </h1>
 
           {!isAuthorViewer && (
-            <p className="line-clamp-1 text-sm text-gray-600">
+            <p className="text-gray-600 text-sm line-clamp-1">
               {details.author.name}
             </p>
           )}

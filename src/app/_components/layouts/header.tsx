@@ -1,9 +1,9 @@
 "use client";
 
-import axios from "axios";
 import { Menu01Icon, QuillWrite02Icon } from "hugeicons-react";
 import { Crown, Home } from "lucide-react";
 import Link from "next/link";
+import { MicroHeader } from "~/components/shared/micro-header";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Kbd } from "~/components/ui/kbd";
 import {
@@ -100,7 +100,6 @@ const MobileMenu = () => {
         </div>
 
         <div className="flex flex-col flex-1 overflow-hidden">
-          {/* Navigation Links */}
           <div className="flex-1 overflow-y-auto">
             <div className="space-y-1 p-4">
               <h3 className="mb-2 font-semibold text-muted-foreground text-sm">
@@ -138,7 +137,6 @@ const MobileMenu = () => {
               </Link>
             </div>
 
-            {/* Genres Section */}
             <div className="p-4">
               <h3 className="mb-2 font-semibold text-muted-foreground text-sm">
                 Genres
@@ -182,12 +180,13 @@ const Header = ({
   const { user } = useUserStore();
 
   return (
-    <> 
+    <>
+      <MicroHeader />
       {!removeBackground && (
         <>
-          <div className="-z-10 fixed bg-gradient-to-br from-primary/20 via-white to-primary/10 w-full h-screen"></div>
+          <div className="-z-10 fixed inset-0 bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
           <div
-            className="-z-10 fixed opacity-30 w-full h-screen"
+            className="-z-10 fixed inset-0 opacity-30"
             style={{
               backgroundImage: "url(/ooorganize.svg)",
               backgroundBlendMode: "overlay",
@@ -198,7 +197,11 @@ const Header = ({
         </>
       )}
       <header
-        className={cn("w-full", headerExtraStyle, background && "bg-slate-50")}
+        className={cn(
+          "z-30 relative w-full",
+          headerExtraStyle,
+          background && "bg-slate-50",
+        )}
       >
         <div
           className={cn(

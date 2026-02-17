@@ -9,6 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
 import { BetaOnboardingModal } from "~/components/shared/beta-onboarding-modal";
+import ContestPopup from "~/components/shared/contest-popup";
 import { UserActivityTracker } from "~/components/shared/user-activity-tracker";
 import { TRPCReactProvider } from "~/trpc/react";
 import { manrope } from "~/utils/font";
@@ -52,6 +53,8 @@ export default async function RootLayout({
                   <Analytics />
                   <SpeedInsights />
                   <ReadCounter />
+                  <ContestPopup />
+
                   <Suspense>
                     <TailwindIndicator />
                     <HolyLoader height={4} color="#e11d48" />

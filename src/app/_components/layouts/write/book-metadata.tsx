@@ -28,10 +28,14 @@ const BookMetadata = ({
   editData,
   status,
   onSubmit,
+  initialTags = [],
+  initialGenre = "",
 }: {
   editData: BookMetadataType | null;
   status: "idle" | "success" | "error" | "pending";
   onSubmit: (metadata: BookMetadataType) => void;
+  initialTags?: string[];
+  initialGenre?: string;
 }) => {
   const { data: geners, isLoading: genreLoading } = api.genres.all.useQuery(
     undefined,
@@ -44,8 +48,8 @@ const BookMetadata = ({
     editData || {
       title: "",
       synopsis: "",
-      tags: [],
-      genre: "",
+      tags: initialTags,
+      genre: initialGenre,
       isMature: false,
       hasAiContent: false,
       language: "English",

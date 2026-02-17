@@ -82,6 +82,7 @@ const ChapterMetaData = () => {
   const { user } = useUserStore();
 
   const metrics = parseMetrics(chapter?.metrics);
+  console.log({ metrics })
 
   return (
     <div className="py-12 sm:py-20 space-y-6 sm:space-y-8 border-b border-border">
@@ -112,8 +113,8 @@ const ChapterMetaData = () => {
       </div>
 
       {story?.author.id === user?.id &&
-      chapter?.scheduledFor &&
-      !isChapterScheduled(chapter.scheduledFor) ? (
+        chapter?.scheduledFor &&
+        !isChapterScheduled(chapter.scheduledFor) ? (
         <div className="text-center text-sm text-slate-500">
           Scheduled for{" "}
           <span className="underline-offset-2 text-primary font-semibold underline">
@@ -126,10 +127,10 @@ const ChapterMetaData = () => {
           <span className="underline-offset-2 text-slate-500 font-semibold underline">
             {chapter?.updatedAt
               ? new Date(chapter.updatedAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
               : ""}
           </span>
         </div>

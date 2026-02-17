@@ -35,15 +35,18 @@ const Write = ({
   editData,
 }: {
   editData:
-    | (BookMetadataType & {
-        thumbnail: string;
-        thumbnailId: string;
-        storyStatus: string;
-      })
-    | null;
+  | (BookMetadataType & {
+    thumbnail: string;
+    thumbnailId: string;
+    storyStatus: string;
+  })
+  | null;
 }) => {
   const router = useRouter();
-  const editId = useSearchParams().get("editId") ?? null;
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("editId") ?? null;
+
+  console.log({ tags: searchParams.getAll("tags") })
 
   const [file, setFile] = useState<File | undefined>();
   const [preparingUpload, setPreparingUpload] = useState(false);
@@ -51,16 +54,16 @@ const Write = ({
   const [uploadProgress, setUploadProgress] = useState(-1);
   const [uploadedFile, setUploadedFile] = useState<
     | {
-        url: string;
-        public_id: string;
-      }
+      url: string;
+      public_id: string;
+    }
     | undefined
   >(
     editData
       ? {
-          url: editData.thumbnail,
-          public_id: editData.thumbnailId,
-        }
+        url: editData.thumbnail,
+        public_id: editData.thumbnailId,
+      }
       : undefined
   );
 
@@ -212,21 +215,27 @@ const Write = ({
             editData={
               editData
                 ? {
-                    title: editData.title,
-                    synopsis: editData.synopsis,
-                    tags: editData.tags,
-                    genre: editData.genre,
-                    isMature: editData.isMature,
-                    hasAiContent: editData.hasAiContent,
-                    language: editData.language,
-                    isLGBTQContent: editData.isLGBTQContent,
-                    chapters: editData.chapters,
-                    id: editId ?? undefined,
-                  }
+                  title: editData.title,
+                  synopsis: editData.synopsis,
+                  tags: editData.tags,
+                  genre: editData.genre,
+                  isMature: editData.isMature,
+                  hasAiContent: editData.hasAiContent,
+                  language: editData.language,
+                  isLGBTQContent: editData.isLGBTQContent,
+                  chapters: editData.chapters,
+                  id: editId ?? undefined,
+                }
                 : null
             }
             onSubmit={handleSubmit}
             status={status}
+            initialGenre={searchParams.get("genre") ?? undefined}
+            initialTags={
+              searchParams.getAll("tags").length > 0
+                ? (searchParams.getAll("tags")[0] ?? "").split(",").map(e => e.trim()).filter(e => !!e)
+                : undefined
+            }
           />
         </div>
       </div>

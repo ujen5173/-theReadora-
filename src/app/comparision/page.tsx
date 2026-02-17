@@ -75,7 +75,7 @@ export default function ComparisonPage() {
     ...importantComparison,
     {
       feature: "The Legends Shelf",
-      readora: { text: "Hall of Fame for Top Stories", icon: "check" },
+      readora: { text: "Legends Shelf for Top Stories", icon: "check" },
       wattpad: { text: "Wattys Awards", icon: "check" },
       royalroad: { text: "Trending & Best Rated Lists", icon: "partial" },
     },
@@ -555,7 +555,7 @@ export default function ComparisonPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
-                A prestigious hall of fame showcasing the best stories on
+                A prestigious Legends Shelf showcasing the best stories on
                 Readora. Recognition that matters and drives genuine readership.
               </CardContent>
             </Card>
