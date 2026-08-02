@@ -8,8 +8,6 @@ import HolyLoader from "holy-loader";
 import { SessionProvider } from "next-auth/react";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
-import { BetaOnboardingModal } from "~/components/shared/beta-onboarding-modal";
-import ContestPopup from "~/components/shared/contest-popup";
 import { UserActivityTracker } from "~/components/shared/user-activity-tracker";
 import { TRPCReactProvider } from "~/trpc/react";
 import { manrope } from "~/utils/font";
@@ -21,13 +19,8 @@ import Footer from "./_components/shared/footer";
 import ReadCounter from "./_components/shared/read-counter";
 import TailwindIndicator from "./_components/shared/tailwind-size-indicator";
 
-// No `pathname` here on purpose: a canonical set on the root layout is inherited by
-// every route that doesn't define its own, which told Google that chapter pages,
-// /search, /about etc. were all duplicates of the homepage. Each page sets its own.
 export const metadata: Metadata = generateSEOMetadata({});
 
-// themeColor belongs in `viewport`, not `metadata` — Next.js warns on every route
-// when it's set in the metadata export.
 export const viewport: Viewport = {
   themeColor: "#ec003f",
 };
@@ -57,7 +50,6 @@ export default async function RootLayout({
                   <Analytics />
                   <SpeedInsights />
                   <ReadCounter />
-                  <ContestPopup />
 
                   <Suspense>
                     <TailwindIndicator />
@@ -67,7 +59,6 @@ export default async function RootLayout({
                     {children}
 
                     <Footer />
-                    <BetaOnboardingModal />
                   </Suspense>
                 </CSPostHogProvider>
               </RootLayoutClient>

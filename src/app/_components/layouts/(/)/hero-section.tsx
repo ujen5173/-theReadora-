@@ -225,13 +225,7 @@ const HeroSection = () => {
 
           <div className="flex items-center gap-2 mt-10">
             <Link href="/search">
-              <Button
-                variant={"default"}
-                iconStyle="rotate-12"
-                iconPlacement="left"
-              >
-                Start Reading
-              </Button>
+              <Button variant={"default"}>Start Reading</Button>
             </Link>
             <Link href="/auth/signin?redirect=/write">
               <Button variant={"secondary"} icon={QuillWrite02Icon}>
