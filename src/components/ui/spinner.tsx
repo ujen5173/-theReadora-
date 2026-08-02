@@ -1,16 +1,19 @@
-import { Loader2Icon } from "lucide-react"
+import { Loading03Icon } from "hugeicons-react";
 
-import { cn } from "~/lib/utils"
+import { cn } from "~/lib/utils";
 
-function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
+function Spinner({
+  className,
+  ...props
+}: React.ComponentProps<typeof Loading03Icon>) {
   return (
-    <Loader2Icon
+    <Loading03Icon
       role="status"
       aria-label="Loading"
       className={cn("size-4 animate-spin", className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Spinner }
+export { Spinner };

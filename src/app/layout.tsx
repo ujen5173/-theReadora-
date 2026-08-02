@@ -1,6 +1,6 @@
 import "~/styles/globals.css";
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -21,12 +21,16 @@ import Footer from "./_components/shared/footer";
 import ReadCounter from "./_components/shared/read-counter";
 import TailwindIndicator from "./_components/shared/tailwind-size-indicator";
 
-export const metadata: Metadata = generateSEOMetadata({
-  pathname: "/",
-  hreflangAlternates: {
-    en: "/",
-  },
-});
+// No `pathname` here on purpose: a canonical set on the root layout is inherited by
+// every route that doesn't define its own, which told Google that chapter pages,
+// /search, /about etc. were all duplicates of the homepage. Each page sets its own.
+export const metadata: Metadata = generateSEOMetadata({});
+
+// themeColor belongs in `viewport`, not `metadata` — Next.js warns on every route
+// when it's set in the metadata export.
+export const viewport: Viewport = {
+  themeColor: "#ec003f",
+};
 
 export default async function RootLayout({
   children,

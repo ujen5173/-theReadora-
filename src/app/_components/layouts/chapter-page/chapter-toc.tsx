@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpenIcon, ChevronDownIcon } from "lucide-react";
+import { ArrowDown01Icon, BookOpen01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import {
@@ -36,7 +36,7 @@ const ChapterTOC = () => {
       enabled: !!story?.id && !!user?.id,
       staleTime: 1000 * 60 * 5,
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   return (
@@ -58,7 +58,7 @@ const ChapterTOC = () => {
                     </div>
                   ) : (
                     <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-gray-200 flex-shrink-0">
-                      <BookOpenIcon className="h-4 w-4" />
+                      <BookOpen01Icon className="h-4 w-4" />
                     </div>
                   )}
                   <div className="flex flex-col items-start min-w-0">
@@ -70,7 +70,7 @@ const ChapterTOC = () => {
                     </p>
                   </div>
                 </div>
-                <ChevronDownIcon className="w-4 h-4 flex-shrink-0" />
+                <ArrowDown01Icon className="w-4 h-4 flex-shrink-0" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[calc(100vw-2rem)] sm:w-80 p-0 mx-2 sm:mx-4">
@@ -107,7 +107,7 @@ const ChapterTOC = () => {
                         className={cn(
                           "flex items-center gap-2 px-3 py-2 cursor-pointer",
                           "hover:bg-slate-50",
-                          isActive && "bg-rose-50"
+                          isActive && "bg-rose-50",
                         )}
                       >
                         <span
@@ -115,7 +115,7 @@ const ChapterTOC = () => {
                             "text-xs flex-shrink-0",
                             isActive
                               ? "text-primary font-medium"
-                              : "text-slate-500"
+                              : "text-slate-500",
                           )}
                         >
                           {chapter.chapterNumber.toString().padStart(2, "0")}
@@ -126,7 +126,7 @@ const ChapterTOC = () => {
                             "text-sm line-clamp-1 flex-1",
                             isActive
                               ? "text-primary font-medium"
-                              : "text-slate-700"
+                              : "text-slate-700",
                           )}
                         >
                           {chapter.title}

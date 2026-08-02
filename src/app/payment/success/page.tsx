@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2 } from "lucide-react";
+import { CheckmarkCircle02Icon } from "hugeicons-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "~/app/_components/layouts/header";
 import { Button } from "~/components/ui/button";
@@ -19,7 +19,7 @@ export default function PaymentSuccessPage() {
         <div className="max-w-md w-full mx-auto p-8">
           <div className="text-center">
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+              <CheckmarkCircle02Icon className="w-8 h-8 text-green-600" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900 mb-2">
               Payment Successful!

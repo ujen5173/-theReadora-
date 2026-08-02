@@ -1,6 +1,12 @@
 import { Tabs, TabsContent, TabsList } from "@radix-ui/react-tabs";
-import { CoinsBitcoinIcon, FileSyncIcon } from "hugeicons-react";
-import { Bell, HandshakeIcon, ShieldAlert, User } from "lucide-react";
+import {
+  Agreement01Icon,
+  CoinsBitcoinIcon,
+  FileSyncIcon,
+  Notification01Icon,
+  Shield01Icon,
+  UserIcon,
+} from "hugeicons-react";
 import { Suspense } from "react";
 import AffiliateProgram from "./affiliate-program";
 import CoinsPackageSettings from "./coins";
@@ -14,17 +20,17 @@ const navItems = [
   {
     value: "profile",
     label: "Profile",
-    icon: <User className="size-5 mr-2" />,
+    icon: <UserIcon className="size-5 mr-2" />,
   },
   {
     value: "notifications",
     label: "Notifications",
-    icon: <Bell className="size-5 mr-2" />,
+    icon: <Notification01Icon className="size-5 mr-2" />,
   },
   {
     value: "danger",
     label: "Danger Zone",
-    icon: <ShieldAlert className="size-5 mr-2" />,
+    icon: <Shield01Icon className="size-5 mr-2" />,
   },
   {
     value: "coins",
@@ -39,7 +45,7 @@ const navItems = [
   {
     value: "affiliate",
     label: "Affiliate Program",
-    icon: <HandshakeIcon className="size-5 mr-2" />,
+    icon: <Agreement01Icon className="size-5 mr-2" />,
   },
 ];
 

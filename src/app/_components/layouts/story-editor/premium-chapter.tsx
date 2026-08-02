@@ -1,6 +1,6 @@
 "use client";
 
-import { Lock, Unlock } from "lucide-react";
+import { LockIcon, SquareUnlock01Icon } from "hugeicons-react";
 import { Label } from "~/components/ui/label";
 import {
   Select,
@@ -28,9 +28,9 @@ const PremiumChapter = () => {
       <div className="flex items-center justify-between">
         <h3 className="font-semibold flex items-center text-slate-700 gap-2">
           {isLocked ? (
-            <Lock className="h-4 w-4 text-primary" />
+            <LockIcon className="h-4 w-4 text-primary" />
           ) : (
-            <Unlock className="h-4 w-4 text-primary" />
+            <SquareUnlock01Icon className="h-4 w-4 text-primary" />
           )}
           Premium Chapter
         </h3>

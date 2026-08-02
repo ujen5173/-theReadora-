@@ -1,11 +1,9 @@
-import type { HugeiconsProps } from "hugeicons-react";
-
 const CrownMinus = ({
   className,
   props,
 }: {
   className?: string;
-  props?: HugeiconsProps;
+  props?: React.SVGProps<SVGSVGElement>;
 }) => {
   return (
     <svg

@@ -1,6 +1,10 @@
 import { format } from "date-fns";
-import { CoinsBitcoinIcon } from "hugeicons-react";
-import { ArrowRight, Crown, Lock } from "lucide-react";
+import {
+  ArrowRight01Icon,
+  CoinsBitcoinIcon,
+  CrownIcon,
+  LockIcon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { SubscriptionManagementDialog } from "~/app/_components/shared/premium/subscription-management-dialog";
 import CrownMinus from "~/assets/svgs/crown-minus";
@@ -43,7 +47,7 @@ const CoinsPackageSettings = async () => {
                   {data.balance?.coinsLastUpdated
                     ? format(
                         data.balance?.coinsLastUpdated,
-                        "MMM d, yyyy h:mm a"
+                        "MMM d, yyyy h:mm a",
                       )
                     : "Just Now"}
                 </span>
@@ -57,7 +61,7 @@ const CoinsPackageSettings = async () => {
                 <div className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-full bg-primary/10">
-                      <Crown className="size-5 text-primary" />
+                      <CrownIcon className="size-5 text-primary" />
                     </div>
                     <div>
                       <p className="font-medium">Premium Status</p>
@@ -78,7 +82,7 @@ const CoinsPackageSettings = async () => {
                   >
                     <Button
                       variant="outline"
-                      icon={ArrowRight}
+                      icon={ArrowRight01Icon}
                       iconPlacement="right"
                       size="sm"
                     >
@@ -90,7 +94,7 @@ const CoinsPackageSettings = async () => {
                 <div className="p-4 rounded-lg bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 rounded-full bg-primary/10">
-                      <Lock className="size-5 text-primary" />
+                      <LockIcon className="size-5 text-primary" />
                     </div>
                     <div>
                       <p className="font-medium">Unlock Premium Features</p>
@@ -102,7 +106,7 @@ const CoinsPackageSettings = async () => {
 
                   <Link href={"/premium"}>
                     <Button
-                      icon={ArrowRight}
+                      icon={ArrowRight01Icon}
                       iconPlacement="right"
                       effect={"expandIcon"}
                       className="w-full"
@@ -151,7 +155,7 @@ const CoinsPackageSettings = async () => {
                     {transaction.type === "SUBSCRIPTION_ENDED" ? (
                       <CrownMinus className="stroke-rose-700 size-4" />
                     ) : transaction.type === "SUBSCRIPTION" ? (
-                      <Crown className="size-4" />
+                      <CrownIcon className="size-4" />
                     ) : (
                       <CoinsBitcoinIcon className="size-4" />
                     )}
@@ -173,7 +177,7 @@ const CoinsPackageSettings = async () => {
                       <span>
                         {format(
                           new Date(transaction.time),
-                          "MMM d, yyyy h:mm a"
+                          "MMM d, yyyy h:mm a",
                         )}
                       </span>
                       {(transaction.type === "PURCHASE" ||

@@ -1,15 +1,14 @@
 "use client";
 
 import { type ColumnDef } from "@tanstack/react-table";
-import { PinIcon } from "hugeicons-react";
 import {
-  ArrowUpDown,
-  BarChart3,
-  Edit3,
-  MoreHorizontal,
-  Pin,
-  Star,
-} from "lucide-react";
+  ArrowUpDownIcon,
+  Chart01Icon,
+  Edit03Icon,
+  MoreHorizontalIcon,
+  PinIcon,
+  StarIcon,
+} from "hugeicons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "~/components/ui/badge";
@@ -130,7 +129,7 @@ export const columns: ColumnDef<WorkRow>[] = [
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Views
-        <ArrowUpDown className="size-3.5" />
+        <ArrowUpDownIcon className="size-3.5" />
       </Button>
     ),
     cell: ({ row }) => (
@@ -151,7 +150,7 @@ export const columns: ColumnDef<WorkRow>[] = [
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Likes
-        <ArrowUpDown className="ml-1 size-3.5" />
+        <ArrowUpDownIcon className="ml-1 size-3.5" />
       </Button>
     ),
     cell: ({ row }) => (
@@ -172,7 +171,7 @@ export const columns: ColumnDef<WorkRow>[] = [
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Reviews
-        <ArrowUpDown className="ml-1 size-3.5" />
+        <ArrowUpDownIcon className="ml-1 size-3.5" />
       </Button>
     ),
     cell: ({ row }) => (
@@ -196,7 +195,7 @@ export const columns: ColumnDef<WorkRow>[] = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
+              <MoreHorizontalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -204,17 +203,17 @@ export const columns: ColumnDef<WorkRow>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href={`/write?editId=${work.id}`}>
-                <Edit3 className="mr-2 size-4" /> Edit
+                <Edit03Icon className="mr-2 size-4" /> Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={`/studio/analytics?story=${work.id}`}>
-                <BarChart3 className="mr-2 size-4" /> View insights
+                <Chart01Icon className="mr-2 size-4" /> View insights
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={`/studio/reviews?story=${work.id}`}>
-                <Star className="mr-2 size-4" /> Reviews
+                <StarIcon className="mr-2 size-4" /> Reviews
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -229,7 +228,7 @@ export const columns: ColumnDef<WorkRow>[] = [
               {status === "pending" ? (
                 <Spinner />
               ) : (
-                <Pin className="mr-2 size-4" />
+                <PinIcon className="mr-2 size-4" />
               )}{" "}
               {work.pin ? "Unpin from top" : "Pin to top"}
             </DropdownMenuItem>

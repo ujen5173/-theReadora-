@@ -1,6 +1,6 @@
 "use client";
 
-import { Dot } from "lucide-react";
+import { RecordIcon } from "hugeicons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Skeleton } from "~/components/ui/skeleton";
 import Metrics from "../_components/layouts/studio/shared/Metrics";
@@ -41,14 +41,14 @@ const Studio = () => {
                     {Intl.NumberFormat().format(data?.totalStories || 0)}
                   </span>
                 </div>
-                <Dot className="hidden sm:block" />
+                <RecordIcon className="hidden sm:block" />
                 <div className="font-semibold text-slate-700 text-sm">
                   Following:{" "}
                   <span className="text-slate-800">
                     {Intl.NumberFormat().format(data?.followingCount! || 0)}
                   </span>
                 </div>
-                <Dot className="hidden sm:block" />
+                <RecordIcon className="hidden sm:block" />
                 <div className="font-semibold text-slate-700 text-sm">
                   Followers:{" "}
                   <span className="text-slate-800">

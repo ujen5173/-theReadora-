@@ -191,7 +191,7 @@ export default function SignInPage() {
             <div className="text-center text-sm text-slate-500">
               By signing in, you agree to our{" "}
               <Link
-                href="/terms-of-service"
+                href="/terms-of-use"
                 className="text-primary hover:underline"
               >
                 Terms of Service

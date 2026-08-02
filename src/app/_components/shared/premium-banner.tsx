@@ -1,6 +1,10 @@
 "use client";
 
-import { CheckCircle2, Crown, Sparkles } from "lucide-react";
+import {
+  CheckmarkCircle02Icon,
+  CrownIcon,
+  SparklesIcon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { useUserStore } from "~/store/userStore";
@@ -18,7 +22,7 @@ const PremiumBanner = () => {
       <div className="p-5">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 rounded-full bg-primary/10">
-            <Sparkles className="size-5 text-primary" />
+            <SparklesIcon className="size-5 text-primary" />
           </div>
           <h3 className="text-lg font-bold text-slate-800">
             Upgrade to Premium
@@ -28,7 +32,7 @@ const PremiumBanner = () => {
         <ul className="space-y-2 mb-4">
           {premiumFeatures.benefits.map((feature, index) => (
             <li key={index} className="flex items-start gap-2">
-              <CheckCircle2 className="size-4 text-primary mt-0.5 flex-shrink-0" />
+              <CheckmarkCircle02Icon className="size-4 text-primary mt-0.5 flex-shrink-0" />
               <span className="text-sm font-medium text-slate-700">
                 {feature}
               </span>
@@ -37,7 +41,7 @@ const PremiumBanner = () => {
         </ul>
 
         <Link href="/premium" className="w-full">
-          <Button icon={Crown} className="w-full" variant="default">
+          <Button icon={CrownIcon} className="w-full" variant="default">
             Subscribe – ${STRIPE_MONTHLY_PLAN_PRICE}/-
           </Button>
         </Link>

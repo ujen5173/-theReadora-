@@ -8,6 +8,8 @@ const TrendingSection = async () => {
 
   return (
     <BookSection
+      fillRows
+      seeAllHref="/search"
       title="Discover Trending Reads"
       analyticsRef="feed:trending"
       novels={stories}

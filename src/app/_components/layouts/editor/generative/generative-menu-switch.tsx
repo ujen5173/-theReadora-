@@ -2,7 +2,7 @@ import { EditorBubble, removeAIHighlight, useEditor } from "novel";
 import { Fragment, type ReactNode, useEffect } from "react";
 import { AISelector } from "./ai-selector";
 import { Button } from "~/components/ui/button";
-import { WandSparkles } from "lucide-react";
+import { MagicWand01Icon } from "hugeicons-react";
 
 interface GenerativeMenuSwitchProps {
   children: ReactNode;
@@ -40,7 +40,7 @@ const GenerativeMenuSwitch = ({
             onClick={() => onOpenChange(true)}
             size="sm"
           >
-            <WandSparkles className="h-5 w-5" />
+            <MagicWand01Icon className="h-5 w-5" />
             Ask AI
           </Button>
           {children}

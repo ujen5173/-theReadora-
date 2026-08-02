@@ -1,11 +1,9 @@
-import type { HugeiconsProps } from "hugeicons-react";
-
 const HalfStar = ({
   className,
   props,
 }: {
   className?: string;
-  props?: HugeiconsProps;
+  props?: React.SVGProps<SVGSVGElement>;
 }) => {
   return (
     <svg

@@ -1,4 +1,4 @@
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft01Icon, BookOpen01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { merriweatherFont } from "~/utils/font";
@@ -25,13 +25,13 @@ const StoryNotFound = () => {
         <div className="flex gap-4 mt-4">
           <Link href="/search">
             <Button variant="default" className="gap-2">
-              <ArrowLeft className="size-5" />
+              <ArrowLeft01Icon className="size-5" />
               Back to Stories
             </Button>
           </Link>
           <Link href="/search">
             <Button variant="secondary" className="gap-2">
-              <BookOpen className="size-5" />
+              <BookOpen01Icon className="size-5" />
               Discover More Tales
             </Button>
           </Link>

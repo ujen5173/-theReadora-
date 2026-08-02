@@ -1,0 +1,44 @@
+undefined
+? Verifying lockfile against supply-chain policies (1075 entries)...
+Progress: resolved 1, reused 0, downloaded 0, added 0
+[WARN] deprecated @react-email/components@0.0.41: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+[WARN] deprecated @react-email/tailwind@1.2.2: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+[WARN] deprecated recharts@2.15.4: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
+Progress: resolved 113, reused 111, downloaded 0, added 0
+Progress: resolved 114, reused 111, downloaded 0, added 0
+Progress: resolved 114, reused 111, downloaded 1, added 0
+Progress: resolved 114, reused 111, downloaded 2, added 0
+Progress: resolved 144, reused 131, downloaded 2, added 0
+Progress: resolved 199, reused 165, downloaded 21, added 0
+Progress: resolved 270, reused 177, downloaded 52, added 0
+Progress: resolved 318, reused 200, downloaded 85, added 0
+Progress: resolved 340, reused 206, downloaded 101, added 0
+Progress: resolved 357, reused 208, downloaded 121, added 0
+Progress: resolved 361, reused 209, downloaded 132, added 0
+Progress: resolved 537, reused 276, downloaded 196, added 0
+Progress: resolved 614, reused 318, downloaded 224, added 0
+Progress: resolved 702, reused 373, downloaded 266, added 0
+Progress: resolved 703, reused 374, downloaded 277, added 0
+Progress: resolved 706, reused 374, downloaded 282, added 0
+✗ Lockfile failed supply-chain policy check (1075 entries in 18.7s)
+[ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION] 18 lockfile entries failed verification:
+  @napi-rs/wasm-runtime@1.2.0 was published at 2026-07-28T09:41:14.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @posthog/browser-common@0.2.3 was published at 2026-07-27T18:01:10.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/adapter-pg@7.9.1 was published at 2026-07-27T13:40:45.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/client-runtime-utils@7.9.1 was published at 2026-07-27T13:35:00.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/client@7.9.1 was published at 2026-07-27T13:48:30.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/config@7.9.1 was published at 2026-07-27T13:41:55.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/debug@7.9.1 was published at 2026-07-27T13:35:23.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/driver-adapter-utils@7.9.1 was published at 2026-07-27T13:36:58.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/engines@7.9.1 was published at 2026-07-27T13:44:02.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/fetch-engine@7.9.1 was published at 2026-07-27T13:41:31.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  @prisma/get-platform@7.9.1 was published at 2026-07-27T13:37:15.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  acorn@8.18.0 was published at 2026-07-28T06:47:49.255Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  baseline-browser-mapping@2.11.5 was published at 2026-07-27T16:25:09.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  exsolve@1.1.1 was published at 2026-07-27T16:47:52.859Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  minimatch@10.2.6 was published at 2026-07-27T19:00:09.469Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  mongoose@8.24.2 was published at 2026-07-27T21:58:28.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  postcss@8.5.24 was published at 2026-07-28T09:40:56.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+  prisma@7.9.1 was published at 2026-07-27T13:48:59.000Z, within the minimumReleaseAge cutoff (2026-07-27T12:33:41.201Z)
+
+The lockfile contains entries that the active policies reject. This can mean the lockfile is stale, or that someone committed a lockfile that bypassed the policy locally — inspect recent changes to pnpm-lock.yaml before trusting it. If the changes look expected, run "pnpm clean --lockfile" and then "pnpm install" to rebuild from a fresh resolution. Alternatively, relax the policy that flagged them.

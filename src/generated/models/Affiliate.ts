@@ -217,7 +217,7 @@ export type AffiliateGroupByOutputType = {
   _max: AffiliateMaxAggregateOutputType | null
 }
 
-type GetAffiliateGroupByPayload<T extends AffiliateGroupByArgs> = Prisma.PrismaPromise<
+export type GetAffiliateGroupByPayload<T extends AffiliateGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AffiliateGroupByOutputType, T['by']> &
       {
@@ -1340,6 +1340,11 @@ export type AffiliateFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` Affiliates.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Affiliates.
+   */
   distinct?: Prisma.AffiliateScalarFieldEnum | Prisma.AffiliateScalarFieldEnum[]
 }
 

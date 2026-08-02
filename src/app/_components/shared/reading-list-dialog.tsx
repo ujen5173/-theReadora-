@@ -1,7 +1,12 @@
 "use client";
 
-import { PlusSignIcon, Search01Icon } from "hugeicons-react";
-import { Edit3Icon, Loader2, X } from "lucide-react";
+import {
+  Cancel01Icon,
+  Edit03Icon,
+  Loading03Icon,
+  PlusSignIcon,
+  Search01Icon,
+} from "hugeicons-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -52,7 +57,7 @@ const ReadingListDialog = ({
   const [data, setData] = useState({
     title: edited?.title ?? "Untitled",
     description: edited?.description ?? "",
-    stories: selectedStory ? [selectedStory] : edited?.stories ?? [],
+    stories: selectedStory ? [selectedStory] : (edited?.stories ?? []),
   });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,7 +72,7 @@ const ReadingListDialog = ({
     { query: searchQuery },
     {
       enabled: searchQuery.length > 0,
-    }
+    },
   );
 
   // Update data if list changes
@@ -107,7 +112,7 @@ const ReadingListDialog = ({
   const handleAddStory = (story: Story) => {
     const storyId = story.id;
     const storyExists = data.stories.some((s) =>
-      typeof s === "string" ? s === storyId : s.id === storyId
+      typeof s === "string" ? s === storyId : s.id === storyId,
     );
 
     if (!storyExists) {
@@ -124,7 +129,7 @@ const ReadingListDialog = ({
     setData((prev) => ({
       ...prev,
       stories: prev.stories.filter((s) =>
-        typeof s === "string" ? s !== storyId : s.id !== storyId
+        typeof s === "string" ? s !== storyId : s.id !== storyId,
       ),
     }));
   };
@@ -132,7 +137,7 @@ const ReadingListDialog = ({
   const handleCreate = async () => {
     try {
       const initialStories = data.stories.map((s) =>
-        typeof s === "string" ? s : s.id
+        typeof s === "string" ? s : s.id,
       );
 
       if (edited) {
@@ -246,7 +251,7 @@ const ReadingListDialog = ({
               </Label>
               <Input
                 id="initial_stories"
-                icon={isSearching ? Loader2 : Search01Icon}
+                icon={isSearching ? Loading03Icon : Search01Icon}
                 iconPlacement="right"
                 iconStyle={
                   isSearching
@@ -325,12 +330,12 @@ const ReadingListDialog = ({
                           className="h-4 w-4 p-0 hover:bg-slate-200 rounded-full"
                           onClick={() =>
                             handleRemoveStory(
-                              typeof story === "string" ? story : story.id
+                              typeof story === "string" ? story : story.id,
                             )
                           }
                           disabled={isLoading}
                         >
-                          <X className="size-3" />
+                          <Cancel01Icon className="size-3" />
                         </Button>
                       </Badge>
                     ))}
@@ -343,7 +348,9 @@ const ReadingListDialog = ({
         <DialogFooter>
           <Button
             type="button"
-            icon={isLoading ? Loader2 : edited ? Edit3Icon : PlusSignIcon}
+            icon={
+              isLoading ? Loading03Icon : edited ? Edit03Icon : PlusSignIcon
+            }
             iconStyle={isLoading ? "animate-spin" : ""}
             disabled={isLoading}
             onClick={handleCreate}
@@ -353,8 +360,8 @@ const ReadingListDialog = ({
                 ? "Updating..."
                 : "Creating..."
               : edited
-              ? "Update"
-              : "Create"}
+                ? "Update"
+                : "Create"}
           </Button>
         </DialogFooter>
       </DialogContent>

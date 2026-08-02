@@ -1,7 +1,7 @@
 "use client";
 
 import { useCompletion } from "ai/react";
-import { ArrowUp, WandSparkles } from "lucide-react";
+import { ArrowUp01Icon, MagicWand01Icon } from "hugeicons-react";
 import { useEditor } from "novel";
 import { addAIHighlight } from "novel";
 import { useState } from "react";
@@ -53,7 +53,7 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
 
       {isLoading && (
         <div className="flex h-12 w-full items-center px-4 text-sm font-medium text-muted-foreground">
-          <WandSparkles className="mr-2 h-4 w-4 shrink-0  " />
+          <MagicWand01Icon className="mr-2 h-4 w-4 shrink-0  " />
           AI is thinking
           <div className="ml-2 mt-1">
             <CrazySpinner />
@@ -85,7 +85,7 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
 
                 const slice = editor?.state.selection.content();
                 const text = editor?.storage.markdown.serializer.serialize(
-                  slice?.content
+                  slice?.content,
                 );
 
                 complete(text, {
@@ -93,7 +93,7 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
                 }).then(() => setInputValue(""));
               }}
             >
-              <ArrowUp className="h-4 w-4" />
+              <ArrowUp01Icon className="h-4 w-4" />
             </Button>
           </div>
           {hasCompletion ? (

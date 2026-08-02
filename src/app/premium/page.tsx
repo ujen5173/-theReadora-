@@ -1,8 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { ZapIcon } from "hugeicons-react";
-import { CheckIcon, Crown, Loader2 } from "lucide-react";
+import { CrownIcon, Loading03Icon, Tick02Icon, ZapIcon } from "hugeicons-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { SubscriptionManagementDialog } from "~/app/_components/shared/premium/subscription-management-dialog";
@@ -93,7 +92,7 @@ const Premium = () => {
                 <div className="flex justify-between items-center bg-gradient-to-r from-primary/5 to-primary/10 p-6 border border-primary/20 rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="bg-primary/10 p-2 rounded-full">
-                      <Crown className="size-5 text-primary" />
+                      <CrownIcon className="size-5 text-primary" />
                     </div>
                     <div>
                       <p className="font-medium text-lg">
@@ -164,7 +163,7 @@ const Premium = () => {
                     {uniquePremiumFeatures.map((feature, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <div className="bg-white/20 p-1 rounded-full">
-                          <CheckIcon className="w-4 h-4 text-white" />
+                          <Tick02Icon className="w-4 h-4 text-white" />
                         </div>
                         <p className="font-medium text-white">{feature}</p>
                       </div>
@@ -202,7 +201,7 @@ const Premium = () => {
                         }
                       >
                         {status === "pending" ? (
-                          <Loader2 className="animate-spin" />
+                          <Loading03Icon className="animate-spin" />
                         ) : userData?.balance?.premium ? (
                           "Current Plan"
                         ) : (

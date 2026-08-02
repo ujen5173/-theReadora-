@@ -8,6 +8,8 @@ const Recommendations = async () => {
 
   return (
     <BookSection
+      fillRows
+      seeAllHref="/search"
       title="Recommendations"
       novels={recommendations}
       analyticsRef="feed:recommendation"

@@ -1,23 +1,23 @@
 "use client";
 
 import {
-  AlertCircle,
-  BookOpen,
-  Calendar,
-  Check,
-  ChevronsUpDown,
-  Clock,
-  Eye,
-  Filter,
-  Flame,
-  Image,
-  Plus,
-  Sparkles,
-  Star,
-  Tags,
-  TrendingUp,
-  X,
-} from "lucide-react";
+  AlertCircleIcon,
+  BookOpen01Icon,
+  Calendar01Icon,
+  Cancel01Icon,
+  ChartIncreaseIcon,
+  Clock01Icon,
+  FilterIcon,
+  FireIcon,
+  Image01Icon,
+  PlusSignIcon,
+  SparklesIcon,
+  StarIcon,
+  TagsIcon,
+  Tick02Icon,
+  UnfoldMoreIcon,
+  ViewIcon,
+} from "hugeicons-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Badge } from "~/components/ui/badge";
@@ -109,10 +109,10 @@ const FilterSection = ({
   ];
 
   const sortOptions = [
-    { icon: Flame, label: "Hot" },
-    { icon: TrendingUp, label: "Popular" },
-    { icon: Clock, label: "Latest" },
-    { icon: Star, label: "Top Rated" },
+    { icon: FireIcon, label: "Hot" },
+    { icon: ChartIncreaseIcon, label: "Popular" },
+    { icon: Clock01Icon, label: "Latest" },
+    { icon: StarIcon, label: "Top Rated" },
   ];
 
   const handleAddCustomTag = () => {
@@ -189,14 +189,14 @@ const FilterSection = ({
       <div
         className={cn(
           "w-full bg-white rounded-lg h-full flex flex-col",
-          !isMobile && "border border-border"
+          !isMobile && "border border-border",
         )}
       >
         {!isMobile && (
           <div className="border-b border-border p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Filter className="size-5 text-primary" />
+                <FilterIcon className="size-5 text-primary" />
                 <h3 className="font-semibold text-slate-900">Story Filters</h3>
               </div>
             </div>
@@ -228,7 +228,7 @@ const FilterSection = ({
                     className="w-full capitalize justify-between"
                   >
                     {storeGenre ? storeGenre : "Select genre"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    <UnfoldMoreIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
@@ -243,12 +243,12 @@ const FilterSection = ({
                             value={g.name}
                             onSelect={() => handleGenreSelect(g.slug)}
                           >
-                            <Check
+                            <Tick02Icon
                               className={cn(
                                 "mr-2 h-4 w-4",
                                 storeGenre === g.slug
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                             {g.name}
@@ -276,7 +276,7 @@ const FilterSection = ({
                   className={cn(
                     "w-full justify-start",
                     sortBy === option.label &&
-                      "bg-primary hover:bg-primary/80 hover:text-white transition-all text-white"
+                      "bg-primary hover:bg-primary/80 hover:text-white transition-all text-white",
                   )}
                   onClick={() => {
                     setSortBy(option.label);
@@ -294,7 +294,7 @@ const FilterSection = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <BookOpen className="size-4 text-slate-600" />
+                  <BookOpen01Icon className="size-4 text-slate-600" />
                   <Label htmlFor="completed" className="text-sm">
                     Completed Only
                   </Label>
@@ -306,7 +306,7 @@ const FilterSection = ({
                     setStatus(
                       checked
                         ? [...status, "COMPLETED"]
-                        : status.filter((s) => s !== "COMPLETED")
+                        : status.filter((s) => s !== "COMPLETED"),
                     );
                   }}
                 />
@@ -314,7 +314,7 @@ const FilterSection = ({
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="size-4 text-slate-600" />
+                  <AlertCircleIcon className="size-4 text-slate-600" />
                   <Label htmlFor="mature" className="text-sm">
                     Mature Content
                   </Label>
@@ -326,7 +326,7 @@ const FilterSection = ({
                     setStatus(
                       checked
                         ? [...status, "MATURE"]
-                        : status.filter((s) => s !== "MATURE")
+                        : status.filter((s) => s !== "MATURE"),
                     );
                   }}
                 />
@@ -339,7 +339,7 @@ const FilterSection = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="size-4 text-slate-600" />
+                  <SparklesIcon className="size-4 text-slate-600" />
                   <Label htmlFor="ai" className="text-sm">
                     AI Generated
                   </Label>
@@ -351,7 +351,7 @@ const FilterSection = ({
                     setContentType(
                       checked
                         ? [...contentType, "AI_GENERATED"]
-                        : contentType.filter((type) => type !== "AI_GENERATED")
+                        : contentType.filter((type) => type !== "AI_GENERATED"),
                     );
                   }}
                 />
@@ -359,7 +359,7 @@ const FilterSection = ({
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <BookOpen className="size-4 text-slate-600" />
+                  <BookOpen01Icon className="size-4 text-slate-600" />
                   <Label htmlFor="originals" className="text-sm">
                     Originals
                   </Label>
@@ -371,7 +371,7 @@ const FilterSection = ({
                     setContentType(
                       checked
                         ? [...contentType, "ORIGINAL"]
-                        : contentType.filter((type) => type !== "ORIGINAL")
+                        : contentType.filter((type) => type !== "ORIGINAL"),
                     );
                   }}
                 />
@@ -379,7 +379,7 @@ const FilterSection = ({
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Image className="size-4 text-slate-600" />
+                  <Image01Icon className="size-4 text-slate-600" />
                   <Label htmlFor="graphics" className="text-sm">
                     With Graphics
                   </Label>
@@ -391,7 +391,7 @@ const FilterSection = ({
                     setContentType(
                       checked
                         ? [...contentType, "GRAPHICS"]
-                        : contentType.filter((type) => type !== "GRAPHICS")
+                        : contentType.filter((type) => type !== "GRAPHICS"),
                     );
                   }}
                 />
@@ -404,7 +404,7 @@ const FilterSection = ({
             {/* Chapter Range */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <BookOpen className="size-4 text-slate-600" />
+                <BookOpen01Icon className="size-4 text-slate-600" />
                 <Label className="text-sm font-medium">Chapters</Label>
               </div>
               <Slider
@@ -428,7 +428,7 @@ const FilterSection = ({
             {/* View Range */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Eye className="size-4 text-slate-600" />
+                <ViewIcon className="size-4 text-slate-600" />
                 <Label className="text-sm font-medium">View Count</Label>
               </div>
               <Slider
@@ -457,14 +457,18 @@ const FilterSection = ({
           {/* Publication Date */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Calendar className="size-4 text-slate-600" />
+              <Calendar01Icon className="size-4 text-slate-600" />
               <Label className="text-sm font-medium">Publication Date</Label>
             </div>
             <Select
               value={publishedAt}
               onValueChange={(value) => {
                 setPublishedAt(
-                  value as "LAST_WEEK" | "LAST_MONTH" | "LAST_YEAR" | "ALL_TIME"
+                  value as
+                    | "LAST_WEEK"
+                    | "LAST_MONTH"
+                    | "LAST_YEAR"
+                    | "ALL_TIME",
                 );
               }}
             >
@@ -483,7 +487,7 @@ const FilterSection = ({
           {/* Tags Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Tags className="size-4 text-slate-600" />
+              <TagsIcon className="size-4 text-slate-600" />
               <Label className="text-sm font-medium">Tags</Label>
             </div>
 
@@ -501,7 +505,7 @@ const FilterSection = ({
                 onClick={handleAddCustomTag}
                 disabled={!customTag}
               >
-                <Plus className="size-4" />
+                <PlusSignIcon className="size-4" />
               </Button>
             </div>
 
@@ -537,7 +541,7 @@ const FilterSection = ({
         <div
           className={cn(
             "sticky bottom-0 p-4 border-t flex items-center gap-2 border-border bg-white",
-            isMobile ? "flex gap-2" : ""
+            isMobile ? "flex gap-2" : "",
           )}
         >
           <Button
@@ -560,7 +564,7 @@ const FilterSection = ({
               onClick={() => {
                 setOpen(false);
               }}
-              icon={X}
+              icon={Cancel01Icon}
             />
           </div>
         </div>

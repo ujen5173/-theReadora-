@@ -1,7 +1,11 @@
 "use client";
 
-import { Edit02Icon } from "hugeicons-react";
-import { ArrowRight, Loader2, X } from "lucide-react";
+import {
+  ArrowRight01Icon,
+  Cancel01Icon,
+  Edit02Icon,
+  Loading03Icon,
+} from "hugeicons-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -41,7 +45,7 @@ const BookMetadata = ({
     undefined,
     {
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const [metadata, setMetadata] = useState<BookMetadataType>(
@@ -54,7 +58,7 @@ const BookMetadata = ({
       hasAiContent: false,
       language: "English",
       isLGBTQContent: false,
-    }
+    },
   );
 
   const [currentTag, setCurrentTag] = useState("");
@@ -162,7 +166,7 @@ const BookMetadata = ({
                   onClick={() => removeTag(tag)}
                   className="ml-1.5 sm:ml-2 hover:text-destructive"
                 >
-                  <X className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
+                  <Cancel01Icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
                 </button>
               </Badge>
             ))}
@@ -293,7 +297,7 @@ const BookMetadata = ({
         <div className="flex flex-col sm:flex-row gap-3">
           <Button
             onClick={() => onSubmit(metadata)}
-            icon={ArrowRight}
+            icon={ArrowRight01Icon}
             effect={status === "pending" ? undefined : "expandIcon"}
             iconPlacement="right"
             disabled={status === "pending"}
@@ -301,7 +305,7 @@ const BookMetadata = ({
           >
             {status === "pending" ? (
               <>
-                <Loader2 className="size-3.5 sm:size-4 animate-spin" />
+                <Loading03Icon className="size-3.5 sm:size-4 animate-spin" />
                 <span>Processing...</span>
               </>
             ) : !!editData ? (
@@ -327,7 +331,12 @@ const BookMetadata = ({
                   <Link
                     href={`/write/story-editor/${editData.id}?chapter_id=${chapter.id}`}
                   >
-                    <Button icon={Edit02Icon} variant="ghost" size="sm" className="h-8">
+                    <Button
+                      icon={Edit02Icon}
+                      variant="ghost"
+                      size="sm"
+                      className="h-8"
+                    >
                       Edit
                     </Button>
                   </Link>

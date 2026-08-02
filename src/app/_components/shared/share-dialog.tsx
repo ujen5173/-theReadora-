@@ -1,13 +1,14 @@
 "use client";
 
 import {
+  Copy01Icon,
   Facebook01Icon,
   RedditIcon,
   Share01Icon,
+  Tick02Icon,
   TwitterIcon,
   WhatsappIcon,
 } from "hugeicons-react";
-import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -36,7 +37,7 @@ const socialPlatforms = [
     hoverColor: "hover:bg-[#1DA1F2]/20",
     getShareUrl: (url: string, title: string) =>
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        title
+        title,
       )}&url=${encodeURIComponent(url)}`,
   },
   {
@@ -54,7 +55,7 @@ const socialPlatforms = [
     hoverColor: "hover:bg-[#FF4500]/20",
     getShareUrl: (url: string, title: string) =>
       `https://reddit.com/submit?url=${encodeURIComponent(
-        url
+        url,
       )}&title=${encodeURIComponent(title)}`,
   },
   {
@@ -135,9 +136,9 @@ const ShareDialog = ({
               size="sm"
               className={cn(
                 "transition-all duration-200 whitespace-nowrap",
-                "bg-slate-900 hover:bg-slate-800 text-white"
+                "bg-slate-900 hover:bg-slate-800 text-white",
               )}
-              icon={copied ? Check : Copy}
+              icon={copied ? Tick02Icon : Copy01Icon}
               iconPlacement="left"
               onClick={handleCopy}
             >
@@ -158,7 +159,7 @@ const ShareDialog = ({
                   className={cn(
                     "transition-colors",
                     platform.color,
-                    platform.hoverColor
+                    platform.hoverColor,
                   )}
                   onClick={() => handleShare(platform)}
                   icon={platform.icon}

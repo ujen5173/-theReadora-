@@ -1,16 +1,15 @@
 import {
-  Check,
-  CheckSquare,
-  ChevronDown,
-  Code,
-  Heading1,
-  Heading2,
-  Heading3,
-  ListOrdered,
-  type LucideIcon,
-  TextIcon,
-  TextQuote,
-} from "lucide-react";
+  ArrowDown01Icon,
+  CheckmarkSquare02Icon,
+  CodeIcon,
+  Heading01Icon,
+  Heading02Icon,
+  Heading03Icon,
+  LeftToRightListNumberIcon,
+  QuoteDownIcon,
+  TextFontIcon,
+  Tick02Icon,
+} from "hugeicons-react";
 import { EditorBubbleItem, useEditor } from "novel";
 
 import { Button } from "~/components/ui/button";
@@ -19,7 +18,7 @@ import { Popover } from "@radix-ui/react-popover";
 
 export type SelectorItem = {
   name: string;
-  icon: LucideIcon;
+  icon: React.ElementType;
   command: (editor: ReturnType<typeof useEditor>["editor"]) => void;
   isActive: (editor: ReturnType<typeof useEditor>["editor"]) => boolean;
 };
@@ -27,67 +26,67 @@ export type SelectorItem = {
 const items: SelectorItem[] = [
   {
     name: "Text",
-    icon: TextIcon,
+    icon: TextFontIcon,
     command: (editor) => editor?.chain().focus().clearNodes().run(),
     isActive: (editor) =>
       Boolean(
         editor?.isActive?.("paragraph") &&
           !editor?.isActive?.("bulletList") &&
-          !editor?.isActive?.("orderedList")
+          !editor?.isActive?.("orderedList"),
       ),
   },
   {
     name: "Heading 1",
-    icon: Heading1,
+    icon: Heading01Icon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleHeading({ level: 1 }).run(),
     isActive: (editor) => Boolean(editor?.isActive("heading", { level: 1 })),
   },
   {
     name: "Heading 2",
-    icon: Heading2,
+    icon: Heading02Icon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleHeading({ level: 2 }).run(),
     isActive: (editor) => Boolean(editor?.isActive("heading", { level: 2 })),
   },
   {
     name: "Heading 3",
-    icon: Heading3,
+    icon: Heading03Icon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleHeading({ level: 3 }).run(),
     isActive: (editor) => Boolean(editor?.isActive("heading", { level: 3 })),
   },
   {
     name: "To-do List",
-    icon: CheckSquare,
+    icon: CheckmarkSquare02Icon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleTaskList().run(),
     isActive: (editor) => Boolean(editor?.isActive("taskItem")),
   },
   {
     name: "Bullet List",
-    icon: ListOrdered,
+    icon: LeftToRightListNumberIcon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleBulletList().run(),
     isActive: (editor) => Boolean(editor?.isActive("bulletList")),
   },
   {
     name: "Numbered List",
-    icon: ListOrdered,
+    icon: LeftToRightListNumberIcon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleOrderedList().run(),
     isActive: (editor) => Boolean(editor?.isActive("orderedList")),
   },
   {
     name: "Quote",
-    icon: TextQuote,
+    icon: QuoteDownIcon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleBlockquote().run(),
     isActive: (editor) => Boolean(editor?.isActive("blockquote")),
   },
   {
     name: "Code",
-    icon: Code,
+    icon: CodeIcon,
     command: (editor) =>
       editor?.chain().focus().clearNodes().toggleCodeBlock().run(),
     isActive: (editor) => Boolean(editor?.isActive("codeBlock")),
@@ -113,7 +112,7 @@ export const NodeSelector = ({ open, onOpenChange }: NodeSelectorProps) => {
       >
         <Button size="sm" variant="ghost" className="gap-2">
           <span className="whitespace-nowrap text-sm">{activeItem.name}</span>
-          <ChevronDown className="h-4 w-4" />
+          <ArrowDown01Icon className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent sideOffset={5} align="start" className="w-48 p-1">
@@ -132,7 +131,9 @@ export const NodeSelector = ({ open, onOpenChange }: NodeSelectorProps) => {
               </div>
               <span>{item.name}</span>
             </div>
-            {activeItem.name === item.name && <Check className="h-4 w-4" />}
+            {activeItem.name === item.name && (
+              <Tick02Icon className="h-4 w-4" />
+            )}
           </EditorBubbleItem>
         ))}
       </PopoverContent>

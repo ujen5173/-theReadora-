@@ -10,8 +10,12 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from "@tanstack/react-table";
-import { Book02Icon, QuillWrite02Icon, Upload05Icon } from "hugeicons-react";
-import { Search } from "lucide-react";
+import {
+  Book02Icon,
+  QuillWrite02Icon,
+  Search01Icon,
+  Upload05Icon,
+} from "hugeicons-react";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
@@ -70,7 +74,7 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm bg-white"
             size="md"
-            icon={Search}
+            icon={Search01Icon}
             iconStyle="text-slate-600 size-4"
           />
         </div>
@@ -93,7 +97,7 @@ export function DataTable<TData, TValue>({
                             ? null
                             : flexRender(
                                 header.column.columnDef.header,
-                                header.getContext()
+                                header.getContext(),
                               )}
                         </TableHead>
                       );
@@ -113,7 +117,7 @@ export function DataTable<TData, TValue>({
                         <TableCell key={cell.id} className="p-4 align-middle">
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       ))}

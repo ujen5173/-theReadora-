@@ -1,7 +1,6 @@
 "use client";
 
-import { Book01Icon } from "hugeicons-react";
-import { Edit2 } from "lucide-react";
+import { Book01Icon, Edit02Icon } from "hugeicons-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { useUserProfileStore } from "~/store/userProfileStore";
@@ -25,7 +24,7 @@ const UserCreations = () => {
           {user?.id === currentUser?.id && (
             <Link href={"/write"}>
               <Button
-                icon={Edit2}
+                icon={Edit02Icon}
                 variant="default"
                 size="sm"
                 className="mt-4 gap-2"

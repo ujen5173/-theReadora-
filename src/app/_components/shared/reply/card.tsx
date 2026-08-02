@@ -1,5 +1,9 @@
-import { HeartAddIcon, HeartRemoveIcon, RecordIcon } from "hugeicons-react";
-import { MessageCircle } from "lucide-react";
+import {
+  BubbleChatIcon,
+  HeartAddIcon,
+  HeartRemoveIcon,
+  RecordIcon,
+} from "hugeicons-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -100,7 +104,7 @@ const ReplyCard = ({
               variant="link"
               onClick={() => setShowReplyForm((prev) => !prev)}
               className="text-slate-500 gap-1.5 hover:text-slate-700 px-0"
-              icon={MessageCircle}
+              icon={BubbleChatIcon}
             >
               <span>Reply</span>
             </Button>

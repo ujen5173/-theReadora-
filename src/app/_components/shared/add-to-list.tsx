@@ -1,7 +1,10 @@
 "use client";
 
-import { Bookmark02Icon, BookmarkCheck01Icon } from "hugeicons-react";
-import { Loader2Icon } from "lucide-react";
+import {
+  Bookmark02Icon,
+  BookmarkCheck01Icon,
+  Loading03Icon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -68,7 +71,7 @@ const AddToList = ({
     setSelectedLists((prev) =>
       prev.includes(listId)
         ? prev.filter((id) => id !== listId)
-        : [...prev, listId]
+        : [...prev, listId],
     );
   };
 
@@ -146,7 +149,7 @@ const AddToList = ({
               </ReadingListDialog>
               <Button
                 disabled={status === "pending" || selectedLists.length === 0}
-                icon={status === "pending" ? Loader2Icon : undefined}
+                icon={status === "pending" ? Loading03Icon : undefined}
                 iconStyle={status === "pending" ? "animate-spin" : ""}
                 onClick={handleSave}
               >

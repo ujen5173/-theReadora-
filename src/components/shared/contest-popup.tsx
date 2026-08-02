@@ -1,8 +1,13 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Award01Icon, StarIcon } from "hugeicons-react";
-import { Sparkles, Trophy, X } from "lucide-react";
+import {
+  Award01Icon,
+  Cancel01Icon,
+  ChampionIcon,
+  SparklesIcon,
+  StarIcon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
@@ -220,7 +225,7 @@ const ContestPopup = () => {
                 onClick={handleClose}
                 className="top-4 right-4 z-50 absolute bg-white/80 hover:bg-slate-100 backdrop-blur-sm p-2 rounded-full text-slate-500 hover:text-slate-800 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <Cancel01Icon className="w-5 h-5" />
               </button>
 
               <div className="relative flex flex-col p-8 md:p-8 w-full md:w-1/2 overflow-y-auto custom-scroll">
@@ -253,11 +258,11 @@ const ContestPopup = () => {
                   <div className="flex-1 space-y-2 mb-3">
                     <div className="group relative flex items-start gap-4 bg-gradient-to-br from-rose-50/80 to-orange-50/80 hover:shadow-lg p-4 border border-rose-100/60 rounded-xl overflow-hidden transition-all duration-300">
                       <div className="top-0 right-0 absolute opacity-5 group-hover:opacity-15 p-3 transition-opacity duration-500">
-                        <Trophy className="w-24 h-24 text-rose-500 rotate-12" />
+                        <ChampionIcon className="w-24 h-24 text-rose-500 rotate-12" />
                       </div>
 
                       <div className="bg-white shadow-sm p-2.5 rounded-lg ring-4 ring-rose-50 text-rose-500">
-                        <Trophy className="w-6 h-6" />
+                        <ChampionIcon className="w-6 h-6" />
                       </div>
                       <div>
                         <h3 className="font-bold text-slate-800 text-lg">
@@ -331,7 +336,7 @@ const ContestPopup = () => {
                       <Link href="/contest" onClick={handleClose}>
                         <span className="flex items-center gap-2">
                           View Full Details{" "}
-                          <Sparkles className="w-4 h-4 text-primary-foreground/80" />
+                          <SparklesIcon className="w-4 h-4 text-primary-foreground/80" />
                         </span>
                       </Link>
                     </Button>

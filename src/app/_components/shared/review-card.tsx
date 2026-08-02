@@ -1,12 +1,13 @@
 "use client";
 
 import {
+  BubbleChatIcon,
   HeartAddIcon,
   HeartRemoveIcon,
+  MoreVerticalIcon,
   RecordIcon,
   StarIcon,
 } from "hugeicons-react";
-import { MessageCircle, MoreVertical } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -111,7 +112,7 @@ const ReviewCard = ({ review }: { review: TReview }) => {
               size="icon"
               className="h-8 w-8 hover:bg-slate-100"
             >
-              <MoreVertical className="size-4" />
+              <MoreVerticalIcon className="size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
@@ -143,7 +144,7 @@ const ReviewCard = ({ review }: { review: TReview }) => {
           variant="link"
           onClick={() => setShowReplyForm((prev) => !prev)}
           className="text-slate-500 gap-1.5 hover:text-slate-700 px-0"
-          icon={MessageCircle}
+          icon={BubbleChatIcon}
         >
           <span>Reply</span>
         </Button>

@@ -1,10 +1,10 @@
 import {
-  ArrowDownWideNarrow,
-  CheckCheck,
-  RefreshCcwDot,
-  StepForward,
-  WrapText,
-} from "lucide-react";
+  NextIcon,
+  RefreshDotIcon,
+  SortByDown01Icon,
+  TextWrapIcon,
+  TickDouble02Icon,
+} from "hugeicons-react";
 import { getPrevText, useEditor } from "novel";
 import {
   CommandGroup,
@@ -16,22 +16,22 @@ const options = [
   {
     value: "improve",
     label: "Improve writing",
-    icon: RefreshCcwDot,
+    icon: RefreshDotIcon,
   },
   {
     value: "fix",
     label: "Fix grammar",
-    icon: CheckCheck,
+    icon: TickDouble02Icon,
   },
   {
     value: "shorter",
     label: "Make shorter",
-    icon: ArrowDownWideNarrow,
+    icon: SortByDown01Icon,
   },
   {
     value: "longer",
     label: "Make longer",
-    icon: WrapText,
+    icon: TextWrapIcon,
   },
 ];
 
@@ -51,7 +51,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
               if (editor) {
                 const slice = editor.state.selection.content();
                 const text = editor.storage.markdown.serializer.serialize(
-                  slice.content
+                  slice.content,
                 );
                 onSelect(text, value);
               }
@@ -78,7 +78,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
           value="continue"
           className="gap-2 px-2"
         >
-          <StepForward className="h-4 w-4 text-rose-500" />
+          <NextIcon className="h-4 w-4 text-rose-500" />
           Continue writing
         </CommandItem>
       </CommandGroup>

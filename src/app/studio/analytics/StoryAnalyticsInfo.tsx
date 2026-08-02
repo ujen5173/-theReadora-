@@ -2,22 +2,20 @@
 
 import {
   BookOpen01Icon,
+  ChartIncreaseIcon,
+  CheckListIcon,
+  Delete02Icon,
   EyeIcon,
   FileEditIcon,
   LeftToRightListNumberIcon,
+  LinkSquare01Icon,
   Megaphone01Icon,
   PencilEdit01Icon,
+  Settings02Icon,
   StarIcon,
   ToggleOnIcon,
+  ViewOffIcon,
 } from "hugeicons-react";
-import {
-  ExternalLink,
-  EyeOffIcon,
-  FileCheck2Icon,
-  Settings2,
-  Trash2Icon,
-  TrendingUp,
-} from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -234,7 +232,7 @@ const StoryAnalyticsInfo = ({
               <Tooltip>
                 <TooltipProvider>
                   <TooltipTrigger>
-                    <Button disabled icon={TrendingUp}>
+                    <Button disabled icon={ChartIncreaseIcon}>
                       Boost Work
                     </Button>
                   </TooltipTrigger>
@@ -244,7 +242,7 @@ const StoryAnalyticsInfo = ({
                 </TooltipProvider>
               </Tooltip>
               <DropdownMenu>
-                <Button asChild icon={Settings2} variant="outline">
+                <Button asChild icon={Settings02Icon} variant="outline">
                   <DropdownMenuTrigger>Take Actions</DropdownMenuTrigger>
                 </Button>
                 <DropdownMenuContent className="w-[190px]" align="start">
@@ -264,12 +262,12 @@ const StoryAnalyticsInfo = ({
                           <DropdownMenuItem
                             disabled={info.storyStatus === "PUBLISHED"}
                           >
-                            <FileCheck2Icon className="mr-2 h-4 w-4" /> PUBLISH
+                            <CheckListIcon className="mr-2 h-4 w-4" /> PUBLISH
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             disabled={info.storyStatus === "PRIVATE"}
                           >
-                            <EyeOffIcon className="mr-2 h-4 w-4" /> PRIVATE
+                            <ViewOffIcon className="mr-2 h-4 w-4" /> PRIVATE
                           </DropdownMenuItem>
                         </DropdownMenuSubContent>
                       </DropdownMenuPortal>
@@ -283,14 +281,15 @@ const StoryAnalyticsInfo = ({
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem className="text-red-600">
-                    <Trash2Icon className="mr-2 h-4 w-4 text-red-600" /> Delete
+                    <Delete02Icon className="mr-2 h-4 w-4 text-red-600" />{" "}
+                    Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
             <Button
               variant={"outline"}
-              icon={ExternalLink}
+              icon={LinkSquare01Icon}
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
                 toast.info("URL Copied");

@@ -252,7 +252,7 @@ export type ReadEventGroupByOutputType = {
   _max: ReadEventMaxAggregateOutputType | null
 }
 
-type GetReadEventGroupByPayload<T extends ReadEventGroupByArgs> = Prisma.PrismaPromise<
+export type GetReadEventGroupByPayload<T extends ReadEventGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ReadEventGroupByOutputType, T['by']> &
       {
@@ -1630,6 +1630,11 @@ export type ReadEventFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` ReadEvents.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ReadEvents.
+   */
   distinct?: Prisma.ReadEventScalarFieldEnum | Prisma.ReadEventScalarFieldEnum[]
 }
 

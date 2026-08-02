@@ -2,13 +2,13 @@
 
 import { format } from "date-fns";
 import {
-  Calendar,
-  ChevronDown,
-  Clock,
-  Loader2,
-  Rocket,
-  Users,
-} from "lucide-react";
+  ArrowDown01Icon,
+  Calendar01Icon,
+  Clock01Icon,
+  Loading03Icon,
+  RocketIcon,
+  UserMultipleIcon,
+} from "hugeicons-react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import readingTime from "reading-time";
@@ -47,7 +47,7 @@ const StoryEditorFooter = () => {
 
   const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [scheduledDate, setScheduledDate] = useState<Date | undefined>(
-    undefined
+    undefined,
   );
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -96,7 +96,7 @@ const StoryEditorFooter = () => {
         isLocked,
         price,
 
-        edit: isChapterForEdit ? edit_id ?? undefined : undefined,
+        edit: isChapterForEdit ? (edit_id ?? undefined) : undefined,
       });
 
       if (res.success) {
@@ -180,7 +180,7 @@ const StoryEditorFooter = () => {
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t">
       <Button
         variant="outline"
-        icon={Users}
+        icon={UserMultipleIcon}
         className="text-muted-foreground w-full sm:w-auto"
       >
         Add Collaborators
@@ -193,7 +193,7 @@ const StoryEditorFooter = () => {
           disabled={status === "pending" || isSavingDraft}
           className="w-full sm:w-auto"
         >
-          {isSavingDraft && <Loader2 className="size-4 animate-spin" />}
+          {isSavingDraft && <Loading03Icon className="size-4 animate-spin" />}
           Save Draft
         </Button>
 
@@ -203,7 +203,7 @@ const StoryEditorFooter = () => {
               disabled={status === "pending"}
               className="w-full sm:w-auto bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
               effect="shineHover"
-              icon={status === "pending" ? Loader2 : ChevronDown}
+              icon={status === "pending" ? Loading03Icon : ArrowDown01Icon}
               iconStyle={status === "pending" ? "animate-spin" : "none"}
               iconPlacement="right"
             >
@@ -218,7 +218,7 @@ const StoryEditorFooter = () => {
               }}
               className="flex items-center gap-2 cursor-pointer text-primary hover:text-primary"
             >
-              <Rocket className="h-4 w-4 text-inherit" />
+              <RocketIcon className="h-4 w-4 text-inherit" />
               {isChapterForEdit ? (
                 <span>Update Now</span>
               ) : (
@@ -233,7 +233,7 @@ const StoryEditorFooter = () => {
                 }}
                 className="flex items-center gap-2 cursor-pointer"
               >
-                <Calendar className="h-4 w-4" />
+                <Calendar01Icon className="h-4 w-4" />
                 <span>Schedule Publish</span>
               </DropdownMenuItem>
             )}
@@ -264,7 +264,7 @@ const StoryEditorFooter = () => {
                 }}
               />
               <div className="mt-4 flex items-center gap-2">
-                <Clock className="h-4 w-4" />
+                <Clock01Icon className="h-4 w-4" />
                 <input
                   type="time"
                   className="border rounded px-2 py-1 w-full sm:w-auto"
@@ -272,7 +272,7 @@ const StoryEditorFooter = () => {
                     if (scheduledDate) {
                       const [hours, minutes] = e.target.value.split(":") as [
                         string,
-                        string
+                        string,
                       ];
                       const newDate = new Date(scheduledDate);
                       newDate.setHours(parseInt(hours), parseInt(minutes));

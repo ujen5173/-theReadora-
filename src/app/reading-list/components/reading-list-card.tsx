@@ -3,9 +3,9 @@
 import {
   Delete02Icon,
   Edit02Icon,
+  Loading03Icon,
   MoreVerticalSquare01Icon,
 } from "hugeicons-react";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import BlurImage from "~/app/_components/shared/blur-image";
@@ -127,7 +127,7 @@ const ReadingListCard = ({
                 className="flex items-center gap-2 text-sm px-4 cursor-pointer hover:bg-primary/10 hover:text-primary transition duration-150 py-3"
               >
                 {isDeleting ? (
-                  <Loader2 className="size-5 animate-spin" />
+                  <Loading03Icon className="size-5 animate-spin" />
                 ) : (
                   <Delete02Icon className="text-inherit size-5" />
                 )}

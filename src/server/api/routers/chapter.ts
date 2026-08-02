@@ -1,6 +1,6 @@
  
 import { TRPCError, type inferProcedureOutput } from "@trpc/server";
-import { AI21 } from "ai21";
+import { AI21, type ChatModel } from "ai21";
 import fs from "fs";
 import path from "path";
 import showdown from "showdown";
@@ -103,7 +103,9 @@ Generate the JSON object now:`;
         temperature: 0.8,
         max_tokens: 4000,
         topP: 0.9,
-        model: "jamba-mini-1.6-2025-03",
+        // Dated snapshot; the SDK's ChatModel union only lists the floating
+        // aliases ("jamba-mini" | "jamba-large"), so this is cast.
+        model: "jamba-mini-1.6-2025-03" as ChatModel,
       });
 
       const content = response.choices[0]?.message.content;

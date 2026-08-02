@@ -1,17 +1,14 @@
 "use client";
 
 import {
+  BookOpen01Icon,
   Comment01Icon,
   FavouriteIcon,
+  MoreHorizontalIcon,
   PinIcon,
+  RecordIcon,
   StarIcon,
 } from "hugeicons-react";
-import {
-  BookOpenIcon,
-  Dot,
-  MoreHorizontalIcon,
-  ReplyIcon,
-} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import BlurImage from "~/app/_components/shared/blur-image";
@@ -67,7 +64,7 @@ const ReviewCard = ({
 
   const repliesQuery = api.reviews.getReplies.useQuery(
     { reviewId: review.id },
-    { enabled: showReplies }
+    { enabled: showReplies },
   );
 
   const handlePinToggle = () => {
@@ -122,10 +119,10 @@ const ReviewCard = ({
 
                 <div className="flex items-center text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
-                    <BookOpenIcon className="h-3.5 w-3.5" />
+                    <BookOpen01Icon className="h-3.5 w-3.5" />
                     {formatDate(new Date(review.createdAt))}
                   </span>
-                  <Dot />
+                  <RecordIcon />
                   <div className="flex items-center gap-1">
                     <StarIcon className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     <span className="text-foreground">{review.rating}</span>
@@ -157,7 +154,7 @@ const ReviewCard = ({
                   liked.status
                     ? "bg-red-500 border-red-400 text-white"
                     : "text-muted-foreground hover:bg-red-50 hover:border-red-200 hover:text-red-600",
-                  "h-9 gap-2 rounded-full px-3 transition-all"
+                  "h-9 gap-2 rounded-full px-3 transition-all",
                 )}
               >
                 <FavouriteIcon className="h-4 w-4" />
@@ -182,7 +179,7 @@ const ReviewCard = ({
                 onClick={() => setShowReplyInput(!showReplyInput)}
                 className="h-9 gap-2 rounded-full px-3 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary"
               >
-                <ReplyIcon className="h-4 w-4" />
+                <Comment01Icon className="h-4 w-4" />
                 <span className="text-sm font-medium">Reply</span>
               </Button>
             </div>

@@ -1,5 +1,5 @@
 import * as ComboboxPrimitive from "@diceui/combobox";
-import { Check, ChevronDown, X } from "lucide-react";
+import { ArrowDown01Icon, Cancel01Icon, Tick02Icon } from "hugeicons-react";
 import type * as React from "react";
 
 import { cn } from "~/lib/utils";
@@ -76,7 +76,7 @@ function ComboboxTrigger({
       )}
       {...props}
     >
-      {children || <ChevronDown className="size-4" />}
+      {children || <ArrowDown01Icon className="size-4" />}
     </ComboboxPrimitive.Trigger>
   );
 }
@@ -131,7 +131,7 @@ function ComboboxBadgeItem({
         data-slot="combobox-badge-item-delete"
         className="shrink-0 rounded p-0.5 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring data-highlighted:bg-destructive"
       >
-        <X className="size-3" />
+        <Cancel01Icon className="size-3" />
       </ComboboxPrimitive.BadgeItemDelete>
     </ComboboxPrimitive.BadgeItem>
   );
@@ -241,7 +241,7 @@ function ComboboxItem({
           outset ? "right-2" : "left-2",
         )}
       >
-        <Check className="size-4" />
+        <Tick02Icon className="size-4" />
       </ComboboxPrimitive.ItemIndicator>
       <ComboboxPrimitive.ItemText>{children}</ComboboxPrimitive.ItemText>
     </ComboboxPrimitive.Item>

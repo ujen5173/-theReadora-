@@ -1,7 +1,12 @@
 "use client";
 
-import { Book01Icon, Bookshelf01Icon, RecordIcon } from "hugeicons-react";
-import { CalendarDays, Users } from "lucide-react";
+import {
+  Book01Icon,
+  Bookshelf01Icon,
+  Calendar03Icon,
+  RecordIcon,
+  UserMultipleIcon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -91,7 +96,7 @@ const ProfileMetaData = () => {
 
                   <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />
                   <span className="flex items-center gap-1.5">
-                    <CalendarDays className="size-4" />
+                    <Calendar03Icon className="size-4" />
                     Joined {formatDate(new Date(user?.createdAt ?? ""))}
                   </span>
                 </div>
@@ -107,7 +112,7 @@ const ProfileMetaData = () => {
                 </div>
                 <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />
                 <div className="flex items-center gap-1">
-                  <Users className="size-5 text-primary" />
+                  <UserMultipleIcon className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
                     {user?.followersCount || 0}
                   </span>
@@ -115,7 +120,7 @@ const ProfileMetaData = () => {
                 </div>
                 <RecordIcon className="size-1.5 fill-slate-500 text-slate-500" />
                 <div className="flex items-center gap-1">
-                  <Users className="size-5 text-primary" />
+                  <UserMultipleIcon className="size-5 text-primary" />
                   <span className="text-base font-semibold text-slate-700">
                     {user?.followingCount || 0}
                   </span>
@@ -177,7 +182,7 @@ const ProfileMetaData = () => {
                   >
                     {social.name}
                   </Button>
-                )
+                ),
             )}
             <div className="">
               <ShareDialog

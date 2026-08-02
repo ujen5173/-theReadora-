@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown } from "lucide-react";
+import { ArrowDown01Icon } from "hugeicons-react";
 import ReadingListCard from "~/app/reading-list/components/reading-list-card";
 import type { TgetUserReadingList } from "~/server/api/routers/readinglist";
 
@@ -15,7 +15,7 @@ const ReadingList = ({
         <h1 className="text-xl sm:text-2xl font-semibold text-primary">
           Your Reading Lists{" "}
         </h1>
-        <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+        <ArrowDown01Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {readinglists?.map((list) => (

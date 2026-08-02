@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ShieldAlert } from "lucide-react";
+import { Shield01Icon } from "hugeicons-react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -44,7 +44,7 @@ const DangerZone = () => {
       <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 sm:p-6">
         <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
           <div className="p-1.5 sm:p-2 rounded-full bg-destructive/10">
-            <ShieldAlert className="size-4 sm:size-5 text-destructive" />
+            <Shield01Icon className="size-4 sm:size-5 text-destructive" />
           </div>
           <h3 className="text-base sm:text-lg font-bold text-destructive">
             Danger Zone
@@ -58,8 +58,8 @@ const DangerZone = () => {
           <div className="rounded-lg border border-destructive/20 bg-white p-3 sm:p-4">
             <h4 className="font-semibold mb-2">Delete Account</h4>
             <p className="text-sm text-muted-foreground mb-3 sm:mb-4">
-              Permanently delete your account and all associated data. This action
-              cannot be undone.
+              Permanently delete your account and all associated data. This
+              action cannot be undone.
             </p>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
@@ -71,8 +71,8 @@ const DangerZone = () => {
                 <DialogHeader>
                   <DialogTitle>Are you sure?</DialogTitle>
                   <DialogDescription>
-                    This action cannot be undone. This will permanently delete your
-                    account and remove your data from our servers.
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>

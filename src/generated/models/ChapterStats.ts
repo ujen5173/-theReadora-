@@ -207,7 +207,7 @@ export type ChapterStatsGroupByOutputType = {
   _max: ChapterStatsMaxAggregateOutputType | null
 }
 
-type GetChapterStatsGroupByPayload<T extends ChapterStatsGroupByArgs> = Prisma.PrismaPromise<
+export type GetChapterStatsGroupByPayload<T extends ChapterStatsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ChapterStatsGroupByOutputType, T['by']> &
       {
@@ -1044,6 +1044,11 @@ export type ChapterStatsFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` ChapterStats.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ChapterStats.
+   */
   distinct?: Prisma.ChapterStatsScalarFieldEnum | Prisma.ChapterStatsScalarFieldEnum[]
 }
 

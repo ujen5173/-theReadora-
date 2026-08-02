@@ -312,7 +312,7 @@ export type StoryDailyStatsGroupByOutputType = {
   _max: StoryDailyStatsMaxAggregateOutputType | null
 }
 
-type GetStoryDailyStatsGroupByPayload<T extends StoryDailyStatsGroupByArgs> = Prisma.PrismaPromise<
+export type GetStoryDailyStatsGroupByPayload<T extends StoryDailyStatsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<StoryDailyStatsGroupByOutputType, T['by']> &
       {
@@ -1654,6 +1654,11 @@ export type StoryDailyStatsFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` StoryDailyStats.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of StoryDailyStats.
+   */
   distinct?: Prisma.StoryDailyStatsScalarFieldEnum | Prisma.StoryDailyStatsScalarFieldEnum[]
 }
 

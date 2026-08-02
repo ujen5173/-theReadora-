@@ -1,7 +1,6 @@
 "use client";
 
 import { QuillWrite02Icon } from "hugeicons-react";
-import { BookMarked } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -95,7 +94,7 @@ const FEATURED_NOVELS = [
 ];
 
 const NovelCard = ({ novel }: { novel: (typeof FEATURED_NOVELS)[number] }) => (
-  <div className="flex items-center gap-4 py-1 rounded-lg hover:bg-white/5 transition-colors group">
+  <div className="group flex items-center gap-4 hover:bg-white/5 py-1 rounded-lg transition-colors">
     <BlurImage
       src={novel.cover}
       alt={"COVER NOT FOUND"}
@@ -115,7 +114,7 @@ const VerticalSlider = () => {
   ];
 
   return (
-    <div className="hidden relative h-full max-h-[35rem] w-1/2 gap-2 overflow-hidden lg:flex">
+    <div className="hidden relative lg:flex gap-2 w-1/2 h-full max-h-[35rem] overflow-hidden">
       <div className="flex-1">
         <div
           className="animate-slide-up"
@@ -187,37 +186,37 @@ const HeroSection = () => {
 
   return (
     <section className="w-full">
-      <div className="relative mx-auto px-4 pt-4 pb-6 min-h-[30rem] max-w-[1240px] flex gap-10">
-        <div className="absolute inset-0 z-10 block lg:hidden">
+      <div className="relative flex gap-10 mx-auto px-4 pt-4 pb-6 max-w-[1240px] min-h-[30rem]">
+        <div className="lg:hidden block z-10 absolute inset-0">
           <Image
             src="/background-pattern.png"
             alt="Background Pattern"
             width={800}
             height={400}
-            className="w-full h-full z-0 object-cover select-none opacity-10"
+            className="z-0 opacity-10 w-full h-full object-cover select-none"
           />
         </div>
 
-        <div className="py-20 flex-1 z-10">
+        <div className="z-10 flex-1 py-20">
           <h1
             className={cn(
-              "text-4xl md:text-5xl leading-tight font-black text-slate-600 mb-4 tracking-tight",
-              merriweatherFont.className
+              "mb-4 font-black text-slate-600 text-4xl md:text-5xl leading-tight tracking-tight",
+              merriweatherFont.className,
             )}
           >
             Write stories that actually get noticed!
           </h1>
-          <p className="text-base md:text-lg text-slate-500 font-medium">
+          <p className="font-medium text-slate-500 text-base md:text-lg">
             A clean,{" "}
-            <span className="text-primary/70 underline font-semibold">
+            <span className="font-semibold text-primary/70 underline">
               creator-first
             </span>{" "}
             platform for{" "}
-            <span className="underline text-primary font-semibold">
+            <span className="font-semibold text-primary underline">
               readers
             </span>{" "}
             and{" "}
-            <span className="underline text-primary font-semibold">
+            <span className="font-semibold text-primary underline">
               writers
             </span>
             . Share stories, grow your audience, and enjoy storytelling without
@@ -228,7 +227,6 @@ const HeroSection = () => {
             <Link href="/search">
               <Button
                 variant={"default"}
-                icon={BookMarked}
                 iconStyle="rotate-12"
                 iconPlacement="left"
               >

@@ -1,4 +1,4 @@
-import { BookOpen, Home } from "lucide-react";
+import { BookOpen01Icon, Home01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { merriweatherFont } from "~/utils/font";
@@ -29,13 +29,13 @@ const NotFoundPage = () => {
           <div className="flex gap-4 mt-4">
             <Link href="/">
               <Button variant="default" className="gap-2">
-                <Home className="size-5" />
+                <Home01Icon className="size-5" />
                 Back Home
               </Button>
             </Link>
             <Link href="/search">
               <Button variant="secondary" className="gap-2">
-                <BookOpen className="size-5" />
+                <BookOpen01Icon className="size-5" />
                 Explore Stories
               </Button>
             </Link>

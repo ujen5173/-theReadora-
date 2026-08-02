@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Loader2 } from "lucide-react";
+import { Loading03Icon, Notification01Icon } from "hugeicons-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -99,7 +99,7 @@ const NotificationSettings = () => {
           ...acc,
           [key]: false,
         }),
-        {} as NotificationPreferences
+        {} as NotificationPreferences,
       ),
     };
     setPreferences(disabledPreferences);
@@ -130,7 +130,7 @@ const NotificationSettings = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="p-1.5 sm:p-2 rounded-full bg-primary/10 border border-primary/20">
-            <Bell className="size-4 sm:size-5 text-primary" />
+            <Notification01Icon className="size-4 sm:size-5 text-primary" />
           </div>
           <h3 className="text-base sm:text-lg font-bold text-primary">
             Notification Preferences
@@ -147,7 +147,9 @@ const NotificationSettings = () => {
           </Button>
           <Button
             variant="default"
-            icon={updatePreferences.status === "pending" ? Loader2 : undefined}
+            icon={
+              updatePreferences.status === "pending" ? Loading03Icon : undefined
+            }
             iconStyle={
               updatePreferences.status === "pending" ? "animate-spin" : ""
             }

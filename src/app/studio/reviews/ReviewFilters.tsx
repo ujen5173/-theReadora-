@@ -1,6 +1,11 @@
 "use client";
 
-import { Bookshelf01Icon, StarIcon } from "hugeicons-react";
+import {
+  Bookshelf01Icon,
+  StarIcon,
+  Tick02Icon,
+  UnfoldMoreIcon,
+} from "hugeicons-react";
 import { useMemo, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -16,8 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-
-import { Check, ChevronsUpDown } from "lucide-react";
 
 import {
   Command,
@@ -49,7 +52,7 @@ const ReviewFilters = ({
 
   const selectedStory = useMemo(
     () => (authorWorkTitle ?? []).find(({ id }) => id === metrics.selectedWork),
-    [authorWorkTitle, metrics.selectedWork]
+    [authorWorkTitle, metrics.selectedWork],
   );
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -153,7 +156,7 @@ const ReviewFilters = ({
                   Choose Stories
                 </>
               )}
-              <ChevronsUpDown className="opacity-50" />
+              <UnfoldMoreIcon className="opacity-50" />
             </Button>
           </PopoverTrigger>
           <PopoverContent align="start" className="w-[300px] p-0">
@@ -174,12 +177,12 @@ const ReviewFilters = ({
                       }}
                     >
                       {framework.title}
-                      <Check
+                      <Tick02Icon
                         className={cn(
                           "ml-auto",
                           metrics.selectedWork === framework.id
                             ? "opacity-100"
-                            : "opacity-0"
+                            : "opacity-0",
                         )}
                       />
                     </CommandItem>

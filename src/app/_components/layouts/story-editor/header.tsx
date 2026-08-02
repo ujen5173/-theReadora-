@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
+import { ArrowLeft01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -19,7 +19,7 @@ const StoryEditorHeader = () => {
             <Button
               variant="outline"
               size="icon"
-              icon={ChevronLeft}
+              icon={ArrowLeft01Icon}
               className="h-8 w-8 sm:h-9 sm:w-9 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             />
           </Link>

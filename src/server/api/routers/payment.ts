@@ -5,8 +5,11 @@ import { env } from "~/env";
 import { COIN_PRICE } from "~/utils/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+// Pinned deliberately: the account is on 2025-04-30.basil. The installed SDK's
+// types only name the newer default, so the pin is cast rather than bumped —
+// bumping it would change live Stripe behaviour, not just the types.
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-04-30.basil",
+  apiVersion: "2025-04-30.basil" as Stripe.LatestApiVersion,
 });
 
 export const paymentRouter = createTRPCRouter({

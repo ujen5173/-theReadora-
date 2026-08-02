@@ -1,8 +1,8 @@
 "use client";
 
-import { User } from "lucide-react";
+import { UserIcon } from "hugeicons-react";
 import { useEffect } from "react";
-import { type TGetProfile } from "~/server/api/routers/user";
+import type { TGetProfile } from "~/server/api/routers/user";
 import { useProfileStore } from "~/store/useProfileStore";
 import ProfileForm from "./profile-form";
 import ProfileFormImage from "./profile-form-image";
@@ -18,7 +18,7 @@ const ProfileSettings = ({ user }: { user: TGetProfile }) => {
     <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-4 sm:p-6 border border-primary/20 rounded-lg">
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-primary/10 p-2 border border-primary/20 rounded-full">
-          <User className="size-5 text-primary" />
+          <UserIcon className="size-5 text-primary" />
         </div>
         <h3 className="font-bold text-primary text-lg">Profile Settings</h3>
       </div>

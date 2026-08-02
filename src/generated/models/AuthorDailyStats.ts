@@ -287,7 +287,7 @@ export type AuthorDailyStatsGroupByOutputType = {
   _max: AuthorDailyStatsMaxAggregateOutputType | null
 }
 
-type GetAuthorDailyStatsGroupByPayload<T extends AuthorDailyStatsGroupByArgs> = Prisma.PrismaPromise<
+export type GetAuthorDailyStatsGroupByPayload<T extends AuthorDailyStatsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AuthorDailyStatsGroupByOutputType, T['by']> &
       {
@@ -1304,6 +1304,11 @@ export type AuthorDailyStatsFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` AuthorDailyStats.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of AuthorDailyStats.
+   */
   distinct?: Prisma.AuthorDailyStatsScalarFieldEnum | Prisma.AuthorDailyStatsScalarFieldEnum[]
 }
 

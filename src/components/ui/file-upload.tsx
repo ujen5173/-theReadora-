@@ -1,7 +1,10 @@
 "use client";
 
-import { Upload01Icon, UploadSquare02Icon } from "hugeicons-react";
-import { TrashIcon } from "lucide-react";
+import {
+  Delete02Icon,
+  Upload01Icon,
+  UploadSquare02Icon,
+} from "hugeicons-react";
 import Image from "next/image";
 import * as React from "react";
 import Dropzone, { type DropzoneProps } from "react-dropzone";
@@ -73,7 +76,7 @@ export function FileUploader({
         }
       }
     },
-    [onUpload, setFile, setPreparingUpload]
+    [onUpload, setFile, setPreparingUpload],
   );
 
   // Revoke preview url when component unmounts
@@ -107,7 +110,7 @@ export function FileUploader({
               "text-center transition hover:bg-secondary/5",
               "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               isDragActive && "border-muted-foreground/50 bg-primary/5",
-              className
+              className,
             )}
             {...dropzoneProps}
           >
@@ -150,7 +153,7 @@ export function FileUploader({
             }}
             className="rounded-full bg-destructive/10 p-2 border border-destructive/40 text-destructive hover:bg-destructive/20 transition-colors"
           >
-            <TrashIcon className="h-4 w-4" />
+            <Delete02Icon className="h-4 w-4" />
             <span className="sr-only">Remove image</span>
           </button>
         </div>
@@ -227,7 +230,7 @@ const FileUploaded = ({
         fill
         className={cn(
           "object-cover rounded-xl transition-opacity duration-300",
-          imageLoad ? "opacity-0" : "opacity-100"
+          imageLoad ? "opacity-0" : "opacity-100",
         )}
         sizes="(max-width: 768px) 100vw, 800px"
         priority

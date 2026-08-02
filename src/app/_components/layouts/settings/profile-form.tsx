@@ -2,7 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CheckCircle2, Crown, Loader2, Lock, XCircle } from "lucide-react";
+import {
+  CancelCircleIcon,
+  CheckmarkCircle02Icon,
+  CrownIcon,
+  Loading03Icon,
+  LockIcon,
+} from "hugeicons-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -239,7 +245,7 @@ const ProfileForm = () => {
                       <Button
                         type="button"
                         variant="outline"
-                        icon={isCheckingUsername ? Loader2 : undefined}
+                        icon={isCheckingUsername ? Loading03Icon : undefined}
                         iconStyle={
                           isCheckingUsername ? "animate-spin" : undefined
                         }
@@ -262,9 +268,9 @@ const ProfileForm = () => {
                         )}
                       >
                         {usernameStatus.available ? (
-                          <CheckCircle2 className="size-4" />
+                          <CheckmarkCircle02Icon className="size-4" />
                         ) : (
-                          <XCircle className="size-4" />
+                          <CancelCircleIcon className="size-4" />
                         )}
                         <span>{usernameStatus.message}</span>
                       </div>
@@ -352,12 +358,12 @@ const ProfileForm = () => {
                 <p className="text-muted-foreground text-sm">
                   {premium ? (
                     <span className="flex items-center gap-1.5">
-                      <Crown className="size-4 text-primary" />
+                      <CrownIcon className="size-4 text-primary" />
                       Active Premium Member
                     </span>
                   ) : (
                     <span className="flex items-center gap-1.5">
-                      <Lock className="size-4 text-muted-foreground" />
+                      <LockIcon className="size-4 text-muted-foreground" />
                       Free Account
                     </span>
                   )}
@@ -391,7 +397,7 @@ const ProfileForm = () => {
           <Button
             type="submit"
             disabled={status === "pending"}
-            icon={status === "pending" ? Loader2 : undefined}
+            icon={status === "pending" ? Loading03Icon : undefined}
             iconStyle={status === "pending" ? "animate-spin" : undefined}
           >
             {status === "pending" ? "Saving..." : "Save Changes"}

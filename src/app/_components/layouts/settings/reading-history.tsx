@@ -1,7 +1,6 @@
 "use client";
 
-import { FileSyncIcon } from "hugeicons-react";
-import { Search } from "lucide-react";
+import { FileSyncIcon, Search01Icon } from "hugeicons-react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Input } from "~/components/ui/input";
@@ -88,7 +87,7 @@ const ReadingHistory = () => {
             size="md"
             iconPlacement="left"
             iconStyle="size-4 text-slate-600"
-            icon={Search}
+            icon={Search01Icon}
             placeholder="Find stories by author, tag, or keyword..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -143,7 +142,7 @@ const ReadingHistory = () => {
                     ...novel
                   }) => (
                     <NovelCard isAuthorViewer key={novel.id} details={novel} />
-                  )
+                  ),
                 )}
           </div>
         )}

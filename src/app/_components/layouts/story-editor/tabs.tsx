@@ -1,4 +1,4 @@
-import { Focus } from "lucide-react";
+import { FocusPointIcon } from "hugeicons-react";
 import { Button } from "~/components/ui/button";
 import { TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useNewChapterStore } from "~/store/useNewChapter";
@@ -34,7 +34,7 @@ const StoryEditorTabs = () => {
           variant="outline"
           onClick={() => setFocusMode(!focusMode)}
           effect={"shineHover"}
-          icon={Focus}
+          icon={FocusPointIcon}
           size="sm"
         >
           {focusMode ? "Comfort Mode" : "Focus Mode"}

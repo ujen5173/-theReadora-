@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "lucide-react";
+import { ArrowDown01Icon } from "hugeicons-react";
 import { useState } from "react";
 import { Button } from "./button";
 import { Calendar } from "./calendar";
@@ -35,7 +35,7 @@ const DateRange = ({
             {initialDate && endDate
               ? `${initialDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
               : "Select Date Range"}
-            <ChevronDownIcon />
+            <ArrowDown01Icon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">

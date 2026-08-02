@@ -117,14 +117,15 @@ export const navigationLinks = {
     ],
     support: [
       // { name: "Future Plans", href: "/future-logs" },
-      { name: "Join Affiliate Program", href: "/affiliate" },
+      // The affiliate programme lives in settings; /affiliate was a 404.
+      { name: "Join Affiliate Program", href: "/settings?tab=affiliate" },
       { name: "Terms", href: "/terms-of-use" },
       { name: "Privacy", href: "/privacy-policy" },
       { name: "Comparison", href: "/comparision" },
     ],
     community: [
       { name: "Guidelines", href: "/guidelines" },
-      { name: "Writing Contests", href: "/contests" },
+      { name: "Writing Contests", href: "/contest" },
       { name: "Discord", href: siteConfig.links.discord },
       { name: "Twitter", href: siteConfig.links.twitter },
       { name: "Instagram", href: siteConfig.links.instagram },
@@ -190,7 +191,7 @@ export function generateSEOMetadata({
   description,
   image,
   noIndex = false,
-  pathname = "",
+  pathname,
   keywords = [],
   type = "website",
   author,
@@ -203,7 +204,10 @@ export function generateSEOMetadata({
   const metaTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.title;
   const metaDescription = description ?? siteConfig.description;
   const metaImage = image ?? siteConfig.ogImage;
-  const url = `${siteConfig.url}${pathname}`;
+  // `pathname` is intentionally optional. A canonical is only emitted when a page
+  // states its own path — otherwise a layout's canonical would be inherited by every
+  // child route and declare them all duplicates of that one URL.
+  const url = `${siteConfig.url}${pathname ?? ""}`;
   const metaKeywords = [...siteConfig.keywords, ...keywords].join(", ");
 
   const metadata: Metadata = {
@@ -251,7 +255,7 @@ export function generateSEOMetadata({
     },
     metadataBase: new URL(siteConfig.url),
     alternates: {
-      canonical: url,
+      ...(pathname !== undefined && { canonical: url }),
       ...(hreflangAlternates && { languages: hreflangAlternates }),
     },
     verification: {
@@ -264,7 +268,6 @@ export function generateSEOMetadata({
       apple: [{ url: "/favicon.ico" }],
       shortcut: ["/favicon.ico"],
     },
-    themeColor: "#ec003f",
     appLinks: {
       web: {
         url,

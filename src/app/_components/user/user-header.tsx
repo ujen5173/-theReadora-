@@ -2,11 +2,13 @@
 
 import {
   AnalyticsUpIcon,
+  Book02Icon,
   Bookshelf01Icon,
   CoinsBitcoinIcon,
+  Logout01Icon,
+  Settings01Icon,
   UserCircle02Icon,
 } from "hugeicons-react";
-import { BookIcon, LogOut, SettingsIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -116,7 +118,7 @@ export default function UserHeader({
                 </Link>
                 <Link href="/creations">
                   <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
-                    <BookIcon className="w-4 h-4 text-slate-800" />
+                    <Book02Icon className="w-4 h-4 text-slate-800" />
                     <span className="ml-2 text-sm">My Creations</span>
                   </DropdownMenuItem>
                 </Link>
@@ -134,7 +136,7 @@ export default function UserHeader({
                 </Link>
                 <Link href="/settings">
                   <DropdownMenuItem className="px-2 sm:px-3 py-2 rounded-md cursor-pointer">
-                    <SettingsIcon className="w-4 h-4 text-slate-800" />
+                    <Settings01Icon className="w-4 h-4 text-slate-800" />
                     <span className="ml-2 text-sm">Settings</span>
                   </DropdownMenuItem>
                 </Link>
@@ -148,7 +150,7 @@ export default function UserHeader({
                 }}
                 className="hover:bg-destructive/10 px-2 sm:px-3 py-2 rounded-md text-red-500 hover:text-red-600 cursor-pointer"
               >
-                <LogOut className="w-4 h-4 text-red-500" />
+                <Logout01Icon className="w-4 h-4 text-red-500" />
                 <span className="ml-2 text-sm">Sign Out</span>
               </DropdownMenuItem>
             </div>

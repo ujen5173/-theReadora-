@@ -4,7 +4,7 @@ import {
   CommandSeparator,
 } from "~/components/ui/command";
 import { useEditor } from "novel";
-import { Check, TextQuote, TrashIcon } from "lucide-react";
+import { Delete02Icon, QuoteDownIcon, Tick02Icon } from "hugeicons-react";
 
 const AICompletionCommands = ({
   completion,
@@ -32,13 +32,13 @@ const AICompletionCommands = ({
                     from: selection.from,
                     to: selection.to,
                   },
-                  completion
+                  completion,
                 )
                 .run();
             }
           }}
         >
-          <Check className="h-4 w-4 text-muted-foreground" />
+          <Tick02Icon className="h-4 w-4 text-muted-foreground" />
           Replace selection
         </CommandItem>
         <CommandItem
@@ -55,7 +55,7 @@ const AICompletionCommands = ({
             }
           }}
         >
-          <TextQuote className="h-4 w-4 text-muted-foreground" />
+          <QuoteDownIcon className="h-4 w-4 text-muted-foreground" />
           Insert below
         </CommandItem>
       </CommandGroup>
@@ -63,7 +63,7 @@ const AICompletionCommands = ({
 
       <CommandGroup>
         <CommandItem onSelect={onDiscard} value="thrash" className="gap-2 px-4">
-          <TrashIcon className="h-4 w-4 text-muted-foreground" />
+          <Delete02Icon className="h-4 w-4 text-muted-foreground" />
           Discard
         </CommandItem>
       </CommandGroup>

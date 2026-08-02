@@ -17,20 +17,21 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { JsonValue } from "@prisma/client/runtime/client";
-import { LeftToRightListNumberIcon, RecordIcon } from "hugeicons-react";
 import {
-  ChevronRight,
-  GripVertical,
-  Loader2,
-  Lock,
-  MoreVertical,
-  Pencil,
-  Plus,
-  Save,
-  Trash2,
-  Unlock,
-  X,
-} from "lucide-react";
+  ArrowRight01Icon,
+  Cancel01Icon,
+  Delete02Icon,
+  DragDropVerticalIcon,
+  FloppyDiskIcon,
+  LeftToRightListNumberIcon,
+  Loading03Icon,
+  LockIcon,
+  MoreVerticalIcon,
+  PencilIcon,
+  PlusSignIcon,
+  RecordIcon,
+  SquareUnlock01Icon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -111,7 +112,7 @@ const SortableChapter = ({
             {...attributes}
             {...listeners}
           >
-            <GripVertical className="size-4 sm:size-5 text-slate-400" />
+            <DragDropVerticalIcon className="size-4 sm:size-5 text-slate-400" />
           </Button>
         )}
 
@@ -138,16 +139,16 @@ const SortableChapter = ({
                     "px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border text-xs sm:text-sm font-semibold flex items-center gap-1",
                     unlockedChapters.includes(chapter.id)
                       ? "bg-green-100 text-green-600 border-green-300"
-                      : "bg-primary/20 text-primary border-primary"
+                      : "bg-primary/20 text-primary border-primary",
                   )}
                 >
                   <span className="text-primary">
                     {isLoadingLockedChapters ? (
-                      <Loader2 className="animate-spin size-2.5 sm:size-3" />
+                      <Loading03Icon className="animate-spin size-2.5 sm:size-3" />
                     ) : unlockedChapters.includes(chapter.id) ? (
-                      <Unlock className="size-3 sm:size-4 text-green-600" />
+                      <SquareUnlock01Icon className="size-3 sm:size-4 text-green-600" />
                     ) : (
-                      <Lock className="size-3 sm:size-4" />
+                      <LockIcon className="size-3 sm:size-4" />
                     )}
                   </span>
                   <span>
@@ -176,7 +177,7 @@ const SortableChapter = ({
                   {getReadingTimeText(metrics.readingTime)}
                 </span>
               </div>
-              <ChevronRight className="size-4 sm:size-5 text-slate-500" />
+              <ArrowRight01Icon className="size-4 sm:size-5 text-slate-500" />
             </div>
           </Link>
         </div>
@@ -189,7 +190,7 @@ const SortableChapter = ({
                 size="icon"
                 className="border border-transparent transition hover:border-slate-300 h-7 w-7 sm:h-8 sm:w-8"
               >
-                <MoreVertical className="size-3.5 sm:size-4" />
+                <MoreVerticalIcon className="size-3.5 sm:size-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
@@ -198,7 +199,7 @@ const SortableChapter = ({
                   href={`/write/story-editor/${storyId}?chapter_id=${chapter.id}`}
                   className="flex items-center"
                 >
-                  <Pencil className="size-4 mr-2" />
+                  <PencilIcon className="size-4 mr-2" />
                   Edit
                 </Link>
               </DropdownMenuItem>
@@ -208,7 +209,7 @@ const SortableChapter = ({
                   // Handle delete
                 }}
               >
-                <Trash2 className="size-4 mr-2 text-red-600" />
+                <Delete02Icon className="size-4 mr-2 text-red-600" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -232,7 +233,7 @@ const TableOfContent = ({
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = async (event: any) => {
@@ -246,7 +247,7 @@ const TableOfContent = ({
           (chapter, index) => ({
             ...chapter,
             chapterNumber: index + 1,
-          })
+          }),
         );
 
         setHasOrderChanged(true);
@@ -300,7 +301,7 @@ const TableOfContent = ({
     {
       retry: false,
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   return (
@@ -312,7 +313,7 @@ const TableOfContent = ({
         {isAuthor && (
           <Link prefetch href={`/write/story-editor/${storyId}`}>
             <Button
-              icon={addingChapter ? Loader2 : Plus}
+              icon={addingChapter ? Loading03Icon : PlusSignIcon}
               onClick={handleAddChapter}
               variant="outline"
               size="sm"
@@ -376,7 +377,7 @@ const TableOfContent = ({
                     variant="outline"
                     onClick={handleCancel}
                     className="text-red-600 hover:text-red-700 hover:bg-red-50 flex-1 sm:flex-none"
-                    icon={X}
+                    icon={Cancel01Icon}
                   >
                     Cancel
                   </Button>
@@ -388,10 +389,10 @@ const TableOfContent = ({
                     }}
                     disabled={status === "pending"}
                     className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90 flex-1 sm:flex-none"
-                    icon={status !== "pending" ? Save : undefined}
+                    icon={status !== "pending" ? FloppyDiskIcon : undefined}
                   >
                     {status === "pending" && (
-                      <Loader2 className="size-4 animate-spin" />
+                      <Loading03Icon className="size-4 animate-spin" />
                     )}
                     {status === "pending" ? "Saving..." : "Save Order"}
                   </Button>

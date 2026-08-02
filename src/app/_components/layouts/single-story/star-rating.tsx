@@ -1,6 +1,6 @@
 "use client";
 
-import { StarIcon } from "lucide-react";
+import { StarIcon } from "hugeicons-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import HalfStar from "~/assets/svgs/half-star";
@@ -42,7 +42,7 @@ export const StarRating = ({
   const [review, setReview] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dialogHoverRating, setDialogHoverRating] = useState<number | null>(
-    null
+    null,
   );
 
   const rateMutation = api.story.rate.useMutation({
@@ -142,7 +142,7 @@ export const StarRating = ({
             isDialog && "transition-all duration-300 hover:scale-125",
             !isDialog &&
               isInteractive &&
-              "transition-all duration-200 hover:scale-110"
+              "transition-all duration-200 hover:scale-110",
           )}
           onClick={
             isDialog ? () => setSelectedRating(i + 1) : () => handleStarClick(i)
@@ -158,7 +158,7 @@ export const StarRating = ({
                 "fill-yellow-400 text-yellow-400 transition-all duration-300",
                 isHovered && "fill-yellow-500 text-yellow-500",
                 "group-hover:fill-yellow-500 group-hover:text-yellow-500",
-                isDialog && "group-hover:rotate-12"
+                isDialog && "group-hover:rotate-12",
               )}
             />
           ) : isHalf ? (
@@ -167,7 +167,7 @@ export const StarRating = ({
                 "fill-yellow-400 text-yellow-400 transition-all duration-300",
                 isHovered && "fill-yellow-500 text-yellow-500",
                 "group-hover:fill-yellow-500 group-hover:text-yellow-500",
-                isDialog && "group-hover:rotate-12"
+                isDialog && "group-hover:rotate-12",
               )}
             />
           ) : (
@@ -177,7 +177,7 @@ export const StarRating = ({
                 "text-yellow-400 transition-all duration-300",
                 isHovered && "text-yellow-500",
                 "group-hover:text-yellow-500",
-                isDialog && "group-hover:rotate-12"
+                isDialog && "group-hover:rotate-12",
               )}
             />
           )}
@@ -192,7 +192,7 @@ export const StarRating = ({
         className={cn(
           "flex items-center gap-0.5",
           isInteractive && "cursor-pointer",
-          className
+          className,
         )}
         onMouseLeave={handleMouseLeave}
       >

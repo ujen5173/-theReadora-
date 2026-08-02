@@ -165,7 +165,7 @@ export type ReadinglistGroupByOutputType = {
   _max: ReadinglistMaxAggregateOutputType | null
 }
 
-type GetReadinglistGroupByPayload<T extends ReadinglistGroupByArgs> = Prisma.PrismaPromise<
+export type GetReadinglistGroupByPayload<T extends ReadinglistGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ReadinglistGroupByOutputType, T['by']> &
       {
@@ -1274,6 +1274,11 @@ export type ReadinglistFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` Readinglists.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Readinglists.
+   */
   distinct?: Prisma.ReadinglistScalarFieldEnum | Prisma.ReadinglistScalarFieldEnum[]
 }
 

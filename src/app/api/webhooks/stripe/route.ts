@@ -5,8 +5,9 @@ import { env } from "~/env";
 import { postgresDb } from "~/server/postgresql";
 import { COIN_PRICE } from "~/utils/constants";
 
+// See note in src/server/api/routers/payment.ts — version pin is intentional.
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-04-30.basil",
+  apiVersion: "2025-04-30.basil" as Stripe.LatestApiVersion,
 });
 
 // export async function GET() {

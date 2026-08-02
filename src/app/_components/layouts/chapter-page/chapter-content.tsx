@@ -1,28 +1,59 @@
 "use client";
 
 import { formatDate } from "date-fns";
-import { BookOpen01Icon, BubbleChatIcon, RecordIcon } from "hugeicons-react";
-import { ArrowLeftIcon, ArrowRightIcon, EyeIcon, PlusIcon } from "lucide-react";
+import {
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  BookOpen01Icon,
+  BubbleChatIcon,
+  PlusSignIcon,
+  RecordIcon,
+  ViewIcon,
+} from "hugeicons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LockedChapter from "~/app/_components/shared/locked-chapter";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import { useChapterStore } from "~/store/useChapter";
+import {
+  useChapterStore,
+  type Chunk,
+  type useChapterChapter,
+  type useChapterStory,
+} from "~/store/useChapter";
 import { useUserStore } from "~/store/userStore";
 import "~/styles/editor.css";
 import { api } from "~/trpc/react";
 import { contentFont } from "~/utils/font";
 import { isChapterScheduled, parseMetrics } from "~/utils/helpers";
 
+/**
+ * Server-fetched chapter data, passed down as a fallback.
+ *
+ * The zustand store is only populated in an effect (see chapter-page/wrapper.tsx),
+ * so during SSR it is empty — which previously meant the server HTML contained no
+ * chapter title, no <h1> and no prose at all. Reading `store ?? details` keeps all
+ * client behaviour while making the content present in the initial HTML.
+ */
+type ChapterDetails = {
+  story: useChapterStory;
+  chapter: useChapterChapter;
+  initialChunk: Chunk;
+};
+
 const ChapterContent = ({
   userUnlockedChapter,
+  details,
 }: {
   userUnlockedChapter: boolean;
+  details: ChapterDetails;
 }) => {
-  const { story, chapter } = useChapterStore();
+  const { story: storeStory, chapter: storeChapter } = useChapterStore();
   const { user } = useUserStore();
+
+  const story = storeStory ?? details.story;
+  const chapter = storeChapter ?? details.chapter;
 
   if (!chapter) return null;
 
@@ -68,8 +99,8 @@ const ChapterContent = ({
   return (
     <section className="w-full bg-slate-100">
       <div className="max-w-4xl border-x border-border bg-white px-3 sm:px-6 mx-auto">
-        <ChapterMetaData />
-        <Content />
+        <ChapterMetaData details={details} />
+        <Content details={details} />
       </div>
     </section>
   );
@@ -77,12 +108,14 @@ const ChapterContent = ({
 
 export default ChapterContent;
 
-const ChapterMetaData = () => {
-  const { story, chapter } = useChapterStore();
+const ChapterMetaData = ({ details }: { details: ChapterDetails }) => {
+  const { story: storeStory, chapter: storeChapter } = useChapterStore();
   const { user } = useUserStore();
 
+  const story = storeStory ?? details.story;
+  const chapter = storeChapter ?? details.chapter;
+
   const metrics = parseMetrics(chapter?.metrics);
-  console.log({ metrics })
 
   return (
     <div className="py-12 sm:py-20 space-y-6 sm:space-y-8 border-b border-border">
@@ -99,7 +132,7 @@ const ChapterMetaData = () => {
             </div>
             <RecordIcon className="size-1 sm:size-1.5 fill-slate-600 text-slate-600" />
             <div className="flex items-center gap-1 sm:gap-2">
-              <EyeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
+              <ViewIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
               {/* <span>{readershipAnalytics.total.toLocaleString()} views</span> */}
               <span>0 views</span>
             </div>
@@ -113,8 +146,8 @@ const ChapterMetaData = () => {
       </div>
 
       {story?.author.id === user?.id &&
-        chapter?.scheduledFor &&
-        !isChapterScheduled(chapter.scheduledFor) ? (
+      chapter?.scheduledFor &&
+      !isChapterScheduled(chapter.scheduledFor) ? (
         <div className="text-center text-sm text-slate-500">
           Scheduled for{" "}
           <span className="underline-offset-2 text-primary font-semibold underline">
@@ -127,10 +160,10 @@ const ChapterMetaData = () => {
           <span className="underline-offset-2 text-slate-500 font-semibold underline">
             {chapter?.updatedAt
               ? new Date(chapter.updatedAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
               : ""}
           </span>
         </div>
@@ -139,8 +172,16 @@ const ChapterMetaData = () => {
   );
 };
 
-const Content = () => {
-  const { initialChunk, chapter, story } = useChapterStore();
+const Content = ({ details }: { details: ChapterDetails }) => {
+  const {
+    initialChunk: storeChunk,
+    chapter: storeChapter,
+    story: storeStory,
+  } = useChapterStore();
+
+  const initialChunk = storeChunk ?? details.initialChunk;
+  const chapter = storeChapter ?? details.chapter;
+  const story = storeStory ?? details.story;
   const [queryEnabled, setQueryEnabled] = useState(false);
   const [shouldFetchMore, setShouldFetchMore] = useState(false);
   const hasEnabledQuery = useRef(false);
@@ -150,9 +191,9 @@ const Content = () => {
   const nextChapter = useMemo(
     () =>
       story?.chapters.find(
-        (ch) => ch.chapterNumber === (chapter?.chapterNumber ?? 0) + 1
+        (ch) => ch.chapterNumber === (chapter?.chapterNumber ?? 0) + 1,
       ),
-    [story?.chapters, chapter?.chapterNumber]
+    [story?.chapters, chapter?.chapterNumber],
   );
 
   const { data, fetchNextPage, hasNextPage, isFetching } =
@@ -166,7 +207,7 @@ const Content = () => {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         refetchOnWindowFocus: false,
         staleTime: Infinity,
-      }
+      },
     );
 
   // Improve intersection observer cleanup
@@ -187,7 +228,7 @@ const Content = () => {
         root: null,
         rootMargin: "250px",
         threshold: 0.1,
-      }
+      },
     );
 
     if (currentRef) {
@@ -219,7 +260,7 @@ const Content = () => {
       <div
         className={cn(
           "preview-content text-slate-500 text-base sm:text-lg",
-          contentFont.className
+          contentFont.className,
         )}
         dangerouslySetInnerHTML={{ __html: initialChunk.content }}
       />
@@ -230,7 +271,7 @@ const Content = () => {
           key={chunk.id}
           className={cn(
             "preview-content text-slate-500 text-base sm:text-lg",
-            contentFont.className
+            contentFont.className,
           )}
           dangerouslySetInnerHTML={{ __html: chunk.content }}
         />
@@ -258,7 +299,7 @@ const Content = () => {
                 className="block w-full"
               >
                 <Button
-                  icon={ArrowRightIcon}
+                  icon={ArrowRight01Icon}
                   effect={"expandIcon"}
                   iconPlacement="right"
                   className="w-full "
@@ -311,13 +352,13 @@ const Content = () => {
                 </div>
 
                 <div className="space-x-2 flex items-center justify-center">
-                  <Button className="w-full" icon={PlusIcon}>
+                  <Button className="w-full" icon={PlusSignIcon}>
                     Follow Author
                   </Button>
 
                   <Button
                     variant="outline"
-                    icon={ArrowLeftIcon}
+                    icon={ArrowLeft01Icon}
                     asChild
                     className="w-full hover:bg-slate-50 transition-colors"
                   >

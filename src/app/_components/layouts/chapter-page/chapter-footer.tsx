@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  BookOpenIcon,
-  DotIcon,
-  Flag,
-  MessageSquareIcon,
+  BookOpen01Icon,
+  Flag02Icon,
+  Message01Icon,
+  RecordIcon,
   StarIcon,
-  ThumbsDown,
-  ThumbsUp,
-} from "lucide-react";
+  ThumbsDownIcon,
+  ThumbsUpIcon,
+} from "hugeicons-react";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
@@ -26,7 +26,7 @@ const ChapterFooter = () => {
         {/* Actions Bar */}
         <div className="flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
-            <Button icon={BookOpenIcon} variant="default" size="sm">
+            <Button icon={BookOpen01Icon} variant="default" size="sm">
               Add to Reading List
             </Button>
             <Button icon={StarIcon} variant="secondary" size="sm">
@@ -95,7 +95,7 @@ const ChapterFooter = () => {
                       <span className="text-sm font-medium text-slate-700">
                         John Doe
                       </span>
-                      <DotIcon className="size-4 fill-slate-500 text-slate-500" />
+                      <RecordIcon className="size-4 fill-slate-500 text-slate-500" />
                       <span className="text-xs text-slate-500">
                         2 hours ago
                       </span>
@@ -113,13 +113,13 @@ const ChapterFooter = () => {
                       {/* Vote buttons group */}
                       <div className="flex items-center">
                         <Button variant="ghost" size="sm">
-                          <ThumbsUp className="size-4 text-slate-400 group-hover:text-primary transition-colors" />
+                          <ThumbsUpIcon className="size-4 text-slate-400 group-hover:text-primary transition-colors" />
                           <span className="text-xs font-medium text-slate-500 group-hover:text-primary transition-colors">
                             24
                           </span>
                         </Button>
                         <Button variant="ghost" size="sm">
-                          <ThumbsDown className="size-4 text-slate-400 group-hover:text-red-500 transition-colors" />
+                          <ThumbsDownIcon className="size-4 text-slate-400 group-hover:text-red-500 transition-colors" />
                         </Button>
                       </div>
 
@@ -127,7 +127,7 @@ const ChapterFooter = () => {
 
                       {/* Reply button */}
                       <Button variant="link" size="sm">
-                        <MessageSquareIcon className="size-4 text-slate-400 group-hover:text-primary transition-colors" />
+                        <Message01Icon className="size-4 text-slate-400 group-hover:text-primary transition-colors" />
                         <span className="text-xs font-medium text-slate-500 group-hover:text-primary transition-colors">
                           Reply
                         </span>
@@ -140,7 +140,7 @@ const ChapterFooter = () => {
                       size="icon"
                       className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 ml-auto"
                     >
-                      <Flag className="size-4 text-slate-400 hover:text-red-500 transition-colors" />
+                      <Flag02Icon className="size-4 text-slate-400 hover:text-red-500 transition-colors" />
                     </Button>
                   </div>
 

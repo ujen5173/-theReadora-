@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loading03Icon } from "hugeicons-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -79,7 +79,7 @@ const ProfileFormImage = () => {
           )}
         >
           {preparingUpload || uploadProgress > -1 ? (
-            <Loader2 className="size-4 animate-spin" />
+            <Loading03Icon className="size-4 animate-spin" />
           ) : null}
           Change Avatar
         </Label>

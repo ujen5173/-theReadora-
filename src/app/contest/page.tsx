@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import {
+  ArrowRight01Icon,
   Award01Icon,
   Calendar03Icon,
   ChampionIcon,
@@ -9,9 +10,9 @@ import {
   Clock01Icon,
   CrownIcon,
   PencilEdit02Icon,
+  SparklesIcon,
   StarIcon,
 } from "hugeicons-react";
-import { ArrowRight, Sparkles, TrophyIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import SlotCounter from "react-slot-counter";
@@ -109,7 +110,7 @@ export default function ContestPage() {
               animate={{ opacity: 1, y: 0 }}
               className="inline-flex items-center gap-2 bg-rose-500/10 backdrop-blur-sm mb-8 px-4 py-1.5 border border-rose-500/30 rounded-full font-medium text-rose-300 text-sm"
             >
-              <Sparkles className="w-4 h-4" />
+              <SparklesIcon className="w-4 h-4" />
               <span>Official Writing Competition</span>
             </motion.div>
 
@@ -199,7 +200,8 @@ export default function ContestPage() {
                 asChild
               >
                 <Link href="/write">
-                  Submit Your Entry <ArrowRight className="ml-2 w-5 h-5" />
+                  Submit Your Entry{" "}
+                  <ArrowRight01Icon className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
             </motion.div>
@@ -316,7 +318,7 @@ export default function ContestPage() {
                     badges are awarded, and premium prizes are distributed.
                   </p>
                   <div className="inline-flex items-center bg-white/10 px-3 py-1 rounded-full font-bold text-white text-sm">
-                    <TrophyIcon className="mr-2 w-4 h-4" /> April 5th
+                    <ChampionIcon className="mr-2 w-4 h-4" /> April 5th
                   </div>
                 </div>
                 <div className="hidden left-1/2 z-10 absolute md:flex justify-center items-center bg-rose-500 shadow-lg border-4 border-slate-50 rounded-full w-10 h-10 font-bold text-white -translate-x-1/2">
@@ -336,7 +338,7 @@ export default function ContestPage() {
 
       <section className="relative bg-white py-24 overflow-hidden" id="prizes">
         <div className="top-0 right-0 absolute opacity-5 p-24 pointer-events-none">
-          <TrophyIcon className="w-96 h-96 text-rose-500 rotate-12" />
+          <ChampionIcon className="w-96 h-96 text-rose-500 rotate-12" />
         </div>
         <div className="z-10 relative mx-auto px-4 container">
           <div className="mb-28 text-center">
@@ -412,7 +414,9 @@ export default function ContestPage() {
                     <span className="block font-bold text-white">
                       Featured Story on
                     </span>
-                    <span className="text-slate-300 text-xs">Legends Shelf</span>
+                    <span className="text-slate-300 text-xs">
+                      Legends Shelf
+                    </span>
                   </div>
                 </li>
                 <li className="flex items-center gap-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm p-4 border border-white/5 rounded-xl transition-colors">
@@ -430,7 +434,7 @@ export default function ContestPage() {
                 </li>
                 <li className="flex items-center gap-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm p-4 border border-white/5 rounded-xl transition-colors">
                   <div className="bg-rose-500 shadow-lg shadow-rose-500/30 p-2 rounded-lg text-white">
-                    <TrophyIcon className="w-5 h-5" />
+                    <ChampionIcon className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="block font-bold text-white">
@@ -508,7 +512,7 @@ export default function ContestPage() {
 
           <div className="group relative bg-slate-800/50 backdrop-blur-sm mx-auto p-12 border border-slate-700/50 rounded-3xl max-w-5xl overflow-hidden">
             <div className="absolute inset-0 flex justify-center items-center opacity-30 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none">
-              <TrophyIcon className="w-[400px] h-[400px] text-yellow-500/10" />
+              <ChampionIcon className="w-[400px] h-[400px] text-yellow-500/10" />
             </div>
 
             <div className="z-10 relative flex flex-col justify-center items-center min-h-[300px]">
@@ -650,7 +654,7 @@ export default function ContestPage() {
             asChild
           >
             <Link href="/write" className="flex items-center gap-2">
-              Enter Contest <ArrowRight className="w-5 h-5" />
+              Enter Contest <ArrowRight01Icon className="w-5 h-5" />
             </Link>
           </Button>
         </div>

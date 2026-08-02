@@ -158,7 +158,7 @@ export type UnlockedChapterGroupByOutputType = {
   _max: UnlockedChapterMaxAggregateOutputType | null
 }
 
-type GetUnlockedChapterGroupByPayload<T extends UnlockedChapterGroupByArgs> = Prisma.PrismaPromise<
+export type GetUnlockedChapterGroupByPayload<T extends UnlockedChapterGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<UnlockedChapterGroupByOutputType, T['by']> &
       {
@@ -1252,6 +1252,11 @@ export type UnlockedChapterFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` UnlockedChapters.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of UnlockedChapters.
+   */
   distinct?: Prisma.UnlockedChapterScalarFieldEnum | Prisma.UnlockedChapterScalarFieldEnum[]
 }
 

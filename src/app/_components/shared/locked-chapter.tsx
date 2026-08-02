@@ -1,6 +1,6 @@
 "use client";
 
-import { Coins, Lock } from "lucide-react";
+import { Coins01Icon, LockIcon } from "hugeicons-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "~/components/ui/button";
@@ -40,7 +40,7 @@ const LockedChapter = ({
       <div className="max-w-md w-full p-8 text-center space-y-6">
         <div className="flex justify-center">
           <div className="p-4 rounded-full bg-primary/10">
-            <Lock className="h-8 w-8 text-primary" />
+            <LockIcon className="h-8 w-8 text-primary" />
           </div>
         </div>
 
@@ -52,7 +52,7 @@ const LockedChapter = ({
         </div>
 
         <div className="flex items-center justify-center gap-2 text-slate-700">
-          <Coins className="h-5 w-5 text-primary" />
+          <Coins01Icon className="h-5 w-5 text-primary" />
           <span className="font-medium">
             {CHAPTER_PRICE_POOL[price as keyof typeof CHAPTER_PRICE_POOL]} coins
           </span>
@@ -63,7 +63,7 @@ const LockedChapter = ({
           chapterId={chapterId}
         >
           <Button className="w-full bg-primary hover:bg-primary/90" size="lg">
-            <Coins className="h-4 w-4" />
+            <Coins01Icon className="h-4 w-4" />
             Unlock Chapter
           </Button>
         </UnlockButton>
@@ -72,7 +72,8 @@ const LockedChapter = ({
           <p className="text-sm text-slate-500">
             Premium members get 20% off! (
             {Math.floor(
-              CHAPTER_PRICE_POOL[price as keyof typeof CHAPTER_PRICE_POOL] * 0.8
+              CHAPTER_PRICE_POOL[price as keyof typeof CHAPTER_PRICE_POOL] *
+                0.8,
             )}{" "}
             coins)
           </p>
@@ -113,7 +114,7 @@ const UnlockButton = ({
   const handleUnlock = () => {
     if (!user) {
       router.push(
-        `/auth/signin?callbackUrl=${env.NEXT_PUBLIC_APP_URL}/chapter/${chapterId}`
+        `/auth/signin?callbackUrl=${env.NEXT_PUBLIC_APP_URL}/chapter/${chapterId}`,
       );
       return;
     }
@@ -149,7 +150,7 @@ const UnlockButton = ({
           <div className="space-y-4 md:space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 md:pb-4">
               <div className="flex items-center gap-3">
-                <Coins className="h-5 w-5 text-primary" />
+                <Coins01Icon className="h-5 w-5 text-primary" />
                 <div>
                   <span className="font-bold text-slate-700">Base Price</span>
                   <p className="text-sm text-slate-500">
@@ -183,7 +184,7 @@ const UnlockButton = ({
 
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 md:pb-4">
               <div className="flex items-center gap-3">
-                <Coins className="h-5 w-5 text-primary" />
+                <Coins01Icon className="h-5 w-5 text-primary" />
                 <div>
                   <span className="font-bold text-slate-700">Your Balance</span>
                   <p className="text-sm text-slate-500">Available coins</p>
@@ -196,7 +197,7 @@ const UnlockButton = ({
 
             <div className="flex items-center justify-between pt-2">
               <div className="flex items-center gap-3">
-                <Coins className="h-5 w-5 text-primary" />
+                <Coins01Icon className="h-5 w-5 text-primary" />
                 <div>
                   <span className="font-bold text-slate-700">Final Price</span>
                   <p className="text-sm text-slate-500">
@@ -232,7 +233,11 @@ const UnlockButton = ({
               onClick={handleUnlock}
               className="flex-1 bg-primary hover:bg-primary/90"
               icon={
-                status !== "pending" ? (user ? Coins : undefined) : undefined
+                status !== "pending"
+                  ? user
+                    ? Coins01Icon
+                    : undefined
+                  : undefined
               }
               disabled={
                 status === "pending" ||

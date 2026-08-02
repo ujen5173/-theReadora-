@@ -155,3 +155,110 @@
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: oklch(92.9% 0.013 255.508);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Shelf rows
+
+   Homepage shelves fetch a fixed 8 stories into a grid whose column count is
+   responsive (2 → 8), which stranded orphaned covers on a second row.
+
+   This lives in plain CSS rather than Tailwind arbitrary variants because
+   Tailwind emits every `:block` utility before every `:hidden` utility, so an
+   unprefixed `hidden` always beat the responsive `block` that was meant to
+   override it. Here the cascade order is explicit and ascending.
+
+   Visible counts match the column count at each breakpoint, so every rendered
+   row is full.
+--------------------------------------------------------------------------- */
+
+.shelf-row > *:nth-child(n + 5) {
+  display: none;
+}
+
+@media (min-width: 30rem) {
+  /* xxs — 3 columns → 6 */
+  .shelf-row > *:nth-child(n + 5) {
+    display: block;
+  }
+  .shelf-row > *:nth-child(n + 7) {
+    display: none;
+  }
+}
+
+@media (min-width: 40rem) {
+  /* sm — 4 columns → 8 */
+  .shelf-row > *:nth-child(n + 7) {
+    display: block;
+  }
+  .shelf-row > *:nth-child(n + 9) {
+    display: none;
+  }
+}
+
+@media (min-width: 48rem) {
+  /* md — 5 columns → 5 */
+  .shelf-row > *:nth-child(n + 6) {
+    display: none;
+  }
+}
+
+@media (min-width: 64rem) {
+  /* lg — 6 columns → 6 */
+  .shelf-row > *:nth-child(n + 6) {
+    display: block;
+  }
+  .shelf-row > *:nth-child(n + 7) {
+    display: none;
+  }
+}
+
+@media (min-width: 80rem) {
+  /* xl — 7 columns → 7 */
+  .shelf-row > *:nth-child(n + 7) {
+    display: block;
+  }
+  .shelf-row > *:nth-child(n + 8) {
+    display: none;
+  }
+}
+
+@media (min-width: 96rem) {
+  /* 2xl — 8 columns → 8 */
+  .shelf-row > *:nth-child(n + 8) {
+    display: block;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Horizontal cover marquee (mobile hero)
+
+   The hero's vertical cover columns only render from lg up, which left phones —
+   most of the audience — with a hero of plain text. This gives small screens
+   the same signal: real covers, scrolling.
+--------------------------------------------------------------------------- */
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-x {
+  animation: marquee-x 45s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-x {
+    animation: none;
+  }
+}

@@ -8,6 +8,8 @@ const PopularCompleted = async () => {
 
   return (
     <BookSection
+      fillRows
+      seeAllHref="/search"
       title="Completed Novel"
       analyticsRef="feed:popular-completed"
       novels={completed}

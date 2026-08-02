@@ -5,12 +5,13 @@ import {
   AiImageIcon,
   AiVideoIcon,
   Analytics01Icon,
-  ArrowLeft01Icon, Idea01Icon,
+  ArrowLeft01Icon,
+  Home01Icon,
+  Idea01Icon,
   LibraryIcon,
   QuillWrite02Icon,
-  StarIcon
+  StarIcon,
 } from "hugeicons-react";
-import { Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -36,7 +37,7 @@ const items = {
   manage: [
     {
       title: "Home",
-      icon: Home,
+      icon: Home01Icon,
       slug: "/studio",
       external: false,
       new: false,
@@ -78,7 +79,7 @@ const items = {
       new: false,
     },
   ],
-  'Work with AI': [
+  "Work with AI": [
     {
       title: "Cover Image",
       icon: AiImageIcon,
@@ -145,9 +146,8 @@ const StudioSidebar = () => {
                         asChild
                         className={cn(
                           currentPath === item.slug &&
-                          "border border-slate-300 bg-slate-200",
+                            "border border-slate-300 bg-slate-200",
                           "hover:bg-slate-200",
-
                         )}
                       >
                         <Link

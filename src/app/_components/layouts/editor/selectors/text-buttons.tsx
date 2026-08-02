@@ -1,10 +1,10 @@
 import {
-  BoldIcon,
   CodeIcon,
-  ItalicIcon,
-  StrikethroughIcon,
-  UnderlineIcon,
-} from "lucide-react";
+  TextBoldIcon,
+  TextItalicIcon,
+  TextStrikethroughIcon,
+  TextUnderlineIcon,
+} from "hugeicons-react";
 import { EditorBubbleItem, useEditor } from "novel";
 import type { SelectorItem } from "./node-selector";
 import { cn } from "~/lib/utils";
@@ -20,25 +20,25 @@ export const TextButtons = () => {
       name: "bold",
       isActive: (editor) => Boolean(editor?.isActive("bold")),
       command: (editor) => editor?.chain().focus().toggleBold().run(),
-      icon: BoldIcon,
+      icon: TextBoldIcon,
     },
     {
       name: "italic",
       isActive: (editor) => Boolean(editor?.isActive("italic")),
       command: (editor) => editor?.chain().focus().toggleItalic().run(),
-      icon: ItalicIcon,
+      icon: TextItalicIcon,
     },
     {
       name: "underline",
       isActive: (editor) => Boolean(editor?.isActive("underline")),
       command: (editor) => editor?.chain().focus().toggleUnderline().run(),
-      icon: UnderlineIcon,
+      icon: TextUnderlineIcon,
     },
     {
       name: "strike",
       isActive: (editor) => Boolean(editor?.isActive("strike")),
       command: (editor) => editor?.chain().focus().toggleStrike().run(),
-      icon: StrikethroughIcon,
+      icon: TextStrikethroughIcon,
     },
     {
       name: "code",

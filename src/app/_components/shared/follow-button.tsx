@@ -1,7 +1,10 @@
 "use client";
 
-import { UserAdd01Icon, UserRemove01Icon } from "hugeicons-react";
-import { Loader2Icon } from "lucide-react";
+import {
+  Loading03Icon,
+  UserAdd01Icon,
+  UserRemove01Icon,
+} from "hugeicons-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -23,7 +26,7 @@ const FollowButton = ({
       enabled: !!followingTo?.id,
       refetchOnWindowFocus: false,
       retry: false,
-    }
+    },
   );
 
   const { data, mutateAsync, status, error } = api.user.follow.useMutation();
@@ -44,7 +47,7 @@ const FollowButton = ({
       toast.success(
         data.isFollowing
           ? `Started following ${followingTo?.name}`
-          : `Unfollowed ${followingTo?.name}`
+          : `Unfollowed ${followingTo?.name}`,
       );
     }
   }, [status, error, followingTo?.id]);
@@ -69,10 +72,10 @@ const FollowButton = ({
       size="sm"
       icon={
         isLoading || status === "pending"
-          ? Loader2Icon
+          ? Loading03Icon
           : isFollowing
-          ? UserRemove01Icon
-          : UserAdd01Icon
+            ? UserRemove01Icon
+            : UserAdd01Icon
       }
       iconStyle={isLoading || status === "pending" ? "animate-spin" : ""}
       className="shadow-md hover:shadow-lg transition-shadow"

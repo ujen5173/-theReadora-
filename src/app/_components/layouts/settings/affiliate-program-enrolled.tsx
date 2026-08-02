@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  Award,
-  CheckCircle,
-  Copy,
-  Gift,
-  Loader2,
-  QrCode,
-  Share2,
-  TrendingUp,
-  UserPlus,
-  Users,
-} from "lucide-react";
+  Award01Icon,
+  ChartIncreaseIcon,
+  CheckmarkCircle02Icon,
+  Copy01Icon,
+  GiftIcon,
+  Loading03Icon,
+  QrCodeIcon,
+  Share08Icon,
+  UserAdd01Icon,
+  UserMultipleIcon,
+} from "hugeicons-react";
 import { QRCodeSVG as QRCode } from "qrcode.react";
 import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
@@ -42,7 +42,7 @@ const AffiliateProgramEnrolled = () => {
     return (
       <div className="rounded-lg border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-4 sm:p-6">
         <div className="flex flex-col items-center justify-center py-16">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loading03Icon className="h-8 w-8 animate-spin text-primary" />
           <p className="mt-4 text-muted-foreground">
             Loading affiliate program...
           </p>
@@ -77,12 +77,12 @@ const AffiliateProgramEnrolled = () => {
     <div className="rounded-lg border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-4 sm:p-6">
       <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
         <div className="p-1.5 sm:p-2 rounded-full bg-primary/10 border border-primary/20">
-          <Gift className="size-4 sm:size-5 text-primary" />
+          <GiftIcon className="size-4 sm:size-5 text-primary" />
         </div>
         <h2
           className={cn(
             "text-base sm:text-lg font-bold text-primary",
-            merriweatherFont.className
+            merriweatherFont.className,
           )}
         >
           Affiliate Program
@@ -95,7 +95,7 @@ const AffiliateProgramEnrolled = () => {
             <div className="flex flex-col items-center gap-4">
               <div className="flex flex-col gap-2 items-center">
                 <div className="p-2 rounded-full bg-primary/10">
-                  <Award className="size-5 text-primary" />
+                  <Award01Icon className="size-5 text-primary" />
                 </div>
                 <div className="text-center">
                   <h3 className="font-semibold text-slate-700">
@@ -118,7 +118,7 @@ const AffiliateProgramEnrolled = () => {
                 <Progress value={progress * 100} className="h-3" />
                 {progress === 1 && (
                   <Badge variant="default" className="mx-auto">
-                    <CheckCircle className="size-3 mr-1" />
+                    <CheckmarkCircle02Icon className="size-3 mr-1" />
                     Milestone Complete!
                   </Badge>
                 )}
@@ -130,7 +130,7 @@ const AffiliateProgramEnrolled = () => {
         <Card className="border-primary/20 bg-white">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Share2 className="size-5 text-primary" />
+              <Share08Icon className="size-5 text-primary" />
               Your Referral Link
             </CardTitle>
           </CardHeader>
@@ -150,7 +150,7 @@ const AffiliateProgramEnrolled = () => {
                 className="h-10 font-mono text-sm"
               />
               <Button size="sm" onClick={handleCopy} disabled={!referralCode}>
-                <Copy className="size-4" />
+                <Copy01Icon className="size-4" />
                 {copied ? "Copied!" : "Copy"}
               </Button>
               <Button
@@ -159,7 +159,7 @@ const AffiliateProgramEnrolled = () => {
                 onClick={() => setShowQR((v) => !v)}
                 disabled={!referralCode}
               >
-                <QrCode className="size-4" />
+                <QrCodeIcon className="size-4" />
               </Button>
             </div>
 
@@ -192,7 +192,7 @@ const AffiliateProgramEnrolled = () => {
             <Card className="border-primary/20 bg-white">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <TrendingUp className="size-5 text-primary" />
+                  <ChartIncreaseIcon className="size-5 text-primary" />
                   Your Performance
                 </CardTitle>
               </CardHeader>
@@ -200,7 +200,7 @@ const AffiliateProgramEnrolled = () => {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                   <div className="text-center">
                     <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-2">
-                      <Users className="size-6 text-primary" />
+                      <UserMultipleIcon className="size-6 text-primary" />
                     </div>
                     <div className="text-2xl font-bold text-primary">
                       {stats.users}
@@ -212,7 +212,7 @@ const AffiliateProgramEnrolled = () => {
 
                   <div className="text-center">
                     <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-2">
-                      <Gift className="size-6 text-primary" />
+                      <GiftIcon className="size-6 text-primary" />
                     </div>
                     <div className="text-2xl font-bold text-primary">
                       {stats.coins.toLocaleString()}
@@ -224,7 +224,7 @@ const AffiliateProgramEnrolled = () => {
 
                   <div className="text-center">
                     <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-2">
-                      <TrendingUp className="size-6 text-primary" />
+                      <ChartIncreaseIcon className="size-6 text-primary" />
                     </div>
                     <div className="text-2xl font-bold text-primary">
                       {(stats.clicks ?? 0).toLocaleString()}
@@ -241,7 +241,7 @@ const AffiliateProgramEnrolled = () => {
           <Card className="border-primary/20 bg-white">
             <CardHeader className="">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <UserPlus className="size-5 text-primary" />
+                <UserAdd01Icon className="size-5 text-primary" />
                 How It Works
               </CardTitle>
             </CardHeader>
@@ -266,7 +266,7 @@ const AffiliateProgramEnrolled = () => {
                 </div>
               </div>
               <Badge variant="secondary" className="w-fit">
-                <Gift className="size-3 mr-1" />
+                <GiftIcon className="size-3 mr-1" />
                 Redeem points, Unlock stories
               </Badge>
             </CardContent>
@@ -276,7 +276,7 @@ const AffiliateProgramEnrolled = () => {
         <Card className="border-primary/20 bg-white">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg">
-              <UserPlus className="size-5 text-primary" />
+              <UserAdd01Icon className="size-5 text-primary" />
               Referral History
             </CardTitle>
           </CardHeader>
@@ -290,7 +290,7 @@ const AffiliateProgramEnrolled = () => {
                   >
                     <div className="flex items-center gap-3">
                       <div className="p-2 rounded-full bg-primary/10">
-                        <UserPlus className="size-4 text-primary" />
+                        <UserAdd01Icon className="size-4 text-primary" />
                       </div>
                       <div>
                         <p className="font-medium">{r.name}</p>
@@ -306,7 +306,7 @@ const AffiliateProgramEnrolled = () => {
             ) : (
               <div className="text-center py-8">
                 <div className="p-4 rounded-full bg-muted/50 w-fit mx-auto mb-4">
-                  <UserPlus className="size-8 text-muted-foreground" />
+                  <UserAdd01Icon className="size-8 text-muted-foreground" />
                 </div>
                 <p className="text-muted-foreground mb-2">
                   No referral history yet

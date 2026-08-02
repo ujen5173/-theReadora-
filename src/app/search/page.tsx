@@ -1,6 +1,6 @@
 "use client";
 
-import { Filter } from "lucide-react";
+import { FilterIcon } from "hugeicons-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
@@ -140,7 +140,7 @@ const Search = () => {
                   variant="outline"
                   className="justify-start gap-2 w-full"
                 >
-                  <Filter className="w-4 h-4" />
+                  <FilterIcon className="w-4 h-4" />
                   Filters
                 </Button>
               </SheetTrigger>

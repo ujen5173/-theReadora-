@@ -1,7 +1,7 @@
 "use client";
 
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { CheckIcon } from "lucide-react";
+import { Tick02Icon } from "hugeicons-react";
 import * as React from "react";
 
 import { cn } from "~/lib/utils";
@@ -32,7 +32,7 @@ function Checkbox({
           "data-[state=checked]:bg-primary data-[state=checked]:border-primary dark:data-[state=checked]:bg-primary",
         variant === "primary" &&
           "border-primary data-[state=checked]:bg-primary data-[state=checked]:border-primary dark:data-[state=checked]:bg-primary",
-        className
+        className,
       )}
       {...props}
     >
@@ -40,11 +40,11 @@ function Checkbox({
         data-slot="checkbox-indicator"
         className="flex items-center justify-center text-current transition-none"
       >
-        <CheckIcon
+        <Tick02Icon
           className={cn(
             size === "default" && "size-3.5",
             size === "sm" && "size-3",
-            size === "lg" && "size-4"
+            size === "lg" && "size-4",
           )}
         />
       </CheckboxPrimitive.Indicator>

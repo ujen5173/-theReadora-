@@ -1,5 +1,9 @@
-import { BubbleChatQuestionIcon, LibraryIcon } from "hugeicons-react";
-import { Crown, Sparkles } from "lucide-react";
+import {
+  BubbleChatQuestionIcon,
+  CrownIcon,
+  LibraryIcon,
+  SparklesIcon,
+} from "hugeicons-react";
 import Link from "next/link";
 import BookSection from "~/app/_components/shared/books-section";
 import { Button } from "~/components/ui/button";
@@ -38,7 +42,7 @@ const RecentReadsAndLegendsShelf = async () => {
                     variant={"dark"}
                     effect="shineHover"
                     asChild
-                    icon={Sparkles}
+                    icon={SparklesIcon}
                   >
                     <Link href={`/story/${randomNovel}`}>Suprise me</Link>
                   </Button>
@@ -50,12 +54,12 @@ const RecentReadsAndLegendsShelf = async () => {
           <div
             className={cn(
               "w-full xl:flex-1",
-              legendsShelf.length > 0 ? "" : "hidden lg:block"
+              legendsShelf.length > 0 ? "" : "hidden lg:block",
             )}
           >
             <BookSection
               title="The Legends Shelf"
-              titleIcon={Crown}
+              titleIcon={CrownIcon}
               iconStyle="text-primary"
               novels={legendsShelf}
               headerAddon={
@@ -73,8 +77,8 @@ const RecentReadsAndLegendsShelf = async () => {
                       What is Legends Shelf?
                     </p>
                     <p className="w-full text-lg text-slate-700">
-                      Best performer of the month. Only the best stories make it to the Legends
-                      Shelf. Updates monthly
+                      Best performer of the month. Only the best stories make it
+                      to the Legends Shelf. Updates monthly
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -88,7 +92,7 @@ const RecentReadsAndLegendsShelf = async () => {
                     variant={"outline"}
                     effect="shineHover"
                     asChild
-                    icon={Crown}
+                    icon={CrownIcon}
                   >
                     <Link href="/write?source=the-legends-staff">
                       Claim the Shelf

@@ -1,6 +1,12 @@
 "use client";
 
-import { ChevronDown, ChevronUp, Goal, PenLine, Plus } from "lucide-react";
+import {
+  ArrowDown01Icon,
+  ArrowUp01Icon,
+  PencilEdit01Icon,
+  PlusSignIcon,
+  Target01Icon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { redirect, useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -97,7 +103,7 @@ const StoryEditorSidebar = () => {
         <div className="bg-white rounded-lg sm:rounded-xl border border-border dark:border-slate-700/50 p-3 sm:p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <h3 className="font-semibold text-slate-700 flex items-center gap-2 text-sm sm:text-base">
-              <PenLine className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-primary" />
+              <PencilEdit01Icon className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-primary" />
               Chapter Navigator
             </h3>
           </div>
@@ -119,7 +125,7 @@ const StoryEditorSidebar = () => {
                       className={cn(
                         "w-full text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 p-1.5 sm:p-2 rounded-md border border-border cursor-pointer transition-colors truncate text-left",
                         chapter_id === chapter.id &&
-                          "bg-primary/10 border-primary/20 text-primary hover:bg-primary/20"
+                          "bg-primary/10 border-primary/20 text-primary hover:bg-primary/20",
                       )}
                     >
                       {chapter.chapterNumber.toString().padStart(2, "0")}:{" "}
@@ -141,7 +147,7 @@ const StoryEditorSidebar = () => {
               onClick={onboardNewChapter}
               className="text-xs sm:text-sm flex items-center gap-1 font-semibold text-slate-600 hover:bg-slate-100 p-1.5 sm:p-2 rounded-md cursor-pointer transition-colors"
             >
-              <Plus className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+              <PlusSignIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
               Add New Chapter
             </div>
           </div>
@@ -154,7 +160,7 @@ const StoryEditorSidebar = () => {
         >
           <div className="flex items-center justify-between">
             <h3 className="font-semibold flex items-center text-slate-700 gap-2 text-sm sm:text-base">
-              <Goal className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-primary" />
+              <Target01Icon className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-primary" />
               Writing Stats
             </h3>
             <CollapsibleTrigger asChild>
@@ -164,9 +170,9 @@ const StoryEditorSidebar = () => {
                 className="h-7 sm:h-8 w-7 sm:w-8 p-0"
               >
                 {isStatsOpen ? (
-                  <ChevronDown className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+                  <ArrowDown01Icon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 ) : (
-                  <ChevronUp className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+                  <ArrowUp01Icon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 )}
               </Button>
             </CollapsibleTrigger>

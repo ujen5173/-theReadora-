@@ -170,9 +170,9 @@ const NovelCard: FC<{
         </div>
 
         <div className="invisible mt-2 w-full">
-          <h1 className="font-semibold text-slate-800 text-sm line-clamp-1">
+          <h3 className="font-semibold text-slate-800 text-sm line-clamp-1">
             {details.title}
-          </h1>
+          </h3>
 
           {!isAuthorViewer && (
             <p className="text-gray-600 text-sm line-clamp-1">

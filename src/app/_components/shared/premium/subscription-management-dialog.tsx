@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Crown } from "lucide-react";
+import { CrownIcon } from "hugeicons-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -59,7 +59,7 @@ export const SubscriptionManagementDialog = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Crown className="size-5 text-primary" />
+            <CrownIcon className="size-5 text-primary" />
             Manage Subscription
           </DialogTitle>
         </DialogHeader>

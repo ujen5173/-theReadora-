@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -21,7 +21,7 @@ export function MicroHeader() {
           className="group inline-flex items-center gap-1 font-bold decoration-white/50 hover:decoration-white underline underline-offset-2 transition-all"
         >
           Learn more
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+          <ArrowRight01Icon className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
       <button

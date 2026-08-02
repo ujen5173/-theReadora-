@@ -2,14 +2,16 @@
 
 import { isCuid } from "@paralleldrive/cuid2";
 import {
+  ChartDecreaseIcon,
+  ChartIncreaseIcon,
   Cursor02Icon,
   LicenseIcon,
   Link02Icon,
   Megaphone01Icon,
   Notification02Icon,
+  Search01Icon,
   SearchAreaIcon,
 } from "hugeicons-react";
-import { Search, TrendingDown, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Metrics from "~/app/_components/layouts/studio/shared/Metrics";
 import { Badge } from "~/components/ui/badge";
@@ -30,7 +32,7 @@ const Analytics = ({ p }: { p?: string }) => {
     {
       refetchOnWindowFocus: false,
       retry: false,
-    }
+    },
   );
 
   // Traffic source icon and color mapping
@@ -204,9 +206,9 @@ const Analytics = ({ p }: { p?: string }) => {
                               }`}
                             >
                               {source.isIncreasing ? (
-                                <TrendingUp className="h-3 w-3" />
+                                <ChartIncreaseIcon className="h-3 w-3" />
                               ) : (
-                                <TrendingDown className="h-3 w-3" />
+                                <ChartDecreaseIcon className="h-3 w-3" />
                               )}
                               <span>
                                 {source.isIncreasing ? "+" : ""}
@@ -259,7 +261,7 @@ const Analytics = ({ p }: { p?: string }) => {
           <div className="p-4 sm:p-6 space-y-6">
             {data.searchQueries.length === 0 ? (
               <div className="text-center py-8 text-slate-500">
-                <Search className="h-12 w-12 mx-auto mb-2 opacity-20" />
+                <Search01Icon className="h-12 w-12 mx-auto mb-2 opacity-20" />
                 <p>No search queries recorded yet</p>
               </div>
             ) : (
@@ -306,9 +308,9 @@ const Analytics = ({ p }: { p?: string }) => {
                                   }`}
                                 >
                                   {query.isIncreasing ? (
-                                    <TrendingUp className="h-3 w-3" />
+                                    <ChartIncreaseIcon className="h-3 w-3" />
                                   ) : (
-                                    <TrendingDown className="h-3 w-3" />
+                                    <ChartDecreaseIcon className="h-3 w-3" />
                                   )}
                                   <span>
                                     {query.isIncreasing ? "+" : ""}

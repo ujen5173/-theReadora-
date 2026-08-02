@@ -1,7 +1,11 @@
 "use client";
 
-import { Search01Icon } from "hugeicons-react";
-import { ArrowLeftIcon, BookOpenIcon, UsersIcon } from "lucide-react";
+import {
+  ArrowLeft01Icon,
+  BookOpen01Icon,
+  Search01Icon,
+  UserMultipleIcon,
+} from "hugeicons-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -27,11 +31,11 @@ const ReadingListDetail = () => {
     },
     {
       enabled: !!params.id,
-    }
+    },
   );
 
   const filteredNovels = readingList?.stories.filter((novel) =>
-    novel.title.toLowerCase().includes(searchTerm.toLowerCase())
+    novel.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -46,7 +50,7 @@ const ReadingListDetail = () => {
                 variant="link"
                 className="mb-4 px-0 flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               >
-                <ArrowLeftIcon size={20} />
+                <ArrowLeft01Icon size={20} />
                 Back to Reading Lists
               </Button>
             </Link>
@@ -68,12 +72,12 @@ const ReadingListDetail = () => {
 
                   <div className="mt-4 flex flex-wrap gap-4">
                     <div className="text-sm md:text-base flex items-center gap-2 text-slate-600">
-                      <BookOpenIcon className="w-5 h-5" />
+                      <BookOpen01Icon className="w-5 h-5" />
                       <span>{readingList?.stories.length || 0} Novels</span>
                     </div>
                     {readingList?.user && (
                       <div className="text-sm md:text-base flex items-center gap-2 text-slate-600">
-                        <UsersIcon className="w-5 h-5" />
+                        <UserMultipleIcon className="w-5 h-5" />
                         <span>Created by {readingList.user.name}</span>
                       </div>
                     )}
@@ -125,7 +129,7 @@ const ReadingListDetail = () => {
                     : "Add novels to this list to get started. You can add novels from their detail pages."}
                 </p>
                 <Button variant="outline" className="mt-6" asChild>
-                  <Link href="/explore">Browse Novels</Link>
+                  <Link href="/search">Browse Novels</Link>
                 </Button>
               </div>
             )}

@@ -1,9 +1,12 @@
 "use client";
 
-import { Menu01Icon, QuillWrite02Icon } from "hugeicons-react";
-import { Crown, Home } from "lucide-react";
+import {
+  CrownIcon,
+  Home01Icon,
+  Menu01Icon,
+  QuillWrite02Icon,
+} from "hugeicons-react";
 import Link from "next/link";
-import { MicroHeader } from "~/components/shared/micro-header";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Kbd } from "~/components/ui/kbd";
 import {
@@ -109,7 +112,7 @@ const MobileMenu = () => {
                 <Button
                   variant="ghost"
                   className="justify-start w-full text-sm"
-                  icon={Home}
+                  icon={Home01Icon}
                   iconPlacement="left"
                 >
                   Home
@@ -119,7 +122,7 @@ const MobileMenu = () => {
                 <Button
                   variant="ghost"
                   className="justify-start w-full text-sm"
-                  icon={Crown}
+                  icon={CrownIcon}
                   iconPlacement="left"
                 >
                   Get Premium
@@ -181,7 +184,6 @@ const Header = ({
 
   return (
     <>
-      <MicroHeader />
       {!removeBackground && (
         <>
           <div className="-z-10 fixed inset-0 bg-gradient-to-br from-primary/20 via-white to-primary/10"></div>
@@ -255,7 +257,7 @@ const Header = ({
                   <Button
                     variant="link"
                     className="text-foreground text-sm sm:text-base"
-                    icon={Crown}
+                    icon={CrownIcon}
                     iconPlacement="left"
                   >
                     Get Premium

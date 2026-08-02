@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  ArrowRight,
-  Award,
-  Gift,
-  HandshakeIcon,
-  Loader2,
-  Share2,
-  TrendingUp,
-  Users,
-} from "lucide-react";
+  Agreement01Icon,
+  ArrowRight01Icon,
+  Award01Icon,
+  ChartIncreaseIcon,
+  GiftIcon,
+  Loading03Icon,
+  Share08Icon,
+  UserMultipleIcon,
+} from "hugeicons-react";
 import { useState } from "react";
 
 import Link from "next/link";
@@ -35,7 +35,7 @@ const AffiliateProgram = () => {
     return (
       <div className="rounded-lg border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-4 sm:p-6">
         <div className="flex flex-col items-center justify-center py-16">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loading03Icon className="h-8 w-8 animate-spin text-primary" />
           <p className="mt-4 text-muted-foreground">
             Loading affiliate program...
           </p>
@@ -53,7 +53,7 @@ const AffiliateProgram = () => {
       {/* Header */}
       <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
         <div className="p-1.5 sm:p-2 rounded-full bg-primary/10 border border-primary/20">
-          <HandshakeIcon className="size-4 sm:size-5 text-primary" />
+          <Agreement01Icon className="size-4 sm:size-5 text-primary" />
         </div>
         <h2 className="text-base sm:text-lg font-bold text-primary">
           Affiliate Program
@@ -64,7 +64,7 @@ const AffiliateProgram = () => {
         {/* Hero Section */}
         <div className="text-center space-y-4">
           <div className="p-4 rounded-full bg-primary/10 w-fit mx-auto">
-            <Gift className="h-12 w-12 text-primary" />
+            <GiftIcon className="h-12 w-12 text-primary" />
           </div>
           <div>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2">
@@ -73,7 +73,7 @@ const AffiliateProgram = () => {
                 <span
                   className={cn(
                     "cursor-pointer select-none underline font-black text-primary/90",
-                    kanit.className
+                    kanit.className,
                   )}
                 >
                   [theReadora]
@@ -93,7 +93,7 @@ const AffiliateProgram = () => {
           <Card className="border-primary/20 bg-white">
             <CardContent className="p-6 text-center">
               <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-4">
-                <Users className="h-8 w-8 text-primary" />
+                <UserMultipleIcon className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-lg font-bold mb-2">Earn Coins</h3>
               <p className="text-slate-600">
@@ -106,7 +106,7 @@ const AffiliateProgram = () => {
           <Card className="border-primary/20 bg-white">
             <CardContent className="p-6 text-center">
               <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto mb-4">
-                <Award className="h-8 w-8 text-primary" />
+                <Award01Icon className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-lg font-bold mb-2">
                 Unlock Milestone Bonuses
@@ -123,7 +123,7 @@ const AffiliateProgram = () => {
         <Card className="border-primary/20 bg-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
-              <ArrowRight className="h-5 w-5 text-primary" />
+              <ArrowRight01Icon className="h-5 w-5 text-primary" />
               How It Works
             </CardTitle>
           </CardHeader>
@@ -178,7 +178,7 @@ const AffiliateProgram = () => {
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="p-3 rounded-full bg-primary/10 w-fit mx-auto">
-                  <HandshakeIcon className="h-8 w-8 text-primary" />
+                  <Agreement01Icon className="h-8 w-8 text-primary" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold mb-2">
@@ -207,12 +207,12 @@ const AffiliateProgram = () => {
                 >
                   {enrolling || enrollMutation.status === "pending" ? (
                     <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      <Loading03Icon className="mr-2 h-5 w-5 animate-spin" />
                       Enrolling...
                     </>
                   ) : (
                     <>
-                      <Share2 className="mr-2 h-5 w-5" />
+                      <Share08Icon className="mr-2 h-5 w-5" />
                       Enroll Now
                     </>
                   )}
@@ -228,7 +228,7 @@ const AffiliateProgram = () => {
               </div>
 
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <TrendingUp className="h-4 w-4" />
+                <ChartIncreaseIcon className="h-4 w-4" />
                 <span>Join the growing community of successful affiliates</span>
               </div>
             </div>

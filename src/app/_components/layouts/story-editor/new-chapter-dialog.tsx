@@ -1,4 +1,4 @@
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { Alert02Icon, Loading03Icon } from "hugeicons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -50,7 +50,7 @@ const NewChapterDialog = ({ open, onOpenChange }: NewChapterDialogProps) => {
         <DialogHeader>
           <div className="flex gap-2 items-center">
             <div className="size-10 rounded-full bg-amber-100 border border-amber-200   flex items-center justify-center">
-              <AlertTriangle className="size-5 text-amber-600" />
+              <Alert02Icon className="size-5 text-amber-600" />
             </div>
             <div>
               <DialogTitle className="text-xl">Create New Chapter</DialogTitle>
@@ -64,7 +64,7 @@ const NewChapterDialog = ({ open, onOpenChange }: NewChapterDialogProps) => {
         <div className="my-6">
           <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
             <div className="flex gap-3">
-              <AlertTriangle className="size-5 text-amber-600  flex-shrink-0 mt-0.5" />
+              <Alert02Icon className="size-5 text-amber-600  flex-shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="font-medium text-amber-900">
                   Unsaved Changes Warning
@@ -91,7 +91,9 @@ const NewChapterDialog = ({ open, onOpenChange }: NewChapterDialogProps) => {
             disabled={isLoading}
             className="bg-gradient-to-r from-primary/80 to-primary text-white hover:from-primary hover:to-primary/90"
           >
-            {isLoading && <Loader2 className="size-4 animate-spin mr-2" />}
+            {isLoading && (
+              <Loading03Icon className="size-4 animate-spin mr-2" />
+            )}
             {hardSaved ? "Create New Chapter" : "Save and Continue"}
           </Button>
         </DialogFooter>

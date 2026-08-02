@@ -1912,6 +1912,35 @@ export const storyRouter = createTRPCRouter({
 
     return rows;
   }),
+
+  /**
+   * Chapter URLs for the sitemap. Chapters are the bulk of the indexable surface,
+   * so they matter more here than the story pages do.
+   *
+   * Addressed by id, not slug: `Chapter.slug` is only `@@unique([storyId, slug])`,
+   * so slug URLs are ambiguous across stories.
+   */
+  sitemapChapters: publicProcedure.query(async ({ ctx }) => {
+    const now = new Date();
+
+    const rows = await ctx.postgresDb.chapter.findMany({
+      where: {
+        story: { storyStatus: "PUBLISHED" },
+        // Locked chapters render a paywall rather than prose — indexing them
+        // would just add thin pages.
+        isLocked: false,
+        OR: [{ scheduledFor: null }, { scheduledFor: { lte: now } }],
+      },
+      select: {
+        id: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 40000,
+    });
+
+    return rows;
+  }),
 });
 
 export type SearchResponse = inferProcedureOutput<typeof storyRouter.search>;

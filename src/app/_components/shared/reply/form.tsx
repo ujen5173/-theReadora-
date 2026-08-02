@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loading03Icon } from "hugeicons-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -56,7 +56,7 @@ const ReplyForm = ({
         <Button
           size="sm"
           disabled={replyAReview.status === "pending"}
-          icon={replyAReview.status === "pending" ? Loader2 : undefined}
+          icon={replyAReview.status === "pending" ? Loading03Icon : undefined}
           iconStyle={replyAReview.status === "pending" ? "animate-spin" : ""}
           onClick={handleReply}
         >
